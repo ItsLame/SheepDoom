@@ -50,6 +50,7 @@ namespace MirrorBasics
                 //convert the 5 digit string to a default mirror method GUID
                 networkMatchChecker.matchId = _matchID.ToGuid();
 
+                Debug.Log("test");
                 //generate match
                 TargetHostGame(true, _matchID);
 
