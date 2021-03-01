@@ -50,7 +50,7 @@ namespace MirrorBasics {
         public SyncListMatch matches = new SyncListMatch();
 
         //for easier checking of duplicate matchID
-        public SyncListString matchIDs = new SyncListString();
+        public SyncList<string> matchIDs = new SyncList<string>();
         void Start()
         {
             instance = this;
