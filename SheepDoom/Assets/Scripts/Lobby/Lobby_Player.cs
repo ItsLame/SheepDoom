@@ -73,6 +73,53 @@ namespace MirrorBasics
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.HostSuccess(success);
         }
-    }
 
+        //function for player to Join the game
+        public void JoinGame()
+        {
+            Debug.Log("Joining Game");
+            string matchID = MatchMaker.GetRandomMatchID();
+
+            //give command to server once a matchID is generated
+            CmdJoinGame(matchID);
+        }
+
+        //sending the server the Join game ID, to a list prolly
+        [Command]
+        void CmdJoinGame(string _matchID)
+        {
+            //setting MatchID
+            matchID = _matchID;
+            //from client, calling player function, if manage to Join a game
+            //if Join success
+            if (MatchMaker.instance.JoinGame(_matchID, gameObject))
+            {
+                Debug.Log($"<color = green>Game Joined successfully");
+                //convert the 5 digit string to a default mirror method GUID
+                networkMatchChecker.matchId = _matchID.ToGuid();
+
+                Debug.Log("test");
+                //generate match
+                TargetJoinGame(true, _matchID);
+
+                //notify the UI for success
+
+                //if successful, spawn the UIPlayer prefab
+            }
+
+            //if Join fail
+            else
+            {
+                Debug.Log($"<color = red>Game Joining failed");
+                TargetJoinGame(false, _matchID);
+            }
+        }
+
+        [TargetRpc]
+        void TargetJoinGame(bool success, string _matchID)
+        {
+            Debug.Log($"MatchID: {matchID} == {_matchID}");
+            UI_LobbyScript.instance.JoinSuccess(success);
+        }
+    }
 }

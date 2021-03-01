@@ -67,7 +67,7 @@ namespace MirrorBasics {
         {
             if (success)
             {
-
+                lobbyCanvas.enabled = true;
             }
 
             //if host / join fail, re-enable the buttons
