@@ -61,6 +61,8 @@ namespace MirrorBasics {
             joinMatchInput.interactable = false;
             joinButton.interactable = false;
             hostButton.interactable = false;
+
+            Lobby_Player.localPlayer.JoinGame(joinMatchInput.text);
         }
 
         public void JoinSuccess (bool success)

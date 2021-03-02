@@ -46,7 +46,7 @@ namespace MirrorBasics
             //if host success
             if(MatchMaker.instance.HostGame(_matchID, gameObject))
             {
-                Debug.Log($"<color = green>Game hosted successfully");
+                Debug.Log("Game hosted successfully");
                 //convert the 5 digit string to a default mirror method GUID
                 networkMatchChecker.matchId = _matchID.ToGuid();
 
@@ -62,7 +62,7 @@ namespace MirrorBasics
             //if host fail
             else
             {
-                Debug.Log($"<color = red>Game hosting failed");
+                Debug.Log("Game hosting failed"); 
                 TargetHostGame(false, _matchID);
             }
         }
@@ -75,13 +75,12 @@ namespace MirrorBasics
         }
 
         //function for player to Join the game
-        public void JoinGame()
+        public void JoinGame(string _inputID)
         {
             Debug.Log("Joining Game");
-            string matchID = MatchMaker.GetRandomMatchID();
-
-            //give command to server once a matchID is generated
-            CmdJoinGame(matchID);
+            
+            //pass in _inputID from typed input to join game
+            CmdJoinGame(_inputID);
         }
 
         //sending the server the Join game ID, to a list prolly
@@ -94,23 +93,19 @@ namespace MirrorBasics
             //if Join success
             if (MatchMaker.instance.JoinGame(_matchID, gameObject))
             {
-                Debug.Log($"<color = green>Game Joined successfully");
+                Debug.Log("Game Joined successfully");
                 //convert the 5 digit string to a default mirror method GUID
                 networkMatchChecker.matchId = _matchID.ToGuid();
 
-                Debug.Log("test");
                 //generate match
                 TargetJoinGame(true, _matchID);
 
-                //notify the UI for success
-
-                //if successful, spawn the UIPlayer prefab
             }
 
             //if Join fail
             else
             {
-                Debug.Log($"<color = red>Game Joining failed");
+                Debug.Log("Game Joining failed");
                 TargetJoinGame(false, _matchID);
             }
         }

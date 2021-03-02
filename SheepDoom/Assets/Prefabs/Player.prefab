@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 5c89babc0dbcfaf4aa36dff5386b845a
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &-1554023935054294633
 MonoBehaviour:
@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0
   currentMatchDebug: 
 --- !u!114 &-81033260251576607
 MonoBehaviour:
