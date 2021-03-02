@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Network Test Silvia.unity
-    guid: 97a076781af96a74ca640477d5f510b1
+    path: Assets/Scenes/Main Menu.unity
+    guid: d3b6ba12a5c1ee24e83d02cf2c0a6c1b
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: cd5d373037b373f4b8b637d666f960ab
   m_configObjects: {}

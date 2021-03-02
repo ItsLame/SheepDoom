@@ -46,10 +46,11 @@ namespace MirrorBasics
             //if host success
             if(MatchMaker.instance.HostGame(_matchID, gameObject))
             {
-                Debug.Log($"<color = green>Game hosted successfully");
+                Debug.Log("Game hosted successfully");
                 //convert the 5 digit string to a default mirror method GUID
                 networkMatchChecker.matchId = _matchID.ToGuid();
 
+                Debug.Log("test");
                 //generate match
                 TargetHostGame(true, _matchID);
 
@@ -61,7 +62,7 @@ namespace MirrorBasics
             //if host fail
             else
             {
-                Debug.Log($"<color = red>Game hosting failed");
+                Debug.Log("Game hosting failed"); 
                 TargetHostGame(false, _matchID);
             }
         }
@@ -72,6 +73,48 @@ namespace MirrorBasics
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.HostSuccess(success);
         }
-    }
 
+        //function for player to Join the game
+        public void JoinGame(string _inputID)
+        {
+            Debug.Log("Joining Game");
+            
+            //pass in _inputID from typed input to join game
+            CmdJoinGame(_inputID);
+        }
+
+        //sending the server the Join game ID, to a list prolly
+        [Command]
+        void CmdJoinGame(string _matchID)
+        {
+            //setting MatchID
+            matchID = _matchID;
+            //from client, calling player function, if manage to Join a game
+            //if Join success
+            if (MatchMaker.instance.JoinGame(_matchID, gameObject))
+            {
+                Debug.Log("Game Joined successfully");
+                //convert the 5 digit string to a default mirror method GUID
+                networkMatchChecker.matchId = _matchID.ToGuid();
+
+                //generate match
+                TargetJoinGame(true, _matchID);
+
+            }
+
+            //if Join fail
+            else
+            {
+                Debug.Log("Game Joining failed");
+                TargetJoinGame(false, _matchID);
+            }
+        }
+
+        [TargetRpc]
+        void TargetJoinGame(bool success, string _matchID)
+        {
+            Debug.Log($"MatchID: {matchID} == {_matchID}");
+            UI_LobbyScript.instance.JoinSuccess(success);
+        }
+    }
 }

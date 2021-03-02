@@ -63,6 +63,7 @@ namespace MirrorBasics {
             if (!matchIDs.Contains(_matchID))
             {
                 //add a match to synclistmatch matches using the constructor that uses id + player
+                matchIDs.Add(_matchID);
                 matches.Add(new Match(_matchID, _player));
                 Debug.Log($"Match ID Created");
                 return true;
@@ -78,7 +79,33 @@ namespace MirrorBasics {
             //validation for existing id
         }
 
+        public bool JoinGame(string _matchID, GameObject _player)
+        {
+            //joining a room
+            if (matchIDs.Contains(_matchID))
+            {
+                for (int i = 0; i < matches.Count; i++)
+                {
+                    if(matches[i].matchID == _matchID)
+                    {
+                        matches[i].players.Add(_player);
+                        break;
+                    }
+                }
 
+                Debug.Log("Match Joined");
+                return true;
+            }
+
+            else
+                {
+                    //else its duplicate, a nono
+                    Debug.Log($"Match ID does not exists");
+                    return false;
+                }
+
+
+        }
 
         //generate random match ID
         public static string GetRandomMatchID()

@@ -61,13 +61,15 @@ namespace MirrorBasics {
             joinMatchInput.interactable = false;
             joinButton.interactable = false;
             hostButton.interactable = false;
+
+            Lobby_Player.localPlayer.JoinGame(joinMatchInput.text);
         }
 
         public void JoinSuccess (bool success)
         {
             if (success)
             {
-
+                lobbyCanvas.enabled = true;
             }
 
             //if host / join fail, re-enable the buttons
