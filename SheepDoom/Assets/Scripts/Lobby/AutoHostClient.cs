@@ -24,9 +24,7 @@ public class AutoHostClient : MonoBehaviour
 
     public void JoinLocal() 
     {
-        Debug.Log("Start Game Pressed");
         networkManager.networkAddress = "localhost";
         networkManager.StartClient();
-        Debug.Log("Server started");    
     }
 }
