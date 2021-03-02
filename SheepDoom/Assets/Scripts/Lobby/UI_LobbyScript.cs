@@ -13,14 +13,39 @@ namespace MirrorBasics {
         [SerializeField] InputField joinMatchInput;
         [SerializeField] Button joinButton;
         [SerializeField] Button hostButton;
+        [SerializeField] Button lockinButton;
         //canvas for overlay
         [SerializeField] Canvas lobbyCanvas;
-
-
+        [SerializeField] Canvas gameLobbyCanvas;
+        //text
+        [SerializeField] Text selectionTimerText;
+        //for debugging purposes
+        [SerializeField] Button forceStartDebug;
         //singleton UI instance on start
         void Start()
         {
             instance = this;
+        }
+
+        void Update()
+        {
+            if(gameLobbyCanvas.enabled == true && Lobby_Player.localPlayer.selectionTimerZero == false)
+            {
+                Lobby_Player.localPlayer.selectionTimer -= Time.deltaTime;
+                selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
+                
+                if(Lobby_Player.localPlayer.selectionTimer <= 0)
+                {
+                    selectionTimerText.text = "Starting Game...";
+                    lockinButton.interactable = false;
+                    Lobby_Player.localPlayer.selectionTimerZero = true;
+                }
+            }
+            else if(gameLobbyCanvas.enabled == false)
+            {
+                Lobby_Player.localPlayer.selectionTimer = 5.0f;
+                selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
+            }
         }
 
         //UI hosting function to be attached to host button
@@ -79,6 +104,11 @@ namespace MirrorBasics {
                 joinButton.interactable = true;
                 hostButton.interactable = true;
             }
+        }
+
+        public void ForceStartDebug ()
+        {
+            gameLobbyCanvas.enabled = true;
         }
     }
 }

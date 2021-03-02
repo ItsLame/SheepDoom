@@ -12,6 +12,9 @@ namespace MirrorBasics
 
         //matchID if player host room, syncedvared
         [SyncVar] public string matchID;
+        //syncvar timer
+        [SyncVar] public float selectionTimer;
+        [SyncVar] public bool selectionTimerZero = false;
 
         NetworkMatchChecker networkMatchChecker;
 
