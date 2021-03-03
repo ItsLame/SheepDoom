@@ -12,15 +12,18 @@ public class CharacterMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Start joystick");
         myRigidBody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        Debug.Log("fixedupdate joystick");
         Vector3 moveMe = new Vector3(-CrossPlatformInputManager.GetAxis("Vertical"), 0.0f,
                                      CrossPlatformInputManager.GetAxis("Horizontal")) * speed;
-                                     
+
+        myRigidBody.rotation = Quaternion.LookRotation(moveMe);
         myRigidBody.velocity = moveMe;
 
         /*if(CrossPlatformInputManager.GetAxis("Horizontal") > 0)

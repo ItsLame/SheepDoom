@@ -84,9 +84,5 @@ public class CameraRoaming : MonoBehaviour
         }
 
         transform.position = pos;
-
-
-
-
     }
 }
