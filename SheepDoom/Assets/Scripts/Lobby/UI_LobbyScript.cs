@@ -9,25 +9,31 @@ namespace MirrorBasics {
         //create instance for singleton
         public static UI_LobbyScript instance;
 
+        [Header("Host join")]
         //getting the buttons / fields for controlling
         [SerializeField] InputField joinMatchInput;
         [SerializeField] Button joinButton;
         [SerializeField] Button hostButton;
-        [SerializeField] Button lockinButton;
+       // [SerializeField] Button lockinButton;
         //canvas for overlay
         [SerializeField] Canvas lobbyCanvas;
-        [SerializeField] Canvas gameLobbyCanvas;
+
+        [Header("Lobby")]
+        [SerializeField] Transform UIPlayerParent;
+        [SerializeField] GameObject UIPlayerPrefab;
+        [SerializeField] Text matchIDText;
+        //[SerializeField] Canvas gameLobbyCanvas;
         //text
-        [SerializeField] Text selectionTimerText;
+        // [SerializeField] Text selectionTimerText;
         //for debugging purposes
-        [SerializeField] Button forceStartDebug;
+       // [SerializeField] GameObject forceStartDebug;
         //singleton UI instance on start
         void Start()
         {
             instance = this;
         }
 
-        void Update()
+        /*void Update()
         {
             if(gameLobbyCanvas.enabled == true && Lobby_Player.localPlayer.selectionTimerZero == false)
             {
@@ -46,8 +52,10 @@ namespace MirrorBasics {
                 Lobby_Player.localPlayer.selectionTimer = 5.0f;
                 selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
             }
-        }
+        }*/
 
+
+        //Hosting 
         //UI hosting function to be attached to host button
         public void Host()
         {
@@ -62,11 +70,14 @@ namespace MirrorBasics {
             Lobby_Player.localPlayer.HostGame ();
         }
 
-        public void HostSuccess (bool success)
+        public void HostSuccess (bool success, string matchID)
         {
             if (success)
             {
                 lobbyCanvas.enabled = true;
+                SpawnPlayerPrefab(Lobby_Player.localPlayer);
+                matchIDText.text = matchID;
+                //startGameBtn.SetActive(true);
             }
 
             //if host / join fail, re-enable the buttons
@@ -77,6 +88,8 @@ namespace MirrorBasics {
                 hostButton.interactable = true;
             }
         }
+
+        //Joining
 
         public void Join()
         {
@@ -87,14 +100,16 @@ namespace MirrorBasics {
             joinButton.interactable = false;
             hostButton.interactable = false;
 
-            Lobby_Player.localPlayer.JoinGame(joinMatchInput.text);
+            Lobby_Player.localPlayer.JoinGame(joinMatchInput.text.ToUpper());
         }
 
-        public void JoinSuccess (bool success)
+        public void JoinSuccess (bool success, string matchID)
         {
             if (success)
             {
                 lobbyCanvas.enabled = true;
+                SpawnPlayerPrefab(Lobby_Player.localPlayer);
+                matchIDText.text = matchID;
             }
 
             //if host / join fail, re-enable the buttons
@@ -106,9 +121,17 @@ namespace MirrorBasics {
             }
         }
 
-        public void ForceStartDebug ()
+        /*public void ForceStartDebug ()
         {
-            gameLobbyCanvas.enabled = true;
+            //gameLobbyCanvas.enabled = true;
+            Lobby_Player.localPlayer.StartGame();
+        }*/
+
+        public void SpawnPlayerPrefab(Lobby_Player player) // might need to pass match ID
+        {
+            GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParent);
+            newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+            newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
         }
     }
 }

@@ -19,6 +19,7 @@ public class AutoHostClient : MonoBehaviour
         else
         {
             Debug.Log($"=== Server Build ===");
+            networkManager.StartServer();
         }  
     }
 

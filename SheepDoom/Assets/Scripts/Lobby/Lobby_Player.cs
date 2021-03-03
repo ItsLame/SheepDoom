@@ -12,22 +12,28 @@ namespace MirrorBasics
 
         //matchID if player host room, syncedvared
         [SyncVar] public string matchID;
-        //syncvar timer
+        [SyncVar] public int playerIndex;
+        /*syncvar timer
         [SyncVar] public float selectionTimer;
-        [SyncVar] public bool selectionTimerZero = false;
+        [SyncVar] public bool selectionTimerZero = false;*/
 
         NetworkMatchChecker networkMatchChecker;
 
         void Start()
         {
+            networkMatchChecker = GetComponent<NetworkMatchChecker>();
             //adding the current player
             if (isLocalPlayer)
             {
                 localPlayer = this;
             }
-
-            networkMatchChecker = GetComponent<NetworkMatchChecker>();
+            else
+            {
+                UI_LobbyScript.instance.SpawnPlayerPrefab(this);    //this could be the source of the server extra player in room problem
+            }
         }
+
+        // Hosting match
 
         //function for player to host the game
         public void HostGame()
@@ -47,7 +53,7 @@ namespace MirrorBasics
             matchID = _matchID;
             //from client, calling player function, if manage to host a game
             //if host success
-            if(MatchMaker.instance.HostGame(_matchID, gameObject))
+            if(MatchMaker.instance.HostGame(_matchID, gameObject, out playerIndex))
             {
                 Debug.Log("Game hosted successfully");
                 //convert the 5 digit string to a default mirror method GUID
@@ -55,7 +61,7 @@ namespace MirrorBasics
 
                 Debug.Log("test");
                 //generate match
-                TargetHostGame(true, _matchID);
+                TargetHostGame(true, _matchID, playerIndex);
 
                 //notify the UI for success
                 
@@ -66,16 +72,20 @@ namespace MirrorBasics
             else
             {
                 Debug.Log("Game hosting failed"); 
-                TargetHostGame(false, _matchID);
+                TargetHostGame(false, _matchID, playerIndex);
             }
         }
 
         [TargetRpc]
-        void TargetHostGame(bool success, string _matchID)
+        void TargetHostGame(bool success, string _matchID, int _playerIndex)
         {
+            playerIndex = _playerIndex;
+            matchID = _matchID;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
-            UI_LobbyScript.instance.HostSuccess(success);
+            UI_LobbyScript.instance.HostSuccess(success, _matchID);
         }
+
+        // Joining match
 
         //function for player to Join the game
         public void JoinGame(string _inputID)
@@ -94,30 +104,57 @@ namespace MirrorBasics
             matchID = _matchID;
             //from client, calling player function, if manage to Join a game
             //if Join success
-            if (MatchMaker.instance.JoinGame(_matchID, gameObject))
+            if (MatchMaker.instance.JoinGame(_matchID, gameObject, out playerIndex))
             {
                 Debug.Log("Game Joined successfully");
                 //convert the 5 digit string to a default mirror method GUID
                 networkMatchChecker.matchId = _matchID.ToGuid();
 
                 //generate match
-                TargetJoinGame(true, _matchID);
-
+                TargetJoinGame(true, _matchID, playerIndex);
             }
 
             //if Join fail
             else
             {
                 Debug.Log("Game Joining failed");
-                TargetJoinGame(false, _matchID);
+                TargetJoinGame(false, _matchID, playerIndex);
             }
         }
 
         [TargetRpc]
-        void TargetJoinGame(bool success, string _matchID)
+        void TargetJoinGame(bool success, string _matchID, int _playerIndex)
         {
+            playerIndex = _playerIndex;
+            matchID = _matchID;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
-            UI_LobbyScript.instance.JoinSuccess(success);
+            UI_LobbyScript.instance.JoinSuccess(success, _matchID);
         }
+
+        /*
+        // start match
+        //available to hosts only
+
+        public void StartGame()
+        {
+            Debug.Log("Joining Game");
+            CmdStartGame();
+        }
+
+        [Command]
+        void CmdStartGame()
+        {
+            MatchMaker.instance.StartGame();
+            Debug.Log("Game started successfully");
+            //generate match
+            TargetStartGame();
+        }
+
+        [TargetRpc]
+        void TargetStartGame()
+        {
+            Debug.Log($"MatchID: {matchID} | starting");
+            
+        }*/
     }
 }
