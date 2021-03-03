@@ -57,8 +57,9 @@ namespace MirrorBasics {
         }
 
         //host game bool validation for same IDs..
-        public bool HostGame(string _matchID, GameObject _player)
+        public bool HostGame(string _matchID, GameObject _player, out int playerIndex)
         {
+            playerIndex = -1;
             //if duplicate is not found in matchIDs synclist, create new match
             if (!matchIDs.Contains(_matchID))
             {
@@ -66,6 +67,7 @@ namespace MirrorBasics {
                 matchIDs.Add(_matchID);
                 matches.Add(new Match(_matchID, _player));
                 Debug.Log($"Match ID Created");
+                playerIndex = 1;
                 return true;
             }
 
@@ -79,8 +81,9 @@ namespace MirrorBasics {
             //validation for existing id
         }
 
-        public bool JoinGame(string _matchID, GameObject _player)
+        public bool JoinGame(string _matchID, GameObject _player, out int playerIndex)
         {
+            playerIndex = -1;
             //joining a room
             if (matchIDs.Contains(_matchID))
             {
@@ -89,6 +92,7 @@ namespace MirrorBasics {
                     if(matches[i].matchID == _matchID)
                     {
                         matches[i].players.Add(_player);
+                        playerIndex = matches[i].players.Count;
                         break;
                     }
                 }
@@ -103,9 +107,12 @@ namespace MirrorBasics {
                     Debug.Log($"Match ID does not exists");
                     return false;
                 }
-
-
         }
+
+       /* public void StartGame()
+        {
+
+        }*/
 
         //generate random match ID
         public static string GetRandomMatchID()
