@@ -57,8 +57,9 @@ namespace MirrorBasics {
         }
 
         //host game bool validation for same IDs..
-        public bool HostGame(string _matchID, GameObject _player)
+        public bool HostGame(string _matchID, GameObject _player, out int playerIndex)
         {
+            playerIndex = -1;
             //if duplicate is not found in matchIDs synclist, create new match
             if (!matchIDs.Contains(_matchID))
             {
@@ -66,9 +67,9 @@ namespace MirrorBasics {
                 matchIDs.Add(_matchID);
                 matches.Add(new Match(_matchID, _player));
                 Debug.Log($"Match ID Created");
+                playerIndex = 1;
                 return true;
             }
-
             else
             {
                 //else its duplicate, a nono
@@ -79,8 +80,9 @@ namespace MirrorBasics {
             //validation for existing id
         }
 
-        public bool JoinGame(string _matchID, GameObject _player)
+        public bool JoinGame(string _matchID, GameObject _player, out int playerIndex)
         {
+            playerIndex = -1;
             //joining a room
             if (matchIDs.Contains(_matchID))
             {
@@ -89,6 +91,7 @@ namespace MirrorBasics {
                     if(matches[i].matchID == _matchID)
                     {
                         matches[i].players.Add(_player);
+                        playerIndex = matches[i].players.Count;
                         break;
                     }
                 }
@@ -96,15 +99,22 @@ namespace MirrorBasics {
                 Debug.Log("Match Joined");
                 return true;
             }
-
             else
-                {
-                    //else its duplicate, a nono
-                    Debug.Log($"Match ID does not exists");
-                    return false;
-                }
+            {
+                //else its duplicate, a nono
+                Debug.Log($"Match ID does not exists");
+                return false;
+            }
+        }
 
-
+        //start game for everyone
+        public void StartGame()
+        {
+            Debug.Log("MatchMaker: Game Started!");
+            
+            //game is starting
+            Lobby_Player.localPlayer.isGameStart = true;
+            Debug.Log("isGameStart set to true");
         }
 
         //generate random match ID
@@ -131,7 +141,7 @@ namespace MirrorBasics {
                     _id += (random - 26).ToString();
                 }
             }
-
+            
             Debug.Log($"Random Match ID: {_id}");
             return _id;
         }
