@@ -13,9 +13,15 @@ namespace MirrorBasics
         //matchID if player host room, syncedvared
         [SyncVar] public string matchID;
         [SyncVar] public int playerIndex;
-        /*syncvar timer
+        
+        //syncvar timer
         [SyncVar] public float selectionTimer;
-        [SyncVar] public bool selectionTimerZero = false;*/
+        //[SyncVar] public bool selectionTimerZero = false;
+        [SyncVar] public bool selectionTimerReset = true;
+
+        //bool to check if room owner & if game is started
+        [SyncVar] public bool isRoomOwner = false;
+        [SyncVar(hook = nameof(StartCountDown))] public bool isGameStart = false;
 
         NetworkMatchChecker networkMatchChecker;
 
@@ -83,6 +89,9 @@ namespace MirrorBasics
             matchID = _matchID;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.HostSuccess(success, _matchID);
+
+            //local player is room owner
+            isRoomOwner = true;
         }
 
         // Joining match
@@ -104,7 +113,7 @@ namespace MirrorBasics
             matchID = _matchID;
             //from client, calling player function, if manage to Join a game
             //if Join success
-            if (MatchMaker.instance.JoinGame(_matchID, gameObject, out playerIndex))
+            if(MatchMaker.instance.JoinGame(_matchID, gameObject, out playerIndex))
             {
                 Debug.Log("Game Joined successfully");
                 //convert the 5 digit string to a default mirror method GUID
@@ -129,15 +138,16 @@ namespace MirrorBasics
             matchID = _matchID;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.JoinSuccess(success, _matchID);
+
+            //local player is not room owner
+            isRoomOwner = false;
         }
 
-        /*
-        // start match
+        //start match
         //available to hosts only
-
         public void StartGame()
         {
-            Debug.Log("Joining Game");
+            Debug.Log("Starting Game");
             CmdStartGame();
         }
 
@@ -154,7 +164,64 @@ namespace MirrorBasics
         void TargetStartGame()
         {
             Debug.Log($"MatchID: {matchID} | starting");
+        }
+
+        //function to start count down and get ready start actual game
+        private void StartCountDown(bool oldIsGameStart, bool newIsGameStart)
+        {
+            //timer countdown and sync
+            Debug.Log("check isGameStart state");
+            if(isGameStart == true)
+            {
+                //turn on gamelobbyui canvas
+                UI_LobbyScript.instance.gameLobbyCanvas.enabled = true;
+                
+                //reset timer
+                if(selectionTimerReset == true)
+                {
+                    Debug.Log("selection timer resetted");
+                    selectionTimer = 5.0f;
+                    UI_LobbyScript.instance.selectionTimerText.text = selectionTimer.ToString("f0");
+                    selectionTimerReset = false;
+                }
+                
+                //after reset start countdown
+                if(selectionTimerReset == false)
+                {
+                    Debug.Log("start selection timer countdown");
+                    StartCoroutine(Countdown());
+                }
+            }
+            else
+            {
+                Debug.Log("Starting actual game");
+                //when timer reaches 0, proceed to the actual game screen
+            }
+        }
+
+        //ienumerator for counting down (so timer won't freeze)
+        private IEnumerator Countdown()
+        {
+            //count down will last for this duration
+            float duration = selectionTimer + 2.0f;
+            float normalizedTime = 0;
             
-        }*/
+            while(normalizedTime <= 1.0f)
+            {
+                normalizedTime += Time.deltaTime / duration;
+
+                selectionTimer -= Time.deltaTime;
+                UI_LobbyScript.instance.selectionTimerText.text = selectionTimer.ToString("f0");
+
+                if(selectionTimer <= 0)
+                {
+                    UI_LobbyScript.instance.selectionTimerText.text = "Starting Game...";
+                    UI_LobbyScript.instance.lockinButton.interactable = false;
+                    isGameStart = false;
+                }
+
+                yield return null;
+            }
+        }
     }
 }

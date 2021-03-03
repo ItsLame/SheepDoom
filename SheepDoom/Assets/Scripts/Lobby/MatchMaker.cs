@@ -70,7 +70,6 @@ namespace MirrorBasics {
                 playerIndex = 1;
                 return true;
             }
-
             else
             {
                 //else its duplicate, a nono
@@ -100,19 +99,23 @@ namespace MirrorBasics {
                 Debug.Log("Match Joined");
                 return true;
             }
-
             else
-                {
-                    //else its duplicate, a nono
-                    Debug.Log($"Match ID does not exists");
-                    return false;
-                }
+            {
+                //else its duplicate, a nono
+                Debug.Log($"Match ID does not exists");
+                return false;
+            }
         }
 
-       /* public void StartGame()
+        //start game for everyone
+        public void StartGame()
         {
-
-        }*/
+            Debug.Log("MatchMaker: Game Started!");
+            
+            //game is starting
+            Lobby_Player.localPlayer.isGameStart = true;
+            Debug.Log("isGameStart set to true");
+        }
 
         //generate random match ID
         public static string GetRandomMatchID()
@@ -138,7 +141,7 @@ namespace MirrorBasics {
                     _id += (random - 26).ToString();
                 }
             }
-
+            
             Debug.Log($"Random Match ID: {_id}");
             return _id;
         }

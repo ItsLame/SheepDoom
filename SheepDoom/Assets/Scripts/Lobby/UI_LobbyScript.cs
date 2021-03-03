@@ -9,12 +9,12 @@ namespace MirrorBasics {
         //create instance for singleton
         public static UI_LobbyScript instance;
 
-        [Header("Host join")]
+        [Header("Host Join")]
         //getting the buttons / fields for controlling
         [SerializeField] InputField joinMatchInput;
         [SerializeField] Button joinButton;
         [SerializeField] Button hostButton;
-       // [SerializeField] Button lockinButton;
+
         //canvas for overlay
         [SerializeField] Canvas lobbyCanvas;
 
@@ -22,38 +22,63 @@ namespace MirrorBasics {
         [SerializeField] Transform UIPlayerParent;
         [SerializeField] GameObject UIPlayerPrefab;
         [SerializeField] Text matchIDText;
-        //[SerializeField] Canvas gameLobbyCanvas;
+
+        [Header("Game Lobby (Hero Selection)")]
+        //canvas
+        [SerializeField] public Canvas gameLobbyCanvas;
         //text
-        // [SerializeField] Text selectionTimerText;
+        [SerializeField] public Text selectionTimerText;
+        //lock-in button
+        [SerializeField] public Button lockinButton;
+
+        [Header("For Debugging Purposes")]
         //for debugging purposes
-       // [SerializeField] GameObject forceStartDebug;
+        [SerializeField] GameObject forceStartDebug;
+
         //singleton UI instance on start
         void Start()
         {
             instance = this;
         }
 
-        /*void Update()
+        void Update()
         {
-            if(gameLobbyCanvas.enabled == true && Lobby_Player.localPlayer.selectionTimerZero == false)
+            //so that only hosts have access to force start button
+            if(Lobby_Player.localPlayer?.isRoomOwner == true)
             {
-                Lobby_Player.localPlayer.selectionTimer -= Time.deltaTime;
-                selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
-                
-                if(Lobby_Player.localPlayer.selectionTimer <= 0)
-                {
-                    selectionTimerText.text = "Starting Game...";
-                    lockinButton.interactable = false;
-                    Lobby_Player.localPlayer.selectionTimerZero = true;
-                }
+                forceStartDebug.gameObject.SetActive(true);
             }
-            else if(gameLobbyCanvas.enabled == false)
+            else if(Lobby_Player.localPlayer?.isRoomOwner == false)
             {
-                Lobby_Player.localPlayer.selectionTimer = 5.0f;
-                selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
+                forceStartDebug.gameObject.SetActive(false);
             }
-        }*/
 
+            /*//timer countdown and sync
+            if(Lobby_Player.localPlayer.isGameStart == true)
+            {
+                //Debug.Log("gameLobbyCanvas enabled for: " + Lobby_Player.localPlayer);
+                gameLobbyCanvas.enabled = true;
+                if(Lobby_Player.localPlayer.selectionTimerReset == true)
+                {
+                    Lobby_Player.localPlayer.selectionTimer = 5.0f;
+                    selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
+                    Lobby_Player.localPlayer.selectionTimerReset = false;
+                }
+                else
+                {
+                    Lobby_Player.localPlayer.selectionTimer -= Time.deltaTime;
+                    selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
+
+                    if(Lobby_Player.localPlayer.selectionTimer <= 0)
+                    {
+                        selectionTimerText.text = "Starting Game...";
+                        lockinButton.interactable = false;
+                        Lobby_Player.localPlayer.isGameStart = false;
+                        //Lobby_Player.localPlayer.selectionTimerZero = true;
+                    }
+                }
+            }*/
+        }
 
         //Hosting 
         //UI hosting function to be attached to host button
@@ -77,7 +102,6 @@ namespace MirrorBasics {
                 lobbyCanvas.enabled = true;
                 SpawnPlayerPrefab(Lobby_Player.localPlayer);
                 matchIDText.text = matchID;
-                //startGameBtn.SetActive(true);
             }
 
             //if host / join fail, re-enable the buttons
@@ -90,7 +114,6 @@ namespace MirrorBasics {
         }
 
         //Joining
-
         public void Join()
         {
             Debug.Log("Join Room Button Clicked");
@@ -111,7 +134,6 @@ namespace MirrorBasics {
                 SpawnPlayerPrefab(Lobby_Player.localPlayer);
                 matchIDText.text = matchID;
             }
-
             //if host / join fail, re-enable the buttons
             else
             {
@@ -121,11 +143,11 @@ namespace MirrorBasics {
             }
         }
 
-        /*public void ForceStartDebug ()
+        //function for force start button
+        public void ForceStartDebug ()
         {
-            //gameLobbyCanvas.enabled = true;
             Lobby_Player.localPlayer.StartGame();
-        }*/
+        }
 
         public void SpawnPlayerPrefab(Lobby_Player player) // might need to pass match ID
         {
