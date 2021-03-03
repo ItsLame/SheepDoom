@@ -21,11 +21,11 @@ public class Movement : MonoBehaviour
     void Update()
     {
         //when pressing left mouse button
-        if(Input.GetMouseButtonDown(1))
+        if(Input.touchCount == 1)
         {
             RaycastHit hit;
-
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+            Touch touch = Input.GetTouch(0);
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(touch.position), out hit, Mathf.Infinity))
             {
                 //have the player to move to raycast point
                 agent.SetDestination(hit.point);
