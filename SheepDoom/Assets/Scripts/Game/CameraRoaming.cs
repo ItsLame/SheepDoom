@@ -49,40 +49,43 @@ public class CameraRoaming : MonoBehaviour
         }
         Vector3 pos = transform.position;
 
-        //Up
+        //somehow the position where the camera moves is fking flipped from the area u pressed
+        //changes are pos camera + to - and - to + to make sensible debug logs -jh
+
+        //Down
         if(Input.GetTouch(0).position.y >= Screen.height - UpMargin)
         {
-            Debug.Log("Top Screen has been pressed");
+            Debug.Log("Bottom Screen has been pressed");
             this.gameObject.GetComponent<CamSwitchManager>().touchTop();
             screenTouched = true;
             pos.x += camspeed * Time.deltaTime;
             // pos.z -= camspeed = Time.deltaTime;
         }
 
-        //Down
+        //Up
         if (Input.GetTouch(0).position.y <= DownMargin)
         {
-            Debug.Log("Bottom Screen has been pressed");
+            Debug.Log("Upper Screen has been pressed");
             this.gameObject.GetComponent<CamSwitchManager>().touchBot();
             screenTouched = true;
             pos.x -= camspeed * Time.deltaTime;
 
             // pos.z -= camspeed = Time.deltaTime;
         }
-        //Right
+        //Left
         if (Input.GetTouch(0).position.x >= Screen.width - RightMargin)
         {
-            Debug.Log("Right Screen has been pressed");
+            Debug.Log("Left Screen has been pressed");
             this.gameObject.GetComponent<CamSwitchManager>().touchRight();
             screenTouched = true;
             pos.z -= camspeed * Time.deltaTime;
 
             // pos.z -= camspeed = Time.deltaTime;
         }
-        //Left
+        //Right
         if (Input.GetTouch(0).position.x <= LeftMargin)
         {
-            Debug.Log("Left Screen has been pressed");
+            Debug.Log("Right Screen has been pressed");
             this.gameObject.GetComponent<CamSwitchManager>().touchLeft();
             screenTouched = true;
             pos.z += camspeed * Time.deltaTime;
