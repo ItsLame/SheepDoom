@@ -53,46 +53,50 @@ public class CameraRoaming : MonoBehaviour
         //changes are pos camera + to - and - to + to make sensible debug logs -jh
 
         //Up
-        if (Input.GetTouch(0).position.y >= Screen.height - UpMargin)
+        if (Input.touchCount > 1 )
         {
-            Debug.Log("Top Screen has been pressed");
-            this.gameObject.GetComponent<CamSwitchManager>().touchTop();
-            screenTouched = true;
-            pos.x += camspeed * Time.deltaTime;
-            // pos.z -= camspeed = Time.deltaTime;
+            if (Input.GetTouch(1).position.y >= Screen.height - UpMargin)
+            {
+                Debug.Log("Top Screen has been pressed");
+                this.gameObject.GetComponent<CamSwitchManager>().touchTop();
+                screenTouched = true;
+                pos.x += camspeed * Time.deltaTime;
+                // pos.z -= camspeed = Time.deltaTime;
+            }
+
+            //Down
+            if (Input.GetTouch(1).position.y <= DownMargin)
+            {
+                Debug.Log("Bottom Screen has been pressed");
+                this.gameObject.GetComponent<CamSwitchManager>().touchBot();
+                screenTouched = true;
+                pos.x -= camspeed * Time.deltaTime;
+
+                // pos.z -= camspeed = Time.deltaTime;
+            }
+            //Right
+            if (Input.GetTouch(1).position.x >= Screen.width - RightMargin)
+            {
+                Debug.Log("Right Screen has been pressed");
+                this.gameObject.GetComponent<CamSwitchManager>().touchRight();
+                screenTouched = true;
+                pos.z -= camspeed * Time.deltaTime;
+
+                // pos.z -= camspeed = Time.deltaTime;
+            }
+            //Left
+            if (Input.GetTouch(1).position.x <= LeftMargin)
+            {
+                Debug.Log("Left Screen has been pressed");
+                this.gameObject.GetComponent<CamSwitchManager>().touchLeft();
+                screenTouched = true;
+                pos.z += camspeed * Time.deltaTime;
+
+                // pos.z -= camspeed = Time.deltaTime;
+            }
+
+            transform.position = pos;
         }
-
-        //Down
-        if (Input.GetTouch(0).position.y <= DownMargin)
-        {
-            Debug.Log("Bottom Screen has been pressed");
-            this.gameObject.GetComponent<CamSwitchManager>().touchBot();
-            screenTouched = true;
-            pos.x -= camspeed * Time.deltaTime;
-
-            // pos.z -= camspeed = Time.deltaTime;
-        }
-        //Right
-        if (Input.GetTouch(0).position.x >= Screen.width - RightMargin)
-        {
-            Debug.Log("Right Screen has been pressed");
-            this.gameObject.GetComponent<CamSwitchManager>().touchRight();
-            screenTouched = true;
-            pos.z -= camspeed * Time.deltaTime;
-
-            // pos.z -= camspeed = Time.deltaTime;
-        }
-        //Left
-        if (Input.GetTouch(0).position.x <= LeftMargin)
-        {
-            Debug.Log("Left Screen has been pressed");
-            this.gameObject.GetComponent<CamSwitchManager>().touchLeft();
-            screenTouched = true;
-            pos.z += camspeed * Time.deltaTime;
-
-            // pos.z -= camspeed = Time.deltaTime;
-        }
-
-        transform.position = pos;
     }
+       
 }
