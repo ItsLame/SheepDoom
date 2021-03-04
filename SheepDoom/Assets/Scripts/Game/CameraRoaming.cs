@@ -51,7 +51,7 @@ public class CameraRoaming : MonoBehaviour
 
         //somehow the position where the camera moves is fking flipped from the area u pressed
         //changes are pos camera + to - and - to + to make sensible debug logs -jh
-
+        //for joystick press + border press
         //Up
         if (Input.touchCount > 1 )
         {
@@ -93,6 +93,62 @@ public class CameraRoaming : MonoBehaviour
                 pos.z += camspeed * Time.deltaTime;
 
                 // pos.z -= camspeed = Time.deltaTime;
+            }
+
+            if (Input.touches[1].phase == TouchPhase.Ended)
+            {
+                this.gameObject.GetComponent<CamSwitchManager>().snapBackFunction();
+            }
+
+            transform.position = pos;
+        }
+
+        //for single press to check the borders..
+        else if (Input.touchCount == 1)
+        {
+            if (Input.GetTouch(0).position.y >= Screen.height - UpMargin)
+            {
+                Debug.Log("Top Screen has been pressed");
+                this.gameObject.GetComponent<CamSwitchManager>().touchTop();
+                screenTouched = true;
+                pos.x += camspeed * Time.deltaTime;
+                // pos.z -= camspeed = Time.deltaTime;
+            }
+
+            //Down
+            if (Input.GetTouch(0).position.y <= DownMargin)
+            {
+                Debug.Log("Bottom Screen has been pressed");
+                this.gameObject.GetComponent<CamSwitchManager>().touchBot();
+                screenTouched = true;
+                pos.x -= camspeed * Time.deltaTime;
+
+                // pos.z -= camspeed = Time.deltaTime;
+            }
+            //Right
+            if (Input.GetTouch(0).position.x >= Screen.width - RightMargin)
+            {
+                Debug.Log("Right Screen has been pressed");
+                this.gameObject.GetComponent<CamSwitchManager>().touchRight();
+                screenTouched = true;
+                pos.z -= camspeed * Time.deltaTime;
+
+                // pos.z -= camspeed = Time.deltaTime;
+            }
+            //Left
+            if (Input.GetTouch(0).position.x <= LeftMargin)
+            {
+                Debug.Log("Left Screen has been pressed");
+                this.gameObject.GetComponent<CamSwitchManager>().touchLeft();
+                screenTouched = true;
+                pos.z += camspeed * Time.deltaTime;
+
+                // pos.z -= camspeed = Time.deltaTime;
+            }
+
+            if (Input.touches[0].phase == TouchPhase.Ended)
+            {
+                this.gameObject.GetComponent<CamSwitchManager>().snapBackFunction();
             }
 
             transform.position = pos;

@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74015be0a8b46840966a89e656e1604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1473718504}
+  player: {fileID: 1653176054}
   smoothness: 0.5
 --- !u!114 &10872346
 MonoBehaviour:
@@ -234,7 +234,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camspeed: 30
-  screenSizeThickness: 100
+  LeftMargin: 192
+  RightMargin: 192
+  UpMargin: 108
+  DownMargin: 108
   screenTouched: 0
   m_Text: {fileID: 587138202}
 --- !u!114 &10872347
@@ -739,7 +742,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &948718739
 PrefabInstance:
@@ -754,7 +757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: a6555311c0902fb47bcd2ce6066ea5c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a6555311c0902fb47bcd2ce6066ea5c0, type: 3}
       propertyPath: m_RootOrder
@@ -810,6 +813,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a6555311c0902fb47bcd2ce6066ea5c0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11100000, guid: a6555311c0902fb47bcd2ce6066ea5c0, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11100000, guid: a6555311c0902fb47bcd2ce6066ea5c0, type: 3}
@@ -1001,7 +1008,7 @@ PrefabInstance:
     - target: {fileID: 2427539677405621946, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2427539677405621946, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
         type: 3}
@@ -1072,6 +1079,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerMoveTest_v2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2427539677405621947, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2427539677405621921, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d, type: 3}
@@ -1270,12 +1282,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
---- !u!4 &1473718504 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2427539677405621946, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
-    type: 3}
-  m_PrefabInstance: {fileID: 1281829810}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1646419704
 GameObject:
   m_ObjectHideFlags: 0
@@ -1392,6 +1398,12 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!4 &1653176054 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400000, guid: a6555311c0902fb47bcd2ce6066ea5c0,
+    type: 3}
+  m_PrefabInstance: {fileID: 948718739}
+  m_PrefabAsset: {fileID: 0}
 --- !u!136 &1653176055
 CapsuleCollider:
   m_ObjectHideFlags: 0
