@@ -35,7 +35,7 @@ namespace MirrorBasics
             }
             else
             {
-                UI_LobbyScript.instance.SpawnPlayerPrefab(this);    //this could be the source of the server extra player in room problem
+                UI_LobbyScript.instance.SpawnPlayerPrefab(this);   
             }
         }
 
@@ -154,16 +154,13 @@ namespace MirrorBasics
         [Command]
         void CmdStartGame()
         {
-            MatchMaker.instance.StartGame();
-            Debug.Log("Game started successfully");
-            //generate match
-            TargetStartGame();
+            MatchMaker.instance.StartGame(matchID); // pass in the match id so matchmaker will find the correct match on the server to start game
+            Debug.Log("Game beginning");
         }
 
-        [TargetRpc]
-        void TargetStartGame()
+        public void BeginGame()
         {
-            Debug.Log($"MatchID: {matchID} | starting");
+            isGameStart = true; // change syncvar hook to display gamelobbycanvas and timer
         }
 
         //function to start count down and get ready start actual game
