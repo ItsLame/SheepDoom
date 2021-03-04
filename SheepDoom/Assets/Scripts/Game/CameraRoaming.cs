@@ -95,6 +95,11 @@ public class CameraRoaming : MonoBehaviour
                 // pos.z -= camspeed = Time.deltaTime;
             }
 
+            if (Input.touches[1].phase == TouchPhase.Ended)
+            {
+                this.gameObject.GetComponent<CamSwitchManager>().snapBackFunction();
+            }
+
             transform.position = pos;
         }
     }
