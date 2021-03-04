@@ -20,7 +20,6 @@ namespace MirrorBasics
         [SyncVar] public bool selectionTimerReset = true;
 
         //bool to check if room owner & if game is started
-        [SyncVar] public bool isRoomOwner = false;
         [SyncVar(hook = nameof(StartCountDown))] public bool isGameStart = false;
 
         NetworkMatchChecker networkMatchChecker;
@@ -89,9 +88,6 @@ namespace MirrorBasics
             matchID = _matchID;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.HostSuccess(success, _matchID);
-
-            //local player is room owner
-            isRoomOwner = true;
         }
 
         // Joining match
@@ -138,9 +134,6 @@ namespace MirrorBasics
             matchID = _matchID;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.JoinSuccess(success, _matchID);
-
-            //local player is not room owner
-            isRoomOwner = false;
         }
 
         //start match
@@ -167,14 +160,14 @@ namespace MirrorBasics
         private void StartCountDown(bool oldIsGameStart, bool newIsGameStart)
         {
             //timer countdown and sync
-            Debug.Log("check isGameStart state");
+            Debug.Log("isGameStart value is: " + isGameStart.ToString());
             if(isGameStart == true)
             {
                 //turn on gamelobbyui canvas
                 UI_LobbyScript.instance.gameLobbyCanvas.enabled = true;
-                
+                UI_LobbyScript.instance.forceStartDebug.SetActive(false);
                 //reset timer
-                if(selectionTimerReset == true)
+                if (selectionTimerReset == true)
                 {
                     Debug.Log("selection timer resetted");
                     selectionTimer = 5.0f;

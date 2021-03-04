@@ -33,51 +33,12 @@ namespace MirrorBasics {
 
         [Header("For Debugging Purposes")]
         //for debugging purposes
-        [SerializeField] GameObject forceStartDebug;
+        [SerializeField] public GameObject forceStartDebug;
 
         //singleton UI instance on start
         void Start()
         {
             instance = this;
-        }
-
-        void Update()
-        {
-            //so that only hosts have access to force start button
-            if(Lobby_Player.localPlayer?.isRoomOwner == true)
-            {
-                forceStartDebug.gameObject.SetActive(true);
-            }
-            else if(Lobby_Player.localPlayer?.isRoomOwner == false)
-            {
-                forceStartDebug.gameObject.SetActive(false);
-            }
-
-            /*//timer countdown and sync
-            if(Lobby_Player.localPlayer.isGameStart == true)
-            {
-                //Debug.Log("gameLobbyCanvas enabled for: " + Lobby_Player.localPlayer);
-                gameLobbyCanvas.enabled = true;
-                if(Lobby_Player.localPlayer.selectionTimerReset == true)
-                {
-                    Lobby_Player.localPlayer.selectionTimer = 5.0f;
-                    selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
-                    Lobby_Player.localPlayer.selectionTimerReset = false;
-                }
-                else
-                {
-                    Lobby_Player.localPlayer.selectionTimer -= Time.deltaTime;
-                    selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
-
-                    if(Lobby_Player.localPlayer.selectionTimer <= 0)
-                    {
-                        selectionTimerText.text = "Starting Game...";
-                        lockinButton.interactable = false;
-                        Lobby_Player.localPlayer.isGameStart = false;
-                        //Lobby_Player.localPlayer.selectionTimerZero = true;
-                    }
-                }
-            }*/
         }
 
         //Hosting 
@@ -102,6 +63,8 @@ namespace MirrorBasics {
                 lobbyCanvas.enabled = true;
                 SpawnPlayerPrefab(Lobby_Player.localPlayer);
                 matchIDText.text = matchID;
+                //so that only hosts have access to force start button
+                forceStartDebug.gameObject.SetActive(true);
             }
 
             //if host / join fail, re-enable the buttons
@@ -149,7 +112,7 @@ namespace MirrorBasics {
             Lobby_Player.localPlayer.StartGame();
         }
 
-        public void SpawnPlayerPrefab(Lobby_Player player) // might need to pass match ID
+        public void SpawnPlayerPrefab(Lobby_Player player) 
         {
             GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParent);
             newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
