@@ -3,4 +3,4 @@
 FYP 2021 Q1 </br>
 Multiplayer Battle Arena for Mobile Devices
 
-A MOBA game for Android making use of Mirror Networking.
+A MOBA game created in C# and Unity for Android making use of Mirror Networking.
