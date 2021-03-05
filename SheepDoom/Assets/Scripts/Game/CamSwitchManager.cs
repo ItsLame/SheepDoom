@@ -67,7 +67,7 @@ public class CamSwitchManager : MonoBehaviour
     //snap camera back to player
     public void snapBackFunction()
     {
-        Debug.Log("snapbackfunction called");
+  //      Debug.Log("snapbackfunction called");
         topScreenClicked = false;
         bottomScreenClicked = false;
         leftScreenClicked = false;
@@ -78,7 +78,19 @@ public class CamSwitchManager : MonoBehaviour
         // Update is called once per frame
         void Update()
         {
-        Debug.Log("SnapToPlayer: " + snapBackToPlayer);
+        if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
+        {
+            Debug.Log("Stop camera tracking");
+            camFollowscript.enabled = false;
+        }
+
+        else 
+        {
+            Debug.Log("Enable camera tracking");
+            camFollowscript.enabled = true;
+        }
+
+
             if (camViewChanged == false)
             {
                 if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
@@ -90,16 +102,17 @@ public class CamSwitchManager : MonoBehaviour
                     camFollowscript.enabled = false;
                 }
             }
+
             else if (camViewChanged == true)
             {
                 if (snapBackToPlayer)
                 {
-                    Debug.Log("Snapping back to character");
+            //        Debug.Log("Snapping back to character");
                     camViewChanged = false;
                   //  camRoamscript.enabled = false;
                     camFollowscript.enabled = true;
                 }
             }
-
-        }
+        Debug.Log("SnapToPlayer: " + snapBackToPlayer);
+    }
 }

@@ -16,6 +16,7 @@ namespace MirrorBasics {
         public string matchID;
         //storing the players
         public SyncListGameObject players = new SyncListGameObject();
+        //public bool inMatch = false;
 
         //constructor that takes in matchID and the host
         public Match(string matchID, GameObject player)
@@ -121,13 +122,27 @@ namespace MirrorBasics {
         }
 
         //start game for everyone
-        public void StartGame()
+        public void StartGame(string _matchID)
         {
-            Debug.Log("MatchMaker: Game Started!");
+            for(int i = 0; i < matches.Count; i++)
+            {
+                if (matches[i].matchID == _matchID) // find the correct match
+                {
+                    //matches[i].inMatch = true;
+                    foreach (var player in matches[i].players)
+                    {
+                        Lobby_Player _player = player.GetComponent<Lobby_Player>();
+                        Debug.Log("in matchmaker foreach loop");
+                        _player.BeginGame(); // start the corresponding match
+                    }
+                    break;
+                }
+            }
+            /*Debug.Log("MatchMaker: Game Started!");
             
             //game is starting
-            Lobby_Player.localPlayer.isGameStart = true;
-            Debug.Log("isGameStart set to true");
+            Lobby_Player.localPlayer.isGameStart = true; // not working in server build
+            Debug.Log("isGameStart set to true");   */
         }
 
         //switch team viewable for everyone <-- function transferred to Lobby_Player.cs RpcSwitchTeam
