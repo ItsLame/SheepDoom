@@ -155,9 +155,6 @@ namespace MirrorBasics {
             Lobby_Player.localPlayer.StartGame();
         }
 
-<<<<<<< Updated upstream
-        public void SpawnPlayerPrefab(Lobby_Player player) // might need to pass match ID
-=======
         //to spawn players in lobby
         public void SpawnPlayerPrefab(Lobby_Player player) 
         {   
@@ -172,11 +169,12 @@ namespace MirrorBasics {
                 //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
                 //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
 
+                playerLobbyUIGameObject.SetActive(true);
+
                 Lobby_Player.localPlayer.teamIndex = 1;
                 Lobby_Player.localPlayer.gameObject.transform.SetParent(UIPlayerParentTeam1);
                 Lobby_Player.localPlayer.GetComponent<UIPlayer>().SetPlayer(player);
                 
-                playerLobbyUIGameObject.SetActive(true);
                 countPlayers += 1;
             }
             //add new clients to team 2
@@ -186,11 +184,11 @@ namespace MirrorBasics {
                 //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
                 //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
 
+                playerLobbyUIGameObject.SetActive(true);
+
                 Lobby_Player.localPlayer.teamIndex = 2;
                 Lobby_Player.localPlayer.gameObject.transform.SetParent(UIPlayerParentTeam2);
                 Lobby_Player.localPlayer.GetComponent<UIPlayer>().SetPlayer(player);
-
-                playerLobbyUIGameObject.SetActive(true);
             }
             
             //switch button differs according to client's team
@@ -227,7 +225,6 @@ namespace MirrorBasics {
             countPlayers -= 1;
         }
         public void SwitchToTeam1()
->>>>>>> Stashed changes
         {
             countPlayers += 1;
         }
