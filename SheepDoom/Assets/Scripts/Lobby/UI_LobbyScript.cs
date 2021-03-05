@@ -176,6 +176,8 @@ namespace MirrorBasics {
                 Lobby_Player.localPlayer.GetComponent<UIPlayer>().SetPlayer(player);
                 
                 countPlayers += 1;
+
+                Lobby_Player.localPlayer.RefreshTeam(UIPlayerParentTeam1);
             }
             //add new clients to team 2
             else
@@ -189,6 +191,9 @@ namespace MirrorBasics {
                 Lobby_Player.localPlayer.teamIndex = 2;
                 Lobby_Player.localPlayer.gameObject.transform.SetParent(UIPlayerParentTeam2);
                 Lobby_Player.localPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+
+                Lobby_Player.localPlayer.RefreshTeam(UIPlayerParentTeam1);
+                Lobby_Player.localPlayer.RefreshTeam(UIPlayerParentTeam2);
             }
             
             //switch button differs according to client's team

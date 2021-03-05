@@ -225,6 +225,35 @@ namespace MirrorBasics
             }
         }
 
+        //function to auto refresh team list
+        public void RefreshTeam(Transform teamParentGroup)
+        {
+            Debug.Log("Refreshing team list...");
+            CmdRefreshTeam(teamParentGroup);
+        }
+
+        [Command]
+        void CmdRefreshTeam(Transform teamParentGroup)
+        {
+            Debug.Log("Commencing team refresh...");
+            RpcRefreshTeam(teamParentGroup);
+        }
+
+        [ClientRpc]
+        void RpcRefreshTeam(Transform teamParentGroup)
+        {
+            if(teamIndex == 1)
+            {
+                Debug.Log(playerIndex + " belongs to team 1!");
+                this.gameObject.transform.SetParent(teamParentGroup);
+            }
+            else if(teamIndex == 2)
+            {
+                Debug.Log(playerIndex + " belongs to team 2!");
+                this.gameObject.transform.SetParent(teamParentGroup);
+            }
+        }
+
         //function for players to switch team
         public void SwitchTeam(Transform teamParentGroup)
         {
