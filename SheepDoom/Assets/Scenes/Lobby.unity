@@ -1014,7 +1014,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 181755203}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}
@@ -1206,7 +1206,7 @@ MonoBehaviour:
   m_StartAxis: 1
   m_CellSize: {x: 180, y: 180}
   m_Spacing: {x: 1325, y: 20}
-  m_Constraint: 1
+  m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!114 &256191721
 MonoBehaviour:
