@@ -1597,21 +1597,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
---- !u!114 &1473718500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1473718498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c783e7c37ea46c4489543875f8a08b2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
-    type: 3}
-  SpawnPoint: {fileID: 1763315043}
 --- !u!4 &1473718504 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2427539677405621946, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
@@ -1630,6 +1615,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf7336327a1c244ca493c0327e8bfab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
+    type: 3}
+  SpawnPoint: {fileID: 1763315043}
 --- !u!1 &1554319953
 GameObject:
   m_ObjectHideFlags: 0
@@ -2152,6 +2140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf7336327a1c244ca493c0327e8bfab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Projectile: {fileID: 0}
+  SpawnPoint: {fileID: 0}
 --- !u!95 &1653176060
 Animator:
   serializedVersion: 3
