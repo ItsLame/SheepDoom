@@ -13,6 +13,7 @@ namespace MirrorBasics
         //matchID if player host room, syncedvared
         [SyncVar] public string matchID;
         [SyncVar] public int playerIndex;
+        [SyncVar] public int teamIndex;
         
         //syncvar timer
         [SyncVar] public float selectionTimer;
@@ -35,7 +36,11 @@ namespace MirrorBasics
             }
             else
             {
+<<<<<<< Updated upstream
                 UI_LobbyScript.instance.SpawnPlayerPrefab(this);    //this could be the source of the server extra player in room problem
+=======
+                UI_LobbyScript.instance.SpawnPlayerPrefab(this);
+>>>>>>> Stashed changes
             }
         }
 
@@ -59,7 +64,7 @@ namespace MirrorBasics
             matchID = _matchID;
             //from client, calling player function, if manage to host a game
             //if host success
-            if(MatchMaker.instance.HostGame(_matchID, gameObject, out playerIndex))
+            if(MatchMaker.instance.HostGame(_matchID, gameObject, out playerIndex, out teamIndex))
             {
                 Debug.Log("Game hosted successfully");
                 //convert the 5 digit string to a default mirror method GUID
@@ -67,7 +72,7 @@ namespace MirrorBasics
 
                 Debug.Log("test");
                 //generate match
-                TargetHostGame(true, _matchID, playerIndex);
+                TargetHostGame(true, _matchID, playerIndex, teamIndex);
 
                 //notify the UI for success
                 
@@ -78,15 +83,16 @@ namespace MirrorBasics
             else
             {
                 Debug.Log("Game hosting failed"); 
-                TargetHostGame(false, _matchID, playerIndex);
+                TargetHostGame(false, _matchID, playerIndex, teamIndex);
             }
         }
 
         [TargetRpc]
-        void TargetHostGame(bool success, string _matchID, int _playerIndex)
+        void TargetHostGame(bool success, string _matchID, int _playerIndex, int _teamIndex)
         {
             playerIndex = _playerIndex;
             matchID = _matchID;
+            teamIndex = _teamIndex;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.HostSuccess(success, _matchID);
 
@@ -113,7 +119,7 @@ namespace MirrorBasics
             matchID = _matchID;
             //from client, calling player function, if manage to Join a game
             //if Join success
-            if(MatchMaker.instance.JoinGame(_matchID, gameObject, out playerIndex))
+            if(MatchMaker.instance.JoinGame(_matchID, gameObject, out playerIndex, out teamIndex))
             {
                 Debug.Log("Game Joined successfully");
                 //convert the 5 digit string to a default mirror method GUID
@@ -221,6 +227,65 @@ namespace MirrorBasics
                 }
 
                 yield return null;
+            }
+        }
+
+        //function for players to switch team
+        public void SwitchTeam(Transform teamParentGroup)
+        {
+            Debug.Log("Attempting to switch team...");
+            CmdSwitchTeam(teamParentGroup);
+        }
+
+        [Command]
+        void CmdSwitchTeam(Transform teamParentGroup)
+        {
+                Debug.Log("Commencing team switch...");
+                RpcSwitchTeam(teamParentGroup);
+                //MatchMaker.instance.SwitchTeam(teamParentGroup, out teamIndex);
+                TargetSwitchTeam();
+        }
+
+        //when team switched, change view for all players
+        [ClientRpc]
+        void RpcSwitchTeam(Transform teamParentGroup)
+        {
+            bool isSwitch = true;
+            
+            if(isSwitch == true)
+            {
+                if(teamIndex == 1)
+                {
+                    Debug.Log(playerIndex + " switches to team 2!");
+                    teamIndex = 2;
+                    this.gameObject.transform.SetParent(teamParentGroup);
+                    UI_LobbyScript.instance.SwitchToTeam2();
+                }
+                else if(teamIndex == 2)
+                {
+                    Debug.Log(playerIndex + " switches to team 1!");
+                    teamIndex = 1;
+                    this.gameObject.transform.SetParent(teamParentGroup);
+                    UI_LobbyScript.instance.SwitchToTeam1();
+                }
+
+                isSwitch = false;
+            }
+        }
+
+        //change button only for the person who clicked
+        [TargetRpc]
+        void TargetSwitchTeam()
+        {
+            if(teamIndex == 1)
+            {
+                UI_LobbyScript.instance.MoveToTeam1Btn.SetActive(false);
+                UI_LobbyScript.instance.MoveToTeam2Btn.SetActive(true);
+            }
+            else if(teamIndex == 2)
+            {
+                UI_LobbyScript.instance.MoveToTeam1Btn.SetActive(true);
+                UI_LobbyScript.instance.MoveToTeam2Btn.SetActive(false);
             }
         }
     }

@@ -57,9 +57,10 @@ namespace MirrorBasics {
         }
 
         //host game bool validation for same IDs..
-        public bool HostGame(string _matchID, GameObject _player, out int playerIndex)
+        public bool HostGame(string _matchID, GameObject _player, out int playerIndex, out int teamIndex)
         {
             playerIndex = -1;
+            teamIndex = -1;
             //if duplicate is not found in matchIDs synclist, create new match
             if (!matchIDs.Contains(_matchID))
             {
@@ -68,6 +69,7 @@ namespace MirrorBasics {
                 matches.Add(new Match(_matchID, _player));
                 Debug.Log($"Match ID Created");
                 playerIndex = 1;
+                teamIndex = 1;
                 return true;
             }
             else
@@ -80,9 +82,10 @@ namespace MirrorBasics {
             //validation for existing id
         }
 
-        public bool JoinGame(string _matchID, GameObject _player, out int playerIndex)
+        public bool JoinGame(string _matchID, GameObject _player, out int playerIndex, out int teamIndex)
         {
             playerIndex = -1;
+            teamIndex = -1;
             //joining a room
             if (matchIDs.Contains(_matchID))
             {
@@ -92,6 +95,16 @@ namespace MirrorBasics {
                     {
                         matches[i].players.Add(_player);
                         playerIndex = matches[i].players.Count;
+
+                        if(playerIndex <= 3)
+                        {
+                            teamIndex = 1;
+                        }
+                        else
+                        {
+                            teamIndex = 2;
+                        }
+
                         break;
                     }
                 }
@@ -116,6 +129,34 @@ namespace MirrorBasics {
             Lobby_Player.localPlayer.isGameStart = true;
             Debug.Log("isGameStart set to true");
         }
+
+        //switch team viewable for everyone <-- function transferred to Lobby_Player.cs RpcSwitchTeam
+        /*public void SwitchTeam(Transform _teamParentGroup, out int _teamIndex)
+        {
+            _teamIndex = Lobby_Player.localPlayer.teamIndex;
+            bool isSwitch = true;
+            int _playerIndex = Lobby_Player.localPlayer.playerIndex;
+            
+            if(isSwitch == true)
+            {
+                if(_teamIndex == 1)
+                {
+                    Debug.Log("player " + _playerIndex + ": switches to team 2!");
+                    _teamIndex = 2;
+                    UI_LobbyScript.instance.gameObject.transform.SetParent(_teamParentGroup);
+                    UI_LobbyScript.instance.SwitchToTeam2();
+                }
+                else if(_teamIndex == 2)
+                {
+                    Debug.Log("player " + _playerIndex + ": switches to team 1!");
+                    _teamIndex = 1;
+                    UI_LobbyScript.instance.gameObject.transform.SetParent(_teamParentGroup);
+                    UI_LobbyScript.instance.SwitchToTeam1();
+                }
+
+                isSwitch = false;
+            }
+        }*/
 
         //generate random match ID
         public static string GetRandomMatchID()

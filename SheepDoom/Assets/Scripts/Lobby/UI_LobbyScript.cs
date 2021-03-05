@@ -19,8 +19,11 @@ namespace MirrorBasics {
         [SerializeField] Canvas lobbyCanvas;
 
         [Header("Lobby")]
-        [SerializeField] Transform UIPlayerParent;
-        [SerializeField] GameObject UIPlayerPrefab;
+        [SerializeField] Transform UIPlayerParentTeam1;
+        [SerializeField] Transform UIPlayerParentTeam2;
+        [SerializeField] public GameObject UIPlayerPrefab;
+        [SerializeField] public GameObject MoveToTeam1Btn;
+        [SerializeField] public GameObject MoveToTeam2Btn;
         [SerializeField] Text matchIDText;
 
         [Header("Game Lobby (Hero Selection)")]
@@ -34,6 +37,9 @@ namespace MirrorBasics {
         [Header("For Debugging Purposes")]
         //for debugging purposes
         [SerializeField] GameObject forceStartDebug;
+
+        //[SerializeField] public GameObject newUIPlayer;
+        private int countPlayers = 0;
 
         //singleton UI instance on start
         void Start()
@@ -149,11 +155,81 @@ namespace MirrorBasics {
             Lobby_Player.localPlayer.StartGame();
         }
 
+<<<<<<< Updated upstream
         public void SpawnPlayerPrefab(Lobby_Player player) // might need to pass match ID
+=======
+        //to spawn players in lobby
+        public void SpawnPlayerPrefab(Lobby_Player player) 
+        {   
+            GameObject playerGameObject = Lobby_Player.localPlayer.gameObject;
+            GameObject playerLobbyUIGameObject = playerGameObject.transform.GetChild(0).gameObject;
+            //Lobby_Player.localPlayer.playerLobbyGameObject = playerLobbyUIGameObject;
+
+            //if team 1 not full, add new clients to team 1
+            if(countPlayers <=3)
+            {
+                //newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam1);
+                //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+                //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+
+                Lobby_Player.localPlayer.teamIndex = 1;
+                Lobby_Player.localPlayer.gameObject.transform.SetParent(UIPlayerParentTeam1);
+                Lobby_Player.localPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+                
+                playerLobbyUIGameObject.SetActive(true);
+                countPlayers += 1;
+            }
+            //add new clients to team 2
+            else
+            {
+                //newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam2);
+                //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+                //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+
+                Lobby_Player.localPlayer.teamIndex = 2;
+                Lobby_Player.localPlayer.gameObject.transform.SetParent(UIPlayerParentTeam2);
+                Lobby_Player.localPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+
+                playerLobbyUIGameObject.SetActive(true);
+            }
+            
+            //switch button differs according to client's team
+            if(Lobby_Player.localPlayer.transform.parent == UIPlayerParentTeam1)
+            {
+                MoveToTeam2Btn.SetActive(true);
+                MoveToTeam1Btn.SetActive(false);
+            }
+            else if(Lobby_Player.localPlayer.transform.parent == UIPlayerParentTeam2)
+            {
+                MoveToTeam1Btn.SetActive(true);
+                MoveToTeam2Btn.SetActive(false);
+            }
+        }
+
+        //when switch button is pressed
+        public void SwitchTeam()
         {
-            GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParent);
-            newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
-            newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+            if(MoveToTeam2Btn.activeSelf)
+            {
+                Debug.Log("MoveToTeam2Btn pressed!");
+                Lobby_Player.localPlayer.SwitchTeam(UIPlayerParentTeam2);
+            }
+            else if(MoveToTeam1Btn.activeSelf)
+            {
+                Debug.Log("MoveToTeam1Btn pressed!");
+                Lobby_Player.localPlayer.SwitchTeam(UIPlayerParentTeam1);
+            }
+        }
+
+        //to know which team new client belong to
+        public void SwitchToTeam2()
+        {
+            countPlayers -= 1;
+        }
+        public void SwitchToTeam1()
+>>>>>>> Stashed changes
+        {
+            countPlayers += 1;
         }
     }
 }
