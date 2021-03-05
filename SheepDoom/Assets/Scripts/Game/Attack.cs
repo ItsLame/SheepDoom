@@ -5,6 +5,8 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
     private bool attacking = false;
+    private bool ulti = false;
+    private bool specialskill = false;
     public GameObject Projectile;
     public Transform SpawnPoint;
 
@@ -18,6 +20,17 @@ public class Attack : MonoBehaviour
     {
         attacking = true;
     }
+
+    public void UltiClick()
+    {
+        ulti = true;
+    }
+
+    public void SpecialSkillClick()
+    {
+        specialskill = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -25,6 +38,16 @@ public class Attack : MonoBehaviour
         {
             Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
             attacking = false;
+        }
+        if (ulti)
+        {
+            Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
+            ulti = false;
+        }
+        if (specialskill)
+        {
+            Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
+            specialskill = false;
         }
     }
 }
