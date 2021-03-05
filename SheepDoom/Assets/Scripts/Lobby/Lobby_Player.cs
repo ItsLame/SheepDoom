@@ -232,6 +232,7 @@ namespace MirrorBasics
             CmdRefreshTeam(teamParentGroup);
         }
 
+        //client to server
         [Command]
         void CmdRefreshTeam(Transform teamParentGroup)
         {
@@ -239,6 +240,7 @@ namespace MirrorBasics
             RpcRefreshTeam(teamParentGroup);
         }
 
+        //refresh view for all players
         [ClientRpc]
         void RpcRefreshTeam(Transform teamParentGroup)
         {
@@ -261,6 +263,7 @@ namespace MirrorBasics
             CmdSwitchTeam(teamParentGroup);
         }
 
+        //client to server
         [Command]
         void CmdSwitchTeam(Transform teamParentGroup)
         {
