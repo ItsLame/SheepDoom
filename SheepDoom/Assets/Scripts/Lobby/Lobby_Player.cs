@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 
 namespace MirrorBasics
@@ -23,6 +24,8 @@ namespace MirrorBasics
         //bool to check if room owner & if game is started
         [SyncVar] public bool isRoomOwner = false;
         [SyncVar(hook = nameof(StartCountDown))] public bool isGameStart = false;
+        [SyncVar] public bool isReady = false;
+        [SyncVar] public int countReady = 1;
 
         NetworkMatchChecker networkMatchChecker;
 
@@ -66,7 +69,7 @@ namespace MirrorBasics
                 //convert the 5 digit string to a default mirror method GUID
                 networkMatchChecker.matchId = _matchID.ToGuid();
 
-                Debug.Log("test");
+                Debug.Log("TargetHostGame");
                 //generate match
                 TargetHostGame(true, _matchID, playerIndex, teamIndex);
 
@@ -147,24 +150,116 @@ namespace MirrorBasics
 
         //start match
         //available to hosts only
-        public void StartGame()
+        public void StartGame(string startButton)
         {
             Debug.Log("Starting Game");
-            CmdStartGame();
+            CmdStartGame(startButton);
+            
         }
 
         [Command]
-        void CmdStartGame()
+        void CmdStartGame(string startButton)
         {
-            MatchMaker.instance.StartGame(matchID);
-            Debug.Log("Game started successfully");
+            MatchMaker.instance.StartGame(startButton, matchID);
+            //Debug.Log("Game started successfully");
             //generate match
         }
 
-        public void BeginGame()
+        public void BeginGame(bool AllReady)
         {
-            Debug.Log($"MatchID: {matchID} | starting");
-            isGameStart = true; // change syncvar hook to display gamelobbycanvas and timer
+            if(AllReady == true)
+            {
+                ClientStartGame();
+                Debug.Log($"MatchID: {matchID} | starting");
+                isGameStart = true; // change syncvar hook to display gamelobbycanvas and timer
+            }
+            else
+            {
+                Debug.Log($"MatchID: {matchID} | all players must be ready!");
+                isGameStart = false;
+            }
+        }
+
+        //change ready status of host to ready; viewable to all
+        [ClientRpc]
+        void ClientStartGame()
+        {
+            this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().text = "Ready!";
+            this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().color = Color.green;
+        }
+
+        //function when player presses ready
+        public void ReadyGame()
+        {
+            Debug.Log("Lobby_Player: ReadyGame");
+            CmdReadyGame();
+        }
+
+        [Command]
+        void CmdReadyGame()
+        {
+            bool sendReadyStatus = false;
+            Debug.Log("Player " + this.playerIndex + ": Change Ready Status!");
+
+            if(this.isReady == false)
+            {
+                sendReadyStatus = true;
+                this.isReady = true;
+                RpcReadyGame(sendReadyStatus);
+            }
+            else if(this.isReady == true)
+            {
+                sendReadyStatus = false;
+                this.isReady = false;
+                RpcReadyGame(sendReadyStatus);
+            }
+            
+            TargetReadyGame();
+        }
+
+        //change ready status of player viewable to everyone
+        [ClientRpc]
+        void RpcReadyGame(bool receiveReadyStatus)
+        {
+            Debug.Log("Lobby Player: RpcReadyGame");
+            if(receiveReadyStatus == true)
+            {
+                countReady += 1;
+                this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().text = "Ready!";
+                this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().color = Color.green;
+            }
+            else if(receiveReadyStatus == false)
+            {
+                countReady -= 1;
+                this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().text = "Not Ready";
+                this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().color = Color.red;
+            }
+        }
+
+        //change ready button to the one who presses
+        [TargetRpc]
+        void TargetReadyGame()
+        {
+            if(this.isReady == false)
+            {
+                var changeBtnColor = UI_LobbyScript.instance.readyButton.GetComponent<Button>().colors;
+                changeBtnColor.normalColor = Color.red;
+                changeBtnColor.highlightedColor = Color.gray;
+                changeBtnColor.pressedColor = Color.magenta;
+                UI_LobbyScript.instance.readyButton.GetComponent<Button>().colors = changeBtnColor;
+
+                UI_LobbyScript.instance.readyButton.transform.GetChild(0).GetComponent<Text>().text = "Ready";
+            }
+            else if(this.isReady == true)
+            {
+                var changeBtnColor = UI_LobbyScript.instance.readyButton.GetComponent<Button>().colors;
+                changeBtnColor.normalColor = Color.black;
+                changeBtnColor.highlightedColor = Color.gray;
+                changeBtnColor.pressedColor = Color.magenta;
+                UI_LobbyScript.instance.readyButton.GetComponent<Button>().colors = changeBtnColor;
+
+                UI_LobbyScript.instance.readyButton.transform.GetChild(0).GetComponent<Text>().text = "Cancel";
+            }
         }
 
         //function to start count down and get ready start actual game

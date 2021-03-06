@@ -42,6 +42,7 @@ namespace MirrorBasics {
     public class SyncListMatch : SyncList<Match>
     {
     }
+
     public class MatchMaker : NetworkBehaviour
     {
         //single entity of matchmaker at a time
@@ -122,56 +123,52 @@ namespace MirrorBasics {
         }
 
         //start game for everyone
-        public void StartGame(string _matchID)
+        public void StartGame(string startButton, string _matchID)
         {
-            for(int i = 0; i < matches.Count; i++)
+            if(startButton == "Force Start")
             {
-                if (matches[i].matchID == _matchID) // find the correct match
+                for(int i = 0; i < matches.Count; i++)
                 {
-                    //matches[i].inMatch = true;
-                    foreach (var player in matches[i].players)
+                    if (matches[i].matchID == _matchID) // find the correct match
                     {
-                        Lobby_Player _player = player.GetComponent<Lobby_Player>();
-                        Debug.Log("in matchmaker foreach loop");
-                        _player.BeginGame(); // start the corresponding match
+                        //matches[i].inMatch = true;
+                        foreach (var player in matches[i].players)
+                        {
+                            Lobby_Player _player = player.GetComponent<Lobby_Player>();
+                            Debug.Log("MatchMaker: StartGame foreach loop");
+                            _player.BeginGame(true); // start the corresponding match
+                        }
+                        break;
                     }
-                    break;
                 }
             }
-            /*Debug.Log("MatchMaker: Game Started!");
-            
-            //game is starting
-            Lobby_Player.localPlayer.isGameStart = true; // not working in server build
-            Debug.Log("isGameStart set to true");   */
-        }
-
-        //switch team viewable for everyone <-- function transferred to Lobby_Player.cs RpcSwitchTeam
-        /*public void SwitchTeam(Transform _teamParentGroup, out int _teamIndex)
-        {
-            _teamIndex = Lobby_Player.localPlayer.teamIndex;
-            bool isSwitch = true;
-            int _playerIndex = Lobby_Player.localPlayer.playerIndex;
-            
-            if(isSwitch == true)
+            else if(startButton == "Normal Start")
             {
-                if(_teamIndex == 1)
-                {
-                    Debug.Log("player " + _playerIndex + ": switches to team 2!");
-                    _teamIndex = 2;
-                    UI_LobbyScript.instance.gameObject.transform.SetParent(_teamParentGroup);
-                    UI_LobbyScript.instance.SwitchToTeam2();
-                }
-                else if(_teamIndex == 2)
-                {
-                    Debug.Log("player " + _playerIndex + ": switches to team 1!");
-                    _teamIndex = 1;
-                    UI_LobbyScript.instance.gameObject.transform.SetParent(_teamParentGroup);
-                    UI_LobbyScript.instance.SwitchToTeam1();
-                }
+                int countPlayer = 0;
 
-                isSwitch = false;
+                for(int i = 0; i < matches.Count; i++)
+                {
+                    if (matches[i].matchID == _matchID) // find the correct match
+                    {
+                        foreach (var player in matches[i].players)
+                        {
+                            countPlayer += 1;
+                            Lobby_Player _player = player.GetComponent<Lobby_Player>();
+
+                            if(_player.countReady == countPlayer)
+                            {
+                                _player.BeginGame(true); // start the corresponding match
+                            }
+                            else if(_player.countReady < countPlayer)
+                            {
+                                _player.BeginGame(false);
+                            }
+                        }
+                        break;
+                    }
+                }
             }
-        }*/
+        }
 
         //generate random match ID
         public static string GetRandomMatchID()
@@ -221,3 +218,37 @@ namespace MirrorBasics {
         }
     }
 }
+
+/*Debug.Log("MatchMaker: Game Started!");
+//game is starting <-- previously in StartGame() function
+Lobby_Player.localPlayer.isGameStart = true; // not working in server build
+Debug.Log("isGameStart set to true");*/
+
+//switch team viewable for everyone <-- function transferred to Lobby_Player.cs RpcSwitchTeam,
+//                                      previously in StartGame() function
+        /*public void SwitchTeam(Transform _teamParentGroup, out int _teamIndex)
+        {
+            _teamIndex = Lobby_Player.localPlayer.teamIndex;
+            bool isSwitch = true;
+            int _playerIndex = Lobby_Player.localPlayer.playerIndex;
+            
+            if(isSwitch == true)
+            {
+                if(_teamIndex == 1)
+                {
+                    Debug.Log("player " + _playerIndex + ": switches to team 2!");
+                    _teamIndex = 2;
+                    UI_LobbyScript.instance.gameObject.transform.SetParent(_teamParentGroup);
+                    UI_LobbyScript.instance.SwitchToTeam2();
+                }
+                else if(_teamIndex == 2)
+                {
+                    Debug.Log("player " + _playerIndex + ": switches to team 1!");
+                    _teamIndex = 1;
+                    UI_LobbyScript.instance.gameObject.transform.SetParent(_teamParentGroup);
+                    UI_LobbyScript.instance.SwitchToTeam1();
+                }
+
+                isSwitch = false;
+            }
+        }*/

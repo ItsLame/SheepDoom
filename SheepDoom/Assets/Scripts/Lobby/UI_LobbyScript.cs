@@ -25,6 +25,8 @@ namespace MirrorBasics {
         [SerializeField] public GameObject MoveToTeam1Btn;
         [SerializeField] public GameObject MoveToTeam2Btn;
         [SerializeField] Text matchIDText;
+        [SerializeField] public Button startButton;
+        [SerializeField] public Button readyButton;
 
         [Header("Game Lobby (Hero Selection)")]
         //canvas
@@ -36,7 +38,9 @@ namespace MirrorBasics {
 
         [Header("For Debugging Purposes")]
         //for debugging purposes
-        [SerializeField] GameObject forceStartDebug;
+        [SerializeField] bool isForceStartDebug;
+        [SerializeField] public GameObject forceStartDebug;
+        [SerializeField] public Text debugText;
 
         //[SerializeField] public GameObject newUIPlayer;
         private int countPlayers = 0;
@@ -52,38 +56,24 @@ namespace MirrorBasics {
             //so that only hosts have access to force start button
             if(Lobby_Player.localPlayer?.isRoomOwner == true)
             {
-                forceStartDebug.gameObject.SetActive(true);
+                if(isForceStartDebug == true)
+                {
+                    forceStartDebug.gameObject.SetActive(true);
+                }
+                else if(isForceStartDebug == false)
+                {
+                    forceStartDebug.gameObject.SetActive(false);
+                }
+
+                startButton.gameObject.SetActive(true);
+                readyButton.gameObject.SetActive(false);
             }
             else if(Lobby_Player.localPlayer?.isRoomOwner == false)
             {
                 forceStartDebug.gameObject.SetActive(false);
+                startButton.gameObject.SetActive(false);
+                readyButton.gameObject.SetActive(true);
             }
-
-            /*//timer countdown and sync
-            if(Lobby_Player.localPlayer.isGameStart == true)
-            {
-                //Debug.Log("gameLobbyCanvas enabled for: " + Lobby_Player.localPlayer);
-                gameLobbyCanvas.enabled = true;
-                if(Lobby_Player.localPlayer.selectionTimerReset == true)
-                {
-                    Lobby_Player.localPlayer.selectionTimer = 5.0f;
-                    selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
-                    Lobby_Player.localPlayer.selectionTimerReset = false;
-                }
-                else
-                {
-                    Lobby_Player.localPlayer.selectionTimer -= Time.deltaTime;
-                    selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
-
-                    if(Lobby_Player.localPlayer.selectionTimer <= 0)
-                    {
-                        selectionTimerText.text = "Starting Game...";
-                        lockinButton.interactable = false;
-                        Lobby_Player.localPlayer.isGameStart = false;
-                        //Lobby_Player.localPlayer.selectionTimerZero = true;
-                    }
-                }
-            }*/
         }
 
         //Hosting 
@@ -150,10 +140,26 @@ namespace MirrorBasics {
         }
 
         //function for force start button
-        public void ForceStartDebug ()
+        public void ForceStartDebug()
         {
-            Lobby_Player.localPlayer.StartGame();
+            Debug.Log("Force Start Button Pressed");
+            Lobby_Player.localPlayer.StartGame("Force Start");
         }
+
+        //function for start button
+        public void StartGamePressed()
+        {
+            Debug.Log("Start Button Pressed");
+            Lobby_Player.localPlayer.StartGame("Normal Start");
+        }
+
+        public void ReadyGamePressed()
+        {
+            Debug.Log("Ready Button Pressed");
+            Lobby_Player.localPlayer.ReadyGame();
+        }
+
+        //function for ready button
 
         //to spawn players in lobby
         public void SpawnPlayerPrefab(Lobby_Player player) 
@@ -235,3 +241,29 @@ namespace MirrorBasics {
         }
     }
 }
+
+/*//timer countdown and sync <--- previously in Update() function
+            if(Lobby_Player.localPlayer.isGameStart == true)
+            {
+                //Debug.Log("gameLobbyCanvas enabled for: " + Lobby_Player.localPlayer);
+                gameLobbyCanvas.enabled = true;
+                if(Lobby_Player.localPlayer.selectionTimerReset == true)
+                {
+                    Lobby_Player.localPlayer.selectionTimer = 5.0f;
+                    selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
+                    Lobby_Player.localPlayer.selectionTimerReset = false;
+                }
+                else
+                {
+                    Lobby_Player.localPlayer.selectionTimer -= Time.deltaTime;
+                    selectionTimerText.text = Lobby_Player.localPlayer.selectionTimer.ToString("f0");
+
+                    if(Lobby_Player.localPlayer.selectionTimer <= 0)
+                    {
+                        selectionTimerText.text = "Starting Game...";
+                        lockinButton.interactable = false;
+                        Lobby_Player.localPlayer.isGameStart = false;
+                        //Lobby_Player.localPlayer.selectionTimerZero = true;
+                    }
+                }
+            }*/
