@@ -24,4 +24,9 @@ public class ProjectileSettings : MonoBehaviour
         m_Rigidbody.AddForce(transform.forward * m_Speed);
         Destroy(gameObject, m_Lifespan);
     }
+
+    void Update()
+    {
+        transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
+    }
 }
