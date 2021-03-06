@@ -1,11 +1,17 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UnityStandardAssets.CrossPlatformInput
 {
 	public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 	{
+		//for transparency
+		public float alphaInactive = 0.5f;
+		public float alphaActive = 1.0f;
+		public Image JoystickButton; 
+
 		public enum AxisOption
 		{
 			// Options for which axes to use
@@ -70,8 +76,19 @@ namespace UnityStandardAssets.CrossPlatformInput
 			}
 		}
 
+		
+		//function to change transparency
+		void changeAlpha (float alphaVal)
+        {
+			JoystickButton = GetComponent<Image>();
+			var tempColor = JoystickButton.color;
+			tempColor.a = alphaVal;
+			JoystickButton.color = tempColor;
+        }
+
 		public void OnDrag(PointerEventData data)
 		{
+			changeAlpha(alphaActive);
 			Vector3 newPos = Vector3.zero;
 
 			if (m_UseX)
@@ -94,6 +111,7 @@ namespace UnityStandardAssets.CrossPlatformInput
 
 		public void OnPointerUp(PointerEventData data)
 		{
+			changeAlpha(alphaInactive);
 			transform.position = m_StartPos;
 			UpdateVirtualAxes(m_StartPos);
 		}
