@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: -148290906583799778}
   - component: {fileID: -1554023935054294633}
   - component: {fileID: -81033260251576607}
-  - component: {fileID: 4849997160542310348}
+  - component: {fileID: 3715298715355455870}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -356,7 +356,7 @@ MonoBehaviour:
   selectionTimerReset: 1
   isRoomOwner: 0
   isGameStart: 0
---- !u!114 &4849997160542310348
+--- !u!114 &3715298715355455870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
