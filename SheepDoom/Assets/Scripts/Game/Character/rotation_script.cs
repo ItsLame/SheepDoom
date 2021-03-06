@@ -15,6 +15,5 @@ public class rotation_script : MonoBehaviour
     void Update()
     {
         transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
-
     }
 }
