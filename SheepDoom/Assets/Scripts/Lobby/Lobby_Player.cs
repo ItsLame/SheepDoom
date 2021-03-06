@@ -36,7 +36,7 @@ namespace MirrorBasics
             }
             else
             {
-                UI_LobbyScript.instance.SpawnPlayerPrefab(this);    //this could be the source of the server extra player in room problem
+                UI_LobbyScript.instance.SpawnPlayerPrefab(this);   
             }
         }
 
@@ -65,8 +65,6 @@ namespace MirrorBasics
                 Debug.Log("Game hosted successfully");
                 //convert the 5 digit string to a default mirror method GUID
                 networkMatchChecker.matchId = _matchID.ToGuid();
-
-                Debug.Log("test");
                 //generate match
                 TargetHostGame(true, _matchID, playerIndex, teamIndex);
 
@@ -78,7 +76,7 @@ namespace MirrorBasics
             //if host fail
             else
             {
-                Debug.Log("Game hosting failed"); 
+                Debug.Log("Game hosting failed");
                 TargetHostGame(false, _matchID, playerIndex, teamIndex);
             }
         }
@@ -87,8 +85,9 @@ namespace MirrorBasics
         void TargetHostGame(bool success, string _matchID, int _playerIndex, int _teamIndex)
         {
             playerIndex = _playerIndex;
-            matchID = _matchID;
             teamIndex = _teamIndex;
+            matchID = _matchID;
+            //teamIndex = _teamIndex;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.HostSuccess(success, _matchID);
 
@@ -122,27 +121,71 @@ namespace MirrorBasics
                 networkMatchChecker.matchId = _matchID.ToGuid();
 
                 //generate match
-                TargetJoinGame(true, _matchID, playerIndex);
+                TargetJoinGame(true, _matchID, playerIndex, teamIndex);
             }
 
             //if Join fail
             else
             {
                 Debug.Log("Game Joining failed");
-                TargetJoinGame(false, _matchID, playerIndex);
+                TargetJoinGame(false, _matchID, playerIndex, teamIndex);
             }
         }
 
         [TargetRpc]
-        void TargetJoinGame(bool success, string _matchID, int _playerIndex)
+        void TargetJoinGame(bool success, string _matchID, int _playerIndex, int _teamIndex)
         {
             playerIndex = _playerIndex;
+            teamIndex = _teamIndex;
             matchID = _matchID;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.JoinSuccess(success, _matchID);
 
             //local player is not room owner
             isRoomOwner = false;
+        }
+
+        // switching team
+
+        public void SwitchTeam(Transform teamParentGroup)
+        {
+            Debug.Log("Send to server to switch team");
+            CmdSwitchTeam(teamParentGroup);
+        }
+        
+        [Command]
+        void CmdSwitchTeam(Transform teamParentGroup)
+        {
+            if(MatchMaker.instance.SwitchTeam(matchID, localPlayer))
+            {
+                CmdRefreshTeam(teamParentGroup);
+            }
+                
+        }
+
+        [Command]
+        void CmdRefreshTeam(Transform teamParentGroup)
+        {
+            Debug.Log("Switch team success..switching");
+            RpcRefreshTeam(teamParentGroup);
+        }
+
+        [ClientRpc]
+        void RpcRefreshTeam(Transform teamParentGroup)
+        {
+            Debug.Log("Refreshing team..");
+            if (teamIndex == 1)
+            {
+                Debug.Log(playerIndex + " belongs to team 1!");
+                //this.gameObject.transform.SetParent(teamParentGroup);
+                UI_LobbyScript.instance.SpawnPlayerPrefab(localPlayer);
+            }
+            else if (teamIndex == 2)
+            {
+                Debug.Log(playerIndex + " belongs to team 2!");
+                UI_LobbyScript.instance.SpawnPlayerPrefab(localPlayer);
+                //this.gameObject.transform.SetParent(teamParentGroup); 
+            }
         }
 
         //start match
@@ -226,7 +269,7 @@ namespace MirrorBasics
         }
 
         //function to auto refresh team list
-        public void RefreshTeam(Transform teamParentGroup)
+        /*public void RefreshTeam(Transform teamParentGroup)
         {
             Debug.Log("Refreshing team list...");
             CmdRefreshTeam(teamParentGroup);
@@ -264,7 +307,7 @@ namespace MirrorBasics
         }
 
         //client to server
-        [Command]
+        /*[Command]
         void CmdSwitchTeam(Transform teamParentGroup)
         {
                 Debug.Log("Commencing team switch...");
@@ -314,6 +357,6 @@ namespace MirrorBasics
                 UI_LobbyScript.instance.MoveToTeam1Btn.SetActive(true);
                 UI_LobbyScript.instance.MoveToTeam2Btn.SetActive(false);
             }
-        }
+        }*/
     }
 }

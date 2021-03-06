@@ -1367,7 +1367,7 @@ MonoBehaviour:
   lobbyCanvas: {fileID: 181755204}
   UIPlayerParentTeam1: {fileID: 256191719}
   UIPlayerParentTeam2: {fileID: 1532933788}
-  UIPlayerPrefab: {fileID: 9215272971011741937, guid: 5c89babc0dbcfaf4aa36dff5386b845a,
+  UIPlayerPrefab: {fileID: 6243845483501120523, guid: 887d73d39868dd74684111b8284d4913,
     type: 3}
   MoveToTeam1Btn: {fileID: 582551111}
   MoveToTeam2Btn: {fileID: 1374813150}

@@ -16,15 +16,17 @@ namespace MirrorBasics {
         public string matchID;
         //storing the players
         public SyncListGameObject players = new SyncListGameObject();
+        public SyncListInt playerIndexes = new SyncListInt();
         //public bool inMatch = false;
 
         //constructor that takes in matchID and the host
-        public Match(string matchID, GameObject player)
+        public Match(string matchID, GameObject player, int playerIndex)
         {
             this.matchID = matchID;
 
             //add player directly to the list
             players.Add(player);
+            playerIndexes.Add(playerIndex);
         }
 
         //default constructor for unity to be happy. blank 
@@ -67,9 +69,9 @@ namespace MirrorBasics {
             {
                 //add a match to synclistmatch matches using the constructor that uses id + player
                 matchIDs.Add(_matchID);
-                matches.Add(new Match(_matchID, _player));
-                Debug.Log($"Match ID Created");
                 playerIndex = 1;
+                matches.Add(new Match(_matchID, _player, playerIndex));
+                Debug.Log($"Match ID Created");
                 teamIndex = 1;
                 return true;
             }
@@ -96,7 +98,7 @@ namespace MirrorBasics {
                     {
                         matches[i].players.Add(_player);
                         playerIndex = matches[i].players.Count;
-
+                        matches[i].playerIndexes.Add(playerIndex);
                         if(playerIndex <= 3)
                         {
                             teamIndex = 1;
@@ -121,6 +123,34 @@ namespace MirrorBasics {
             }
         }
 
+        public bool SwitchTeam(string _matchID, Lobby_Player _player)
+        {
+            bool isSwitch = false;
+            for(int i = 0; i < matches.Count; i++)
+            {
+                if(matches[i].matchID == _matchID)
+                {
+                    for(int j = 0; j < matches[i].players.Count; j++) // should be the same as matches[i].playerIndexes.Count
+                    {
+                        if (matches[i].playerIndexes[j] == _player.playerIndex)
+                        {
+                            if (_player.teamIndex == 1)
+                                _player.teamIndex = 2;
+                            else
+                                _player.teamIndex = 1;
+                            isSwitch = true;
+                        }   
+                        else
+                        {
+                            Debug.Log("No such player");
+                        }
+                    }
+                    break;
+                }
+            }
+            return isSwitch;
+        }
+
         //start game for everyone
         public void StartGame(string _matchID)
         {
@@ -132,46 +162,12 @@ namespace MirrorBasics {
                     foreach (var player in matches[i].players)
                     {
                         Lobby_Player _player = player.GetComponent<Lobby_Player>();
-                        Debug.Log("in matchmaker foreach loop");
                         _player.BeginGame(); // start the corresponding match
                     }
                     break;
                 }
             }
-            /*Debug.Log("MatchMaker: Game Started!");
-            
-            //game is starting
-            Lobby_Player.localPlayer.isGameStart = true; // not working in server build
-            Debug.Log("isGameStart set to true");   */
         }
-
-        //switch team viewable for everyone <-- function transferred to Lobby_Player.cs RpcSwitchTeam
-        /*public void SwitchTeam(Transform _teamParentGroup, out int _teamIndex)
-        {
-            _teamIndex = Lobby_Player.localPlayer.teamIndex;
-            bool isSwitch = true;
-            int _playerIndex = Lobby_Player.localPlayer.playerIndex;
-            
-            if(isSwitch == true)
-            {
-                if(_teamIndex == 1)
-                {
-                    Debug.Log("player " + _playerIndex + ": switches to team 2!");
-                    _teamIndex = 2;
-                    UI_LobbyScript.instance.gameObject.transform.SetParent(_teamParentGroup);
-                    UI_LobbyScript.instance.SwitchToTeam2();
-                }
-                else if(_teamIndex == 2)
-                {
-                    Debug.Log("player " + _playerIndex + ": switches to team 1!");
-                    _teamIndex = 1;
-                    UI_LobbyScript.instance.gameObject.transform.SetParent(_teamParentGroup);
-                    UI_LobbyScript.instance.SwitchToTeam1();
-                }
-
-                isSwitch = false;
-            }
-        }*/
 
         //generate random match ID
         public static string GetRandomMatchID()
