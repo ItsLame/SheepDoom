@@ -12,12 +12,12 @@ public class PlayerHealth : MonoBehaviour
 
     public event Action<float> OnHealthPctChanged = delegate { };
 
-    private void OnEnable()
+    private void Start()
     {
         currenthealth = maxHealth;
 
     }
-    private void modifyinghealth(int amount)
+    public void modifyinghealth(int amount)
     {
         currenthealth += amount;
 
@@ -27,8 +27,23 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            modifyinghealth(-10);
-        
+        if (currenthealth < 0)
+        {
+            currenthealth = 0;
+            GameOver();
+        }
+        if (currenthealth > maxHealth)
+        {
+            currenthealth = maxHealth;
+        }
+    }
+
+    void GameOver()
+    {
+        Rigidbody myRigidBody = GetComponent<Rigidbody>();
+        Vector3 moveMe = new Vector3(0, 1, 0);
+        myRigidBody.rotation = Quaternion.LookRotation(moveMe);
+
+        Debug.Log("health: ded");
     }
 }

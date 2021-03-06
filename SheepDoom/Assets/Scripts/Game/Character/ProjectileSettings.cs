@@ -10,6 +10,8 @@ public class ProjectileSettings : MonoBehaviour
     public float y_rotaspeed;
     public float z_rotaspeed;
 
+    public int damage;
+
     public float m_Speed = 10f;   // default speed of projectile
     public float m_Lifespan = 3f; // Lifespan per second
 
@@ -23,6 +25,16 @@ public class ProjectileSettings : MonoBehaviour
     {
         m_Rigidbody.AddForce(transform.forward * m_Speed);
         Destroy(gameObject, m_Lifespan);
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.tag == "Player")
+        {
+            col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
+            Debug.Log("health: hit by " + m_Rigidbody);
+            Object.Destroy(this.gameObject);
+        }
     }
 
     void Update()
