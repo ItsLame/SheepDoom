@@ -145,11 +145,13 @@ namespace MirrorBasics {
         {
             if (MoveToTeam2Btn.activeSelf)
             {
-                Lobby_Player.localPlayer.SwitchTeam(UIPlayerParentTeam2);
+                string toTeam2 = "team2";
+                Lobby_Player.localPlayer.SwitchTeam(UIPlayerParentTeam2, toTeam2);
             }
             else if (MoveToTeam1Btn.activeSelf)
             {
-                Lobby_Player.localPlayer.SwitchTeam(UIPlayerParentTeam1);
+                string toTeam1 = "team1";
+                Lobby_Player.localPlayer.SwitchTeam(UIPlayerParentTeam1, toTeam1);
             }
         }
 
@@ -159,15 +161,24 @@ namespace MirrorBasics {
             Debug.Log("Player " + player.playerIndex + "teamIndex is :" + player.teamIndex);
             if(player.teamIndex == 1)
             {
-                GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam1);
-                newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+                GameObject newUIPlayer = player.gameObject;
+                GameObject playerUIGameObject = newUIPlayer.transform.GetChild(0).gameObject;
                 newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+                playerUIGameObject.SetActive(true);
+                player.gameObject.transform.SetParent(UIPlayerParentTeam1);
+                player.GetComponent<UIPlayer>().SetPlayer(player);
             }
             else if (player.teamIndex == 2)
             {
-                GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam2);
-                newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
-                newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 4); // minus 4 to fit index 0-3 for parent grid 2
+                GameObject newUIPlayer = player.gameObject;
+                GameObject playerUIGameObject = newUIPlayer.transform.GetChild(0).gameObject;
+                newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+                playerUIGameObject.SetActive(true);
+                player.gameObject.transform.SetParent(UIPlayerParentTeam2);
+                player.GetComponent<UIPlayer>().SetPlayer(player);
+                //GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam2);
+                //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+                //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1); 
             }
             //return newUIPlayer;
             //GameObject playerGameObject = Lobby_Player.localPlayer.gameObject;

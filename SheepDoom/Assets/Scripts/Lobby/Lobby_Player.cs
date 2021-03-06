@@ -146,45 +146,67 @@ namespace MirrorBasics
         }
 
         // switching team
-
-        public void SwitchTeam(Transform teamParentGroup)
+        
+        public void SwitchTeam(Transform teamParentGroup, string team)
         {
             Debug.Log("Send to server to switch team");
-            CmdSwitchTeam(teamParentGroup);
+            CmdSwitchTeam(teamParentGroup, team);
         }
         
         [Command]
-        void CmdSwitchTeam(Transform teamParentGroup)
+        void CmdSwitchTeam(Transform teamParentGroup, string team)
         {
-            if(MatchMaker.instance.SwitchTeam(matchID, localPlayer))
+            Debug.Log("In cmdswitchteam");
+            if(MatchMaker.instance.SwitchTeam(matchID, out teamIndex, team))
             {
-                CmdRefreshTeam(teamParentGroup);
+                networkMatchChecker.matchId = matchID.ToGuid();
+                RpcSwitchTeam(teamParentGroup, teamIndex);
             }
-                
+            else
+            {
+                Debug.Log("Team switch failed");
+            }
         }
 
-        [Command]
-        void CmdRefreshTeam(Transform teamParentGroup)
+        /*[TargetRpc]
+        void TargetSwitchTeam(Transform teamParentGroup, int _teamIndex)
         {
-            Debug.Log("Switch team success..switching");
-            RpcRefreshTeam(teamParentGroup);
-        }
-
-        [ClientRpc]
-        void RpcRefreshTeam(Transform teamParentGroup)
-        {
-            Debug.Log("Refreshing team..");
+            teamIndex = _teamIndex;
+            Debug.Log("Switching team..");
             if (teamIndex == 1)
             {
                 Debug.Log(playerIndex + " belongs to team 1!");
-                //this.gameObject.transform.SetParent(teamParentGroup);
-                UI_LobbyScript.instance.SpawnPlayerPrefab(localPlayer);
+                this.gameObject.transform.SetParent(teamParentGroup);
             }
             else if (teamIndex == 2)
             {
                 Debug.Log(playerIndex + " belongs to team 2!");
-                UI_LobbyScript.instance.SpawnPlayerPrefab(localPlayer);
-                //this.gameObject.transform.SetParent(teamParentGroup); 
+                this.gameObject.transform.SetParent(teamParentGroup);
+            }
+        }
+
+        [Command]
+        void CmdRefreshTeam(Transform teamParentGroup, int _teamIndex)
+        {
+            teamIndex = _teamIndex;
+            Debug.Log("Switch team success..switching");
+            RpcRefreshTeam(teamParentGroup, teamIndex);
+        }*/
+
+        [ClientRpc]
+        void RpcSwitchTeam(Transform teamParentGroup, int _teamIndex)
+        {
+            teamIndex = _teamIndex;
+            Debug.Log("Switching team..");
+            if (teamIndex == 1)
+            {
+                Debug.Log(playerIndex + " belongs to team 1!");
+                this.gameObject.transform.SetParent(teamParentGroup);
+            }
+            else if (teamIndex == 2)
+            {
+                Debug.Log(playerIndex + " belongs to team 2!");
+                this.gameObject.transform.SetParent(teamParentGroup);
             }
         }
 

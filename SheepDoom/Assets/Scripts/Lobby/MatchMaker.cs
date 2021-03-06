@@ -16,17 +16,19 @@ namespace MirrorBasics {
         public string matchID;
         //storing the players
         public SyncListGameObject players = new SyncListGameObject();
-        public SyncListInt playerIndexes = new SyncListInt();
+        public int team1;
+        public int team2;
         //public bool inMatch = false;
 
         //constructor that takes in matchID and the host
-        public Match(string matchID, GameObject player, int playerIndex)
+        public Match(string matchID, GameObject player)
         {
             this.matchID = matchID;
 
             //add player directly to the list
             players.Add(player);
-            playerIndexes.Add(playerIndex);
+            team1++;
+            team2 = 0;
         }
 
         //default constructor for unity to be happy. blank 
@@ -36,7 +38,8 @@ namespace MirrorBasics {
     [System.Serializable]
     //to store a list of game objects that needs to be synced between clients
     public class SyncListGameObject : SyncList<GameObject> 
-    { 
+    {
+
     }
 
     [System.Serializable]
@@ -70,9 +73,9 @@ namespace MirrorBasics {
                 //add a match to synclistmatch matches using the constructor that uses id + player
                 matchIDs.Add(_matchID);
                 playerIndex = 1;
-                matches.Add(new Match(_matchID, _player, playerIndex));
-                Debug.Log($"Match ID Created");
+                matches.Add(new Match(_matchID, _player));
                 teamIndex = 1;
+                Debug.Log($"Match ID Created");
                 return true;
             }
             else
@@ -97,21 +100,21 @@ namespace MirrorBasics {
                     if(matches[i].matchID == _matchID)
                     {
                         matches[i].players.Add(_player);
-                        playerIndex = matches[i].players.Count;
-                        matches[i].playerIndexes.Add(playerIndex);
-                        if(playerIndex <= 3)
+                        if(matches[i].team1 < 3)
                         {
+                            matches[i].team1++;
+                            playerIndex = matches[i].team1;
                             teamIndex = 1;
                         }
-                        else
+                        else if(matches[i].team2 < 3)
                         {
+                            matches[i].team2++;
+                            playerIndex = matches[i].team2;
                             teamIndex = 2;
                         }
-
                         break;
                     }
                 }
-
                 Debug.Log("Match Joined");
                 return true;
             }
@@ -123,26 +126,44 @@ namespace MirrorBasics {
             }
         }
 
-        public bool SwitchTeam(string _matchID, Lobby_Player _player)
+        // does not account for player disconnect, when player gone, won't deduct or increment slots
+        public bool SwitchTeam(string _matchID, out int teamIndex, string team)
         {
+            Debug.Log("In Matchmaker switchteam");
             bool isSwitch = false;
+            teamIndex = -1;
             for(int i = 0; i < matches.Count; i++)
             {
                 if(matches[i].matchID == _matchID)
                 {
-                    for(int j = 0; j < matches[i].players.Count; j++) // should be the same as matches[i].playerIndexes.Count
+                    if(team == "team1")
                     {
-                        if (matches[i].playerIndexes[j] == _player.playerIndex)
+                        if(matches[i].team1 < 3)
                         {
-                            if (_player.teamIndex == 1)
-                                _player.teamIndex = 2;
-                            else
-                                _player.teamIndex = 1;
+                            matches[i].team2--;
+                            matches[i].team1++;
+                            teamIndex = 1;
                             isSwitch = true;
-                        }   
+                        }
                         else
                         {
-                            Debug.Log("No such player");
+                            Debug.Log("Team 1 is already full");
+                            isSwitch = false;
+                        }
+                    }
+                    else if (team == "team2")
+                    {
+                        if(matches[i].team2 < 3)
+                        {
+                            matches[i].team1--;
+                            matches[i].team2++;
+                            teamIndex = 2;
+                            isSwitch = true;
+                        }
+                        else
+                        {
+                            Debug.Log("Team 2 is already full");
+                            isSwitch = false;
                         }
                     }
                     break;
