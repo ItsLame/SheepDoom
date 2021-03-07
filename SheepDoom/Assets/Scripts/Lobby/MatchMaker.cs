@@ -20,6 +20,7 @@ namespace MirrorBasics {
         public int team2;
         //int to count players ready
         public int countReady;
+        public bool imReady;
         //public bool inMatch = false;
 
         //constructor that takes in matchID and the host
@@ -140,33 +141,57 @@ namespace MirrorBasics {
             }
         }
 
-        public void ReadyGame(string _matchID, GameObject _player)
+        public void EnterRoomInit(string _matchID, GameObject _player)
         {
-            bool readyStatus = false;
+            _player.GetComponent<Lobby_Player>().isReady = true;
 
             for(int i = 0; i < matches.Count; i++)
             {
                 //search match
                 if(matches[i].matchID == _matchID)
                 {
+                    //loop through players in match
+                    for(int k = 1; k != matches[i].players.Count; k++)
+                    {
+                        //update ready status of pre-existing clients to the client who just entered
+                        if(matches[i].players[k].GetComponent<Lobby_Player>().isReady)
+                        {
+                            Debug.Log("MM EnterRoomInit: Updating Player " + matches[i].players[k].GetComponent<Lobby_Player>().playerIndex + " to wait");
+                        }
+                        else if(!matches[i].players[k].GetComponent<Lobby_Player>().isReady)
+                        {
+                            Debug.Log("MM EnterRoomInit: Updating Player " + matches[i].players[k].GetComponent<Lobby_Player>().playerIndex + " to ready");
+                        }
+
+                        matches[i].players[k].GetComponent<Lobby_Player>().RpcReadyGame();
+                    }
+                }
+            }
+        }
+
+        public void ReadyGame(string _matchID, GameObject _player)
+        {
+            for(int i = 0; i < matches.Count; i++)
+            {
+                //search match
+                if(matches[i].matchID == _matchID)
+                {
                     //switch player's ready status
-                    if(!_player.GetComponent<Lobby_Player>().isReady)
+                    if(_player.GetComponent<Lobby_Player>().isReady == true)
                     {
                         matches[i].countReady += 1;
-                        readyStatus = true;
 
-                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " change ready status to: " + readyStatus);
+                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " change ready status to: " + _player.GetComponent<Lobby_Player>().isReady);
                         Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " changed to ready!");
                         Debug.Log("Room [" + _matchID + "] Ready Count: " + matches[i].countReady);
                         
                         break;
                     }
-                    else if(_player.GetComponent<Lobby_Player>().isReady)
+                    else if(_player.GetComponent<Lobby_Player>().isReady == false)
                     {
                          matches[i].countReady -= 1;
-                         readyStatus = false;
 
-                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " change ready status to: " + readyStatus);
+                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " change ready status to: " + _player.GetComponent<Lobby_Player>().isReady);
                         Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " changed to waiting!");
                         Debug.Log("Room [" + _matchID + "] Ready Count: " + matches[i].countReady);
                         
@@ -175,7 +200,7 @@ namespace MirrorBasics {
                 }
             }
 
-            _player.GetComponent<Lobby_Player>().UpdateReadyCount(readyStatus);
+            _player.GetComponent<Lobby_Player>().UpdateReadyCountUI();
         }
 
         // does not account for player disconnect, when player gone, won't deduct or increment slots

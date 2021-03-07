@@ -21,6 +21,7 @@ namespace MirrorBasics
         [SyncVar] public bool selectionTimerReset = true;
 
         [SyncVar] public bool isReady = false;
+        [SyncVar] private bool isReadyUI = false;
 
         //bool to check if room owner & if game is started
         [SyncVar] public bool isRoomOwner = false;
@@ -150,12 +151,18 @@ namespace MirrorBasics
 
         public void EnterRoomInit()
         {
-            isReady = false;
+            //isReady = false;
+            //isReadyUI = true;
+            
+            //isReady = false;
+
+            MatchMaker.instance.EnterRoomInit(matchID, gameObject);
 
             TargetEnterRoomInit();
             RpcEnterRoomInit();
         }
 
+        //server to a client
         [TargetRpc]
         void TargetEnterRoomInit()
         {
@@ -165,8 +172,11 @@ namespace MirrorBasics
             Debug.Log("[INITIALIZE] Changing " + playerIndex + " status to " + readyBtnText + " in " + readyBtnColor);
             UI_LobbyScript.instance.readyButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = readyBtnText;
             UI_LobbyScript.instance.readyButton.transform.GetChild(0).gameObject.GetComponent<Text>().color = readyBtnColor;
+
+            //MatchMaker.instance.EnterRoomInit(matchID, gameObject);
         }
 
+        //server to all clients
         [ClientRpc]
         void RpcEnterRoomInit()
         {
@@ -237,12 +247,27 @@ namespace MirrorBasics
             if(!StartSuccess)
             {
                 Debug.Log($"MatchID: {matchID} | all players must be ready!");
+                TargetBeginGame(StartSuccess);
                 isGameStart = false;
             }
             else if(StartSuccess)
             {
                 Debug.Log($"MatchID: {matchID} | starting");
+                TargetBeginGame(StartSuccess);
                 isGameStart = true; // change syncvar hook to display gamelobbycanvas and timer
+            }
+        }
+
+        [TargetRpc]
+        void TargetBeginGame(bool StartSuccess)
+        {
+            if(!StartSuccess)
+            {
+                UI_LobbyScript.instance.debugText.text = "all players must be ready!";
+            }
+            else if(StartSuccess)
+            {
+                UI_LobbyScript.instance.debugText.text = "starting match...";
             }
         }
 
@@ -256,17 +281,43 @@ namespace MirrorBasics
         void CmdReadyGame()
         {
             Debug.Log("Attempt to change Player " + playerIndex + "'s ready status...");
+
             MatchMaker.instance.ReadyGame(matchID, gameObject);
         }
 
-        public void UpdateReadyCount(bool readyStatus)
+        public void UpdateReadyCountUI()
         {
-            isReady = readyStatus;
+            if(isReady)
+            {
+                isReadyUI = true;
+            }
+            else if(!isReady)
+            {
+                isReadyUI = false;
+            }
 
             //change ready button viewable only to the client who pressed it
             TargetReadyGame();
             //change ready status viewable to everyone
             RpcReadyGame();
+
+            if(isReady)
+            {
+                isReady = false;
+            }
+            else if(!isReady)
+            {
+                isReady = true;
+            }
+
+            if(isReady)
+            {
+                isReadyUI = true;
+            }
+            else if(!isReady)
+            {
+                isReadyUI = false;
+            }
         }
 
         [TargetRpc]
@@ -275,12 +326,12 @@ namespace MirrorBasics
             string readyBtnText = "";
             Color readyBtnColor = Color.black;
 
-            if(!isReady)
+            if(isReadyUI == true)
             {
                 readyBtnText = "Cancel";
                 readyBtnColor = Color.red;
             }
-            else if(isReady)
+            else if(isReadyUI == false)
             {
                 readyBtnText  = "Ready";
                 readyBtnColor = Color.green;
@@ -292,22 +343,21 @@ namespace MirrorBasics
         }
 
         [ClientRpc]
-        void RpcReadyGame()
+        public void RpcReadyGame()
         {
             string readyStatus = "";
             Color readyStatusColor = Color.black;
 
-            if(!isReady)
+            if(isReadyUI == true)
             {
                 readyStatus = "Ready!";
                 readyStatusColor = Color.green;
             }
-            else if(isReady)
+            else if(isReadyUI == false)
             {
                 readyStatus = "Waiting";
                 readyStatusColor = Color.red;
             }
-            
 
             Debug.Log("Changing " + playerIndex + " status to " + readyStatus + " in " + readyStatusColor);
             gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().text = readyStatus;
