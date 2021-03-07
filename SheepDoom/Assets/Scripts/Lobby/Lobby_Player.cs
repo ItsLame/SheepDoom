@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Mirror;
 
 namespace MirrorBasics
@@ -24,8 +23,6 @@ namespace MirrorBasics
         //bool to check if room owner & if game is started
         [SyncVar] public bool isRoomOwner = false;
         [SyncVar(hook = nameof(StartCountDown))] public bool isGameStart = false;
-        [SyncVar] public bool isReady = false;
-        [SyncVar] public int countReady = 1;
 
         NetworkMatchChecker networkMatchChecker;
 
@@ -39,7 +36,7 @@ namespace MirrorBasics
             }
             else
             {
-                UI_LobbyScript.instance.SpawnPlayerPrefab(this);    //this could be the source of the server extra player in room problem
+                UI_LobbyScript.instance.SpawnPlayerPrefab(this);   
             }
         }
 
@@ -68,8 +65,6 @@ namespace MirrorBasics
                 Debug.Log("Game hosted successfully");
                 //convert the 5 digit string to a default mirror method GUID
                 networkMatchChecker.matchId = _matchID.ToGuid();
-
-                Debug.Log("TargetHostGame");
                 //generate match
                 TargetHostGame(true, _matchID, playerIndex, teamIndex);
 
@@ -81,7 +76,7 @@ namespace MirrorBasics
             //if host fail
             else
             {
-                Debug.Log("Game hosting failed"); 
+                Debug.Log("Game hosting failed");
                 TargetHostGame(false, _matchID, playerIndex, teamIndex);
             }
         }
@@ -90,8 +85,9 @@ namespace MirrorBasics
         void TargetHostGame(bool success, string _matchID, int _playerIndex, int _teamIndex)
         {
             playerIndex = _playerIndex;
-            matchID = _matchID;
             teamIndex = _teamIndex;
+            matchID = _matchID;
+            //teamIndex = _teamIndex;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.HostSuccess(success, _matchID);
 
@@ -125,21 +121,22 @@ namespace MirrorBasics
                 networkMatchChecker.matchId = _matchID.ToGuid();
 
                 //generate match
-                TargetJoinGame(true, _matchID, playerIndex);
+                TargetJoinGame(true, _matchID, playerIndex, teamIndex);
             }
 
             //if Join fail
             else
             {
                 Debug.Log("Game Joining failed");
-                TargetJoinGame(false, _matchID, playerIndex);
+                TargetJoinGame(false, _matchID, playerIndex, teamIndex);
             }
         }
 
         [TargetRpc]
-        void TargetJoinGame(bool success, string _matchID, int _playerIndex)
+        void TargetJoinGame(bool success, string _matchID, int _playerIndex, int _teamIndex)
         {
             playerIndex = _playerIndex;
+            teamIndex = _teamIndex;
             matchID = _matchID;
             Debug.Log($"MatchID: {matchID} == {_matchID}");
             UI_LobbyScript.instance.JoinSuccess(success, _matchID);
@@ -148,118 +145,91 @@ namespace MirrorBasics
             isRoomOwner = false;
         }
 
-        //start match
-        //available to hosts only
-        public void StartGame(string startButton)
+        // switching team
+        
+        public void SwitchTeam(Transform teamParentGroup, string team)
         {
-            Debug.Log("Starting Game");
-            CmdStartGame(startButton);
-            
+            Debug.Log("Send to server to switch team");
+            CmdSwitchTeam(teamParentGroup, team);
         }
-
+        
         [Command]
-        void CmdStartGame(string startButton)
+        void CmdSwitchTeam(Transform teamParentGroup, string team)
         {
-            MatchMaker.instance.StartGame(startButton, matchID);
-            //Debug.Log("Game started successfully");
-            //generate match
-        }
-
-        public void BeginGame(bool AllReady)
-        {
-            if(AllReady == true)
+            Debug.Log("In cmdswitchteam");
+            if(MatchMaker.instance.SwitchTeam(matchID, out teamIndex, team))
             {
-                ClientStartGame();
-                Debug.Log($"MatchID: {matchID} | starting");
-                isGameStart = true; // change syncvar hook to display gamelobbycanvas and timer
+                networkMatchChecker.matchId = matchID.ToGuid();
+                RpcSwitchTeam(teamParentGroup, teamIndex);
             }
             else
             {
-                Debug.Log($"MatchID: {matchID} | all players must be ready!");
-                isGameStart = false;
+                Debug.Log("Team switch failed");
             }
         }
 
-        //change ready status of host to ready; viewable to all
-        [ClientRpc]
-        void ClientStartGame()
+        /*[TargetRpc]
+        void TargetSwitchTeam(Transform teamParentGroup, int _teamIndex)
         {
-            this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().text = "Ready!";
-            this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().color = Color.green;
-        }
-
-        //function when player presses ready
-        public void ReadyGame()
-        {
-            Debug.Log("Lobby_Player: ReadyGame");
-            CmdReadyGame();
+            teamIndex = _teamIndex;
+            Debug.Log("Switching team..");
+            if (teamIndex == 1)
+            {
+                Debug.Log(playerIndex + " belongs to team 1!");
+                this.gameObject.transform.SetParent(teamParentGroup);
+            }
+            else if (teamIndex == 2)
+            {
+                Debug.Log(playerIndex + " belongs to team 2!");
+                this.gameObject.transform.SetParent(teamParentGroup);
+            }
         }
 
         [Command]
-        void CmdReadyGame()
+        void CmdRefreshTeam(Transform teamParentGroup, int _teamIndex)
         {
-            bool sendReadyStatus = false;
-            Debug.Log("Player " + this.playerIndex + ": Change Ready Status!");
+            teamIndex = _teamIndex;
+            Debug.Log("Switch team success..switching");
+            RpcRefreshTeam(teamParentGroup, teamIndex);
+        }*/
 
-            if(this.isReady == false)
-            {
-                sendReadyStatus = true;
-                this.isReady = true;
-                RpcReadyGame(sendReadyStatus);
-            }
-            else if(this.isReady == true)
-            {
-                sendReadyStatus = false;
-                this.isReady = false;
-                RpcReadyGame(sendReadyStatus);
-            }
-            
-            TargetReadyGame();
-        }
-
-        //change ready status of player viewable to everyone
         [ClientRpc]
-        void RpcReadyGame(bool receiveReadyStatus)
+        void RpcSwitchTeam(Transform teamParentGroup, int _teamIndex)
         {
-            Debug.Log("Lobby Player: RpcReadyGame");
-            if(receiveReadyStatus == true)
+            teamIndex = _teamIndex;
+            Debug.Log("Switching team..");
+            if (teamIndex == 1)
             {
-                countReady += 1;
-                this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().text = "Ready!";
-                this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().color = Color.green;
+                Debug.Log(playerIndex + " belongs to team 1!");
+                this.gameObject.transform.SetParent(teamParentGroup);
             }
-            else if(receiveReadyStatus == false)
+            else if (teamIndex == 2)
             {
-                countReady -= 1;
-                this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().text = "Not Ready";
-                this.gameObject.transform.GetChild(0).transform.GetChild(2).GetComponent<Text>().color = Color.red;
+                Debug.Log(playerIndex + " belongs to team 2!");
+                this.gameObject.transform.SetParent(teamParentGroup);
             }
         }
 
-        //change ready button to the one who presses
-        [TargetRpc]
-        void TargetReadyGame()
+        //start match
+        //available to hosts only
+        public void StartGame()
         {
-            if(this.isReady == false)
-            {
-                var changeBtnColor = UI_LobbyScript.instance.readyButton.GetComponent<Button>().colors;
-                changeBtnColor.normalColor = Color.red;
-                changeBtnColor.highlightedColor = Color.gray;
-                changeBtnColor.pressedColor = Color.magenta;
-                UI_LobbyScript.instance.readyButton.GetComponent<Button>().colors = changeBtnColor;
+            Debug.Log("Starting Game");
+            CmdStartGame();
+        }
 
-                UI_LobbyScript.instance.readyButton.transform.GetChild(0).GetComponent<Text>().text = "Ready";
-            }
-            else if(this.isReady == true)
-            {
-                var changeBtnColor = UI_LobbyScript.instance.readyButton.GetComponent<Button>().colors;
-                changeBtnColor.normalColor = Color.black;
-                changeBtnColor.highlightedColor = Color.gray;
-                changeBtnColor.pressedColor = Color.magenta;
-                UI_LobbyScript.instance.readyButton.GetComponent<Button>().colors = changeBtnColor;
+        [Command]
+        void CmdStartGame()
+        {
+            MatchMaker.instance.StartGame(matchID);
+            Debug.Log("Game started successfully");
+            //generate match
+        }
 
-                UI_LobbyScript.instance.readyButton.transform.GetChild(0).GetComponent<Text>().text = "Cancel";
-            }
+        public void BeginGame()
+        {
+            Debug.Log($"MatchID: {matchID} | starting");
+            isGameStart = true; // change syncvar hook to display gamelobbycanvas and timer
         }
 
         //function to start count down and get ready start actual game
@@ -321,7 +291,7 @@ namespace MirrorBasics
         }
 
         //function to auto refresh team list
-        public void RefreshTeam(Transform teamParentGroup)
+        /*public void RefreshTeam(Transform teamParentGroup)
         {
             Debug.Log("Refreshing team list...");
             CmdRefreshTeam(teamParentGroup);
@@ -359,7 +329,7 @@ namespace MirrorBasics
         }
 
         //client to server
-        [Command]
+        /*[Command]
         void CmdSwitchTeam(Transform teamParentGroup)
         {
                 Debug.Log("Commencing team switch...");
@@ -409,6 +379,6 @@ namespace MirrorBasics
                 UI_LobbyScript.instance.MoveToTeam1Btn.SetActive(true);
                 UI_LobbyScript.instance.MoveToTeam2Btn.SetActive(false);
             }
-        }
+        }*/
     }
 }

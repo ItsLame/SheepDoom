@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -8781045267611185837}
   m_Layer: 0
   m_Name: Projectile2
-  m_TagString: Untagged
+  m_TagString: Skill
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,5 +126,6 @@ MonoBehaviour:
   x_rotaspeed: 0
   y_rotaspeed: 0
   z_rotaspeed: 0
+  damage: 15
   m_Speed: 5000
   m_Lifespan: 3

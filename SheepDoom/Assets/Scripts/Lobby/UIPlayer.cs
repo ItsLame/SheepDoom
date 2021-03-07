@@ -12,7 +12,7 @@ namespace MirrorBasics
 
         public void SetPlayer(Lobby_Player player)
         {
-            //this.player = player;
+            this.player = player;
             //text.text = "Player " + player.playerIndex.ToString();
             text.text = "You";
         }

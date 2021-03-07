@@ -43,7 +43,7 @@ namespace MirrorBasics {
         [SerializeField] public Text debugText;
 
         //[SerializeField] public GameObject newUIPlayer;
-        private int countPlayers = 0;
+        //private int countPlayers = 0;
 
         //singleton UI instance on start
         void Start()
@@ -73,6 +73,17 @@ namespace MirrorBasics {
                 forceStartDebug.gameObject.SetActive(false);
                 startButton.gameObject.SetActive(false);
                 readyButton.gameObject.SetActive(true);
+            }
+
+            if(Lobby_Player.localPlayer?.teamIndex == 1)
+            {
+                MoveToTeam2Btn.SetActive(true);
+                MoveToTeam1Btn.SetActive(false);
+            }
+            else if (Lobby_Player.localPlayer?.teamIndex == 2)
+            {
+                MoveToTeam1Btn.SetActive(true);
+                MoveToTeam2Btn.SetActive(false);
             }
         }
 
@@ -159,21 +170,55 @@ namespace MirrorBasics {
             Lobby_Player.localPlayer.ReadyGame();
         }
 
-        //function for ready button
+        // switching team
+        public void SwitchTeam()
+        {
+            if (MoveToTeam2Btn.activeSelf)
+            {
+                string toTeam2 = "team2";
+                Lobby_Player.localPlayer.SwitchTeam(UIPlayerParentTeam2, toTeam2);
+            }
+            else if (MoveToTeam1Btn.activeSelf)
+            {
+                string toTeam1 = "team1";
+                Lobby_Player.localPlayer.SwitchTeam(UIPlayerParentTeam1, toTeam1);
+            }
+        }
 
         //to spawn players in lobby
         public void SpawnPlayerPrefab(Lobby_Player player) 
-        {   
-            GameObject playerGameObject = Lobby_Player.localPlayer.gameObject;
-            GameObject playerLobbyUIGameObject = playerGameObject.transform.GetChild(0).gameObject;
+        {
+            Debug.Log("Player " + player.playerIndex + "teamIndex is :" + player.teamIndex);
+            if(player.teamIndex == 1)
+            {
+                GameObject newUIPlayer = player.gameObject;
+                GameObject playerUIGameObject = newUIPlayer.transform.GetChild(0).gameObject;
+                newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+                playerUIGameObject.SetActive(true);
+                player.gameObject.transform.SetParent(UIPlayerParentTeam1);
+                player.GetComponent<UIPlayer>().SetPlayer(player);
+            }
+            else if (player.teamIndex == 2)
+            {
+                GameObject newUIPlayer = player.gameObject;
+                GameObject playerUIGameObject = newUIPlayer.transform.GetChild(0).gameObject;
+                newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+                playerUIGameObject.SetActive(true);
+                player.gameObject.transform.SetParent(UIPlayerParentTeam2);
+                player.GetComponent<UIPlayer>().SetPlayer(player);
+                //GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam2);
+                //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+                //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1); 
+            }
+            //return newUIPlayer;
+            //GameObject playerGameObject = Lobby_Player.localPlayer.gameObject;
+            //GameObject playerLobbyUIGameObject = playerGameObject.transform.GetChild(0).gameObject;
             //Lobby_Player.localPlayer.playerLobbyGameObject = playerLobbyUIGameObject;
 
             //if team 1 not full, add new clients to team 1
-            if(countPlayers <=3)
+            /*if(countPlayers <=3)
             {
-                //newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam1);
-                //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
-                //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+               
 
                 playerLobbyUIGameObject.SetActive(true);
 
@@ -212,10 +257,10 @@ namespace MirrorBasics {
             {
                 MoveToTeam1Btn.SetActive(true);
                 MoveToTeam2Btn.SetActive(false);
-            }
+            }*/
         }
 
-        //when switch button is pressed
+       /* //when switch button is pressed
         public void SwitchTeam()
         {
             if(MoveToTeam2Btn.activeSelf)
@@ -231,14 +276,14 @@ namespace MirrorBasics {
         }
 
         //to know which team new client belong to
-        public void SwitchToTeam2()
+        /*public void SwitchToTeam2()
         {
             countPlayers -= 1;
         }
         public void SwitchToTeam1()
         {
             countPlayers += 1;
-        }
+        }*/
     }
 }
 
