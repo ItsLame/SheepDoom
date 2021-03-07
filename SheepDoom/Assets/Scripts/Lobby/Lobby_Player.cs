@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 
 namespace MirrorBasics
@@ -17,8 +18,9 @@ namespace MirrorBasics
         
         //syncvar timer
         [SyncVar] public float selectionTimer;
-        //[SyncVar] public bool selectionTimerZero = false;
         [SyncVar] public bool selectionTimerReset = true;
+
+        [SyncVar] public bool isReady = false;
 
         //bool to check if room owner & if game is started
         [SyncVar] public bool isRoomOwner = false;
@@ -36,7 +38,7 @@ namespace MirrorBasics
             }
             else
             {
-                UI_LobbyScript.instance.SpawnPlayerPrefab(this);   
+                UI_LobbyScript.instance.SpawnPlayerPrefab(this);
             }
         }
 
@@ -122,6 +124,7 @@ namespace MirrorBasics
 
                 //generate match
                 TargetJoinGame(true, _matchID, playerIndex, teamIndex);
+                EnterRoomInit();
             }
 
             //if Join fail
@@ -145,8 +148,37 @@ namespace MirrorBasics
             isRoomOwner = false;
         }
 
+        public void EnterRoomInit()
+        {
+            isReady = false;
+
+            TargetEnterRoomInit();
+            RpcEnterRoomInit();
+        }
+
+        [TargetRpc]
+        void TargetEnterRoomInit()
+        {
+            string readyBtnText = "Ready";
+            Color readyBtnColor = Color.green;
+            
+            Debug.Log("[INITIALIZE] Changing " + playerIndex + " status to " + readyBtnText + " in " + readyBtnColor);
+            UI_LobbyScript.instance.readyButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = readyBtnText;
+            UI_LobbyScript.instance.readyButton.transform.GetChild(0).gameObject.GetComponent<Text>().color = readyBtnColor;
+        }
+
+        [ClientRpc]
+        void RpcEnterRoomInit()
+        {
+            string readyStatus = "Waiting";
+            Color readyStatusColor = Color.red;
+
+            Debug.Log("[INITIALIZE] Changing " + playerIndex + " status to " + readyStatus + " in " + readyStatusColor);
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().text = readyStatus;
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().color = readyStatusColor;
+        }
+
         // switching team
-        
         public void SwitchTeam(Transform teamParentGroup, string team)
         {
             Debug.Log("Send to server to switch team");
@@ -168,31 +200,6 @@ namespace MirrorBasics
             }
         }
 
-        /*[TargetRpc]
-        void TargetSwitchTeam(Transform teamParentGroup, int _teamIndex)
-        {
-            teamIndex = _teamIndex;
-            Debug.Log("Switching team..");
-            if (teamIndex == 1)
-            {
-                Debug.Log(playerIndex + " belongs to team 1!");
-                this.gameObject.transform.SetParent(teamParentGroup);
-            }
-            else if (teamIndex == 2)
-            {
-                Debug.Log(playerIndex + " belongs to team 2!");
-                this.gameObject.transform.SetParent(teamParentGroup);
-            }
-        }
-
-        [Command]
-        void CmdRefreshTeam(Transform teamParentGroup, int _teamIndex)
-        {
-            teamIndex = _teamIndex;
-            Debug.Log("Switch team success..switching");
-            RpcRefreshTeam(teamParentGroup, teamIndex);
-        }*/
-
         [ClientRpc]
         void RpcSwitchTeam(Transform teamParentGroup, int _teamIndex)
         {
@@ -212,24 +219,99 @@ namespace MirrorBasics
 
         //start match
         //available to hosts only
-        public void StartGame()
+        public void StartGame(string StartState)
         {
             Debug.Log("Starting Game");
-            CmdStartGame();
+            CmdStartGame(StartState);
         }
 
         [Command]
-        void CmdStartGame()
+        void CmdStartGame(string StartState)
         {
-            MatchMaker.instance.StartGame(matchID);
-            Debug.Log("Game started successfully");
-            //generate match
+            Debug.Log("Attempting to start " + matchID + " game...");
+            MatchMaker.instance.StartGame(StartState, matchID);
         }
 
-        public void BeginGame()
+        public void BeginGame(bool StartSuccess)
         {
-            Debug.Log($"MatchID: {matchID} | starting");
-            isGameStart = true; // change syncvar hook to display gamelobbycanvas and timer
+            if(!StartSuccess)
+            {
+                Debug.Log($"MatchID: {matchID} | all players must be ready!");
+                isGameStart = false;
+            }
+            else if(StartSuccess)
+            {
+                Debug.Log($"MatchID: {matchID} | starting");
+                isGameStart = true; // change syncvar hook to display gamelobbycanvas and timer
+            }
+        }
+
+        public void ReadyGame()
+        {
+            Debug.Log("Player " + playerIndex + ": pressed ready!");
+            CmdReadyGame();
+        }
+
+        [Command]
+        void CmdReadyGame()
+        {
+            Debug.Log("Attempt to change Player " + playerIndex + "'s ready status...");
+            MatchMaker.instance.ReadyGame(matchID, gameObject);
+        }
+
+        public void UpdateReadyCount(bool readyStatus)
+        {
+            isReady = readyStatus;
+
+            //change ready button viewable only to the client who pressed it
+            TargetReadyGame();
+            //change ready status viewable to everyone
+            RpcReadyGame();
+        }
+
+        [TargetRpc]
+        void TargetReadyGame()
+        {
+            string readyBtnText = "";
+            Color readyBtnColor = Color.black;
+
+            if(!isReady)
+            {
+                readyBtnText = "Cancel";
+                readyBtnColor = Color.red;
+            }
+            else if(isReady)
+            {
+                readyBtnText  = "Ready";
+                readyBtnColor = Color.green;
+            }
+            
+            Debug.Log("Changing " + playerIndex + " status to " + readyBtnText + " in " + readyBtnColor);
+            UI_LobbyScript.instance.readyButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = readyBtnText;
+            UI_LobbyScript.instance.readyButton.transform.GetChild(0).gameObject.GetComponent<Text>().color = readyBtnColor;
+        }
+
+        [ClientRpc]
+        void RpcReadyGame()
+        {
+            string readyStatus = "";
+            Color readyStatusColor = Color.black;
+
+            if(!isReady)
+            {
+                readyStatus = "Ready!";
+                readyStatusColor = Color.green;
+            }
+            else if(isReady)
+            {
+                readyStatus = "Waiting";
+                readyStatusColor = Color.red;
+            }
+            
+
+            Debug.Log("Changing " + playerIndex + " status to " + readyStatus + " in " + readyStatusColor);
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().text = readyStatus;
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().color = readyStatusColor;
         }
 
         //function to start count down and get ready start actual game
@@ -237,6 +319,13 @@ namespace MirrorBasics
         {
             //timer countdown and sync
             Debug.Log("check isGameStart state");
+            
+            string readyStatus = "Ready!";
+            Color readyStatusColor = Color.green;
+            Debug.Log("Changing " + playerIndex + " status to " + readyStatus + " in " + readyStatusColor);
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().text = readyStatus;
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().color = readyStatusColor;
+
             if(isGameStart == true)
             {
                 //turn on gamelobbyui canvas
@@ -289,96 +378,123 @@ namespace MirrorBasics
                 yield return null;
             }
         }
+    }
+}
 
-        //function to auto refresh team list
-        /*public void RefreshTeam(Transform teamParentGroup)
-        {
-            Debug.Log("Refreshing team list...");
-            CmdRefreshTeam(teamParentGroup);
-        }
+// ------------- ARCHIVE ------------- //
 
-        //client to server
-        [Command]
-        void CmdRefreshTeam(Transform teamParentGroup)
+/*[TargetRpc]
+        void TargetSwitchTeam(Transform teamParentGroup, int _teamIndex)
         {
-            Debug.Log("Commencing team refresh...");
-            RpcRefreshTeam(teamParentGroup);
-        }
-
-        //refresh view for all players
-        [ClientRpc]
-        void RpcRefreshTeam(Transform teamParentGroup)
-        {
-            if(teamIndex == 1)
+            teamIndex = _teamIndex;
+            Debug.Log("Switching team..");
+            if (teamIndex == 1)
             {
                 Debug.Log(playerIndex + " belongs to team 1!");
                 this.gameObject.transform.SetParent(teamParentGroup);
             }
-            else if(teamIndex == 2)
+            else if (teamIndex == 2)
             {
                 Debug.Log(playerIndex + " belongs to team 2!");
                 this.gameObject.transform.SetParent(teamParentGroup);
             }
         }
 
-        //function for players to switch team
-        public void SwitchTeam(Transform teamParentGroup)
+        [Command]
+        void CmdRefreshTeam(Transform teamParentGroup, int _teamIndex)
         {
-            Debug.Log("Attempting to switch team...");
-            CmdSwitchTeam(teamParentGroup);
-        }
-
-        //client to server
-        /*[Command]
-        void CmdSwitchTeam(Transform teamParentGroup)
-        {
-                Debug.Log("Commencing team switch...");
-                RpcSwitchTeam(teamParentGroup);
-                //MatchMaker.instance.SwitchTeam(teamParentGroup, out teamIndex);
-                TargetSwitchTeam();
-        }
-
-        //when team switched, change view for all players
-        [ClientRpc]
-        void RpcSwitchTeam(Transform teamParentGroup)
-        {
-            bool isSwitch = true;
-            
-            if(isSwitch == true)
-            {
-                if(teamIndex == 1)
-                {
-                    Debug.Log(playerIndex + " switches to team 2!");
-                    teamIndex = 2;
-                    this.gameObject.transform.SetParent(teamParentGroup);
-                    UI_LobbyScript.instance.SwitchToTeam2();
-                }
-                else if(teamIndex == 2)
-                {
-                    Debug.Log(playerIndex + " switches to team 1!");
-                    teamIndex = 1;
-                    this.gameObject.transform.SetParent(teamParentGroup);
-                    UI_LobbyScript.instance.SwitchToTeam1();
-                }
-
-                isSwitch = false;
-            }
-        }
-
-        //change button only for the person who clicked
-        [TargetRpc]
-        void TargetSwitchTeam()
-        {
-            if(teamIndex == 1)
-            {
-                UI_LobbyScript.instance.MoveToTeam1Btn.SetActive(false);
-                UI_LobbyScript.instance.MoveToTeam2Btn.SetActive(true);
-            }
-            else if(teamIndex == 2)
-            {
-                UI_LobbyScript.instance.MoveToTeam1Btn.SetActive(true);
-                UI_LobbyScript.instance.MoveToTeam2Btn.SetActive(false);
-            }
+            teamIndex = _teamIndex;
+            Debug.Log("Switch team success..switching");
+            RpcRefreshTeam(teamParentGroup, teamIndex);
         }*/
+
+//function to auto refresh team list
+/*public void RefreshTeam(Transform teamParentGroup)
+{
+    Debug.Log("Refreshing team list...");
+    CmdRefreshTeam(teamParentGroup);
+}
+
+//client to server
+[Command]
+void CmdRefreshTeam(Transform teamParentGroup)
+{
+    Debug.Log("Commencing team refresh...");
+    RpcRefreshTeam(teamParentGroup);
+}
+
+//refresh view for all players
+[ClientRpc]
+void RpcRefreshTeam(Transform teamParentGroup)
+{
+    if(teamIndex == 1)
+    {
+        Debug.Log(playerIndex + " belongs to team 1!");
+        this.gameObject.transform.SetParent(teamParentGroup);
+    }
+    else if(teamIndex == 2)
+    {
+        Debug.Log(playerIndex + " belongs to team 2!");
+        this.gameObject.transform.SetParent(teamParentGroup);
     }
 }
+
+//function for players to switch team
+public void SwitchTeam(Transform teamParentGroup)
+{
+    Debug.Log("Attempting to switch team...");
+    CmdSwitchTeam(teamParentGroup);
+}
+
+//client to server
+/*[Command]
+void CmdSwitchTeam(Transform teamParentGroup)
+{
+        Debug.Log("Commencing team switch...");
+        RpcSwitchTeam(teamParentGroup);
+        //MatchMaker.instance.SwitchTeam(teamParentGroup, out teamIndex);
+        TargetSwitchTeam();
+}
+
+//when team switched, change view for all players
+[ClientRpc]
+void RpcSwitchTeam(Transform teamParentGroup)
+{
+    bool isSwitch = true;
+    
+    if(isSwitch == true)
+    {
+        if(teamIndex == 1)
+        {
+            Debug.Log(playerIndex + " switches to team 2!");
+            teamIndex = 2;
+            this.gameObject.transform.SetParent(teamParentGroup);
+            UI_LobbyScript.instance.SwitchToTeam2();
+        }
+        else if(teamIndex == 2)
+        {
+            Debug.Log(playerIndex + " switches to team 1!");
+            teamIndex = 1;
+            this.gameObject.transform.SetParent(teamParentGroup);
+            UI_LobbyScript.instance.SwitchToTeam1();
+        }
+
+        isSwitch = false;
+    }
+}
+
+//change button only for the person who clicked
+[TargetRpc]
+void TargetSwitchTeam()
+{
+    if(teamIndex == 1)
+    {
+        UI_LobbyScript.instance.MoveToTeam1Btn.SetActive(false);
+        UI_LobbyScript.instance.MoveToTeam2Btn.SetActive(true);
+    }
+    else if(teamIndex == 2)
+    {
+        UI_LobbyScript.instance.MoveToTeam1Btn.SetActive(true);
+        UI_LobbyScript.instance.MoveToTeam2Btn.SetActive(false);
+    }
+}*/

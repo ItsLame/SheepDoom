@@ -18,6 +18,8 @@ namespace MirrorBasics {
         public SyncListGameObject players = new SyncListGameObject();
         public int team1;
         public int team2;
+        //int to count players ready
+        public int countReady;
         //public bool inMatch = false;
 
         //constructor that takes in matchID and the host
@@ -29,6 +31,7 @@ namespace MirrorBasics {
             players.Add(player);
             team1++;
             team2 = 0;
+            countReady = 0;
         }
 
         //default constructor for unity to be happy. blank 
@@ -38,8 +41,7 @@ namespace MirrorBasics {
     [System.Serializable]
     //to store a list of game objects that needs to be synced between clients
     public class SyncListGameObject : SyncList<GameObject> 
-    {
-
+    { 
     }
 
     [System.Serializable]
@@ -77,6 +79,17 @@ namespace MirrorBasics {
                 matches.Add(new Match(_matchID, _player));
                 teamIndex = 1;
                 Debug.Log($"Match ID Created");
+                
+                for (int i = 0; i < matches.Count; i++)
+                {
+                    if(matches[i].matchID == _matchID)
+                    {
+                        matches[i].countReady += 1;
+                        Debug.Log("Room [" + _matchID + "] Ready Count: " + matches[i].countReady);
+                        break;
+                    }
+                }
+                
                 return true;
             }
             else
@@ -125,6 +138,44 @@ namespace MirrorBasics {
                 Debug.Log($"Match ID does not exists");
                 return false;
             }
+        }
+
+        public void ReadyGame(string _matchID, GameObject _player)
+        {
+            bool readyStatus = false;
+
+            for(int i = 0; i < matches.Count; i++)
+            {
+                //search match
+                if(matches[i].matchID == _matchID)
+                {
+                    //switch player's ready status
+                    if(!_player.GetComponent<Lobby_Player>().isReady)
+                    {
+                        matches[i].countReady += 1;
+                        readyStatus = true;
+
+                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " change ready status to: " + readyStatus);
+                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " changed to ready!");
+                        Debug.Log("Room [" + _matchID + "] Ready Count: " + matches[i].countReady);
+                        
+                        break;
+                    }
+                    else if(_player.GetComponent<Lobby_Player>().isReady)
+                    {
+                         matches[i].countReady -= 1;
+                         readyStatus = false;
+
+                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " change ready status to: " + readyStatus);
+                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " changed to waiting!");
+                        Debug.Log("Room [" + _matchID + "] Ready Count: " + matches[i].countReady);
+                        
+                        break;
+                    }
+                }
+            }
+
+            _player.GetComponent<Lobby_Player>().UpdateReadyCount(readyStatus);
         }
 
         // does not account for player disconnect, when player gone, won't deduct or increment slots
@@ -186,8 +237,8 @@ namespace MirrorBasics {
                         foreach (var player in matches[i].players)
                         {
                             Lobby_Player _player = player.GetComponent<Lobby_Player>();
-                            Debug.Log("MatchMaker: StartGame foreach loop");
-                            _player.BeginGame(true); // start the corresponding match
+                            Debug.Log("MatchMaker: [Force]StartGame foreach loop");
+                            _player.BeginGame(true); // start the correspondin g match
                         }
                         break;
                     }
@@ -195,22 +246,20 @@ namespace MirrorBasics {
             }
             else if(startButton == "Normal Start")
             {
-                int countPlayer = 0;
-
                 for(int i = 0; i < matches.Count; i++)
                 {
                     if (matches[i].matchID == _matchID) // find the correct match
                     {
                         foreach (var player in matches[i].players)
                         {
-                            countPlayer += 1;
                             Lobby_Player _player = player.GetComponent<Lobby_Player>();
+                            Debug.Log("MatchMaker: [Normal]StartGame foreach loop");
 
-                            if(_player.countReady == countPlayer)
+                            if(matches[i].countReady == matches[i].players.Count)
                             {
                                 _player.BeginGame(true); // start the corresponding match
                             }
-                            else if(_player.countReady < countPlayer)
+                            else if(matches[i].countReady < matches[i].players.Count)
                             {
                                 _player.BeginGame(false);
                             }
@@ -269,6 +318,8 @@ namespace MirrorBasics {
         }
     }
 }
+
+// ------------- ARCHIVE ------------- //
 
 /*Debug.Log("MatchMaker: Game Started!");
 //game is starting <-- previously in StartGame() function

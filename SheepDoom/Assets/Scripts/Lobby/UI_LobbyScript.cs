@@ -38,7 +38,7 @@ namespace MirrorBasics {
 
         [Header("For Debugging Purposes")]
         //for debugging purposes
-        [SerializeField] bool isForceStartDebug;
+        [SerializeField] bool isForceStartDebug = false;
         [SerializeField] public GameObject forceStartDebug;
         [SerializeField] public Text debugText;
 
@@ -49,6 +49,9 @@ namespace MirrorBasics {
         void Start()
         {
             instance = this;
+            
+            //toggle isforcestart bool on start to true (for debug)
+            isForceStartDebug = true;
         }
 
         void Update()
@@ -64,16 +67,13 @@ namespace MirrorBasics {
                 {
                     forceStartDebug.gameObject.SetActive(false);
                 }
-
-                startButton.gameObject.SetActive(true);
-                readyButton.gameObject.SetActive(false);
             }
-            else if(Lobby_Player.localPlayer?.isRoomOwner == false)
+            /*else if(Lobby_Player.localPlayer?.isRoomOwner == false)
             {
                 forceStartDebug.gameObject.SetActive(false);
                 startButton.gameObject.SetActive(false);
                 readyButton.gameObject.SetActive(true);
-            }
+            }*/
 
             if(Lobby_Player.localPlayer?.teamIndex == 1)
             {
@@ -109,6 +109,9 @@ namespace MirrorBasics {
                 lobbyCanvas.enabled = true;
                 SpawnPlayerPrefab(Lobby_Player.localPlayer);
                 matchIDText.text = matchID;
+
+                startButton.gameObject.SetActive(true);
+                readyButton.gameObject.SetActive(false);
             }
 
             //if host / join fail, re-enable the buttons
@@ -140,6 +143,9 @@ namespace MirrorBasics {
                 lobbyCanvas.enabled = true;
                 SpawnPlayerPrefab(Lobby_Player.localPlayer);
                 matchIDText.text = matchID;
+                
+                startButton.gameObject.SetActive(false);
+                readyButton.gameObject.SetActive(true);
             }
             //if host / join fail, re-enable the buttons
             else
@@ -206,61 +212,18 @@ namespace MirrorBasics {
                 playerUIGameObject.SetActive(true);
                 player.gameObject.transform.SetParent(UIPlayerParentTeam2);
                 player.GetComponent<UIPlayer>().SetPlayer(player);
-                //GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam2);
+            }
+        }
+    }
+}
+
+// ------------- ARCHIVE ------------- //
+
+//GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam2);
                 //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
                 //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1); 
-            }
-            //return newUIPlayer;
-            //GameObject playerGameObject = Lobby_Player.localPlayer.gameObject;
-            //GameObject playerLobbyUIGameObject = playerGameObject.transform.GetChild(0).gameObject;
-            //Lobby_Player.localPlayer.playerLobbyGameObject = playerLobbyUIGameObject;
 
-            //if team 1 not full, add new clients to team 1
-            /*if(countPlayers <=3)
-            {
-               
-
-                playerLobbyUIGameObject.SetActive(true);
-
-                Lobby_Player.localPlayer.teamIndex = 1;
-                Lobby_Player.localPlayer.gameObject.transform.SetParent(UIPlayerParentTeam1);
-                Lobby_Player.localPlayer.GetComponent<UIPlayer>().SetPlayer(player);
-                
-                countPlayers += 1;
-
-                Lobby_Player.localPlayer.RefreshTeam(UIPlayerParentTeam1);
-            }
-            //add new clients to team 2
-            else
-            {
-                //newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParentTeam2);
-                //newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
-                //newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
-
-                playerLobbyUIGameObject.SetActive(true);
-
-                Lobby_Player.localPlayer.teamIndex = 2;
-                Lobby_Player.localPlayer.gameObject.transform.SetParent(UIPlayerParentTeam2);
-                Lobby_Player.localPlayer.GetComponent<UIPlayer>().SetPlayer(player);
-
-                Lobby_Player.localPlayer.RefreshTeam(UIPlayerParentTeam1);
-                Lobby_Player.localPlayer.RefreshTeam(UIPlayerParentTeam2);
-            }
-            
-            //switch button differs according to client's team
-            if(Lobby_Player.localPlayer.transform.parent == UIPlayerParentTeam1)
-            {
-                MoveToTeam2Btn.SetActive(true);
-                MoveToTeam1Btn.SetActive(false);
-            }
-            else if(Lobby_Player.localPlayer.transform.parent == UIPlayerParentTeam2)
-            {
-                MoveToTeam1Btn.SetActive(true);
-                MoveToTeam2Btn.SetActive(false);
-            }*/
-        }
-
-       /* //when switch button is pressed
+/* //when switch button is pressed
         public void SwitchTeam()
         {
             if(MoveToTeam2Btn.activeSelf)
@@ -284,8 +247,6 @@ namespace MirrorBasics {
         {
             countPlayers += 1;
         }*/
-    }
-}
 
 /*//timer countdown and sync <--- previously in Update() function
             if(Lobby_Player.localPlayer.isGameStart == true)
