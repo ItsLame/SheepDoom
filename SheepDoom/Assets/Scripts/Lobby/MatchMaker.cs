@@ -141,29 +141,39 @@ namespace MirrorBasics {
             }
         }
 
-        public void EnterRoomInit(string _matchID, GameObject _player)
+        public void EnterRoomInit(string _matchID, GameObject _player, int playerIndex, int teamIndex)
         {
-            _player.GetComponent<Lobby_Player>().isReady = true;
-
             for(int i = 0; i < matches.Count; i++)
             {
                 //search match
                 if(matches[i].matchID == _matchID)
                 {
                     //loop through players in match
-                    for(int k = 1; k != matches[i].players.Count; k++)
+                    for(int k = 0; k < (matches[i].team1+matches[i].team2); k++)
                     {
-                        //update ready status of pre-existing clients to the client who just entered
-                        if(matches[i].players[k].GetComponent<Lobby_Player>().isReady)
-                        {
-                            Debug.Log("MM EnterRoomInit: Updating Player " + matches[i].players[k].GetComponent<Lobby_Player>().playerIndex + " to wait");
-                        }
-                        else if(!matches[i].players[k].GetComponent<Lobby_Player>().isReady)
-                        {
-                            Debug.Log("MM EnterRoomInit: Updating Player " + matches[i].players[k].GetComponent<Lobby_Player>().playerIndex + " to ready");
-                        }
+                        //Debug.Log("players[k] = " + matches[i].players[k].GetComponent<Lobby_Player>().playerIndex);
+                        //Debug.Log("_player = "+ _player.GetComponent<Lobby_Player>().playerIndex);
+                        Debug.Log("team1 =" + matches[i].team1);
+                        Debug.Log("team2 =" + matches[i].team2);
 
-                        matches[i].players[k].GetComponent<Lobby_Player>().RpcReadyGame();
+                        //if it's not the new client who just entered
+                        if((_player.GetComponent<Lobby_Player>().teamIndex != matches[i].players[k].GetComponent<Lobby_Player>().teamIndex) ||
+                            (_player.GetComponent<Lobby_Player>().playerIndex != matches[i].players[k].GetComponent<Lobby_Player>().playerIndex))
+                        {
+                            //update ready status of pre-existing clients to the client who just entered
+                            if(matches[i].players[k].GetComponent<Lobby_Player>().isReady)
+                            {
+                                Debug.Log("MM EnterRoomInit: Updating Player " + matches[i].players[k].GetComponent<Lobby_Player>().playerIndex + 
+                                            "from team " + matches[i].players[k].GetComponent<Lobby_Player>().teamIndex + "to wait");
+                            }
+                            else if(!matches[i].players[k].GetComponent<Lobby_Player>().isReady)
+                            {
+                                Debug.Log("MM EnterRoomInit: Updating Player " + matches[i].players[k].GetComponent<Lobby_Player>().playerIndex + 
+                                            "from team " + matches[i].players[k].GetComponent<Lobby_Player>().teamIndex + "to ready");
+                            }
+                            //matches[i].players[k].GetComponent<Lobby_Player>().UpdateReadyCountUI(true);
+                            matches[i].players[k].GetComponent<Lobby_Player>().RpcReadyGame(true);
+                        }
                     }
                 }
             }
@@ -176,22 +186,22 @@ namespace MirrorBasics {
                 //search match
                 if(matches[i].matchID == _matchID)
                 {
-                    //switch player's ready status
-                    if(_player.GetComponent<Lobby_Player>().isReady == true)
+                    //if not ready, countReady++ (isReady will be set to true @ lobby_player; after all the UI are set)
+                    if(_player.GetComponent<Lobby_Player>().isReady == false)
                     {
                         matches[i].countReady += 1;
 
-                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " change ready status to: " + _player.GetComponent<Lobby_Player>().isReady);
+                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " ready status was: " + _player.GetComponent<Lobby_Player>().isReady);
                         Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " changed to ready!");
                         Debug.Log("Room [" + _matchID + "] Ready Count: " + matches[i].countReady);
                         
                         break;
                     }
-                    else if(_player.GetComponent<Lobby_Player>().isReady == false)
+                    else if(_player.GetComponent<Lobby_Player>().isReady == true)
                     {
                          matches[i].countReady -= 1;
 
-                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " change ready status to: " + _player.GetComponent<Lobby_Player>().isReady);
+                        Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " ready status was: " + _player.GetComponent<Lobby_Player>().isReady);
                         Debug.Log("Player " + _player.GetComponent<Lobby_Player>().playerIndex + " changed to waiting!");
                         Debug.Log("Room [" + _matchID + "] Ready Count: " + matches[i].countReady);
                         
@@ -200,6 +210,7 @@ namespace MirrorBasics {
                 }
             }
 
+            //_player.GetComponent<Lobby_Player>().UpdateReadyCountUI(false);
             _player.GetComponent<Lobby_Player>().UpdateReadyCountUI();
         }
 

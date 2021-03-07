@@ -125,7 +125,9 @@ namespace MirrorBasics
 
                 //generate match
                 TargetJoinGame(true, _matchID, playerIndex, teamIndex);
+                
                 EnterRoomInit();
+                MatchMaker.instance.EnterRoomInit(matchID, gameObject, playerIndex, teamIndex);
             }
 
             //if Join fail
@@ -149,44 +151,46 @@ namespace MirrorBasics
             isRoomOwner = false;
         }
 
+        //when new client enters room, update view for the new client (not working yet)
         public void EnterRoomInit()
         {
-            //isReady = false;
-            //isReadyUI = true;
+            //isReady = true;
             
-            //isReady = false;
-
-            MatchMaker.instance.EnterRoomInit(matchID, gameObject);
+            //CmdEnterRoomInit();
+            //UpdateReadyCountUI(true);
 
             TargetEnterRoomInit();
             RpcEnterRoomInit();
+
+            isReady = false;
         }
 
-        //server to a client
+        /*[Command]
+        void CmdEnterRoomInit()
+        {
+            MatchMaker.instance.EnterRoomInit(matchID, gameObject);
+        }*/
+
         [TargetRpc]
         void TargetEnterRoomInit()
         {
             string readyBtnText = "Ready";
             Color readyBtnColor = Color.green;
             
-            Debug.Log("[INITIALIZE] Changing " + playerIndex + " status to " + readyBtnText + " in " + readyBtnColor);
             UI_LobbyScript.instance.readyButton.transform.GetChild(0).gameObject.GetComponent<Text>().text = readyBtnText;
             UI_LobbyScript.instance.readyButton.transform.GetChild(0).gameObject.GetComponent<Text>().color = readyBtnColor;
-
-            //MatchMaker.instance.EnterRoomInit(matchID, gameObject);
         }
 
-        //server to all clients
         [ClientRpc]
         void RpcEnterRoomInit()
         {
             string readyStatus = "Waiting";
             Color readyStatusColor = Color.red;
 
-            Debug.Log("[INITIALIZE] Changing " + playerIndex + " status to " + readyStatus + " in " + readyStatusColor);
             gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().text = readyStatus;
             gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().color = readyStatusColor;
         }
+
 
         // switching team
         public void SwitchTeam(Transform teamParentGroup, string team)
@@ -273,65 +277,89 @@ namespace MirrorBasics
 
         public void ReadyGame()
         {
-            Debug.Log("Player " + playerIndex + ": pressed ready!");
+            Debug.Log("Player " + this.playerIndex + ": pressed ready!");
             CmdReadyGame();
         }
 
         [Command]
         void CmdReadyGame()
         {
-            Debug.Log("Attempt to change Player " + playerIndex + "'s ready status...");
+            Debug.Log("Attempting to change Player " + this.playerIndex + "'s ready status...");
 
-            MatchMaker.instance.ReadyGame(matchID, gameObject);
+            MatchMaker.instance.ReadyGame(matchID, this.gameObject);
         }
 
         public void UpdateReadyCountUI()
         {
-            if(isReady)
+            if(this.isReady)
             {
-                isReadyUI = true;
+                this.isReadyUI = true;
             }
-            else if(!isReady)
+            else if(!this.isReady)
             {
-                isReadyUI = false;
+                this.isReadyUI = false;
             }
+
+            /*if(isInit)
+            {
+                if(isReady)
+                {
+                    isReadyUI = false;
+                }
+                else if(!isReady)
+                {
+                    isReadyUI = true;
+                }
+            }*/
 
             //change ready button viewable only to the client who pressed it
             TargetReadyGame();
             //change ready status viewable to everyone
-            RpcReadyGame();
+            RpcReadyGame(false);
 
-            if(isReady)
+            /*if(!isInit)
             {
-                isReady = false;
+                if(isReady)
+                {
+                    isReady = false;
+                }
+                else if(!isReady)
+                {
+                    isReady = true;
+                }
+            }*/
+
+            if(this.isReady)
+            {
+                this.isReady = false;
             }
-            else if(!isReady)
+            else if(!this.isReady)
             {
-                isReady = true;
+                this.isReady = true;
             }
 
-            if(isReady)
+            if(this.isReady)
             {
                 isReadyUI = true;
             }
-            else if(!isReady)
+            else if(!this.isReady)
             {
                 isReadyUI = false;
             }
         }
 
         [TargetRpc]
-        void TargetReadyGame()
+        public void TargetReadyGame()
         {
             string readyBtnText = "";
             Color readyBtnColor = Color.black;
 
-            if(isReadyUI == true)
+            if(isReadyUI == false)
             {
                 readyBtnText = "Cancel";
                 readyBtnColor = Color.red;
             }
-            else if(isReadyUI == false)
+            else if(isReadyUI == true)
             {
                 readyBtnText  = "Ready";
                 readyBtnColor = Color.green;
@@ -343,21 +371,38 @@ namespace MirrorBasics
         }
 
         [ClientRpc]
-        public void RpcReadyGame()
+        public void RpcReadyGame(bool isInit)
         {
             string readyStatus = "";
             Color readyStatusColor = Color.black;
 
-            if(isReadyUI == true)
+            if(isInit == false)
             {
-                readyStatus = "Ready!";
-                readyStatusColor = Color.green;
+                if(isReadyUI == false)
+                {
+                    readyStatus = "Ready!";
+                    readyStatusColor = Color.green;
+                }
+                else if(isReadyUI == true)
+                {
+                    readyStatus = "Waiting";
+                    readyStatusColor = Color.red;
+                }
             }
-            else if(isReadyUI == false)
+            else if(isInit == true)
             {
-                readyStatus = "Waiting";
-                readyStatusColor = Color.red;
+                if(isReadyUI == true)
+                {
+                    readyStatus = "Ready!";
+                    readyStatusColor = Color.green;
+                }
+                else if(isReadyUI == false)
+                {
+                    readyStatus = "Waiting";
+                    readyStatusColor = Color.red;
+                }
             }
+            
 
             Debug.Log("Changing " + playerIndex + " status to " + readyStatus + " in " + readyStatusColor);
             gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<Text>().text = readyStatus;
@@ -424,7 +469,6 @@ namespace MirrorBasics
                     UI_LobbyScript.instance.lockinButton.interactable = false;
                     isGameStart = false;
                 }
-
                 yield return null;
             }
         }
