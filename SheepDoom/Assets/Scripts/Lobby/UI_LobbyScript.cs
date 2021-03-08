@@ -194,7 +194,6 @@ namespace MirrorBasics {
         //to spawn players in lobby
         public void SpawnPlayerPrefab(Lobby_Player player) 
         {
-            Debug.Log("Player " + player.playerIndex + "teamIndex is :" + player.teamIndex);
             if(player.teamIndex == 1)
             {
                 GameObject newUIPlayer = player.gameObject;

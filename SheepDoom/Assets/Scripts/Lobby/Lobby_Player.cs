@@ -205,7 +205,6 @@ namespace MirrorBasics
             Debug.Log("In cmdswitchteam");
             if(MatchMaker.instance.SwitchTeam(matchID, out teamIndex, team))
             {
-                networkMatchChecker.matchId = matchID.ToGuid();
                 RpcSwitchTeam(teamParentGroup, teamIndex);
             }
             else
