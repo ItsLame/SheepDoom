@@ -29,7 +29,7 @@ public class AutoHostClient : MonoBehaviour
     public void Login() 
     {
         networkManager.networkAddress = "localhost";
-        networkManager.StartClient();
+        networkManager.StartClient(); // change to StartHost() if you don't want to build to test and just wanna use unity editor to test
     }
 
     public void Register() { }
