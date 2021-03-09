@@ -30,7 +30,7 @@ namespace SheepDoom
         public void Login()
         {
             string user = username.text;
-            if(Client.ClientLogin(user))
+            if(Player.ClientLogin(user))
             {
                 networkManager.networkAddress = "localhost";
                 networkManager.StartClient(); // change to StartHost() if you don't want to build to test and just wanna use unity editor to test

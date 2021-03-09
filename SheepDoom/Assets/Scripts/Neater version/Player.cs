@@ -10,23 +10,39 @@ using UnityEngine.UI;
 */
 namespace SheepDoom
 {
-    public class Client : NetworkBehaviour
+    public class Player : NetworkBehaviour
     {
         // profile details
-        public static Client client;
+        public static Player player;
         private static string userInput;
-        [SyncVar] private string username;
-
-        void Start()
-        {
-           
-        }
-
+        private string username;
+        
+        // match details
+        NetworkMatchChecker networkMatchChecker;
         public static bool ClientLogin(string user)
         {
             // validate with database here..
             userInput = user;
             return true; // for now la..
+        }
+
+        /// <summary>
+        /// Called on every NetworkBehaviour when it is activated on a client.
+        /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
+        /// </summary>
+        public override void OnStartClient()
+        {
+            if (isLocalPlayer)
+            {
+                player = this;
+                player.username = userInput;
+                networkMatchChecker = GetComponent<NetworkMatchChecker>();
+                Debug.Log(player.username);
+            }
+            else
+            {
+                Debug.Log("client start failed");
+            }
         }
 
         #region Start & Stop Callbacks
@@ -43,24 +59,6 @@ namespace SheepDoom
         /// <para>Useful for saving object data in persistent storage</para>
         /// </summary>
         public override void OnStopServer() { }
-
-        /// <summary>
-        /// Called on every NetworkBehaviour when it is activated on a client.
-        /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
-        /// </summary>
-        public override void OnStartClient() 
-        {
-            if (isServer && isClient && isLocalPlayer)
-            {
-                client = this;
-                client.username = userInput;
-                Debug.Log(client.username);
-            }
-            else
-            {
-                Debug.Log("client start failed");
-            }
-        }
 
         /// <summary>
         /// This is invoked on clients when the server has caused this object to be destroyed.
