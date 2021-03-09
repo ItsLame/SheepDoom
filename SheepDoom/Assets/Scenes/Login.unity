@@ -2933,7 +2933,7 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 9215272971011741937, guid: 5c89babc0dbcfaf4aa36dff5386b845a,
+  playerPrefab: {fileID: 6243845483501120523, guid: 887d73d39868dd74684111b8284d4913,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
@@ -7044,7 +7044,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1705324743}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a1900a1edab5bb4eb80c1a1017e377f, type: 3}
+  m_Script: {fileID: 11500000, guid: 66824a869146c0e47adab0998ce7e8c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   networkManager: {fileID: 629494789}
