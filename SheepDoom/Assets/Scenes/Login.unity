@@ -2926,7 +2926,7 @@ MonoBehaviour:
   serverBatching: 0
   serverBatchInterval: 0
   offlineScene: Assets/Scenes/Login.unity
-  onlineScene: Assets/Scenes/Lobby.unity
+  onlineScene: Assets/Scenes/Main Menu.unity
   transport: {fileID: 629494787}
   networkAddress: localhost
   maxConnections: 64

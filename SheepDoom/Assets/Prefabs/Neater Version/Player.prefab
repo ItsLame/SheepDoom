@@ -87,9 +87,10 @@ GameObject:
   - component: {fileID: 6243845483501120532}
   - component: {fileID: 6243845483501120533}
   - component: {fileID: 1485065021524012805}
-  - component: {fileID: 8396283280733302121}
+  - component: {fileID: 1056693830197017546}
+  - component: {fileID: 4573897209349995482}
   m_Layer: 5
-  m_Name: Client
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,7 +170,7 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &8396283280733302121
+--- !u!114 &1056693830197017546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +184,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0
-  username: {fileID: 0}
+--- !u!114 &4573897209349995482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6243845483501120523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1020a74962faada4b807ac5dc053a4cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  currentMatchDebug: 
 --- !u!1 &8289357149895215813
 GameObject:
   m_ObjectHideFlags: 0
