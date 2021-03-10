@@ -2,7 +2,7 @@
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace SheepDoom
 {
@@ -32,39 +32,22 @@ namespace SheepDoom
             return true; // for now la..
         }
 
-        /// <summary>
-        /// This is invoked for NetworkBehaviour objects when they become active on the server.
-        /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
-        /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
-        /// </summary>
         public override void OnStartServer()
         {
-            player = this;
-            Debug.Log("Player name is in ONSTARTSERVER: " + player.username);
+            player = this; // initialize player on server
         }
 
-        /// <summary>
-        /// Called on every NetworkBehaviour when it is activated on a client.
-        /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
-        /// </summary>
         public override void OnStartClient()
         {
-            player = this;
-            Debug.Log("Player name is in ONSTARTCLIENT: " + player.username);
+            player = this; // initialize player on client
         }
 
-        /// <summary>
-        /// Called when the local player object has been set up.
-        /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
-        /// </summary>
         public override void OnStartLocalPlayer() 
         {
-            player.username = userInput;
-            Debug.Log("player username in ONSTARTLOCALPLAYER: " + player.username);
-            CmdSetPlayerName(player.username);
+            CmdSetPlayerName(userInput);
         }
 
-        [Command] // initialize player name on the server
+        [Command] // update player name on the server
         void CmdSetPlayerName(string _username)
         {
             username = _username; 
@@ -106,7 +89,15 @@ namespace SheepDoom
             //matchID = _matchID;
             //teamIndex = _teamIndex;
             //playerSortIndex = _playerSortIndex;
-            MainMenu.instance.HostSuccess(success);
+            if(success)
+            {
+                StartCoroutine(LoadLobbyAsyncScene());
+                // spawn player
+            }
+            else
+            {
+                Debug.Log("Host failed");
+            }
         }
 
         public void JoinGame(string _matchID)
@@ -134,9 +125,28 @@ namespace SheepDoom
         [TargetRpc]
         void TargetJoinGame(bool success)
         {
-            Debug.Log("Game joined match id = " + matchID);
-            MainMenu.instance.JoinSuccess(success);
+            if (success)
+            {
+                StartCoroutine(LoadLobbyAsyncScene());
+                // Spawn player
+            }
+            else
+            {
+                Debug.Log("Join failed");
+            }
+
         }
+
+        // Waits until scene finishes loading before any stuff happens
+        IEnumerator LoadLobbyAsyncScene()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2, LoadSceneMode.Single);
+            while(!asyncLoad.isDone)
+            {
+                yield return null;
+            }    
+        }
+
 
         public void SetTeamIndex(int _teamIndex)
         {

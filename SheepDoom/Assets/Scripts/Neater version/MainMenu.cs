@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
+
 namespace SheepDoom
 {
     public class MainMenu : NetworkBehaviour
@@ -26,8 +27,12 @@ namespace SheepDoom
         void Start()
         {
             instance = this;
+        }
+
+        void Update()
+        {
             if(isClient)
-                playerName.text = Player.player.GetUsername(); // from network behaviour
+                playerName.text = Player.player.GetUsername();
         }
 
         // When clicked host button
@@ -36,35 +41,10 @@ namespace SheepDoom
             Player.player.HostGame();
         }
 
-        public void HostSuccess(bool success)
-        {
-            if(success)
-            {
-                // load scene
-                Debug.Log("Congrats!! Host success");
-            }
-            else
-            {
-                Debug.Log("Host game failed");
-            }
-        }
-
         // When clicked Join button...may change to room listing
         public void Join()
         {
             Player.player.JoinGame(matchID.text.ToUpper());
-        }
-
-        public void JoinSuccess(bool success)
-        {
-            if(success)
-            {
-                Debug.Log("Congrats!! Join success");
-            }
-            else
-            {
-                Debug.Log("Join game failed");
-            }
         }
     }
 }
