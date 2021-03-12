@@ -2890,6 +2890,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &1734050800
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734050793}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.50000006
+  m_Height: 2.8706725
+  m_Direction: 1
+  m_Center: {x: 0.00000004148069, y: -0.042752486, z: -0.00000008296138}
 --- !u!1 &1763315042
 GameObject:
   m_ObjectHideFlags: 0
