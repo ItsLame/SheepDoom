@@ -2306,7 +2306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6930b3b70c481404b8069355d56680aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 30
 --- !u!65 &1473718500
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3346,6 +3346,11 @@ PrefabInstance:
         type: 3}
       propertyPath: TotalTowerText
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -5447017754164849973, guid: 393cd935dcd88d9498839c776382cac7,
+        type: 3}
+      propertyPath: TowerRegenRate
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -5447017754164849973, guid: 393cd935dcd88d9498839c776382cac7,
         type: 3}
