@@ -7,7 +7,7 @@ using Mirror;
 
 namespace SheepDoom
 {
-    public class MainMenu : NetworkBehaviour
+    public class MainMenu : MonoBehaviour
     {
         public static MainMenu instance;
 
@@ -29,12 +29,11 @@ namespace SheepDoom
             instance = this;
         }
 
-        void Update()
+        public void SetPlayerName(string name)
         {
-            if(isClient)
-                playerName.text = Player.player.GetUsername();
+            playerName.text = name;
         }
-
+         
         // When clicked host button
         public void Host()
         {

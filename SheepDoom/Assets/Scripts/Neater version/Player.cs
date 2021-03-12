@@ -3,26 +3,33 @@ using Mirror;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace SheepDoom
 {
     public class Player : NetworkBehaviour
     {
-        NetworkMatchChecker networkMatchChecker;
-        // profile details
+        NetworkMatchChecker networkMatchChecker; // change this to playerprefab script attached to player prefab?
+        [Header("Setting up player")]
+        [SerializeField]
+        private NetworkIdentity playerPrefab = null;
         public static Player player;
+        // dynamically store and call functions and dispatched on the player object spawned by the client
+        // note that client prefab/object and player prefab/object are 2 different things but are connected
+        public static event Action<GameObject> OnClientPlayerSpawned;
         private static string userInput;
-        [SyncVar] private string username;
+        [SyncVar(hook = nameof(SetClientName))] private string username;
 
         // match settings
         [SyncVar] private string matchID;
         [SyncVar] private int teamIndex;
         [SyncVar] private int playerSortIndex;
         
-        //setup profile
+        //setup 
         void Awake()
         {
             networkMatchChecker = GetComponent<NetworkMatchChecker>();
+            networkMatchChecker.matchId = string.Empty.ToGuid();
         }
 
         public static bool ClientLogin(string user)
@@ -32,30 +39,61 @@ namespace SheepDoom
             return true; // for now la..
         }
 
-        public override void OnStartServer()
+        // this is for other scripts to be able to retrieve the client instance with their corresponding connection and network identity
+        // To retrieve for other scripts do this => Player player = Player.ReturnPlayerInstance(connectionToClient);
+        public static Player ReturnPlayerInstance(NetworkConnection conn = null) // optional parameter
         {
-            player = this; // initialize player on server
-        }
-
-        public override void OnStartClient()
-        {
-            player = this; // initialize player on client
+            if (NetworkServer.active && conn != null)
+            {
+                NetworkIdentity localPlayer;
+                if (SDNetworkManager.LocalPlayers.TryGetValue(conn, out localPlayer))
+                    return localPlayer.GetComponent<Player>(); // if this is returned, this is owned by a client with the corresponding network identity and has authority
+                else
+                    return null;
+            }
+            else
+                return player; // if this is returned, no client is connected to the player object, so no authority
+            
         }
 
         public override void OnStartLocalPlayer() 
         {
-            CmdSetPlayerName(userInput);
+            player = this;
+            CmdRequestPlayerObjSpawn(userInput);
         }
 
-        [Command] // update player name on the server
-        void CmdSetPlayerName(string _username)
+
+        [Command] // Request player object to be spawned for client
+        void CmdRequestPlayerObjSpawn(string userInput)
         {
-            username = _username; 
+            username = userInput; // update client name on server
+            NetworkSpawnPlayer();
         }
 
-        public string GetUsername()
+        [Server]
+        private void NetworkSpawnPlayer()
+        {
+            GameObject spawn = Instantiate(playerPrefab.gameObject);
+            NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
+        }
+
+        // This function will be called when player object is spawned for a client, make sure to pass the player obj
+        // Once this function is called, it will retrieve the relevant function within OnClientPlayerSpawned Actions and call it for the player obj
+        public void InvokePlayerObjectSpawned(GameObject _player)
+        {
+            OnClientPlayerSpawned?.Invoke(_player);
+        }
+
+        public string GetClientName()
         {
             return username;
+        }
+
+        // SyncVar hook
+        private void SetClientName(string prev, string next)
+        {
+            if(hasAuthority)
+                MainMenu.instance.SetPlayerName(next);
         }
        
 
@@ -140,7 +178,7 @@ namespace SheepDoom
         // Waits until scene finishes loading before any stuff happens
         IEnumerator LoadLobbyAsyncScene()
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2, LoadSceneMode.Single);
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
             while(!asyncLoad.isDone)
             {
                 yield return null;
@@ -179,12 +217,7 @@ namespace SheepDoom
 
         
 
-        /// <summary>
-        /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
-        /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
-        /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
-        /// </summary>
-        public override void OnStartAuthority() { }
+        
 
         /// <summary>
         /// This is invoked on behaviours when authority is removed.

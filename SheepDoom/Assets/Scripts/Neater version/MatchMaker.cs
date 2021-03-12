@@ -74,6 +74,7 @@ namespace SheepDoom
         // track matches
         private SyncListMatch matches = new SyncListMatch();
         private SyncListString matchIDs = new SyncListString();
+        public GameObject lobbyManager;
 
         void Start()
         {
@@ -116,6 +117,9 @@ namespace SheepDoom
             {
                 matchIDs.Add(_matchID);
                 matches.Add(new Match(_matchID, _player));
+                GameObject matchLobby = Instantiate(lobbyManager);
+                NetworkServer.Spawn(matchLobby);
+                matchLobby.GetComponent<NetworkMatchChecker>().matchId = _matchID.ToGuid();
                 _player.GetComponent<Player>().SetTeamIndex(1);
                 _player.GetComponent<Player>().SetPlayerSortIndex(1);
                 return true;
