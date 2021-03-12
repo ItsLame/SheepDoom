@@ -2875,7 +2875,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 629494790}
-  - component: {fileID: 629494789}
+  - component: {fileID: 629494788}
   - component: {fileID: 629494787}
   m_Layer: 0
   m_Name: NetworkManager
@@ -2906,7 +2906,7 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &629494789
+--- !u!114 &629494788
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2915,29 +2915,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 629494786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
+  m_Script: {fileID: 11500000, guid: fc31d281962da1d49bcad13147734b37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
   runInBackground: 1
-  autoStartServerBuild: 0
+  autoStartServerBuild: 1
   showDebugMessages: 0
   serverTickRate: 30
   serverBatching: 0
   serverBatchInterval: 0
   offlineScene: Assets/Scenes/Login.unity
-  onlineScene: Assets/Scenes/Lobby.unity
+  onlineScene: Assets/Scenes/Main Menu.unity
   transport: {fileID: 629494787}
   networkAddress: localhost
-  maxConnections: 64
+  maxConnections: 100
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 9215272971011741937, guid: 5c89babc0dbcfaf4aa36dff5386b845a,
+  playerPrefab: {fileID: 827987486703652307, guid: 9944ce00d86aa2f42acca38086b0bf70,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 6243845483501120523, guid: 887d73d39868dd74684111b8284d4913, type: 3}
 --- !u!4 &629494790
 Transform:
   m_ObjectHideFlags: 0
@@ -7044,10 +7045,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1705324743}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a1900a1edab5bb4eb80c1a1017e377f, type: 3}
+  m_Script: {fileID: 11500000, guid: 66824a869146c0e47adab0998ce7e8c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 629494789}
+  networkManager: {fileID: 629494788}
   username: {fileID: 1936077886}
   password: {fileID: 537546058}
 --- !u!4 &1705324745
