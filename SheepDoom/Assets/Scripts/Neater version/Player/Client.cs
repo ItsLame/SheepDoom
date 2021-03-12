@@ -48,11 +48,11 @@ namespace SheepDoom
         public override void OnStartLocalPlayer() 
         {
             client = this;
-            CmdRequestPlayerObjSpawn(userInput);
+            CmdRequestPlayerObjSpawn();
         }
 
         [Command] // Request player object to be spawned for client
-        void CmdRequestPlayerObjSpawn(string userInput)
+        void CmdRequestPlayerObjSpawn()
         {
             NetworkSpawnPlayer();
         }

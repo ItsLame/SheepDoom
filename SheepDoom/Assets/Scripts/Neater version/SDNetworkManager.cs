@@ -13,6 +13,8 @@ namespace SheepDoom
     {
         // Like an associative array - key client conns, value = their network identities
         public static Dictionary<NetworkConnection, NetworkIdentity> LocalPlayers = new Dictionary<NetworkConnection, NetworkIdentity>();
+        [SerializeField]
+        private NetworkIdentity matchMaker;
         #region Unity Callbacks
 
         public override void OnValidate()
@@ -230,7 +232,11 @@ namespace SheepDoom
         /// This is invoked when a server is started - including when a host is started.
         /// <para>StartServer has multiple signatures, but they all cause this hook to be called.</para>
         /// </summary>
-        public override void OnStartServer() { }
+        public override void OnStartServer() 
+        {
+            GameObject mm = Instantiate(matchMaker.gameObject);
+            NetworkServer.Spawn(mm);
+        }
 
         /// <summary>
         /// This is invoked when the client is started.

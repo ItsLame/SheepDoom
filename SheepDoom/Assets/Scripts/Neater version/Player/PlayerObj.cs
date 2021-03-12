@@ -21,6 +21,16 @@ namespace SheepDoom
             instance = this;
         }
 
+        void Update()
+        {
+            if(isClient)
+            {
+                Debug.Log("Set matchId: " + matchID);
+                Debug.Log("Matchmaker set teamindex: " + teamIndex);
+                Debug.Log("Matchmaker set playersortindex: " + playerSortIndex);
+            }
+        }
+
         [Client]
         public void SetPlayerName(string name)
         {
@@ -51,13 +61,23 @@ namespace SheepDoom
             playerSortIndex = _playerSortIndex;
         }
 
+        [Client]
         public void HostGame()
         {
             Debug.Log("Callable");
-            //CmdHostGame();
+            CmdHostGame();
         }
 
-            
+        [Command]
+        void CmdHostGame()
+        {
+            Debug.Log("Before serveronly");
+            matchID = MatchMaker.GetRandomMatchID(); // syncvared
+            if (MatchMaker.instance.HostGame(matchID, gameObject))
+            {
+                Debug.Log("CmdHostGameSuccess");
+            }
+        }
         #region Start & Stop Callbacks
 
 

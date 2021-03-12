@@ -11,7 +11,6 @@ namespace SheepDoom
 {
     public class PlayerObjSpawned : NetworkBehaviour
     {
-        NetworkMatchChecker networkMatchChecker;
 
         public static Client client;
         

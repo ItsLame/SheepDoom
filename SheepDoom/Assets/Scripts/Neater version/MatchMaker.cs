@@ -120,8 +120,8 @@ namespace SheepDoom
                 //GameObject matchLobby = Instantiate(lobbyManager);
                 //NetworkServer.Spawn(matchLobby);
                 //matchLobby.GetComponent<NetworkMatchChecker>().matchId = _matchID.ToGuid();
-                //_player.GetComponent<Player>().SetTeamIndex(1);
-                //_player.GetComponent<Player>().SetPlayerSortIndex(1);
+                _player.GetComponent<PlayerObj>().SetTeamIndex(1);
+                _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1);
                 return true;
             }
             else
