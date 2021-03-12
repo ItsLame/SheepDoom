@@ -10,10 +10,8 @@ namespace SheepDoom
     public class MainMenu : MonoBehaviour
     {
         public static MainMenu instance;
-
-        [Header("Player profile")]
-        [SerializeField] Text playerName;
-
+        [SerializeField]
+        private Text playerName;
         [Header("Miscellaneous")]
         [SerializeField] Button optionButton;
         [SerializeField] Button creditsButton;
@@ -35,15 +33,15 @@ namespace SheepDoom
         }
          
         // When clicked host button
-        public void Host()
+        private void Host()
         {
-            Player.player.HostGame();
+            PlayerObj.instance.HostGame();
         }
 
         // When clicked Join button...may change to room listing
-        public void Join()
+        private void Join()
         {
-            Player.player.JoinGame(matchID.text.ToUpper());
+
         }
     }
 }

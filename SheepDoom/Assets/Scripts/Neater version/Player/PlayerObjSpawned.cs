@@ -1,12 +1,22 @@
-﻿using UnityEngine;
+﻿    using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
+using System.Collections;
+using UnityEngine.SceneManagement;
+using System;
+
 
 
 namespace SheepDoom
 {
     public class PlayerObjSpawned : NetworkBehaviour
     {
+        NetworkMatchChecker networkMatchChecker;
+
+        public static Client client;
+        
+        
+       
         /// <summary>
         /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
         /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
@@ -19,9 +29,94 @@ namespace SheepDoom
 
         private void OnClientPlayerSpawned()
         {
-            Player player = Player.ReturnPlayerInstance();
-            player.InvokePlayerObjectSpawned(gameObject);
+            client = Client.ReturnClientInstance(connectionToClient);
+            client.InvokePlayerObjectSpawned(gameObject);
         }
+
+       /*
+        [Command]
+        void CmdHostGame()
+        {
+            matchID = MatchMaker.GetRandomMatchID();
+            if (MatchMaker.instance.HostGame(matchID, gameObject))
+            {
+                networkMatchChecker.matchId = matchID.ToGuid();
+                Debug.Log("Match id is: " + matchID);
+                TargetHostGame(true);
+            }
+            else
+            {
+                matchID = "";
+                TargetHostGame(false);
+            }
+        }
+
+        [TargetRpc]
+        void TargetHostGame(bool success)
+        {
+            //matchID = _matchID;
+            //teamIndex = _teamIndex;
+            //playerSortIndex = _playerSortIndex;
+            if (success)
+            {
+                StartCoroutine(LoadLobbyAsyncScene());
+                // spawn player
+            }
+            else
+            {
+                Debug.Log("Host failed");
+            }
+        }
+
+        public void JoinGame(string _matchID)
+        {
+            CmdJoinGame(_matchID);
+        }
+
+        [Command]
+        void CmdJoinGame(string _matchID)
+        {
+            matchID = _matchID;
+            if (MatchMaker.instance.JoinGame(matchID, gameObject))
+            {
+                Debug.Log("return true success");
+                networkMatchChecker.matchId = matchID.ToGuid();
+                TargetJoinGame(true);
+            }
+            else
+            {
+                matchID = "";
+                TargetJoinGame(false);
+            }
+        }
+
+        [TargetRpc]
+        void TargetJoinGame(bool success)
+        {
+            if (success)
+            {
+                StartCoroutine(LoadLobbyAsyncScene());
+                // Spawn player
+            }
+            else
+            {
+                Debug.Log("Join failed");
+            }
+
+        }
+
+        // Waits until scene finishes loading before any stuff happens
+        IEnumerator LoadLobbyAsyncScene()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+        }*/
+
+
+        
 
         #region Start & Stop Callbacks
 

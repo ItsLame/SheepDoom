@@ -30,9 +30,9 @@ namespace SheepDoom
         public void Login()
         {
             string user = username.text;
-            if(Player.ClientLogin(user)) // server is inactive, so this is only assigned on client at first
+            if(Client.ClientLogin(user)) // server is inactive, so this is only assigned on client at first
             {
-                networkManager.networkAddress = "localhost";
+    
                 networkManager.StartClient(); // change to StartHost() if you don't want to build to test and just wanna use unity editor to test
             }
         }

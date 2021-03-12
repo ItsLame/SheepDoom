@@ -2,13 +2,9 @@
 using Mirror;
 using System.Collections.Generic;
 
-/*
-	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
-	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
-*/
-
 public class LobbyManager : NetworkBehaviour
 {
+
     #region Start & Stop Callbacks
 
     /// <summary>
