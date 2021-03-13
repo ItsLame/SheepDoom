@@ -7,6 +7,8 @@ TagManager:
   - Attack
   - Skill
   - Ulti
+  - Team1
+  - Team2
   layers:
   - Default
   - TransparentFX

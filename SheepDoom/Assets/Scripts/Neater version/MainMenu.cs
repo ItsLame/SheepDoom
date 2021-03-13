@@ -13,12 +13,8 @@ namespace SheepDoom
         [SerializeField]
         private Text playerName;
         [Header("Miscellaneous")]
-        [SerializeField] Button optionButton;
-        [SerializeField] Button creditsButton;
 
         [Header("Setup match")]
-        [SerializeField] Button joinButton;
-        [SerializeField] Button hostButton;
         [SerializeField] InputField matchID;
 
         // Start is called before the first frame update

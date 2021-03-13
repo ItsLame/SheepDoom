@@ -5,16 +5,14 @@ using UnityEngine.UI;
 // The gameobject this script is attached to should only be spawned as a prefab on the server
 public class LobbyManager : NetworkBehaviour
 {
-    [SerializeField]
-    Button StartGameBtn;
-    [SerializeField]
-    Button SwitchTeamBtn;
+    [SerializeField] Transform UIPlayerParentTeam1;
+    [SerializeField] Transform UIPlayerParentTeam2;
 
-    private void StartGame()
+    public void StartGame()
     {
 
     }
-    private void SwitchTeam()
+    public void SwitchTeam()
     {
 
     }
@@ -34,7 +32,7 @@ public class LobbyManager : NetworkBehaviour
     public override void OnStopServer() { }
 
     /// <summary>
-    /// Called on every NetworkBehaviour when it is activated on a client.
+    /// Called on every NetworkBehaviour when it is activated on a client.  
     /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
     /// </summary>
     public override void OnStartClient() { }

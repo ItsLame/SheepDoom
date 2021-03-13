@@ -15,24 +15,8 @@ namespace SheepDoom
         [Header("Player profile")]
         [SyncVar(hook = nameof(OnNameUpdate))] private string syncName; 
         [SyncVar] private string matchID;
-        [SyncVar] private int teamIndex;
-        [SyncVar] private int playerSortIndex;
-
-        /*void Update()
-        {
-            if(isClient && hasAuthority)
-            {
-                Debug.Log("Set matchId by: " + syncName + " - " + matchID);
-                Debug.Log("Matchmaker set teamindex: " + syncName + " - " + teamIndex);
-                Debug.Log("Matchmaker set playersortindex: " + syncName + " - " + playerSortIndex);
-            }
-            /*if(isServer)
-            {
-                Debug.Log("Set matchId by: " + syncName + " - " + matchID);
-                Debug.Log("Matchmaker set teamindex: " + syncName + " - " + teamIndex);
-                Debug.Log("Matchmaker set playersortindex: " + syncName + " - " + playerSortIndex);
-            }
-        }*/
+        [SyncVar] private int teamIndex = 0;
+        [SyncVar] private int playerSortIndex = 0;
 
         [Client]
         public void SetPlayerName(string name)
@@ -98,7 +82,7 @@ namespace SheepDoom
             if (success)
             {
                 Debug.Log("Host successful for client");
-                StartCoroutine(LoadLobbyAsyncScene());
+                StartCoroutine(LoadLobbyAsyncScene()); 
             }
             else
             {
@@ -145,11 +129,12 @@ namespace SheepDoom
             }
         }
 
+        // wrong approach, this only tells client's version of client to load scene, not server's version of client...
         IEnumerator LoadLobbyAsyncScene()
         {
             // unspawn player
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
-            while (!asyncLoad.isDone)
+            while (!asyncLoad.isDone || string.IsNullOrEmpty(matchID) || teamIndex == 0 || playerSortIndex == 0)
             {
                 yield return null;
             }
