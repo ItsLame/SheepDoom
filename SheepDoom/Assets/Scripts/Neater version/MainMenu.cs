@@ -41,7 +41,8 @@ namespace SheepDoom
         // When clicked Join button...may change to room listing
         private void Join()
         {
-
+            string matchIdInput = matchID.text;
+            PlayerObj.instance.JoinGame(matchIdInput.ToUpper());
         }
     }
 }

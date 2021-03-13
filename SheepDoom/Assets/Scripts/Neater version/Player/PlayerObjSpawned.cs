@@ -30,6 +30,8 @@ namespace SheepDoom
         {
             client = Client.ReturnClientInstance(connectionToClient);
             client.InvokePlayerObjectSpawned(gameObject);
+            if (client != null)
+                Debug.Log("Retrieved client instance for the client on playerobjspawned script");
         }
 
        /*

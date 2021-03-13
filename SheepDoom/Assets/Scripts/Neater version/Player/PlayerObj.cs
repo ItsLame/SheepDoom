@@ -2,6 +2,8 @@
 using Mirror;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace SheepDoom
 {
@@ -9,27 +11,28 @@ namespace SheepDoom
     {
         NetworkMatchChecker networkMatchChecker;
         public static PlayerObj instance;
+        public static Client client;
         [Header("Player profile")]
         [SyncVar(hook = nameof(OnNameUpdate))] private string syncName; 
         [SyncVar] private string matchID;
         [SyncVar] private int teamIndex;
         [SyncVar] private int playerSortIndex;
 
-        // setup playerobj
-        void Start()
+        /*void Update()
         {
-            instance = this;
-        }
-
-        void Update()
-        {
-            if(isClient)
+            if(isClient && hasAuthority)
             {
-                Debug.Log("Set matchId: " + matchID);
-                Debug.Log("Matchmaker set teamindex: " + teamIndex);
-                Debug.Log("Matchmaker set playersortindex: " + playerSortIndex);
+                Debug.Log("Set matchId by: " + syncName + " - " + matchID);
+                Debug.Log("Matchmaker set teamindex: " + syncName + " - " + teamIndex);
+                Debug.Log("Matchmaker set playersortindex: " + syncName + " - " + playerSortIndex);
             }
-        }
+            /*if(isServer)
+            {
+                Debug.Log("Set matchId by: " + syncName + " - " + matchID);
+                Debug.Log("Matchmaker set teamindex: " + syncName + " - " + teamIndex);
+                Debug.Log("Matchmaker set playersortindex: " + syncName + " - " + playerSortIndex);
+            }
+        }*/
 
         [Client]
         public void SetPlayerName(string name)
@@ -64,20 +67,95 @@ namespace SheepDoom
         [Client]
         public void HostGame()
         {
-            Debug.Log("Callable");
             CmdHostGame();
         }
 
         [Command]
         void CmdHostGame()
         {
-            Debug.Log("Before serveronly");
             matchID = MatchMaker.GetRandomMatchID(); // syncvared
             if (MatchMaker.instance.HostGame(matchID, gameObject))
             {
-                Debug.Log("CmdHostGameSuccess");
+                networkMatchChecker.matchId = matchID.ToGuid();
+                Debug.Log("Server hosted game successfully");
+                TargetHostGame(true);
+            }
+            else
+            {
+                matchID = "";
+                networkMatchChecker.matchId = string.Empty.ToGuid();
+                Debug.Log("Failed to command server to host game");
+                TargetHostGame(false);
             }
         }
+
+        [TargetRpc]
+        void TargetHostGame(bool success)
+        {
+            //matchID = _matchID;
+            //teamIndex = _teamIndex;
+            //playerSortIndex = _playerSortIndex;
+            if (success)
+            {
+                Debug.Log("Host successful for client");
+                StartCoroutine(LoadLobbyAsyncScene());
+            }
+            else
+            {
+                Debug.Log("Host failed for client");
+            }
+        }
+
+        [Client]
+        public void JoinGame(string matchIdInput)
+        {
+            CmdJoinGame(matchIdInput);
+        }
+
+        [Command]
+        void CmdJoinGame(string matchIdInput)
+        {
+            matchID = matchIdInput;
+            if (MatchMaker.instance.JoinGame(matchID, gameObject))
+            {
+                networkMatchChecker.matchId = matchID.ToGuid();
+                Debug.Log("Server joined game successfully");
+                TargetJoinGame(true);
+            }
+            else
+            {
+                matchID = "";
+                networkMatchChecker.matchId = string.Empty.ToGuid();
+                Debug.Log("Failed to command server to join game");
+                TargetJoinGame(false);
+            }
+        }
+
+        [TargetRpc]
+        void TargetJoinGame(bool success)
+        {
+            if (success)
+            {
+                Debug.Log("Join successful for client");
+                StartCoroutine(LoadLobbyAsyncScene());
+            }
+            else
+            {
+                Debug.Log("Join failed for client");
+            }
+        }
+
+        IEnumerator LoadLobbyAsyncScene()
+        {
+            // unspawn player
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+            // respawn player
+        }
+
         #region Start & Stop Callbacks
 
 
@@ -88,8 +166,17 @@ namespace SheepDoom
         /// </summary>
         public override void OnStartServer() 
         {
+            //client = Client.ReturnClientInstance(connectionToClient);
             networkMatchChecker = GetComponent<NetworkMatchChecker>();
             networkMatchChecker.matchId = string.Empty.ToGuid();
+            /*if (client != null)
+            {
+                Debug.Log("Retrieved client instance for server on playerobj script");
+                instance = client.GetPlayerObj().GetComponent<PlayerObj>();
+                if (instance != null)
+                    Debug.Log("PlayerObj initialized on server");
+            }*/
+                
         }
 
         /// <summary>
@@ -102,7 +189,24 @@ namespace SheepDoom
         /// Called on every NetworkBehaviour when it is activated on a client.
         /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
         /// </summary>
-        public override void OnStartClient() { }
+        public override void OnStartClient() // this is running twice for some reason...
+        {
+            if(hasAuthority)
+            {
+                client = Client.ReturnClientInstance(connectionToClient);
+                if (client != null)
+                {
+                    Debug.Log("Retrieved client instance for client on playerobj script");
+                    instance = client.GetPlayerObj().GetComponent<PlayerObj>();
+                    if (instance != null)
+                        Debug.Log("PlayerObj initialized on client");
+                }
+            }
+            else
+            {
+                Debug.Log("no authority");
+            }
+        }
 
         /// <summary>
         /// This is invoked on clients when the server has caused this object to be destroyed.

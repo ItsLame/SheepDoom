@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-
+// This script only runs on the server, not available to clients
 namespace SheepDoom
 {
     [System.Serializable]
@@ -120,8 +120,8 @@ namespace SheepDoom
                 //GameObject matchLobby = Instantiate(lobbyManager);
                 //NetworkServer.Spawn(matchLobby);
                 //matchLobby.GetComponent<NetworkMatchChecker>().matchId = _matchID.ToGuid();
-                _player.GetComponent<PlayerObj>().SetTeamIndex(1);
-                _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1);
+                _player.GetComponent<PlayerObj>().SetTeamIndex(1); // syncvared
+                _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1); // syncvared
                 return true;
             }
             else
@@ -143,14 +143,14 @@ namespace SheepDoom
                         if(matches[i].GetTeam1Count() < 3)
                         {
                             matches[i].AddTeam1Count();
-                           // _player.GetComponent<Player>().SetTeamIndex(1);
-                           // _player.GetComponent<Player>().SetPlayerSortIndex(matches[i].GetTeam1Count());
+                            _player.GetComponent<PlayerObj>().SetTeamIndex(1);
+                            _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[i].GetTeam1Count());
                         }
                         else if(matches[i].GetTeam2Count() < 3)
                         {
                             matches[i].AddTeam2Count();
-                            //_player.GetComponent<Player>().SetTeamIndex(2);
-                           // _player.GetComponent<Player>().SetPlayerSortIndex(matches[i].GetTeam2Count());
+                            _player.GetComponent<PlayerObj>().SetTeamIndex(2);
+                            _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[i].GetTeam2Count());
                         }
                         break;
                     }

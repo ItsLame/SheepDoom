@@ -30,19 +30,29 @@ namespace SheepDoom
 
         // this is for other scripts to be able to retrieve the client instance with their corresponding connection and network identity
         // To retrieve for other scripts do this => Player player = Player.ReturnPlayerInstance(connectionToClient);
-        public static Client ReturnClientInstance(NetworkConnection conn = null) // optional parameter
+        // If connection is null, your intention was to retrieve the client instance on the client
+        // If connection is not null, your intention was to retrieve the client instance on the server
+        public static Client ReturnClientInstance(NetworkConnection conn = null) 
         {
             if (NetworkServer.active && conn != null)
             {
                 NetworkIdentity localPlayer;
                 if (SDNetworkManager.LocalPlayers.TryGetValue(conn, out localPlayer))
-                    return localPlayer.GetComponent<Client>(); // if this is returned, this is owned by a client with the corresponding network identity and has authority
+                {
+                    Debug.Log("Retrieved client instance for server");
+                    return localPlayer.GetComponent<Client>(); // if this is returned, this returns server client with the corresponding network identity and has authority
+                }
                 else
+                {
+                    Debug.Log("No such client on server");
                     return null;
+                }   
             }
             else
-                return client; // if this is returned, no client is connected to the player object, so no authority
-            
+            {
+                Debug.Log("Retrieved client instance for client");
+                return client; // if this is returned, server client is not connected to the player object, so no authority
+            }
         }
 
         public override void OnStartLocalPlayer() 
@@ -71,7 +81,21 @@ namespace SheepDoom
             currentPlayerObj = _player;
             clientName = userInput;
             SetPlayerName(clientName);
+            Debug.Log("Player object spawned");
             OnClientPlayerSpawned?.Invoke(_player);
+        }
+
+        public GameObject GetPlayerObj()
+        {
+            GameObject _currentPlayerObj = null;
+            if (currentPlayerObj != null)
+            {
+                Debug.Log("Retrieved current player object");
+                _currentPlayerObj = currentPlayerObj;
+            }
+            else
+                Debug.Log("Failed to retrieve current player object, it is empty");
+            return _currentPlayerObj;
         }
 
         // set client name
