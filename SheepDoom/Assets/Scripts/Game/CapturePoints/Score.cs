@@ -13,6 +13,8 @@ public class Score : MonoBehaviour
     [SerializeField]
     private Text redCaptureCounter;
 
+    [SerializeField]
+    public GameObject completeGameUI;
 
     //counters for tower captures per team
     //hard coded for now
@@ -20,7 +22,7 @@ public class Score : MonoBehaviour
     [SerializeField]
     private float blueCaptureScore = 0;
     [SerializeField]
-    private float redCaptureScore = 2;
+    private float redCaptureScore = 4;
 
     // Start is called before the first frame update
     void Start()
@@ -45,5 +47,25 @@ public class Score : MonoBehaviour
         //if blue scores, red will -1
         blueCaptureScore += 1;
         redCaptureScore -= 1;
+    }
+
+
+    // game winning condition (will be called when base is taken)
+    // shows scoreboard etc when game ends, will add timer counter condition in the future
+    public void GameEnd(int TeamID)
+    {
+        //if blue team wins
+        if (TeamID == 1)
+        {
+            Debug.Log("Blue Team Wins!");
+            completeGameUI.SetActive(true);
+            completeGameUI.GetComponent<Animator>().SetTrigger("Complete");
+        }
+
+        //if red team wins, not gonna use else for precision
+        if (TeamID == 2)
+        {
+            Debug.Log("Red Team Wins!");
+        }
     }
 }
