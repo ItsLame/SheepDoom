@@ -55,9 +55,15 @@ namespace SheepDoom
             }
         }
 
+        public override void OnStartServer()
+        {
+
+        }
+
         public override void OnStartLocalPlayer() 
         {
             client = this;
+            //DontDestroyOnLoad(client.gameObject);
             CmdRequestPlayerObjSpawn();
         }
 

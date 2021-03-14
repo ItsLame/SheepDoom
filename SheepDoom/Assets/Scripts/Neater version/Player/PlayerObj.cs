@@ -9,7 +9,6 @@ namespace SheepDoom
 {
     public class PlayerObj : NetworkBehaviour
     {
-        NetworkMatchChecker networkMatchChecker;
         public static PlayerObj instance;
         public static Client client;
         [Header("Player profile")]
@@ -57,20 +56,34 @@ namespace SheepDoom
         [Command]
         void CmdHostGame()
         {
-            matchID = MatchMaker.GetRandomMatchID(); // syncvared
-            if (MatchMaker.instance.HostGame(matchID, gameObject))
+            client = Client.ReturnClientInstance(connectionToClient);
+            if (client != null)
             {
-                networkMatchChecker.matchId = matchID.ToGuid();
-                Debug.Log("Server hosted game successfully");
-                TargetHostGame(true);
+                matchID = MatchMaker.GetRandomMatchID(); // syncvared
+                if (MatchMaker.instance.HostGame(matchID, gameObject))
+                {
+                    StartCoroutine(WaitForSyncList(MatchMaker.instance.GetLobbyScenes().Count));
+                    TargetHostGame(true);
+                }
+                else
+                {
+                    matchID = string.Empty;
+                    Debug.Log("Failed to command server to host game");
+                    TargetHostGame(false);
+                }
             }
-            else
+        }
+
+        IEnumerator WaitForSyncList(int oldCount)
+        {
+            while(MatchMaker.instance.GetLobbyScenes().Count == oldCount)
+                yield return null;
+            SceneMessage msg = new SceneMessage
             {
-                matchID = "";
-                networkMatchChecker.matchId = string.Empty.ToGuid();
-                Debug.Log("Failed to command server to host game");
-                TargetHostGame(false);
-            }
+                sceneName = MatchMaker.instance.GetLobbyScenes()[matchID].name,
+                sceneOperation = SceneOperation.LoadAdditive
+            };
+            connectionToClient.Send(msg);
         }
 
         [TargetRpc]
@@ -82,7 +95,6 @@ namespace SheepDoom
             if (success)
             {
                 Debug.Log("Host successful for client");
-                StartCoroutine(LoadLobbyAsyncScene()); 
             }
             else
             {
@@ -99,19 +111,21 @@ namespace SheepDoom
         [Command]
         void CmdJoinGame(string matchIdInput)
         {
-            matchID = matchIdInput;
-            if (MatchMaker.instance.JoinGame(matchID, gameObject))
+            client = Client.ReturnClientInstance(connectionToClient);
+            if (client != null)
             {
-                networkMatchChecker.matchId = matchID.ToGuid();
-                Debug.Log("Server joined game successfully");
-                TargetJoinGame(true);
-            }
-            else
-            {
-                matchID = "";
-                networkMatchChecker.matchId = string.Empty.ToGuid();
-                Debug.Log("Failed to command server to join game");
-                TargetJoinGame(false);
+                matchID = matchIdInput;
+                if (MatchMaker.instance.JoinGame(matchID, gameObject))
+                {
+                    Debug.Log("Server joined game successfully");
+                    TargetJoinGame(true);
+                }
+                else
+                {
+                    matchID = string.Empty;
+                    Debug.Log("Failed to command server to join game");
+                    TargetJoinGame(false);
+                }
             }
         }
 
@@ -120,25 +134,12 @@ namespace SheepDoom
         {
             if (success)
             {
-                Debug.Log("Join successful for client");
-                StartCoroutine(LoadLobbyAsyncScene());
+                // move player to lobby scene on server
             }
             else
             {
                 Debug.Log("Join failed for client");
             }
-        }
-
-        // wrong approach, this only tells client's version of client to load scene, not server's version of client...
-        IEnumerator LoadLobbyAsyncScene()
-        {
-            // unspawn player
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
-            while (!asyncLoad.isDone || string.IsNullOrEmpty(matchID) || teamIndex == 0 || playerSortIndex == 0)
-            {
-                yield return null;
-            }
-            // respawn player
         }
 
         #region Start & Stop Callbacks
@@ -150,18 +151,7 @@ namespace SheepDoom
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
         public override void OnStartServer() 
-        {
-            //client = Client.ReturnClientInstance(connectionToClient);
-            networkMatchChecker = GetComponent<NetworkMatchChecker>();
-            networkMatchChecker.matchId = string.Empty.ToGuid();
-            /*if (client != null)
-            {
-                Debug.Log("Retrieved client instance for server on playerobj script");
-                instance = client.GetPlayerObj().GetComponent<PlayerObj>();
-                if (instance != null)
-                    Debug.Log("PlayerObj initialized on server");
-            }*/
-                
+        {   
         }
 
         /// <summary>

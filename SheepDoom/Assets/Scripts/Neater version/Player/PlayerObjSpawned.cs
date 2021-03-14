@@ -21,7 +21,7 @@ namespace SheepDoom
         /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
         /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
         /// </summary>
-        public override void OnStartAuthority() 
+        public override void OnStartAuthority()  // for the player object, not client instance obj
         {
             OnClientPlayerSpawned();
         }
