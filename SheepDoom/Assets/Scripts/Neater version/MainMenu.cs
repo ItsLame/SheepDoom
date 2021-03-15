@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-
 namespace SheepDoom
 {
     public class MainMenu : MonoBehaviour

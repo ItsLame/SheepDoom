@@ -13,8 +13,6 @@ namespace SheepDoom
     {
 
         public static Client client;
-        
-        
        
         /// <summary>
         /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
@@ -32,7 +30,7 @@ namespace SheepDoom
             client.InvokePlayerObjectSpawned(gameObject);
             if (client != null)
                 Debug.Log("Retrieved client instance for the client on playerobjspawned script");
-        } 
+        }
 
         #region Start & Stop Callbacks
 

@@ -32,7 +32,10 @@ namespace SheepDoom
         private void OnNameUpdate(string prev, string next)
         {
             if (hasAuthority)
+            {
                 MainMenu.instance.SetPlayerName(next);
+                this.GetComponent<GameObject>().transform.GetChild(0).GetComponent<Text>().text = next;
+            }
         }
 
         // playerobj match settings
@@ -143,7 +146,6 @@ namespace SheepDoom
         }
 
         #region Start & Stop Callbacks
-
 
         /// <summary>
         /// This is invoked for NetworkBehaviour objects when they become active on the server.
