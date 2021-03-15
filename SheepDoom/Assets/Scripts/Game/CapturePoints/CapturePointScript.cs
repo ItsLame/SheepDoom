@@ -54,10 +54,11 @@ public class CapturePointScript : MonoBehaviour
         if ((numOfCapturers == 0) && (TowerInGameHP < TowerHP))
         {
             TowerInGameHP += TowerRegenRate * Time.deltaTime;
+            //debug showing tower HP
+            Debug.Log(this.name + " HP: " + TowerInGameHP);
         }
 
-        //debug showing tower HP
-        Debug.Log("Tower HP:" + TowerInGameHP);
+        
 
         //once HP = 0, notify the scoring and convert the tower
         //for now since single player mode, only use blue team's settings
@@ -108,6 +109,9 @@ public class CapturePointScript : MonoBehaviour
             {
                 Debug.Log(other.name + "capturing Tower");
                 TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
+
+                //debug showing tower HP
+                Debug.Log(this.name + " HP: " + TowerInGameHP);
             }
         }
     }

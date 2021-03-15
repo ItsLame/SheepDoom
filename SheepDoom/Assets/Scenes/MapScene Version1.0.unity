@@ -220,9 +220,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1473718498}
-  fixXdist: -270
-  fixYdist: 266.5
-  fixZdist: 22
+  fixXdist: -320
+  fixYdist: 318
+  fixZdist: 26
   smoothness: 0.5
 --- !u!114 &10872346
 MonoBehaviour:
@@ -1928,7 +1928,7 @@ PrefabInstance:
     - target: {fileID: 2427539677405621946, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 753.5
+      value: 126
       objectReference: {fileID: 0}
     - target: {fileID: 2427539677405621946, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
         type: 3}
@@ -1938,7 +1938,7 @@ PrefabInstance:
     - target: {fileID: 2427539677405621946, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 156
+      value: 665
       objectReference: {fileID: 0}
     - target: {fileID: 2427539677405621946, guid: bc5dfa792b7ec6f4ea88626e1ce0de9d,
         type: 3}

@@ -54,10 +54,10 @@ public class CaptureBaseScript : MonoBehaviour
         if ((numOfCapturersBase == 0) && (BaseInGameHP < BaseHP))
         {
             BaseInGameHP += BaseRegenRate * Time.deltaTime;
-        }
 
-        //debug showing tower HP
-        Debug.Log("Base HP:" + BaseInGameHP);
+            //debug showing base hp
+            Debug.Log(this.name + " HP: " + BaseInGameHP);
+        }
 
         //once HP = 0, notify the scoring and convert the Base
         //for now since single player mode, only use blue team's settings
@@ -108,6 +108,9 @@ public class CaptureBaseScript : MonoBehaviour
             {
                 Debug.Log(other.name + "capturing Base");
                 BaseInGameHP -= BaseCaptureRate * Time.deltaTime;
+
+                //debug showing base hp
+                Debug.Log(this.name + " HP: " + BaseInGameHP);
             }
         }
     }
