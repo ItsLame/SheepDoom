@@ -16,6 +16,7 @@ namespace SheepDoom
         [Scene]
         public string lobbyScene;
         private string matchID = string.Empty;
+<<<<<<< Updated upstream
         //[Scene]
         //public string gameScene;
         bool lobbySubSceneLoaded = false;
@@ -23,6 +24,10 @@ namespace SheepDoom
         //bool gameSubScenesLoaded;
         [SerializeField] Transform UIPlayerParentTeam1;
         [SerializeField] Transform UIPlayerParentTeam2;
+=======
+        private GameObject UIPlayerParentTeam1;
+        private GameObject UIPlayerParentTeam2;
+>>>>>>> Stashed changes
 
         void Start()
         {
@@ -37,6 +42,7 @@ namespace SheepDoom
         public void StartLobbyScene()
         {
             StartCoroutine(ServerLoadSubScenes());
+            //ServerAssignTeam();
         }
 
         IEnumerator ServerLoadSubScenes()
@@ -49,6 +55,7 @@ namespace SheepDoom
                 Debug.Log("Loaded scene name: " + newLobbyScene.name);
                 MatchMaker.instance.GetLobbyScenes().Add(matchID, newLobbyScene);
             }
+<<<<<<< Updated upstream
             lobbySubSceneLoaded = true;
 
 
@@ -59,6 +66,19 @@ namespace SheepDoom
                 Scene newGameScene = SceneManager.GetSceneAt(i);
                 subGameScenes.Add(newGameScene);
             }*/
+=======
+            //SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
+        }
+
+        public void ServerAssignTeam()
+        {
+            // (server only) to move the playerprefab into other gameobjects in lobby scene
+            // Search for team1 & team2 gameobject
+            UIPlayerParentTeam1 = GameObject.Find("Players (Team 1)");
+            //Debug.Log("lobby manager -> client spawn: " + Client.client.spawn);
+            //Client.client.spawn.transform.parent = UIPlayerParentTeam1.transform;
+            
+>>>>>>> Stashed changes
         }
 
         public void StartGame()

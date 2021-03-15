@@ -18,7 +18,8 @@ namespace SheepDoom
         public static event Action<GameObject> OnClientPlayerSpawned;
         private static string userInput;
         private string clientName;
-        private GameObject currentPlayerObj = null;
+        public GameObject currentPlayerObj = null;
+        //public GameObject spawn;
         
         // setup client
         public static bool ClientLogin(string user)
