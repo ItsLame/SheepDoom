@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class CapturePointScript : MonoBehaviour
 {
@@ -34,6 +35,8 @@ public class CapturePointScript : MonoBehaviour
     [SerializeField]
     private int numOfCapturers; //logging number to check if tower is under capture or not
 
+    public event Action<float> OnHealthPctChangedTower = delegate { };
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,12 +56,11 @@ public class CapturePointScript : MonoBehaviour
         //regen hp if tower is not under capture
         if ((numOfCapturers == 0) && (TowerInGameHP < TowerHP))
         {
-            TowerInGameHP += TowerRegenRate * Time.deltaTime;
+            //TowerInGameHP += TowerRegenRate * Time.deltaTime;
+            modifyinghealth(TowerRegenRate * Time.deltaTime);
             //debug showing tower HP
             Debug.Log(this.name + " HP: " + TowerInGameHP);
         }
-
-        
 
         //once HP = 0, notify the scoring and convert the tower
         //for now since single player mode, only use blue team's settings
@@ -89,6 +91,15 @@ public class CapturePointScript : MonoBehaviour
         }
     }
 
+    public void modifyinghealth(float amount)
+    {
+        TowerInGameHP += amount;
+        Debug.Log("health: tower in game hp:  " + TowerInGameHP);
+        float currenthealthPct = TowerInGameHP /TowerHP;
+        OnHealthPctChangedTower(currenthealthPct);
+        Debug.Log("health tower ================================== changed");
+    }
+
     //check for player enter
     private void OnTriggerEnter(Collider other)
     {
@@ -108,7 +119,9 @@ public class CapturePointScript : MonoBehaviour
             if (!CapturedByBlue)
             {
                 Debug.Log(other.name + "capturing Tower");
-                TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
+
+                modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
+                //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
 
                 //debug showing tower HP
                 Debug.Log(this.name + " HP: " + TowerInGameHP);

@@ -8,6 +8,7 @@ TagManager:
   - Skill
   - Ulti
   - Shop
+  - Tower
   layers:
   - Default
   - TransparentFX

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class CaptureBaseScript : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class CaptureBaseScript : MonoBehaviour
     private bool CapturedByRed2;
     [SerializeField]
     private int numOfCapturersBase; //logging number to check if Base is under capture or not
+
+    public event Action<float> OnHealthPctChanged = delegate { };
 
     // Start is called before the first frame update
     void Start()
@@ -86,6 +89,14 @@ public class CaptureBaseScript : MonoBehaviour
             var captureRenderer = this.GetComponent<Renderer>();
             captureRenderer.material.SetColor("_Color", Color.red);
         }
+    }
+
+    public void modifyinghealth(int amount)
+    {
+        BaseInGameHP += amount;
+
+        float currenthealthPct = (float)BaseInGameHP / (float)BaseHP;
+        OnHealthPctChanged(currenthealthPct);
     }
 
     //check for player enter

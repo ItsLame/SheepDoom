@@ -32,7 +32,12 @@ public class ProjectileSettings : MonoBehaviour
         if (col.tag == "Player")
         {
             col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
-            Debug.Log("health: hit by " + m_Rigidbody);
+            Debug.Log("health: player hit by " + m_Rigidbody);
+            Object.Destroy(this.gameObject);
+        } else if (col.tag == "Tower")
+        {
+            col.transform.parent.gameObject.GetComponent<CapturePointScript>().modifyinghealth(-damage);
+            Debug.Log("health: tower hit by " + m_Rigidbody);
             Object.Destroy(this.gameObject);
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealthBar : MonoBehaviour
+public class TowerHealthBar : MonoBehaviour
 {
     [SerializeField]
     private Image foregroundimage;
@@ -13,13 +13,13 @@ public class PlayerHealthBar : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        GetComponentInParent<PlayerHealth>().OnHealthPctChanged += HandleHealthChanged;
+        GetComponentInParent<CapturePointScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
     }
-    private void HandleHealthChanged(float pct)
+    private void HandleHealthChangedTower(float pct)
     {
-        StartCoroutine(ChangedToPct(pct));
+        StartCoroutine(ChangedToPctTower(pct));
     }
-    private IEnumerator ChangedToPct(float pct)
+    private IEnumerator ChangedToPctTower(float pct)
     {
         float preChangedPct = foregroundimage.fillAmount;
         float elasped1 = 0f;
@@ -37,7 +37,7 @@ public class PlayerHealthBar : MonoBehaviour
     void LateUpdate()
     {
         transform.LookAt(Camera.main.transform);
-        transform.Rotate( 0, 180, 0);
-        
+        transform.Rotate(0, 180, 0);
+
     }
 }
