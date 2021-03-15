@@ -12,7 +12,7 @@ namespace SheepDoom
     public class PlayerObjSpawned : NetworkBehaviour
     {
 
-        public static Client client;
+        //public static Client client;
         
         
        
@@ -28,9 +28,9 @@ namespace SheepDoom
 
         private void OnClientPlayerSpawned()
         {
-            client = Client.ReturnClientInstance(connectionToClient);
-            client.InvokePlayerObjectSpawned(gameObject);
-            if (client != null)
+            //client = Client.ReturnClientInstance(connectionToClient);
+            Client.client.InvokePlayerObjectSpawned(gameObject);
+            if (Client.client != null)
                 Debug.Log("Retrieved client instance for the client on playerobjspawned script");
         } 
 

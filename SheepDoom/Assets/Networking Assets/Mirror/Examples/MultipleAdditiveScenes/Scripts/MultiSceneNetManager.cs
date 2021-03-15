@@ -84,7 +84,7 @@ namespace Mirror.Examples.MultipleAdditiveScenes
 
                 Scene newScene = SceneManager.GetSceneAt(index);
                 subScenes.Add(newScene);
-                //Spawner.InitialSpawn(newScene);
+                Spawner.InitialSpawn(newScene);
             }
 
             subscenesLoaded = true;

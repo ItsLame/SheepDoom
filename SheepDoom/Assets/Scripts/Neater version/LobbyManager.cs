@@ -16,13 +16,8 @@ namespace SheepDoom
         [Scene]
         public string lobbyScene;
         private string matchID = string.Empty;
-        //[Scene]
-        //public string gameScene;
-        bool lobbySubSceneLoaded = false;
-        //readonly List<Scene> subGameScenes = new List<Scene>();
-        //bool gameSubScenesLoaded;
-        [SerializeField] Transform UIPlayerParentTeam1;
-        [SerializeField] Transform UIPlayerParentTeam2;
+        private Transform UIPlayerParentTeam1;
+        private Transform UIPlayerParentTeam2;
 
         void Start()
         {
@@ -44,21 +39,14 @@ namespace SheepDoom
             // load lobby scenes
             for(int i = 1; i <= 1; i++)
             {
-                yield return SceneManager.LoadSceneAsync(lobbyScene, LoadSceneMode.Additive);
+                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(lobbyScene, LoadSceneMode.Additive);
+                while (!asyncLoad.isDone)
+                    yield return null;
                 Scene newLobbyScene = SceneManager.GetSceneAt(i);
                 Debug.Log("Loaded scene name: " + newLobbyScene.name);
                 MatchMaker.instance.GetLobbyScenes().Add(matchID, newLobbyScene);
             }
-            lobbySubSceneLoaded = true;
-
-
-            /*// load game scenes
-            for (int i = 1; i <= matchSceneInstances; i++)
-            {
-                yield return SceneManager.LoadSceneAsync(lobbyScene, new LoadSceneParameters {loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.Physics3D});
-                Scene newGameScene = SceneManager.GetSceneAt(i);
-                subGameScenes.Add(newGameScene);
-            }*/
+            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
         }
 
         public void StartGame()

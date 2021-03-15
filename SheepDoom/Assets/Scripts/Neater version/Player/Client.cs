@@ -57,13 +57,12 @@ namespace SheepDoom
 
         public override void OnStartServer()
         {
-
+            client = ReturnClientInstance(connectionToClient);
         }
 
         public override void OnStartLocalPlayer() 
         {
             client = this;
-            //DontDestroyOnLoad(client.gameObject);
             CmdRequestPlayerObjSpawn();
         }
 
@@ -91,16 +90,17 @@ namespace SheepDoom
             OnClientPlayerSpawned?.Invoke(_player);
         }
 
+        // only works on client
         public GameObject GetPlayerObj()
         {
             GameObject _currentPlayerObj = null;
             if (currentPlayerObj != null)
             {
-                Debug.Log("Retrieved current player object");
+                Debug.Log("Retrieved current player object on client");
                 _currentPlayerObj = currentPlayerObj;
             }
             else
-                Debug.Log("Failed to retrieve current player object, it is empty");
+                Debug.Log("Failed to retrieve current player object on client, it is empty");
             return _currentPlayerObj;
         }
 

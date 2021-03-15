@@ -257,8 +257,8 @@ MonoBehaviour:
   serverTickRate: 30
   serverBatching: 0
   serverBatchInterval: 0
-  offlineScene: Assets/Networking Assets/Mirror/Examples/MultipleAdditiveScenes/Scenes/Main.unity
-  onlineScene: Assets/Networking Assets/Mirror/Examples/MultipleAdditiveScenes/Scenes/Game.unity
+  offlineScene: 
+  onlineScene: 
   transport: {fileID: 69965671}
   networkAddress: localhost
   maxConnections: 100

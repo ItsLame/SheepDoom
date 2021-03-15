@@ -10,7 +10,6 @@ namespace SheepDoom
     public class PlayerObj : NetworkBehaviour
     {
         public static PlayerObj instance;
-        public static Client client;
         [Header("Player profile")]
         [SyncVar(hook = nameof(OnNameUpdate))] private string syncName; 
         [SyncVar] private string matchID;
@@ -47,6 +46,25 @@ namespace SheepDoom
             playerSortIndex = _playerSortIndex;
         }
 
+       /* [Client]
+        void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        [Client]
+        void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        [Client]
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            SceneManager.MoveGameObjectToScene(Client.client.gameObject, scene);
+            SceneManager.MoveGameObjectToScene(gameObject, scene);
+        }*/
+
         [Client]
         public void HostGame()
         {
@@ -56,28 +74,29 @@ namespace SheepDoom
         [Command]
         void CmdHostGame()
         {
-            client = Client.ReturnClientInstance(connectionToClient);
-            if (client != null)
+            if (Client.client != null)
             {
                 matchID = MatchMaker.GetRandomMatchID(); // syncvared
                 if (MatchMaker.instance.HostGame(matchID, gameObject))
                 {
-                    StartCoroutine(WaitForSyncList(MatchMaker.instance.GetLobbyScenes().Count));
-                    TargetHostGame(true);
+                    StartCoroutine(WaitForSyncList(MatchMaker.instance.GetLobbyScenes().Count, Client.client));
                 }
                 else
                 {
                     matchID = string.Empty;
                     Debug.Log("Failed to command server to host game");
-                    TargetHostGame(false);
                 }
             }
+            else
+                Debug.Log("Client instance on server is null in playerobj script");
         }
 
-        IEnumerator WaitForSyncList(int oldCount)
+        IEnumerator WaitForSyncList(int oldCount, Client client)
         {
             while(MatchMaker.instance.GetLobbyScenes().Count == oldCount)
                 yield return null;
+            SceneManager.MoveGameObjectToScene(client.gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
+            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
             SceneMessage msg = new SceneMessage
             {
                 sceneName = MatchMaker.instance.GetLobbyScenes()[matchID].name,
@@ -85,23 +104,7 @@ namespace SheepDoom
             };
             connectionToClient.Send(msg);
         }
-
-        [TargetRpc]
-        void TargetHostGame(bool success)
-        {
-            //matchID = _matchID;
-            //teamIndex = _teamIndex;
-            //playerSortIndex = _playerSortIndex;
-            if (success)
-            {
-                Debug.Log("Host successful for client");
-            }
-            else
-            {
-                Debug.Log("Host failed for client");
-            }
-        }
-
+       
         [Client]
         public void JoinGame(string matchIdInput)
         {
@@ -111,36 +114,37 @@ namespace SheepDoom
         [Command]
         void CmdJoinGame(string matchIdInput)
         {
-            client = Client.ReturnClientInstance(connectionToClient);
-            if (client != null)
+            if (Client.client != null)
             {
                 matchID = matchIdInput;
                 if (MatchMaker.instance.JoinGame(matchID, gameObject))
                 {
+                    SceneManager.MoveGameObjectToScene(Client.client.gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
+                    SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
+                    SceneMessage msg = new SceneMessage
+                    {
+                        sceneName = MatchMaker.instance.GetLobbyScenes()[matchID].name,
+                        sceneOperation = SceneOperation.LoadAdditive
+                    };
+                    connectionToClient.Send(msg);
                     Debug.Log("Server joined game successfully");
-                    TargetJoinGame(true);
                 }
                 else
                 {
                     matchID = string.Empty;
                     Debug.Log("Failed to command server to join game");
-                    TargetJoinGame(false);
                 }
             }
+            else
+                Debug.Log("Client instance on server is null in playerobj script");
         }
 
-        [TargetRpc]
-        void TargetJoinGame(bool success)
+       /* [TargetRpc]
+        void TargetJoinGame(Scene scene, LoadSceneMode mode)
         {
-            if (success)
-            {
-                // move player to lobby scene on server
-            }
-            else
-            {
-                Debug.Log("Join failed for client");
-            }
-        }
+            Debug.Log("Loaded scene: " + scene.name);
+            
+        }*/
 
         #region Start & Stop Callbacks
 
@@ -151,7 +155,8 @@ namespace SheepDoom
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
         public override void OnStartServer() 
-        {   
+        {
+            
         }
 
         /// <summary>
@@ -168,11 +173,10 @@ namespace SheepDoom
         {
             if(hasAuthority)
             {
-                client = Client.ReturnClientInstance(connectionToClient);
-                if (client != null)
+                if (Client.client != null)
                 {
                     Debug.Log("Retrieved client instance for client on playerobj script");
-                    instance = client.GetPlayerObj().GetComponent<PlayerObj>();
+                    instance = Client.client.GetPlayerObj().GetComponent<PlayerObj>();
                     if (instance != null)
                         Debug.Log("PlayerObj initialized on client");
                 }
@@ -200,7 +204,10 @@ namespace SheepDoom
         /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
         /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
         /// </summary>
-        public override void OnStartAuthority() { }
+        public override void OnStartAuthority() 
+        {
+            
+        }
 
         /// <summary>
         /// This is invoked on behaviours when authority is removed.
