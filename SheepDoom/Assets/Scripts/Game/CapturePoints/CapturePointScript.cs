@@ -102,7 +102,7 @@ public class CapturePointScript : MonoBehaviour
     //for capture hp reduction when staying in area
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             //single player mode, so only blue team
             if (!CapturedByBlue)
@@ -119,7 +119,7 @@ public class CapturePointScript : MonoBehaviour
     //check for player exit
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             Debug.Log("Player Left Zone");
             numOfCapturers -= 1;
