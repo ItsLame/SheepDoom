@@ -42,6 +42,14 @@ public class ProjectileSettings : MonoBehaviour
             Debug.Log("health: tower hit by " + m_Rigidbody);
             Object.Destroy(this.gameObject);
         }
+        /*
+        else if (col.tag == "Base")
+        {
+            col.transform.parent.gameObject.GetComponent<CaptureBaseScript>().modifyinghealth(-damage);
+            Debug.Log("health: base hit by " + m_Rigidbody);
+            Object.Destroy(this.gameObject);
+        }
+        */
     }
 
     void Update()

@@ -9,6 +9,7 @@ TagManager:
   - Ulti
   - Shop
   - Tower
+  - Base
   layers:
   - Default
   - TransparentFX

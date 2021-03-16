@@ -35,7 +35,7 @@ public class CaptureBaseScript : MonoBehaviour
     [SerializeField]
     private int numOfCapturersBase; //logging number to check if Base is under capture or not
 
-    public event Action<float> OnHealthPctChanged = delegate { };
+    public event Action<float> OnHealthPctChangedTower = delegate { };
 
     // Start is called before the first frame update
     void Start()
@@ -56,8 +56,8 @@ public class CaptureBaseScript : MonoBehaviour
         //regen hp if tower is not under capture
         if ((numOfCapturersBase == 0) && (BaseInGameHP < BaseHP))
         {
-            BaseInGameHP += BaseRegenRate * Time.deltaTime;
-
+            //BaseInGameHP += BaseRegenRate * Time.deltaTime;
+            modifyinghealth(BaseRegenRate * Time.deltaTime);
             //debug showing base hp
             Debug.Log(this.name + " HP: " + BaseInGameHP);
         }
@@ -70,8 +70,8 @@ public class CaptureBaseScript : MonoBehaviour
             Debug.Log(this.name + " Captured By Blue Team");
             CapturedByBlue2 = true;
             CapturedByRed2 = false;
-            BaseInGameHP = BaseHP;
-
+            //BaseInGameHP = BaseHP;
+            modifyinghealth(BaseHP);
             //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
             scoreGameObject.GetComponent<Score>().GameEnd(1);
         }
@@ -91,12 +91,12 @@ public class CaptureBaseScript : MonoBehaviour
         }
     }
 
-    public void modifyinghealth(int amount)
+    public void modifyinghealth(float amount)
     {
         BaseInGameHP += amount;
 
-        float currenthealthPct = (float)BaseInGameHP / (float)BaseHP;
-        OnHealthPctChanged(currenthealthPct);
+        float currenthealthPct = BaseInGameHP / BaseHP;
+        OnHealthPctChangedTower(currenthealthPct);
     }
 
     //check for player enter
@@ -118,8 +118,8 @@ public class CaptureBaseScript : MonoBehaviour
             if (!CapturedByBlue2)
             {
                 Debug.Log(other.name + "capturing Base");
-                BaseInGameHP -= BaseCaptureRate * Time.deltaTime;
-
+                //BaseInGameHP -= BaseCaptureRate * Time.deltaTime;
+                modifyinghealth(-(BaseCaptureRate * Time.deltaTime));
                 //debug showing base hp
                 Debug.Log(this.name + " HP: " + BaseInGameHP);
             }
