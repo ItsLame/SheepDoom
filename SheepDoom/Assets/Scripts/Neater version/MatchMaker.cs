@@ -76,7 +76,7 @@ namespace SheepDoom
         // track matches
         private SyncListMatch matches = new SyncListMatch();
         private SyncListString matchIDs = new SyncListString();
-        private readonly SyncDictionary<string, Scene> subLobbyScenes = new SyncDictionary<string, Scene>(); // might cause serialization problems...
+        private readonly SyncDictionary<string, Scene> subLobbyScenes = new SyncDictionary<string, Scene>();
         [SerializeField]
         GameObject lobbyManager;
 
@@ -88,6 +88,11 @@ namespace SheepDoom
         public SyncDictionary<string, Scene> GetLobbyScenes()
         {
             return subLobbyScenes;
+        }
+
+        public int GetMatchCount()
+        {
+            return matches.Count;
         }
 
         //generate random match ID

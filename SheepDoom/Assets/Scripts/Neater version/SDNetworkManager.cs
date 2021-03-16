@@ -240,6 +240,7 @@ namespace SheepDoom
         {
             GameObject mm = Instantiate(matchMaker.gameObject);
             NetworkServer.Spawn(mm);
+            DontDestroyOnLoad(mm);
         }
 
         /// <summary>

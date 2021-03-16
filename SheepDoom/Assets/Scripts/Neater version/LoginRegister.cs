@@ -18,7 +18,7 @@ namespace SheepDoom
             if (!Application.isBatchMode)
             { //Headless build
                 Debug.Log($"=== Client Build ===");
-                //networkManager.StartServer();
+                networkManager.StartServer();
             }
             else
             {
@@ -30,7 +30,7 @@ namespace SheepDoom
         public void Login()
         {
             string user = username.text;
-            if(Client.ClientLogin(user)) // server is inactive, so this is only assigned on client at first
+            if(ClientName.ClientLogin(user)) // server is inactive, so this is only assigned on client at first
             {
     
                 networkManager.StartClient(); // change to StartHost() if you don't want to build to test and just wanna use unity editor to test
