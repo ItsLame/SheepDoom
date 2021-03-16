@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -9,15 +10,21 @@ public class PlayerAttack : MonoBehaviour
     private bool ulti = false;
     private bool specialskill = false;
 
+    [Space(15)]
     //for checking if player purchased special and ulti
     public bool hasPurchasedSpecial = false;
     public bool hasPurchasedUlti = false;
 
+    public GameObject SpecialButton;
+    public GameObject UltiButton;
+
+    [Space(15)]
     //Skill projectiles
     public GameObject Projectile;
     public GameObject Projectile2;
     public GameObject Projectile3;
 
+    [Space(15)]
     //skill launch point
     public Transform SpawnPoint;
 
@@ -29,12 +36,15 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField]
     public float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
 
-    // Start is called before the first frame update
+    // Start is called before the first frame update    
     void Start()
     {
         cooldown1_inGame = cooldown1;
         cooldown2_inGame = cooldown2;
         cooldown3_inGame = cooldown3;
+
+        SpecialButton.GetComponent<Button>().interactable = false;
+        UltiButton.GetComponent<Button>().interactable = false;
     }
 
     public void AttackClick()
