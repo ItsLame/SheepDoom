@@ -5,11 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
-    //for activating attacks when buttons r clicked
-    private bool attacking = false;
-    private bool ulti = false;
-    private bool specialskill = false;
-
     [Space(15)]
     //for checking if player purchased special and ulti
     public bool hasPurchasedSpecial = false;
@@ -47,82 +42,70 @@ public class PlayerAttack : MonoBehaviour
         UltiButton.GetComponent<Button>().interactable = false;
     }
 
+    //if atk button is pressed
     public void AttackClick()
     {
-        attacking = true;
+        //if off cd
+        if (cooldown1_inGame <= 0)
+        {
+            Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
+            //resetcd
+            cooldown1_inGame = cooldown1;
+        }
     }
 
+    //if ulti button is pressed
     public void UltiClick()
     {
-        ulti = true;
+        if (hasPurchasedUlti)
+        {
+            if (cooldown3_inGame <= 0)
+            {
+                Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
+                cooldown3_inGame = cooldown3;
+            }
+        }
+        else
+        {
+            Debug.Log("Player hasn't purchased ultimate skill");
+        }
     }
 
+    //if special skill is pressed
     public void SpecialSkillClick()
     {
-        specialskill = true;
+        //only available if special skill is purchased
+        if (hasPurchasedSpecial)
+        {
+            if (cooldown2_inGame <= 0)
+            {
+                Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
+                cooldown2_inGame = cooldown2;
+            }
+        }
+        else
+        {
+            Debug.Log("Player hasn't purchased special skill");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //reduce cd per second
-        cooldown1_inGame -= Time.deltaTime;
-        cooldown2_inGame -= Time.deltaTime;
-        cooldown3_inGame -= Time.deltaTime;
-
-        //if atk button is pressed
-        if (attacking)
+        //if not 0, reduce cd per second
+        if (cooldown1_inGame >= 0)
         {
-            //if off cd
-            if (cooldown1_inGame <= 0)
-            {
-                Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
-                //resetcd
-                cooldown1_inGame = cooldown1; 
-                attacking = false;
-            }
-
+            cooldown1_inGame -= Time.deltaTime;
         }
 
-        //if special skill is pressed
-        if (specialskill)
+        if (cooldown2_inGame >= 0)
         {
-            //only available if special skill is purchased
-            if (hasPurchasedSpecial)
-            {
-                if (cooldown2_inGame <= 0)
-                {
-                    Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
-                    cooldown2_inGame = cooldown2;
-                    specialskill = false;
-                }
-            }
-
-            else
-            {
-                Debug.Log("Player hasn't purchased special skill");
-            }
-
+            cooldown2_inGame -= Time.deltaTime;
         }
 
-        //if ulti button is pressed
-        if (ulti)
+        if (cooldown3_inGame >= 0)
         {
-            if (hasPurchasedUlti)
-            {
-                if (cooldown3_inGame <= 0)
-                {
-                    Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
-                    cooldown3_inGame = cooldown3;
-                    ulti = false;
-                }
-            }
-
-            else
-            {
-                Debug.Log("Player hasn't purchased ultimate skill");
-            }
-
+            cooldown3_inGame -= Time.deltaTime;
         }
     }
 }
