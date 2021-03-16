@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attack : MonoBehaviour
+public class PlayerAttack : MonoBehaviour
 {
     private bool attacking = false;
     private bool ulti = false;

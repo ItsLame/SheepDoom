@@ -70,7 +70,9 @@ public class CapturePointScript : MonoBehaviour
             Debug.Log(this.name + " Captured By Blue Team");
             CapturedByBlue = true;
             CapturedByRed = false;
-            TowerInGameHP = TowerHP;
+
+            modifyinghealth(TowerHP);
+          //  TowerInGameHP = TowerHP;
 
             //reference the score script to increase score function
             scoreGameObject.GetComponent<Score>().blueScoreUp();

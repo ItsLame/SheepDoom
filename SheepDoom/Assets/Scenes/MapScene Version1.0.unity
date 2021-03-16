@@ -2698,8 +2698,8 @@ MonoBehaviour:
   scoreGameObject: {fileID: 850794545}
   BaseHP: 100
   BaseInGameHP: 0
-  BaseCaptureRate: 50
-  BaseRegenRate: 0
+  BaseCaptureRate: 15
+  BaseRegenRate: 10
   CapturedByBlue2: 0
   CapturedByRed2: 0
   numOfCapturersBase: 0
