@@ -77,14 +77,13 @@ namespace Mirror.Examples.MultipleAdditiveScenes
         // If instances is zero, the loop is bypassed entirely.
         IEnumerator ServerLoadSubScenes()
         {
-            Debug.Log("No. of scenes: " + SceneManager.sceneCount);
             for (int index = 1; index <= instances; index++)
             {
                 yield return SceneManager.LoadSceneAsync(gameScene, new LoadSceneParameters { loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.Physics3D });
 
                 Scene newScene = SceneManager.GetSceneAt(index);
                 subScenes.Add(newScene);
-                //Spawner.InitialSpawn(newScene);
+                Spawner.InitialSpawn(newScene);
             }
 
             subscenesLoaded = true;
