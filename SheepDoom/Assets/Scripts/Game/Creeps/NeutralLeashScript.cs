@@ -13,7 +13,13 @@ public class NeutralLeashScript : MonoBehaviour
     {
         if (other.CompareTag("NeutralMinion"))
         {
+            Debug.Log("Neutral Creep " + other.name + " has exited zone");
             other.gameObject.GetComponent<NeutralCreepScript>().BackToLocation();
+        }
+
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player " + other.name + " has exited zone");
         }
     }
 }

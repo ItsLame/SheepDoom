@@ -10,6 +10,7 @@ public class CharacterGold : MonoBehaviour
 
     //UI showing gold amount
     public Text CurrentGoldUI;
+    public Text CurrentGoldInShopUI;
 
     //gold call function
     public float GetCurrentGold()
@@ -29,5 +30,6 @@ public class CharacterGold : MonoBehaviour
     void Update()
     {
         CurrentGoldUI.text = "Current Gold: " + CurrentGold.ToString();
+        CurrentGoldInShopUI.text = CurrentGold.ToString();
     }
 }

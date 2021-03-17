@@ -14,8 +14,8 @@ public class ProjectileSettings : MonoBehaviour
     public float y_rotaspeed;
     public float z_rotaspeed;
 
+    [Space(15)]
     public int damage;
-
     public float m_Speed = 10f;   // default speed of projectile
     public float m_Lifespan = 3f; // Lifespan per second
 
@@ -52,7 +52,11 @@ public class ProjectileSettings : MonoBehaviour
         else if (col.gameObject.CompareTag("NeutralMinion"))
         {
           //  Debug.Log("NeutralMinion hit by " + player.gameObject.name);
-            col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack(player);
+          //inform that its under atk
+            col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
+
+            //take damage
+            col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(damage);
             Object.Destroy(this.gameObject);
         }
 

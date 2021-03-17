@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4428966398550810157}
   - component: {fileID: 2713987787899735525}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,8 +32,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2073488717789443023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 126, y: 36, z: 665}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 79759245960871601}
   - {fileID: 4428966399243598757}
@@ -144,6 +144,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasPurchasedSpecial: 0
   hasPurchasedUlti: 0
+  SpecialButton: {fileID: 0}
+  UltiButton: {fileID: 0}
   Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
     type: 3}
   Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
@@ -182,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dc94119df873f54197a8a7471114fda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentGoldUI: {fileID: 0}
 --- !u!1 &3395230610697679963
 GameObject:
   m_ObjectHideFlags: 0
