@@ -87,7 +87,7 @@ public class NeutralCreepScript : MonoBehaviour
                      transform.position = Vector3.MoveTowards(transform.position, CharacterWhoAttacked_Transform.position, MovementSpeed * Time.deltaTime);
             }*/
 
-            Debug.Log(Vector3.Distance(Attacker.transform.position, transform.position));
+           // Debug.Log(Vector3.Distance(Attacker.transform.position, transform.position));
             //stop at a certain distance from the player
             if (Vector3.Distance(Attacker.transform.position, transform.position) >= AttackRange)
             {

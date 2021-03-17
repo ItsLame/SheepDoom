@@ -4600,7 +4600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e4d0d1946376f4b979f86a2a621215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnTimer: 5
+  spawnTimer: 3
   spawnTimerInGame: 0
   NeutralUnitToSpawn: {fileID: 5934256995453496316}
   isNeutralKilled: 0

@@ -7,6 +7,11 @@ public class Shop : MonoBehaviour
 {
     //linking to player
     public GameObject Player;
+    public float PlayerGold;
+
+    [Space(15)]
+    public float SpecialCost;
+    public float UltiCost;
 
     [Space(15)]
     //shop's UI
@@ -34,6 +39,9 @@ public class Shop : MonoBehaviour
     //for pressing the shop with raycast
     private void Update()
     {
+        //get player's current gold
+        PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
+
         //if more than one touch and at the beginning of the touch
         if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
         {
@@ -99,9 +107,12 @@ public class Shop : MonoBehaviour
     //first special selection button
     public void SelectFirstSpecial()
     {
-        //can purchase only if havent purchased
-        if (!hasPurchasedSpecial)
+        //can purchase only if havent purchased and u have enough gold
+        if (!hasPurchasedSpecial && (PlayerGold - SpecialCost >= 0))
         {
+            //deduct gold
+            Player.GetComponent<CharacterGold>().varyGold(-SpecialCost);
+
             //if choose 1st, disable 2nd
             SpecialButton2.GetComponent<Button>().interactable = false;
             //enable special button
@@ -118,8 +129,11 @@ public class Shop : MonoBehaviour
     public void SelectSecondSpecial()
     {
         //can purchase only if havent purchased
-        if (!hasPurchasedSpecial)
+        if (!hasPurchasedSpecial && (PlayerGold - SpecialCost >= 0))
         {
+            //deduct gold
+            Player.GetComponent<CharacterGold>().varyGold(-SpecialCost);
+
             //if choose 2nd, disable 1st
             SpecialButton1.GetComponent<Button>().interactable = false;
             PlayerSpecialButton.GetComponent<Button>().interactable = true;
@@ -133,8 +147,10 @@ public class Shop : MonoBehaviour
     public void SelectFirstUlti()
     {
         //can purchase only if havent purchased
-        if (!hasPurchasedUlti)
+        if (!hasPurchasedUlti && (PlayerGold - UltiCost >= 0))
         {
+            Player.GetComponent<CharacterGold>().varyGold(-UltiCost);
+
             //if choose 1st, disable 2nd
             UltiButton2.GetComponent<Button>().interactable = false;
             PlayerUltiButton.GetComponent<Button>().interactable = true;
@@ -148,8 +164,9 @@ public class Shop : MonoBehaviour
     public void SelectSecondUlti()
     {
         //can purchase only if havent purchased
-        if (!hasPurchasedUlti)
+        if (!hasPurchasedUlti && (PlayerGold - UltiCost >= 0))
         {
+            Player.GetComponent<CharacterGold>().varyGold(-UltiCost);
             //if choose 2nd, disable 1st
             UltiButton1.GetComponent<Button>().interactable = false;
             PlayerUltiButton.GetComponent<Button>().interactable = true;
