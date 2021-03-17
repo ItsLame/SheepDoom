@@ -143,6 +143,11 @@ namespace SheepDoom
             }
             // respawn player
         }
+<<<<<<< HEAD
+=======
+
+        #region Start & Stop Callbacks
+>>>>>>> parent of d3aed25 (Spawned lobby scene from server)
 
         #region Start & Stop Callbacks
 

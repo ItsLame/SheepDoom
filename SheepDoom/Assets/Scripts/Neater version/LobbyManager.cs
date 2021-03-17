@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LobbyManager : NetworkBehaviour
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     // The gameobject this script is attached to should only be spawned as a prefab on the server
     public class LobbyManager : NetworkBehaviour
     {
@@ -89,6 +90,10 @@ public class LobbyManager : NetworkBehaviour
 
         }
         #region Start & Stop Callbacks
+=======
+    [SerializeField] Transform UIPlayerParentTeam1;
+    [SerializeField] Transform UIPlayerParentTeam2;
+>>>>>>> parent of d3aed25 (Spawned lobby scene from server)
 =======
     [SerializeField] Transform UIPlayerParentTeam1;
     [SerializeField] Transform UIPlayerParentTeam2;
