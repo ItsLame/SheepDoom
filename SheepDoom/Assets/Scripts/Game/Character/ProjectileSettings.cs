@@ -31,31 +31,28 @@ public class ProjectileSettings : MonoBehaviour
         Destroy(gameObject, m_Lifespan);
     }
 
-    //hitting minions
-    private void OnCollisionEnter(Collision col)
-    {
-        if (col.gameObject.tag == ("NeutralMinion"))
-        {
-            Debug.Log("NeutralMinion hit by " + player.gameObject.name);
-            col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack(player);
-            Object.Destroy(this.gameObject);
-        }
-    }
 
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         //if hit player
-        if (col.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player"))
         {
             col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
             Debug.Log("health: player hit by " + m_Rigidbody);
             Object.Destroy(this.gameObject);
         } 
         
-        else if (col.CompareTag("Tower"))
+        else if (col.gameObject.CompareTag("Tower"))
         {
             col.transform.parent.gameObject.GetComponent<CapturePointScript>().modifyinghealth(-damage);
             Debug.Log("health: tower hit by " + m_Rigidbody);
+            Object.Destroy(this.gameObject);
+        }
+
+        else if (col.gameObject.CompareTag("NeutralMinion"))
+        {
+          //  Debug.Log("NeutralMinion hit by " + player.gameObject.name);
+            col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack(player);
             Object.Destroy(this.gameObject);
         }
 
