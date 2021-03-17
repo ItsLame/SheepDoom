@@ -2,11 +2,38 @@
 using Mirror;
 using System.Collections.Generic;
 using UnityEngine.UI;
-// The gameobject this script is attached to should only be spawned as a prefab on the server
+
+    // The gameobject this script is attached to should only be spawned as a prefab on the server
 public class LobbyManager : NetworkBehaviour
 {
+    public static LobbyManager instance;
+    // these will activate on host/join game, not on starting of application
+    [Header("MultiScene Setup")]
+    [Scene]
+    public string lobbyScene;
+    private string matchID = string.Empty;
+    //[Scene]
+    //public string gameScene;
+    bool lobbySubSceneLoaded = false;
+    //readonly List<Scene> subGameScenes = new List<Scene>();
+    //bool gameSubScenesLoaded;
     [SerializeField] Transform UIPlayerParentTeam1;
     [SerializeField] Transform UIPlayerParentTeam2;
+
+    void Start()
+    {
+        instance = this;
+    }
+
+    public void SetMatchID(string _matchID)
+    {
+        matchID = _matchID;
+    }
+
+    public void StartLobbyScene()
+    {
+        
+    }
 
     public void StartGame()
     {
@@ -14,8 +41,8 @@ public class LobbyManager : NetworkBehaviour
     }
     public void SwitchTeam()
     {
-
     }
+
     #region Start & Stop Callbacks
 
     /// <summary>
