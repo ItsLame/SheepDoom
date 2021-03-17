@@ -1,73 +1,58 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 namespace SheepDoom
 {
-    // The gameobject this script is attached to should only be spawned as a prefab on the server
-    public class LobbyManager : NetworkBehaviour
+    public class HostGame : NetworkBehaviour
     {
-        public static LobbyManager instance;
-        // these will activate on host/join game, not on starting of application
-        [Header("MultiScene Setup")]
-        [Scene]
-        public string lobbyScene;
-        [SyncVar] public string matchID = string.Empty;
-        private Transform UIPlayerParentTeam1;
-        private Transform UIPlayerParentTeam2;
+        private PlayerObj pO;
 
-        void Start()
+        void Awake()
         {
-            
-        }
-
-        public void SetMatchID(string _matchID)
-        {
-            matchID = _matchID;
-        }
-
-        public void GetMatchID(out string _matchID)
-        {
-            _matchID = matchID;
-        }
-
-        public void StartLobbyScene()
-        {
-            StartCoroutine(ServerLoadSubScenes());
-        }
-
-        IEnumerator ServerLoadSubScenes()
-        {
-            // load lobby scenes
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(lobbyScene, LoadSceneMode.Additive);
-            while (!asyncLoad.isDone)
-                yield return null;
-            // before, i used GetSceneAt(i) within a for loop that will loop only ONCE (intentional because I wasn't sure how GetSceneAt works, 
-            // the i always resulted in 1 (intentional), so i kept retrieving and adding the same scene
-            // now, I matched the GetSceneAt with the number of matches~scenes (a set) generated, so it will retrieve the correct scene
-            Scene newLobbyScene = SceneManager.GetSceneAt(MatchMaker.instance.GetMatchCount()); 
-            Debug.Log("Loaded scene name: " + newLobbyScene.name);
-            // before, matchID correct, but passed in the wrong scene
-            // now, matchID correct, passed in the correct scene after resolving the GetSceneAt problem
-            MatchMaker.instance.GetLobbyScenes().Add(matchID, newLobbyScene); 
-            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
-            //set matchID to UI (server only)
-            //GameObject.Find("MatchID").GetComponent<Text>().text = matchID;
-        }
-
-        public void StartGame()
-        {
-
-        }
-
-        public void SwitchTeam()
-        {
-
+            pO = GetComponent<PlayerObj>();
         }
         
+        public void Host()
+        {
+            CmdHostGame();
+        }
+
+        [Command]
+        void CmdHostGame()
+        {
+            string _matchID = MatchMaker.GetRandomMatchID();
+            pO.SetMatchID(_matchID); // syncvared
+            if (MatchMaker.instance.HostGame(pO.GetMatchID(), gameObject))
+            {
+                StartCoroutine(WaitForSyncList(MatchMaker.instance.GetLobbyScenes().Count));
+            }
+            else
+            {
+                pO.SetMatchID(string.Empty);
+                Debug.Log("Failed to command server to host game");
+            }
+        }
+
+        IEnumerator WaitForSyncList(int oldCount)
+        {
+            while (MatchMaker.instance.GetLobbyScenes().Count == oldCount)
+                yield return null;
+            // Before, I passed in Client.client.gameObject as the 1st parameter, so I kept passing in the same clientinstance, not linking it to connectionToClient
+            // So I used connectionToClient to reliably retrieve the correct client to pass in
+            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetLobbyScenes()[pO.GetMatchID()]);
+            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[pO.GetMatchID()]);
+            SceneMessage msg = new SceneMessage
+            {
+                sceneName = MatchMaker.instance.GetLobbyScenes()[pO.GetMatchID()].name,
+                sceneOperation = SceneOperation.LoadAdditive
+            };
+            connectionToClient.Send(msg); 
+        }
+
         #region Start & Stop Callbacks
 
         /// <summary>
@@ -75,12 +60,7 @@ namespace SheepDoom
         /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
-        public override void OnStartServer() 
-        {
-            instance = this;
-        }
-
-  
+        public override void OnStartServer() { }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned
@@ -89,7 +69,7 @@ namespace SheepDoom
         public override void OnStopServer() { }
 
         /// <summary>
-        /// Called on every NetworkBehaviour when it is activated on a client.  
+        /// Called on every NetworkBehaviour when it is activated on a client.
         /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
         /// </summary>
         public override void OnStartClient() { }

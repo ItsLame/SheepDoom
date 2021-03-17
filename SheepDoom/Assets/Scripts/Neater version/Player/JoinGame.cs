@@ -1,30 +1,47 @@
-﻿    using UnityEngine;
+﻿using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using System;
-
-
 
 namespace SheepDoom
 {
-    public class PlayerObjSpawned : NetworkBehaviour
+    public class JoinGame : NetworkBehaviour
     {
-        /// <summary>
-        /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
-        /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
-        /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
-        /// </summary>
-        public override void OnStartAuthority() 
+        private PlayerObj pO;
+
+        void Awake()
         {
-            OnClientPlayerSpawned();
+            pO = GetComponent<PlayerObj>();
+        }
+        
+        public void Join(string _matchID)
+        {
+            CmdJoinGame(_matchID);
         }
 
-        private void OnClientPlayerSpawned()
+        [Command]
+        void CmdJoinGame(string matchIdInput)
         {
-            Client.client.GetComponent<SpawnManager>().InvokePlayerObjectSpawned(gameObject);
-        } 
+            if (MatchMaker.instance.JoinGame(matchIdInput, gameObject))
+            {
+                pO.SetMatchID(matchIdInput);
+                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetLobbyScenes()[matchIdInput]);
+                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchIdInput]);
+                SceneMessage msg = new SceneMessage
+                {
+                    sceneName = MatchMaker.instance.GetLobbyScenes()[matchIdInput].name,
+                    sceneOperation = SceneOperation.LoadAdditive
+                };
+                connectionToClient.Send(msg);
+                Debug.Log("Server joined game successfully");
+            }
+            else
+            {
+                pO.SetMatchID(string.Empty);
+                Debug.Log("Failed to command server to join game");
+            }
+        }
 
         #region Start & Stop Callbacks
 
@@ -58,6 +75,13 @@ namespace SheepDoom
         /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
         /// </summary>
         public override void OnStartLocalPlayer() { }
+
+        /// <summary>
+        /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
+        /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
+        /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
+        /// </summary>
+        public override void OnStartAuthority() { }
 
         /// <summary>
         /// This is invoked on behaviours when authority is removed.

@@ -9,24 +9,7 @@ namespace SheepDoom
     public class Client : NetworkBehaviour
     {
         [Header("Setting up player")]
-        [SerializeField]
-        private NetworkIdentity playerPrefab = null;
-        public static Client client;
-
-        // dynamically store and call functions and dispatched on the player object spawned by the client
-        // note that client prefab/object and player prefab/object are 2 different things but are connected
-        public static event Action<GameObject> OnClientPlayerSpawned;
-        private static string userInput;
-        private string clientName;
-        private GameObject currentPlayerObj = null;
-        
-        // setup client
-        public static bool ClientLogin(string user)
-        {
-            // validate with database here..
-            userInput = user;
-            return true; // for now la..
-        }
+        public static Client client; // only use for scripts outside of gameobject
 
         // this is for other scripts to be able to retrieve the client instance with their corresponding connection and network identity
         // To retrieve for other scripts do this => Player player = Player.ReturnPlayerInstance(connectionToClient);
@@ -55,58 +38,14 @@ namespace SheepDoom
             }
         }
 
+        public override void OnStartServer()
+        {
+            client = ReturnClientInstance(connectionToClient);
+        }
+
         public override void OnStartLocalPlayer() 
         {
             client = this;
-            CmdRequestPlayerObjSpawn();
-        }
-
-        [Command] // Request player object to be spawned for client
-        void CmdRequestPlayerObjSpawn()
-        {
-            NetworkSpawnPlayer();
-        }
-
-        [Server]
-        private void NetworkSpawnPlayer()
-        {
-            GameObject spawn = Instantiate(playerPrefab.gameObject);
-            NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
-        }
-
-        // This function will be called when player object is spawned for a client, make sure to pass the player obj
-        // Once this function is called, it will retrieve the relevant function within OnClientPlayerSpawned Actions and call it for the player obj
-        public void InvokePlayerObjectSpawned(GameObject _player)
-        {
-            currentPlayerObj = _player;
-            clientName = userInput;
-            SetPlayerName(clientName);
-            Debug.Log("Player object spawned");
-            OnClientPlayerSpawned?.Invoke(_player);
-        }
-
-        public GameObject GetPlayerObj()
-        {
-            GameObject _currentPlayerObj = null;
-            if (currentPlayerObj != null)
-            {
-                Debug.Log("Retrieved current player object");
-                _currentPlayerObj = currentPlayerObj;
-            }
-            else
-                Debug.Log("Failed to retrieve current player object, it is empty");
-            return _currentPlayerObj;
-        }
-
-        // set client name
-        public void SetPlayerName(string name)
-        {
-            clientName = name;
-            if (currentPlayerObj != null)
-            {
-                PlayerObj playerName = currentPlayerObj.GetComponent<PlayerObj>();
-                playerName.SetPlayerName(name);
-            }
         }
 
         #region Start & Stop Callbacks

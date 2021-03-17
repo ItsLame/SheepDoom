@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using UnityEngine.SceneManagement;
+
 // This script only runs on the server, not available to clients
 namespace SheepDoom
 {
@@ -73,13 +75,24 @@ namespace SheepDoom
 
         // track matches
         private SyncListMatch matches = new SyncListMatch();
-        private SyncListString matchIDs = new SyncListString();
+        private SyncList<string> matchIDs = new SyncList<string>();
+        private readonly SyncDictionary<string, Scene> subLobbyScenes = new SyncDictionary<string, Scene>();
         [SerializeField]
         GameObject lobbyManager;
 
         void Start()
         {
             instance = this;
+        }
+
+        public SyncDictionary<string, Scene> GetLobbyScenes()
+        {
+            return subLobbyScenes;
+        }
+
+        public int GetMatchCount()
+        {
+            return matches.Count;
         }
 
         //generate random match ID
@@ -120,7 +133,8 @@ namespace SheepDoom
                 matches.Add(new Match(_matchID, _player));
                 GameObject matchLobby = Instantiate(lobbyManager);
                 NetworkServer.Spawn(matchLobby);
-                matchLobby.GetComponent<NetworkMatchChecker>().matchId = _matchID.ToGuid();
+                matchLobby.GetComponent<LobbyManager>().SetMatchID(_matchID);
+                matchLobby.GetComponent<LobbyManager>().StartLobbyScene();
                 _player.GetComponent<PlayerObj>().SetTeamIndex(1); // syncvared
                 _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1); // syncvared
                 return true;

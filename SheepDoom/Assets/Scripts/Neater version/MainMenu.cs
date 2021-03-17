@@ -12,7 +12,6 @@ namespace SheepDoom
         public static MainMenu instance;
         [SerializeField]
         private Text playerName;
-        [Header("Miscellaneous")]
 
         [Header("Setup match")]
         [SerializeField] InputField matchID;
@@ -27,18 +26,18 @@ namespace SheepDoom
         {
             playerName.text = name;
         }
-         
+
         // When clicked host button
         private void Host()
         {
-            PlayerObj.instance.HostGame();
+            PlayerObj.instance.GetComponent<HostGame>().Host();
         }
 
         // When clicked Join button...may change to room listing
         private void Join()
         {
             string matchIdInput = matchID.text;
-            PlayerObj.instance.JoinGame(matchIdInput.ToUpper());
+            PlayerObj.instance.GetComponent<JoinGame>().Join(matchIdInput.ToUpper());
         }
     }
 }
