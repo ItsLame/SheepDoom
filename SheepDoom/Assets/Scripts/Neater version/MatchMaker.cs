@@ -75,7 +75,7 @@ namespace SheepDoom
 
         // track matches
         private SyncListMatch matches = new SyncListMatch();
-        private SyncListString matchIDs = new SyncListString();
+        private SyncList<string> matchIDs = new SyncList<string>();
         private readonly SyncDictionary<string, Scene> subLobbyScenes = new SyncDictionary<string, Scene>();
         [SerializeField]
         GameObject lobbyManager;

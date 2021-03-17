@@ -18,7 +18,7 @@ namespace SheepDoom
             if (!Application.isBatchMode)
             { //Headless build
                 Debug.Log($"=== Client Build ===");
-                networkManager.StartServer();
+                networkManager.StartHost();
             }
             else
             {

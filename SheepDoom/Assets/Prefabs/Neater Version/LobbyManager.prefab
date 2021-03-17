@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3034162448469511004}
   - component: {fileID: 2151432167592712868}
-  - component: {fileID: 4603182821286985089}
   - component: {fileID: -2976797983084035639}
+  - component: {fileID: 4603182821286985089}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -49,25 +49,6 @@ MonoBehaviour:
   serverOnly: 1
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &4603182821286985089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5092449763638632953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c092ded57476ed4a8776f03998849f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  lobbyScene: Assets/Scenes/Lobby.unity
-  UIPlayerParentTeam1: {fileID: 7401817509602245938, guid: 70d6bfd82413ae646b6390a2c1119c84,
-    type: 3}
-  UIPlayerParentTeam2: {fileID: 5337561417527798440, guid: 2ce0c1e25ec0d794dbc0ab868da7f70e,
-    type: 3}
 --- !u!114 &-2976797983084035639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,3 +64,19 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   forceHidden: 0
+--- !u!114 &4603182821286985089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5092449763638632953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c092ded57476ed4a8776f03998849f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  lobbyScene: Assets/Scenes/Lobby.unity
+  matchID: 

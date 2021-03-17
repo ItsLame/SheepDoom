@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
@@ -23,7 +24,8 @@ namespace SheepDoom
         [Command]
         void CmdHostGame()
         {
-            pO.SetMatchID(MatchMaker.GetRandomMatchID()); // syncvared
+            string _matchID = MatchMaker.GetRandomMatchID();
+            pO.SetMatchID(_matchID); // syncvared
             if (MatchMaker.instance.HostGame(pO.GetMatchID(), gameObject))
             {
                 StartCoroutine(WaitForSyncList(MatchMaker.instance.GetLobbyScenes().Count));

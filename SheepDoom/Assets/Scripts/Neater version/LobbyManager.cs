@@ -15,7 +15,7 @@ namespace SheepDoom
         [Header("MultiScene Setup")]
         [Scene]
         public string lobbyScene;
-        private string matchID = string.Empty;
+        [SyncVar] public string matchID = string.Empty;
         private Transform UIPlayerParentTeam1;
         private Transform UIPlayerParentTeam2;
 
@@ -27,6 +27,11 @@ namespace SheepDoom
         public void SetMatchID(string _matchID)
         {
             matchID = _matchID;
+        }
+
+        public void GetMatchID(out string _matchID)
+        {
+            _matchID = matchID;
         }
 
         public void StartLobbyScene()
@@ -49,6 +54,8 @@ namespace SheepDoom
             // now, matchID correct, passed in the correct scene after resolving the GetSceneAt problem
             MatchMaker.instance.GetLobbyScenes().Add(matchID, newLobbyScene); 
             SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
+            //set matchID to UI (server only)
+            //GameObject.Find("MatchID").GetComponent<Text>().text = matchID;
         }
 
         public void StartGame()
@@ -60,6 +67,7 @@ namespace SheepDoom
         {
 
         }
+        
         #region Start & Stop Callbacks
 
         /// <summary>
