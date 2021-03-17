@@ -7,6 +7,7 @@ public class LobbyManager : NetworkBehaviour
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     // The gameobject this script is attached to should only be spawned as a prefab on the server
     public class LobbyManager : NetworkBehaviour
     {
@@ -102,6 +103,14 @@ public class LobbyManager : NetworkBehaviour
     public void StartGame()
     {
 
+=======
+    [SerializeField] Transform UIPlayerParentTeam1;
+    [SerializeField] Transform UIPlayerParentTeam2;
+
+    public void StartGame()
+    {
+
+>>>>>>> parent of d3aed25 (Spawned lobby scene from server)
     }
     public void SwitchTeam()
     {
