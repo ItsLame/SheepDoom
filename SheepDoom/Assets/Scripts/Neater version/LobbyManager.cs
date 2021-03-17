@@ -5,20 +5,13 @@ using UnityEngine.UI;
 // The gameobject this script is attached to should only be spawned as a prefab on the server
 public class LobbyManager : NetworkBehaviour
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     // The gameobject this script is attached to should only be spawned as a prefab on the server
-    public class LobbyManager : NetworkBehaviour
-    {
         public static LobbyManager instance;
         // these will activate on host/join game, not on starting of application
         [Header("MultiScene Setup")]
         [Scene]
         public string lobbyScene;
         private string matchID = string.Empty;
-<<<<<<< Updated upstream
         //[Scene]
         //public string gameScene;
         bool lobbySubSceneLoaded = false;
@@ -26,10 +19,6 @@ public class LobbyManager : NetworkBehaviour
         //bool gameSubScenesLoaded;
         [SerializeField] Transform UIPlayerParentTeam1;
         [SerializeField] Transform UIPlayerParentTeam2;
-=======
-        private GameObject UIPlayerParentTeam1;
-        private GameObject UIPlayerParentTeam2;
->>>>>>> Stashed changes
 
         void Start()
         {
@@ -41,48 +30,6 @@ public class LobbyManager : NetworkBehaviour
             matchID = _matchID;
         }
 
-        public void StartLobbyScene()
-        {
-            StartCoroutine(ServerLoadSubScenes());
-            //ServerAssignTeam();
-        }
-
-        IEnumerator ServerLoadSubScenes()
-        {
-            // load lobby scenes
-            for(int i = 1; i <= 1; i++)
-            {
-                yield return SceneManager.LoadSceneAsync(lobbyScene, LoadSceneMode.Additive);
-                Scene newLobbyScene = SceneManager.GetSceneAt(i);
-                Debug.Log("Loaded scene name: " + newLobbyScene.name);
-                MatchMaker.instance.GetLobbyScenes().Add(matchID, newLobbyScene);
-            }
-<<<<<<< Updated upstream
-            lobbySubSceneLoaded = true;
-
-
-            /*// load game scenes
-            for (int i = 1; i <= matchSceneInstances; i++)
-            {
-                yield return SceneManager.LoadSceneAsync(lobbyScene, new LoadSceneParameters {loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.Physics3D});
-                Scene newGameScene = SceneManager.GetSceneAt(i);
-                subGameScenes.Add(newGameScene);
-            }*/
-=======
-            //SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
-        }
-
-        public void ServerAssignTeam()
-        {
-            // (server only) to move the playerprefab into other gameobjects in lobby scene
-            // Search for team1 & team2 gameobject
-            UIPlayerParentTeam1 = GameObject.Find("Players (Team 1)");
-            //Debug.Log("lobby manager -> client spawn: " + Client.client.spawn);
-            //Client.client.spawn.transform.parent = UIPlayerParentTeam1.transform;
-            
->>>>>>> Stashed changes
-        }
-
         public void StartGame()
         {
 
@@ -91,40 +38,6 @@ public class LobbyManager : NetworkBehaviour
         {
 
         }
-        #region Start & Stop Callbacks
-=======
-    [SerializeField] Transform UIPlayerParentTeam1;
-    [SerializeField] Transform UIPlayerParentTeam2;
->>>>>>> parent of d3aed25 (Spawned lobby scene from server)
-=======
-    [SerializeField] Transform UIPlayerParentTeam1;
-    [SerializeField] Transform UIPlayerParentTeam2;
->>>>>>> parent of d3aed25 (Spawned lobby scene from server)
-
-    public void StartGame()
-    {
-
-=======
-    [SerializeField] Transform UIPlayerParentTeam1;
-    [SerializeField] Transform UIPlayerParentTeam2;
-
-    public void StartGame()
-    {
-
->>>>>>> parent of d3aed25 (Spawned lobby scene from server)
-=======
-    [SerializeField] Transform UIPlayerParentTeam1;
-    [SerializeField] Transform UIPlayerParentTeam2;
-
-    public void StartGame()
-    {
-
->>>>>>> parent of d3aed25 (Spawned lobby scene from server)
-    }
-    public void SwitchTeam()
-    {
-
-    }
     #region Start & Stop Callbacks
 
     /// <summary>
