@@ -5,6 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class ProjectileSettings : MonoBehaviour
 {
+    //projectileOwner
+    public GameObject player;
+
+    [Space(15)]
     //rotation controls
     public float x_rotaspeed;
     public float y_rotaspeed;
@@ -27,21 +31,34 @@ public class ProjectileSettings : MonoBehaviour
         Destroy(gameObject, m_Lifespan);
     }
 
+    //hitting minions
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == ("NeutralMinion"))
+        {
+            Debug.Log("NeutralMinion hit by " + player.gameObject.name);
+            col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack(player);
+            Object.Destroy(this.gameObject);
+        }
+    }
+
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag == "Player")
+        //if hit player
+        if (col.CompareTag("Player"))
         {
             col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
             Debug.Log("health: player hit by " + m_Rigidbody);
             Object.Destroy(this.gameObject);
         } 
         
-        else if (col.tag == "Tower")
+        else if (col.CompareTag("Tower"))
         {
             col.transform.parent.gameObject.GetComponent<CapturePointScript>().modifyinghealth(-damage);
             Debug.Log("health: tower hit by " + m_Rigidbody);
             Object.Destroy(this.gameObject);
         }
+
         /*
         else if (col.tag == "Base")
         {
