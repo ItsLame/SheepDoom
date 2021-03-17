@@ -112,6 +112,10 @@ namespace SheepDoom
 
         #region Start & Stop Callbacks
 
+        
+
+       
+
         /// <summary>
         /// Invoked on the server when the object is unspawned
         /// <para>Useful for saving object data in persistent storage</para>
@@ -123,6 +127,10 @@ namespace SheepDoom
         /// <para>This can be used as a hook to invoke effects or do client specific cleanup.</para>
         /// </summary>
         public override void OnStopClient() { }
+
+        
+
+        
 
         /// <summary>
         /// This is invoked on behaviours when authority is removed.
