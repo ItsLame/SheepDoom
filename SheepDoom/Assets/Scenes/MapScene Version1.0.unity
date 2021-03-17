@@ -5137,6 +5137,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 2427539678539973897}
+  PlayerGold: 0
+  SpecialCost: 5
+  UltiCost: 10
   ShopMenuUI: {fileID: 1860659551}
   SpecialButton1: {fileID: 1605007888}
   SpecialButton2: {fileID: 1516162539}
