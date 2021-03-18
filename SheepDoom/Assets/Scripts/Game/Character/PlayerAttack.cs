@@ -31,6 +31,16 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField]
     public float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
 
+    //Melee Bool false
+    public bool ismeeleeattack = false;
+
+    //Melee
+    public Animator animator;
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public int meleedamage = 50;
+    public LayerMask enemyLayers;
+
     // Start is called before the first frame update    
     void Start()
     {
@@ -46,11 +56,23 @@ public class PlayerAttack : MonoBehaviour
     public void AttackClick()
     {
         //if off cd
-        if (cooldown1_inGame <= 0)
+        if (cooldown1_inGame <= 0 && ismeeleeattack == false)
         {
             Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
             //resetcd
             cooldown1_inGame = cooldown1;
+        }
+        else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
+        {
+            animator.SetTrigger("Attack");
+            animator.SetTrigger("AttackToIdle");
+            Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+
+            foreach (Collider enemy in hitenmies)
+            {
+                enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
+
+            }
         }
     }
 
