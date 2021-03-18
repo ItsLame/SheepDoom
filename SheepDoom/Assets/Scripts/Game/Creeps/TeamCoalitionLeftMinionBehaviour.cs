@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 {
@@ -46,6 +47,12 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     public LayerMask enemyLayers;
     public int meleedamage = 50;
 
+    //Health
+    [SerializeField]
+    private int maxHealth = 50;
+    private int currenthealth;
+
+    public event Action<float> OnHealthPctChanged = delegate { };
 
     void Start()
     {
@@ -56,6 +63,7 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
         charAnim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
 
+        currenthealth = maxHealth;
         currentPoint = StartIndex;
         StartMovingToWayPoint();
         agent.autoBraking = false;
@@ -88,6 +96,13 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 
             MeleeAttackPlayer();
         }
+
+        if (currenthealth <= 0)
+        {
+            currenthealth = 0;
+            Destroyy();
+        }
+
     }
 
     void ChasePlayer()
@@ -168,9 +183,12 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     }
     public void TakeDamage(int damage)
     {
+        currenthealth += damage;
 
-
+        float currenthealthPct = (float)currenthealth / (float)maxHealth;
+        OnHealthPctChanged(currenthealthPct);
     }
+
     private void Destroyy()
     {
         Destroy(gameObject);

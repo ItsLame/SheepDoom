@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class NeutralCreepScript : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class NeutralCreepScript : MonoBehaviour
     //how much gold its worth
     public float goldValue;
 
+    public event Action<float> OnHealthPctChanged = delegate { };
+
     //function to change the attacked bool
     public void isUnderAttack(/*GameObject playerWhoAttacked*/)
     {
@@ -41,7 +44,10 @@ public class NeutralCreepScript : MonoBehaviour
 
     public void neutralTakeDamage(float damageAmount)
     {
-        NeutralHPInGame -= damageAmount;
+        NeutralHPInGame += damageAmount;
+
+        float currenthealthPct = (float)NeutralHPInGame / (float)NeutralHP;
+        OnHealthPctChanged(currenthealthPct);
     }
 
     //leash function, called by the attached zone's collider exit 

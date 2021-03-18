@@ -56,10 +56,15 @@ public class ProjectileSettings : MonoBehaviour
             col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
 
             //take damage
-            col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(damage);
+            col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
             Object.Destroy(this.gameObject);
         }
-
+        else if (col.gameObject.CompareTag("BaseMinion"))
+        {
+            col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
+            Debug.Log("health: baseMinion hit by " + m_Rigidbody);
+            Object.Destroy(this.gameObject);
+        }
         /*
         else if (col.tag == "Base")
         {
