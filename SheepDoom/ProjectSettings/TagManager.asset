@@ -12,6 +12,7 @@ TagManager:
   - Base
   - EnemyMinion
   - NeutralMinion
+  - BaseMinion
   layers:
   - Default
   - TransparentFX
