@@ -2383,7 +2383,7 @@ GameObject:
   - component: {fileID: 666581325}
   - component: {fileID: 666581324}
   m_Layer: 5
-  m_Name: Foreground
+  m_Name: NeutralCreepForeground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2886,7 +2886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &767852590
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2917,10 +2917,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 767852589}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 317e9b6c36135b34f96f9d962a095003, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c5a084824ad27643a75cdc4e89bd520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foregroundimage: {fileID: 1274333747}
+  foregroundimage: {fileID: 666581324}
   updatespeedseconds: 0.2
 --- !u!114 &767852592
 MonoBehaviour:
@@ -8182,7 +8182,7 @@ GameObject:
   - component: {fileID: 2036696278}
   - component: {fileID: 2036696277}
   m_Layer: 5
-  m_Name: Background
+  m_Name: NeutralCreepBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8969,6 +8969,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114925852707666586, guid: 451ff2ca4db160b4f815dc540df04389,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 830694943239546975, guid: 451ff2ca4db160b4f815dc540df04389,
         type: 3}
       propertyPath: m_RootOrder
@@ -9032,7 +9037,7 @@ PrefabInstance:
     - target: {fileID: 4606846368894675393, guid: 451ff2ca4db160b4f815dc540df04389,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6455839632124040203, guid: 451ff2ca4db160b4f815dc540df04389,
         type: 3}
