@@ -3377,8 +3377,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 12.443987, y: 0.9755738, z: 10.7776985}
-  m_Center: {x: -0.54838777, y: -0.5122131, z: 1.3313162}
+  m_Size: {x: 12.443987, y: 1.6828258, z: 10.7776985}
+  m_Center: {x: -0.54838777, y: -0.15858713, z: 1.3313162}
 --- !u!1 &1069744350
 GameObject:
   m_ObjectHideFlags: 0
@@ -8199,6 +8199,11 @@ PrefabInstance:
       propertyPath: foregroundimage
       value: 
       objectReference: {fileID: 1274333747}
+    - target: {fileID: 4428966398550810146, guid: d15db42559947dc46aa944550c7b8f8d,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4428966398550810156, guid: d15db42559947dc46aa944550c7b8f8d,
         type: 3}
       propertyPath: UltiButton
@@ -8368,7 +8373,7 @@ PrefabInstance:
     - target: {fileID: 4914764695347524206, guid: f6c162d17bb5c17408881243cfc6d242,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 103.1
+      value: 130.2
       objectReference: {fileID: 0}
     - target: {fileID: 4914764695347524206, guid: f6c162d17bb5c17408881243cfc6d242,
         type: 3}
@@ -8378,7 +8383,7 @@ PrefabInstance:
     - target: {fileID: 4914764695347524206, guid: f6c162d17bb5c17408881243cfc6d242,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 646.9
+      value: 611.6
       objectReference: {fileID: 0}
     - target: {fileID: 4914764695347524206, guid: f6c162d17bb5c17408881243cfc6d242,
         type: 3}
@@ -8419,6 +8424,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EnemyDummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4914764695347524207, guid: f6c162d17bb5c17408881243cfc6d242,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4914764695347524211, guid: f6c162d17bb5c17408881243cfc6d242,
         type: 3}
