@@ -6,14 +6,17 @@ using System;
 
 public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 {
+    [Space(15)]
     // Waypoint System
     public Transform[] waypoints;
     public int StartIndex = 0;
     private int currentPoint = 0;
     private Vector3 target;
     private Vector3 direction;
+    [Space(15)]
     private Transform playerTransf;
     private NavMeshAgent agent;
+    [Space(15)]
     public bool ismeleeattack = false;
     Animator charAnim;
 
@@ -34,31 +37,34 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 
     //layermask
     public LayerMask whatisplayer;
-
+    [Space(15)]
     //Ranged Projectile
     public GameObject projectile;
-
+    [Space(15)]
 
     //animator
     public Animator animator;
-
+    [Space(15)]
     //melee attackpoint
     public Transform attackPoint;
     public LayerMask enemyLayers;
     public int meleedamage = 50;
-
+    [Space(15)]
     //Health
     [SerializeField]
     private int maxHealth = 50;
     private int currenthealth;
+
+    [Space(15)]
+    GameObject player;
 
     public event Action<float> OnHealthPctChanged = delegate { };
 
     void Start()
     {
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        playerTransf = player.GetComponent<Transform>();
+       // GameObject player = GameObject.FindGameObjectWithTag("Player");
+       // playerTransf = player.GetComponent<Transform>();
 
         charAnim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
@@ -67,6 +73,26 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
         currentPoint = StartIndex;
         StartMovingToWayPoint();
         agent.autoBraking = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+         //   playerInView = true;
+            player = other.gameObject;
+            playerTransf = player.transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            //   playerInView = true;
+            player = null;
+            playerTransf = null;
+        }
     }
 
     void Update()
