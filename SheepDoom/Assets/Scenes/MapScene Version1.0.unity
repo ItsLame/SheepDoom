@@ -478,7 +478,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &114424484
 PrefabInstance:
@@ -640,9 +640,6 @@ MonoBehaviour:
   cooldown1: 0
   cooldown2: 0
   cooldown3: 0
-  cooldown1_inGame: 0
-  cooldown2_inGame: 0
-  cooldown3_inGame: 0
   ismeeleeattack: 1
   animator: {fileID: 114424491}
   attackPoint: {fileID: 114424490}
@@ -3177,7 +3174,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 850794545}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -540, z: 0}
+  m_LocalPosition: {x: -921, y: -540, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 355980653}
@@ -8355,7 +8352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -526, y: 382}
+  m_AnchoredPosition: {x: -481.5, y: 382}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2066042354
@@ -8564,7 +8561,7 @@ PrefabInstance:
     - target: {fileID: 2073488717789443022, guid: d15db42559947dc46aa944550c7b8f8d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2073488717789443022, guid: d15db42559947dc46aa944550c7b8f8d,
         type: 3}
@@ -9031,6 +9028,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NeutralCreep1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4606846368894675393, guid: 451ff2ca4db160b4f815dc540df04389,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6455839632124040203, guid: 451ff2ca4db160b4f815dc540df04389,
         type: 3}

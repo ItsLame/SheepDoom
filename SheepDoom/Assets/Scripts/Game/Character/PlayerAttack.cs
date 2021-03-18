@@ -25,20 +25,22 @@ public class PlayerAttack : MonoBehaviour
 
     //skillcd basetrackers
     [SerializeField]
-    public float cooldown1, cooldown2, cooldown3;
+    private float cooldown1, cooldown2, cooldown3;
 
     //skillcd values to be used n manipulated in game
-    [SerializeField]
-    public float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
 
+    private float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
+    [Space(15)]
     //Melee Bool false
     public bool ismeeleeattack = false;
-
+    [Space(15)]
     //Melee
     public Animator animator;
+    [Space(15)]
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public int meleedamage = 50;
+    [Space(15)]
     public LayerMask enemyLayers;
 
     // Start is called before the first frame update    

@@ -14,20 +14,7 @@ public class ShopLookAt : MonoBehaviour
         {
             transform.LookAt(playerWhoIsLookedAt.transform);
         }
-
     }
-
-    /*
-    //look at player when in range
-    private void OnTriggerStay(Collider other)
-    {
-        //if (isLocalPlayer)
-        if (other.CompareTag("Player"))
-        {
-            transform.LookAt(other.transform);
-        }
-
-    } */
 
     private void OnTriggerEnter(Collider other)
     {
@@ -40,6 +27,18 @@ public class ShopLookAt : MonoBehaviour
         }
 
     }
+
+    /*
+//look at player when in range
+private void OnTriggerStay(Collider other)
+{
+    //if (isLocalPlayer)
+    if (other.CompareTag("Player"))
+    {
+        transform.LookAt(other.transform);
+    }
+
+} */
 
     private void OnTriggerExit(Collider other)
     {
