@@ -1073,7 +1073,9 @@ GameObject:
   - component: {fileID: 7964544871403411082}
   - component: {fileID: 7964544871403411080}
   - component: {fileID: 7964544871403411081}
-  - component: {fileID: 1297308869088207236}
+  - component: {fileID: -7950951631845009623}
+  - component: {fileID: 8862616179176438834}
+  - component: {fileID: -178416659201977519}
   m_Layer: 5
   m_Name: Lobby
   m_TagString: Untagged
@@ -1186,7 +1188,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 0
---- !u!114 &1297308869088207236
+--- !u!114 &-7950951631845009623
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1195,10 +1197,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 7964544871403411087}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd7894c02cadddb4aa3016aef3a3ccfa, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &8862616179176438834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964544871403411087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
+--- !u!114 &-178416659201977519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964544871403411087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13902f0e015bc614fb13c6bee8576e8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   MatchIDText: {fileID: 7964544870930823755}
+  Team1GameObject: {fileID: 7964544871446390570}
+  Team2GameObject: {fileID: 7964544870035701079}
+  _myLobby: {fileID: 4603182821286985089, guid: 57f02a4be7ccd114c83624ecc73eaca6,
+    type: 3}
 --- !u!1 &7964544871446390570
 GameObject:
   m_ObjectHideFlags: 0

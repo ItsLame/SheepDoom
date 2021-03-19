@@ -55,6 +55,7 @@ namespace SheepDoom
         {
             team2Count++;
         }
+
         public Match() { }
     }
 
@@ -79,21 +80,87 @@ namespace SheepDoom
         private readonly SyncDictionary<string, Scene> subLobbyScenes = new SyncDictionary<string, Scene>();
         [SerializeField]
         GameObject lobbyManager;
+        GameObject matchLobby;
+        private GameObject lobby = null;
+
+        private int team1Count = 0;
+        private int team2Count = 0;
+        private int matchIndex = 0;
+        private string matchID = "";
 
         void Start()
         {
             instance = this;
         }
 
+        #region Get
+
         public SyncDictionary<string, Scene> GetLobbyScenes()
         {
             return subLobbyScenes;
         }
-
         public int GetMatchCount()
         {
             return matches.Count;
         }
+        public int GetTeam1Count()
+        {
+            return team1Count;
+        }
+
+        public int GetTeam2Count()
+        {
+            return team2Count;
+        }
+        public int GetMatchIndex()
+        {
+            return matchIndex;
+        }
+
+        public string GetMatchID()
+        {
+            return matchID;
+        }
+
+        public SyncList<GameObject> GetPlayerObjList(int _matchIndex)
+        {
+            return matches[_matchIndex].GetPlayerObjList();
+        }
+
+        public GameObject GetLobby()
+        {
+            return lobby;
+        }
+
+        #endregion
+
+        #region Set
+
+        public void SetTeam1Count(int _matchIndex)
+        {
+            team1Count = matches[_matchIndex].GetTeam1Count();
+        }
+        public void SetTeam2Count(int _matchIndex)
+        {
+            team2Count = matches[_matchIndex].GetTeam2Count();
+        }
+
+        public void SetMatchIndex(int _matchIndex)
+        {
+            matchIndex = _matchIndex;
+        }
+
+        public void SetMatchID(string _matchID)
+        {
+            matchID = _matchID;
+        }
+
+        public void SetLobby(GameObject _lobby)
+        {
+            lobby = _lobby;
+        }
+
+        #endregion
 
         //generate random match ID
         public static string GetRandomMatchID()
@@ -131,12 +198,19 @@ namespace SheepDoom
             {
                 matchIDs.Add(_matchID);
                 matches.Add(new Match(_matchID, _player));
-                GameObject matchLobby = Instantiate(lobbyManager);
+                SetMatchID(_matchID);
+                SetMatchIndex(matchIDs.IndexOf(_matchID));
+                SetTeam1Count(GetMatchIndex());
+                matchLobby = Instantiate(lobbyManager);
+                SetLobby(matchLobby);
                 NetworkServer.Spawn(matchLobby);
                 matchLobby.GetComponent<LobbyManager>().SetMatchID(_matchID);
                 matchLobby.GetComponent<LobbyManager>().StartLobbyScene();
                 _player.GetComponent<PlayerObj>().SetTeamIndex(1); // syncvared
                 _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1); // syncvared
+
+                GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
+
                 return true;
             }
             else
@@ -158,14 +232,28 @@ namespace SheepDoom
                         if(matches[i].GetTeam1Count() < 3)
                         {
                             matches[i].AddTeam1Count();
+                            SetMatchID(_matchID);
+                            SetMatchIndex(matchIDs.IndexOf(_matchID));
+                            SetTeam1Count(GetMatchIndex());
                             _player.GetComponent<PlayerObj>().SetTeamIndex(1);
                             _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[i].GetTeam1Count());
+
+                            //if(GetLobby() != null)
+                                GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
+
+                            Debug.Log("new. lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
                         }
                         else if(matches[i].GetTeam2Count() < 3)
                         {
                             matches[i].AddTeam2Count();
+                            SetMatchID(_matchID);
+                            SetMatchIndex(matchIDs.IndexOf(_matchID));
+                            SetTeam1Count(GetMatchIndex());
                             _player.GetComponent<PlayerObj>().SetTeamIndex(2);
                             _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[i].GetTeam2Count());
+
+                            //if(GetLobby() != null)
+                                GetLobby().GetComponent<LobbyManager>().myTeam2Count++;
                         }
                         break;
                     }

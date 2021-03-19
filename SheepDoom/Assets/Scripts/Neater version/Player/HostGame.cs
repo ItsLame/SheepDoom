@@ -50,7 +50,7 @@ namespace SheepDoom
                 sceneName = MatchMaker.instance.GetLobbyScenes()[pO.GetMatchID()].name,
                 sceneOperation = SceneOperation.LoadAdditive
             };
-            connectionToClient.Send(msg); 
+            connectionToClient.Send(msg);
         }
 
         #region Start & Stop Callbacks
