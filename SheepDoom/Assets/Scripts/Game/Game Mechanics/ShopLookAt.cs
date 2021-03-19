@@ -18,13 +18,11 @@ public class ShopLookAt : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Player")) 
         {
             playerInView = true;
             playerWhoIsLookedAt = other.gameObject;
         }
-
     }
 
 

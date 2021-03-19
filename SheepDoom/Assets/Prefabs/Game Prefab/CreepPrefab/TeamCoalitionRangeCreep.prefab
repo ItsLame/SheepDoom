@@ -369,6 +369,7 @@ MonoBehaviour:
     m_Bits: 0
   meleedamage: 10
   maxHealth: 50
+  goldValue: 2
 --- !u!195 &7481533939122191808
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -4574,7 +4574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Minionmelee: {fileID: 7481533939122191818, guid: c86ef34f464325c409f5b82916791207,
     type: 3}
-  spawndelay: 20
+  spawndelay: 3
 --- !u!1 &1361456686
 GameObject:
   m_ObjectHideFlags: 0
