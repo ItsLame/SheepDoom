@@ -6,9 +6,9 @@ using System;
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField]
-    private int maxHealth = 100;
+    private float maxHealth = 100.0f;
 
-    private int currenthealth;
+    private float currenthealth;
 
     public event Action<float> OnHealthPctChanged = delegate { };
 
@@ -17,11 +17,11 @@ public class PlayerHealth : MonoBehaviour
         currenthealth = maxHealth;
     }
 
-    public void modifyinghealth(int amount)
+    public void modifyinghealth(float amount)
     {
         currenthealth += amount;
 
-        float currenthealthPct = (float)currenthealth / (float)maxHealth;
+        float currenthealthPct = currenthealth / maxHealth;
         OnHealthPctChanged(currenthealthPct);
     }
     // Update is called once per frame
