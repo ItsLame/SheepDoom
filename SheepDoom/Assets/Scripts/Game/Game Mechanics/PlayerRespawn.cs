@@ -58,6 +58,9 @@ public class PlayerRespawn : MonoBehaviour
         isDead = false;
 
         this.gameObject.transform.position = respawnLocation.transform.position;
+        Rigidbody myRigidBody = GetComponent<Rigidbody>();
+        Vector3 moveMe = new Vector3(0, 0, 0);
+        myRigidBody.rotation = Quaternion.LookRotation(moveMe);
         //activate all buttons
         this.gameObject.GetComponent<CharacterMovement>().isDead = false;
         this.gameObject.GetComponent<PlayerAttack>().isDead = false;
