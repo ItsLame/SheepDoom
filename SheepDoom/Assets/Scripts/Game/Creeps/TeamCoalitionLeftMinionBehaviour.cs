@@ -24,7 +24,7 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     private float speed = 15.0f;
     private Vector3 wayPointPos;
     // public float howclose;
-    private float dist;
+   // private float dist;
     public float CreepMoveSpeed = 2.0f;
 
     //Attacking
@@ -64,9 +64,11 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     void Start()
     {
 
-       // GameObject player = GameObject.FindGameObjectWithTag("Player");
-       // playerTransf = player.GetComponent<Transform>();
+        // GameObject player = GameObject.FindGameObjectWithTag("Player");
+        // playerTransf = player.GetComponent<Transform>();
 
+        player = null;
+        playerTransf = null;
         charAnim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
 
@@ -86,20 +88,21 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
         }
     }
 
+    /*
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            //   playerInView = true;
+            Debug.Log("Player " + other.gameObject.name + " has left minion zone");
             player = null;
             playerTransf = null;
         }
-    }
+    } */
 
     void Update()
     {
 
-        dist = Vector3.Distance(playerTransf.position, transform.position);
+       // dist = Vector3.Distance(playerTransf.position, transform.position);
         //Check if Player in sightrange
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
 
@@ -108,9 +111,12 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 
         if (target == null)
         {
+            player = null;
+            playerTransf = null;
             StartMovingToWayPoint();
             return;
         }
+
         if (!playerInSightRange && !playerInAttackRange) StartMovingToWayPoint();
         if (playerInSightRange && !playerInAttackRange) ChasePlayer();
         if (playerInAttackRange && playerInSightRange && ismeleeattack == false)
