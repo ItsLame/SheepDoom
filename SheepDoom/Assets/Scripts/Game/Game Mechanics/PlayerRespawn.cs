@@ -12,6 +12,9 @@ public class PlayerRespawn : MonoBehaviour
     [SerializeField]
     private float respawnTimerInGame;
     public bool isDead = false;
+    [Space(15)]
+    public Text respawnText;
+    public GameObject deathOverlay;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +30,7 @@ public class PlayerRespawn : MonoBehaviour
         //if dead, respawnTimer counts down
         if (isDead)
         {
+            deathOverlay.SetActive(true);
             //splat body
             Rigidbody myRigidBody = GetComponent<Rigidbody>();
             Vector3 moveMe = new Vector3(0, 1, 0);
@@ -37,10 +41,12 @@ public class PlayerRespawn : MonoBehaviour
             this.gameObject.GetComponent<PlayerAttack>().isDead = true;
 
             respawnTimerInGame -= Time.deltaTime;
+            respawnText.text = respawnTimerInGame.ToString();
 
             //respawn once timer == 0
             if (respawnTimerInGame <= 0)
             {
+                deathOverlay.SetActive(false);
                 RespawnPlayer();
             }
         }

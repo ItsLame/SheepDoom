@@ -12,6 +12,8 @@ public class PlayerHealth : MonoBehaviour
 
     public event Action<float> OnHealthPctChanged = delegate { };
 
+    public bool isFullHealth;
+
     private void Start()
     {
         currenthealth = maxHealth;
@@ -35,6 +37,12 @@ public class PlayerHealth : MonoBehaviour
         if (currenthealth > maxHealth)
         {
             currenthealth = maxHealth;
+            isFullHealth = true;
+        }
+
+        if (currenthealth < maxHealth)
+        {
+            isFullHealth = false; 
         }
     }
 

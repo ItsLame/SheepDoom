@@ -27,8 +27,12 @@ public class HealingPad : MonoBehaviour
         Debug.Log("inside healing pad");
         if (other.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(HealRate);
-            Debug.Log("healing: " + HealRate * Time.deltaTime);
+            //if not full health
+            if (other.gameObject.GetComponent<PlayerHealth>().isFullHealth == false)
+            {
+                other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(HealRate);
+                Debug.Log("healing: " + HealRate * Time.deltaTime);
+            }
         }
     }
 }
