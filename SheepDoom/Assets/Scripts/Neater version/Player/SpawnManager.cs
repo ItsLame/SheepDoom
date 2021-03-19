@@ -8,6 +8,8 @@ namespace SheepDoom
 {
     public class SpawnManager : NetworkBehaviour
     {
+        public static SpawnManager instance;
+        
         [Header("Setting up player")]
         [SerializeField]
         private NetworkIdentity playerPrefab = null;
@@ -37,7 +39,12 @@ namespace SheepDoom
         // only works on client
         public GameObject GetPlayerObj()
         {
-            GameObject _currentPlayerObj = null;
+           return currentPlayerObj;
+        }
+
+        public void SetPlayerObj(GameObject _currentPlayerObj)
+        {
+            /*_currentPlayerObj = null;
             if (currentPlayerObj != null)
             {
                 Debug.Log("Retrieved current player object on client");
@@ -45,10 +52,10 @@ namespace SheepDoom
             }
             else
                 Debug.Log("Failed to retrieve current player object on client, it is empty");
-            return _currentPlayerObj;
-        }
+            return _currentPlayerObj;*/
 
-        #region Start & Stop Callbacks
+            currentPlayerObj = _currentPlayerObj;
+        }
 
         public override void OnStartLocalPlayer()
         {
@@ -65,13 +72,11 @@ namespace SheepDoom
         private void NetworkSpawnPlayer()
         {
             GameObject spawn = Instantiate(playerPrefab.gameObject);
+            SetPlayerObj(spawn);
             NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
         }
 
-       
-
-
-        
+        #region Start & Stop Callbacks
 
         /// <summary>
         /// Invoked on the server when the object is unspawned
@@ -84,10 +89,6 @@ namespace SheepDoom
         /// <para>This can be used as a hook to invoke effects or do client specific cleanup.</para>
         /// </summary>
         public override void OnStopClient() { }
-
-        
-
-        
 
         /// <summary>
         /// This is invoked on behaviours when authority is removed.

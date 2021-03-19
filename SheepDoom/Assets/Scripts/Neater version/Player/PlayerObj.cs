@@ -10,17 +10,65 @@ namespace SheepDoom
     public class PlayerObj : NetworkBehaviour
     {
         public static PlayerObj instance; // only use when outside of gameobject, but currently only works on client
+        
         [Header("Player profile")]
         [SyncVar(hook = nameof(OnNameUpdate))] private string syncName; 
-        [SyncVar] private string matchID;
-        [SyncVar] private int teamIndex = 0;
+        [SyncVar(hook = nameof(OnMatchJoin))] private string matchID;
+        [SyncVar] public int teamIndex = 0;
         [SyncVar] private int playerSortIndex = 0;
 
+        private void Start()
+        {
+            
+        }
+
+        #region Get
+        public string GetPlayerName()
+        {
+            return syncName;
+        }
+
+        public string GetMatchID()
+        {
+            return matchID;
+
+        }
+        public int GetTeamIndex()
+        {
+            return teamIndex;
+        }
+
+        public int GetPlayerSortIndex()
+        {
+            return playerSortIndex;
+        }
+
+        #endregion
+
+        #region Set
         public void SetPlayerName(string name)
         {
             CmdSetName(name);
         }
 
+        // playerobj match settings
+        public void SetMatchID(string _matchID)
+        {
+            matchID = _matchID;
+        }
+        
+        public void SetTeamIndex(int _teamIndex)
+        {
+            teamIndex = _teamIndex;
+        }
+
+        public void SetPlayerSortIndex(int _playerSortIndex)
+        {
+            playerSortIndex = _playerSortIndex;
+        }
+
+        #endregion
+        
         [Command]
         private void CmdSetName(string name)
         {
@@ -31,27 +79,6 @@ namespace SheepDoom
         {
             if (hasAuthority)
                 MainMenu.instance.SetPlayerName(next);
-        }
-
-        // playerobj match settings
-        public void SetMatchID(string _matchID)
-        {
-            matchID = _matchID;
-        }
-
-        public string GetMatchID()
-        {
-            return matchID;
-
-        }
-        public void SetTeamIndex(int _teamIndex)
-        {
-            teamIndex = _teamIndex;
-        }
-
-        public void SetPlayerSortIndex(int _playerSortIndex)
-        {
-            playerSortIndex = _playerSortIndex;
         }
 
         [Client]
@@ -86,6 +113,11 @@ namespace SheepDoom
             }
             else
                 Debug.Log("Client instance on server is null in playerobj script");
+        }
+
+        private void OnMatchJoin(string oldMatchID, string newMatchID)
+        {
+            
         }
 
        /* [TargetRpc]

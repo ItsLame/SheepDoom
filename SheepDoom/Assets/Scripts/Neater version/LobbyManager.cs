@@ -7,32 +7,113 @@ using UnityEngine.SceneManagement;
 
 namespace SheepDoom
 {
+    public delegate void LobbyEvent();
     // The gameobject this script is attached to should only be spawned as a prefab on the server
     public class LobbyManager : NetworkBehaviour
     {
+        public event LobbyEvent lobbyEvent;
         public static LobbyManager instance;
         // these will activate on host/join game, not on starting of application
         [Header("MultiScene Setup")]
         [Scene]
         public string lobbyScene;
         [SyncVar] public string matchID = string.Empty;
-        private Transform UIPlayerParentTeam1;
-        private Transform UIPlayerParentTeam2;
+        //private Transform UIPlayerParentTeam1;
+        //private Transform UIPlayerParentTeam2;
+
+        [SyncVar] public int matchIndex = 0;
+        [SyncVar] private int team1Count = 0;
+        [SyncVar] private int team2Count = 0;
+
+        #region Properties
+        
+        public int myTeam1Count
+        {
+            get
+            {
+                return team1Count;
+            }
+            set
+            {
+                team1Count = value;
+                if(lobbyEvent != null)
+                    lobbyEvent();
+            }
+        }
+
+        public int myTeam2Count
+        {
+            get
+            {
+                return team2Count;
+            }
+            set
+            {
+                team2Count = value;
+                if(lobbyEvent != null)
+                    lobbyEvent();
+            }
+        }
+
+        #endregion
 
         void Start()
         {
             
         }
 
+        void Update()
+        {
+            
+        }
+
+        #region Get
+
+        public string GetMatchID()
+        {
+            return matchID;
+        }
+
+        public int GetMatchIndex()
+        {
+            return matchIndex;
+        }
+
+        public int GetTeam1Count()
+        {
+            return team1Count;
+        }
+
+        public int GetTeam2Count()
+        {
+            return team2Count;
+        }
+
+        #endregion
+
+        #region Set
+
         public void SetMatchID(string _matchID)
         {
             matchID = _matchID;
         }
 
-        public void GetMatchID(out string _matchID)
+        public void SetMatchIndex(int _matchIndex)
         {
-            _matchID = matchID;
+            matchIndex = _matchIndex;
         }
+
+        public void SetTeam1Count(int _team1Count)
+        {
+            team1Count = _team1Count;
+        }
+
+        public void SetTeam2Count(int _team2Count)
+        {
+            team2Count = _team2Count;
+        }
+
+        #endregion
 
         public void StartLobbyScene()
         {
@@ -54,8 +135,6 @@ namespace SheepDoom
             // now, matchID correct, passed in the correct scene after resolving the GetSceneAt problem
             MatchMaker.instance.GetLobbyScenes().Add(matchID, newLobbyScene); 
             SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[matchID]);
-            //set matchID to UI (server only)
-            //GameObject.Find("MatchID").GetComponent<Text>().text = matchID;
         }
 
         public void StartGame()
