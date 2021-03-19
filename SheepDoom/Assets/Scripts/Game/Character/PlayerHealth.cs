@@ -40,10 +40,10 @@ public class PlayerHealth : MonoBehaviour
 
     void GameOver()
     {
-        Rigidbody myRigidBody = GetComponent<Rigidbody>();
-        Vector3 moveMe = new Vector3(0, 1, 0);
-        myRigidBody.rotation = Quaternion.LookRotation(moveMe);
-        StartCoroutine(TimeBeforeDeath());
+        //added respawn
+        this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
+
+        //StartCoroutine(TimeBeforeDeath());
         Debug.Log("health: ded");
     }
 

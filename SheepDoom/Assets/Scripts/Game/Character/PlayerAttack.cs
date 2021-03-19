@@ -42,6 +42,8 @@ public class PlayerAttack : MonoBehaviour
     public int meleedamage = 50;
     [Space(15)]
     public LayerMask enemyLayers;
+    [Space(15)]
+    public bool isDead;
 
     // Start is called before the first frame update    
     void Start()
@@ -57,23 +59,49 @@ public class PlayerAttack : MonoBehaviour
     //if atk button is pressed
     public void AttackClick()
     {
-        //if off cd
-        if (cooldown1_inGame <= 0 && ismeeleeattack == false)
+        //if not dead
+        if (!isDead)
         {
-            Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
-            //resetcd
-            cooldown1_inGame = cooldown1;
-        }
-        else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
-        {
-            animator.SetTrigger("Attack");
-            animator.SetTrigger("AttackToIdle");
-            Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
-
-            foreach (Collider enemy in hitenmies)
+            //if off cd
+            if (cooldown1_inGame <= 0 && ismeeleeattack == false)
             {
-                enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
+                Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
+                //resetcd
+                cooldown1_inGame = cooldown1;
+            }
+            else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
+            {
+                animator.SetTrigger("Attack");
+                animator.SetTrigger("AttackToIdle");
+                Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 
+                foreach (Collider enemy in hitenmies)
+                {
+                    enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
+
+                }
+            }
+        }
+
+    }
+
+    //if special skill is pressed
+    public void SpecialSkillClick()
+    {
+        if (!isDead)
+        {
+            //only available if special skill is purchased
+            if (hasPurchasedSpecial)
+            {
+                if (cooldown2_inGame <= 0)
+                {
+                    Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
+                    cooldown2_inGame = cooldown2;
+                }
+            }
+            else
+            {
+                Debug.Log("Player hasn't purchased special skill");
             }
         }
     }
@@ -81,37 +109,25 @@ public class PlayerAttack : MonoBehaviour
     //if ulti button is pressed
     public void UltiClick()
     {
-        if (hasPurchasedUlti)
+        if (!isDead)
         {
-            if (cooldown3_inGame <= 0)
+            if (hasPurchasedUlti)
             {
-                Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
-                cooldown3_inGame = cooldown3;
+                if (cooldown3_inGame <= 0)
+                {
+                    Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
+                    cooldown3_inGame = cooldown3;
+                }
+            }
+            else
+            {
+                Debug.Log("Player hasn't purchased ultimate skill");
             }
         }
-        else
-        {
-            Debug.Log("Player hasn't purchased ultimate skill");
-        }
+
     }
 
-    //if special skill is pressed
-    public void SpecialSkillClick()
-    {
-        //only available if special skill is purchased
-        if (hasPurchasedSpecial)
-        {
-            if (cooldown2_inGame <= 0)
-            {
-                Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
-                cooldown2_inGame = cooldown2;
-            }
-        }
-        else
-        {
-            Debug.Log("Player hasn't purchased special skill");
-        }
-    }
+
 
     // Update is called once per frame
     void Update()
