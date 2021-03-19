@@ -117,11 +117,18 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
             return;
         }
 
-        if (!playerInSightRange && !playerInAttackRange) StartMovingToWayPoint();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
+        if (!playerInSightRange && !playerInAttackRange)
+        {
+            StartMovingToWayPoint();
+        }
+
+        if (playerInSightRange && !playerInAttackRange)
+        {
+            ChasePlayer();
+        }
+
         if (playerInAttackRange && playerInSightRange && ismeleeattack == false)
         {
-
             RangedAttackPlayer();
         }
         if (playerInAttackRange && playerInSightRange && ismeleeattack == true)
