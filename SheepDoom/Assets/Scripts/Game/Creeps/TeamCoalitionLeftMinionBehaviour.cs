@@ -54,6 +54,7 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     [SerializeField]
     private int maxHealth = 50;
     private int currenthealth;
+    public float goldValue;
 
     [Space(15)]
     GameObject player;
@@ -126,6 +127,7 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
         if (currenthealth <= 0)
         {
             currenthealth = 0;
+            player.GetComponent<CharacterGold>().varyGold(goldValue);
             Destroyy();
         }
 
@@ -217,7 +219,7 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 
     private void Destroyy()
     {
-        Destroy(gameObject);
+        Destroy(this.gameObject);
     }
 
     private void OnDrawGizmosSelected()
