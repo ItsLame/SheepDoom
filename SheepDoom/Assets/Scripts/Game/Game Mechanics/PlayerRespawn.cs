@@ -55,5 +55,6 @@ public class PlayerRespawn : MonoBehaviour
         //activate all buttons
         this.gameObject.GetComponent<CharacterMovement>().isDead = false;
         this.gameObject.GetComponent<PlayerAttack>().isDead = false;
+        this.gameObject.GetComponent<PlayerHealth>().RefillHealth();
     }
 }

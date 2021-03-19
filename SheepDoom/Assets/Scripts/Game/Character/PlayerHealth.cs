@@ -53,4 +53,9 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(2);
         Destroy(gameObject);
     }
+
+    public void RefillHealth()
+    {
+        currenthealth = maxHealth;
+    }
 }
