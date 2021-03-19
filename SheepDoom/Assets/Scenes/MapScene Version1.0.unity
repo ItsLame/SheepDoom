@@ -4086,6 +4086,18 @@ Transform:
   m_Father: {fileID: 1982140358}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 42.099003, y: -37.706, z: 14.442}
+--- !u!114 &1212685780 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4428966398071526384, guid: d15db42559947dc46aa944550c7b8f8d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4428966397750818502}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1220403702
 GameObject:
   m_ObjectHideFlags: 0
@@ -8661,7 +8673,12 @@ PrefabInstance:
         type: 3}
       propertyPath: foregroundimage
       value: 
-      objectReference: {fileID: 1274333747}
+      objectReference: {fileID: 1212685780}
+    - target: {fileID: 4428966398071526386, guid: d15db42559947dc46aa944550c7b8f8d,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerForeground
+      objectReference: {fileID: 0}
     - target: {fileID: 4428966398071526386, guid: d15db42559947dc46aa944550c7b8f8d,
         type: 3}
       propertyPath: m_Layer
@@ -8692,6 +8709,11 @@ PrefabInstance:
       propertyPath: SpecialButton
       value: 
       objectReference: {fileID: 1554319953}
+    - target: {fileID: 4428966399219538397, guid: d15db42559947dc46aa944550c7b8f8d,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerBackground
+      objectReference: {fileID: 0}
     - target: {fileID: 4428966399219538397, guid: d15db42559947dc46aa944550c7b8f8d,
         type: 3}
       propertyPath: m_Layer
