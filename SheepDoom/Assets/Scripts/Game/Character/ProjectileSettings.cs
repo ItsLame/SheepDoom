@@ -18,6 +18,7 @@ public class ProjectileSettings : MonoBehaviour
     public int damage;
     public float m_Speed = 10f;   // default speed of projectile
     public float m_Lifespan = 3f; // Lifespan per second
+    public bool destroyOnContact; //if projectile ill stop on first contact
 
     private Rigidbody m_Rigidbody;
 
@@ -32,16 +33,20 @@ public class ProjectileSettings : MonoBehaviour
     }
 
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         //if hit player
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player"))    
         {
             col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
             Debug.Log("health: player hit by " + m_Rigidbody);
-            Object.Destroy(this.gameObject);
-        } 
-        
+            if (destroyOnContact)
+            {
+                Object.Destroy(this.gameObject);
+            }
+
+        }
+
         else if (col.gameObject.CompareTag("Tower"))
         {
             col.transform.parent.gameObject.GetComponent<CapturePointScript>().modifyinghealth(-damage);
@@ -51,19 +56,29 @@ public class ProjectileSettings : MonoBehaviour
 
         else if (col.gameObject.CompareTag("NeutralMinion"))
         {
-          //  Debug.Log("NeutralMinion hit by " + player.gameObject.name);
-          //inform that its under atk
+            //  Debug.Log("NeutralMinion hit by " + player.gameObject.name);
+            //inform that its under atk
             col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
 
             //take damage
             col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
-            Object.Destroy(this.gameObject);
+
+            if (destroyOnContact)
+            {
+                Object.Destroy(this.gameObject);
+            }
+
         }
+
         else if (col.gameObject.CompareTag("BaseMinion"))
         {
             col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
             Debug.Log("health: baseMinion hit by " + m_Rigidbody);
-            Object.Destroy(this.gameObject);
+
+            if (destroyOnContact)
+            {
+                Object.Destroy(this.gameObject);
+            }
         }
         /*
         else if (col.tag == "Base")

@@ -29,7 +29,7 @@ public class CharacterGold : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CurrentGoldUI.text = "Current Gold: " + CurrentGold.ToString();
+        CurrentGoldUI.text = CurrentGold.ToString();
         CurrentGoldInShopUI.text = CurrentGold.ToString();
     }
 }
