@@ -11,6 +11,7 @@ public class PlayerRespawn : MonoBehaviour
     private float respawnTimer;
     [SerializeField]
     private float respawnTimerInGame;
+    private float respawnDisplayNumber;
     public bool isDead = false;
     [Space(15)]
     public Text respawnText;
@@ -40,8 +41,11 @@ public class PlayerRespawn : MonoBehaviour
             this.gameObject.GetComponent<CharacterMovement>().isDead = true;
             this.gameObject.GetComponent<PlayerAttack>().isDead = true;
 
+            //subtract time as respawn time passes
             respawnTimerInGame -= Time.deltaTime;
-            respawnText.text = respawnTimerInGame.ToString();
+            //round off for respawn display number
+            respawnDisplayNumber = Mathf.Round(respawnTimerInGame + 0.5f);
+            respawnText.text = respawnDisplayNumber.ToString();
 
             //respawn once timer == 0
             if (respawnTimerInGame <= 0)
