@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace SheepDoom
 {
+    //to set name / profile pic(maybe)
     public class PlayerUI : MonoBehaviour
     {
         [SerializeField] private Text playerName;

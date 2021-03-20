@@ -9,7 +9,7 @@ using System.Collections;
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
 */
 
-namespace SheepDoom
+/*namespace SheepDoom
 {
     public delegate void UIEvent();
 
@@ -64,7 +64,7 @@ namespace SheepDoom
 
         #endregion
 
-        public void Start()
+        /*public void Start()
         {
             StartSetting();
             
@@ -79,8 +79,8 @@ namespace SheepDoom
             
             //Debug.Log("mylobby is: " + _myLobby);
             //Debug.Log("mylobby myteam1count: " + _myLobby.myTeam1Count);
-        }
-
+        }*/
+/*
         private void StartSetting()
         {
             this.StartCoroutine(SetUI_MatchID());
@@ -88,7 +88,7 @@ namespace SheepDoom
 
         private void Update()
         {
-            //StartSetting();
+            StartSetting();
         }
 
         IEnumerator SetUI_MatchID()
@@ -135,6 +135,18 @@ namespace SheepDoom
 
              Debug.Log("detected changes to teamcount! updating...");
              //UpdateUI_Team();
+
+             //TEMPORARY
+            if(PlayerObj.instance.GetTeamIndex() == 1)
+            {
+                Debug.Log("updating team1 UI");
+                PlayerObj.instance.transform.parent = Team1GameObject.transform;
+            }
+            if(PlayerObj.instance.GetTeamIndex() == 2)
+            {
+                Debug.Log("updating team2 UI");
+                PlayerObj.instance.transform.parent = Team1GameObject.transform; 
+            }
         }
         
         #region Spawn Player (Very Broken)
@@ -215,7 +227,7 @@ namespace SheepDoom
                 }*/
             //}
         //}
-
+/*
         #endregion
 
         #region Start & Stop Callbacks
@@ -266,4 +278,4 @@ namespace SheepDoom
 
         #endregion
     }
-}
+}*/

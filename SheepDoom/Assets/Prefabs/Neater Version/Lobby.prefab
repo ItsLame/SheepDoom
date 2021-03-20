@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7964544870035701075}
   - component: {fileID: 7964544870035701074}
   - component: {fileID: 7964544870035701073}
+  - component: {fileID: 5967421247634826912}
+  - component: {fileID: 1640451722925223282}
   m_Layer: 5
   m_Name: Players (Team 2)
   m_TagString: Untagged
@@ -99,6 +101,37 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: -240}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &5967421247634826912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964544870035701079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &1640451722925223282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964544870035701079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
 --- !u!1 &7964544870210367506
 GameObject:
   m_ObjectHideFlags: 0
@@ -837,6 +870,8 @@ GameObject:
   - component: {fileID: 7964544870930823754}
   - component: {fileID: 7964544870930823748}
   - component: {fileID: 7964544870930823755}
+  - component: {fileID: 8882998083532305343}
+  - component: {fileID: 6281795892797766050}
   m_Layer: 5
   m_Name: MatchID
   m_TagString: Untagged
@@ -904,6 +939,37 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: ASDUH
+--- !u!114 &8882998083532305343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964544870930823753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &6281795892797766050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964544870930823753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
 --- !u!1 &7964544871198446995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1075,7 +1141,7 @@ GameObject:
   - component: {fileID: 7964544871403411081}
   - component: {fileID: -7950951631845009623}
   - component: {fileID: 8862616179176438834}
-  - component: {fileID: -178416659201977519}
+  - component: {fileID: 1618346751086552007}
   m_Layer: 5
   m_Name: Lobby
   m_TagString: Untagged
@@ -1219,7 +1285,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   forceHidden: 0
---- !u!114 &-178416659201977519
+--- !u!114 &1618346751086552007
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1228,16 +1294,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7964544871403411087}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13902f0e015bc614fb13c6bee8576e8f, type: 3}
+  m_Script: {fileID: 11500000, guid: 69d16309e41937b4a84921b4fdf5ae5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  MatchIDText: {fileID: 7964544870930823755}
-  Team1GameObject: {fileID: 7964544871446390570}
-  Team2GameObject: {fileID: 7964544870035701079}
-  _myLobby: {fileID: 4603182821286985089, guid: 57f02a4be7ccd114c83624ecc73eaca6,
-    type: 3}
+  matchIDText: {fileID: 7964544870930823753}
+  team1GameObject: {fileID: 7964544871446390570}
+  team2GameObject: {fileID: 7964544870035701079}
 --- !u!1 &7964544871446390570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,6 +1314,8 @@ GameObject:
   - component: {fileID: 7964544871446390566}
   - component: {fileID: 7964544871446390565}
   - component: {fileID: 7964544871446390564}
+  - component: {fileID: 3020592109033454085}
+  - component: {fileID: 5700316201402496931}
   m_Layer: 5
   m_Name: Players (Team 1)
   m_TagString: Team1
@@ -1337,6 +1403,37 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: -240}
   m_Constraint: 0
   m_ConstraintCount: 1
+--- !u!114 &3020592109033454085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964544871446390570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &5700316201402496931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964544871446390570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
 --- !u!1 &7964544871629030110
 GameObject:
   m_ObjectHideFlags: 0

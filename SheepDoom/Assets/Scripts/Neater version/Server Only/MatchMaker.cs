@@ -78,8 +78,7 @@ namespace SheepDoom
         private SyncListMatch matches = new SyncListMatch();
         private SyncList<string> matchIDs = new SyncList<string>();
         private readonly SyncDictionary<string, Scene> subLobbyScenes = new SyncDictionary<string, Scene>();
-        [SerializeField]
-        GameObject lobbyManager;
+        [SerializeField] GameObject lobbyManager;
         GameObject matchLobby;
         private GameObject lobby = null;
 
@@ -193,21 +192,21 @@ namespace SheepDoom
 
         public bool HostGame(string _matchID, GameObject _player)
         {
-            
             if(!matchIDs.Contains(_matchID))
             {
                 matchIDs.Add(_matchID);
                 matches.Add(new Match(_matchID, _player));
-                SetMatchID(_matchID);
-                SetMatchIndex(matchIDs.IndexOf(_matchID));
-                SetTeam1Count(GetMatchIndex());
                 matchLobby = Instantiate(lobbyManager);
-                SetLobby(matchLobby);
                 NetworkServer.Spawn(matchLobby);
                 matchLobby.GetComponent<LobbyManager>().SetMatchID(_matchID);
                 matchLobby.GetComponent<LobbyManager>().StartLobbyScene();
                 _player.GetComponent<PlayerObj>().SetTeamIndex(1); // syncvared
                 _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1); // syncvared
+
+                SetMatchID(_matchID);
+                SetMatchIndex(matchIDs.IndexOf(_matchID));
+                SetTeam1Count(GetMatchIndex());
+                SetLobby(matchLobby);
 
                 GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
 
@@ -232,28 +231,32 @@ namespace SheepDoom
                         if(matches[i].GetTeam1Count() < 3)
                         {
                             matches[i].AddTeam1Count();
-                            SetMatchID(_matchID);
-                            SetMatchIndex(matchIDs.IndexOf(_matchID));
-                            SetTeam1Count(GetMatchIndex());
                             _player.GetComponent<PlayerObj>().SetTeamIndex(1);
                             _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[i].GetTeam1Count());
 
-                            //if(GetLobby() != null)
-                                GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
+                            SetMatchID(_matchID);
+                            SetMatchIndex(matchIDs.IndexOf(_matchID));
+                            SetTeam1Count(GetMatchIndex());
 
-                            Debug.Log("new. lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
+                            //if(GetLobby() != null)
+                            GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
+
+                            Debug.Log("@MatchMaker -> lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
                         }
                         else if(matches[i].GetTeam2Count() < 3)
                         {
                             matches[i].AddTeam2Count();
-                            SetMatchID(_matchID);
-                            SetMatchIndex(matchIDs.IndexOf(_matchID));
-                            SetTeam1Count(GetMatchIndex());
                             _player.GetComponent<PlayerObj>().SetTeamIndex(2);
                             _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[i].GetTeam2Count());
 
+                            SetMatchID(_matchID);
+                            SetMatchIndex(matchIDs.IndexOf(_matchID));
+                            SetTeam1Count(GetMatchIndex());
+
                             //if(GetLobby() != null)
-                                GetLobby().GetComponent<LobbyManager>().myTeam2Count++;
+                            GetLobby().GetComponent<LobbyManager>().myTeam2Count++;
+
+                            Debug.Log("@MatchMaker -> lobbymanager team2count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
                         }
                         break;
                     }

@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using Mirror;
 using System.Collections.Generic;
+using System;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Components/NetworkManager.html
@@ -174,7 +175,7 @@ namespace SheepDoom
         /// </summary>
         /// <param name="conn">Connection from client.</param>
         /// <param name="errorCode">Error code.</param>
-        public override void OnServerError(NetworkConnection conn, int errorCode) { }
+        //public override void OnServerError(NetworkConnection conn, int errorCode) { }
 
         #endregion
 
@@ -205,6 +206,8 @@ namespace SheepDoom
         /// </summary>
         /// <param name="conn">Connection to a server.</param>
         /// <param name="errorCode">Error code.</param>
+        
+        [ObsoleteAttribute("OnClientError method is obsolete.", true)]
         public override void OnClientError(NetworkConnection conn, int errorCode) { }
 
         /// <summary>

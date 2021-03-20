@@ -2639,6 +2639,16 @@ PrefabInstance:
       propertyPath: sceneId
       value: 3318286022
       objectReference: {fileID: 0}
+    - target: {fileID: 3020592109033454085, guid: 0590ef88a97d56c48a5d0c3a57dc4802,
+        type: 3}
+      propertyPath: sceneId
+      value: 3697531702
+      objectReference: {fileID: 0}
+    - target: {fileID: 5967421247634826912, guid: 0590ef88a97d56c48a5d0c3a57dc4802,
+        type: 3}
+      propertyPath: sceneId
+      value: 2889742982
+      objectReference: {fileID: 0}
     - target: {fileID: 7964544871403411076, guid: 0590ef88a97d56c48a5d0c3a57dc4802,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2748,6 +2758,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lobby
+      objectReference: {fileID: 0}
+    - target: {fileID: 8882998083532305343, guid: 0590ef88a97d56c48a5d0c3a57dc4802,
+        type: 3}
+      propertyPath: sceneId
+      value: 1230078425
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0590ef88a97d56c48a5d0c3a57dc4802, type: 3}
