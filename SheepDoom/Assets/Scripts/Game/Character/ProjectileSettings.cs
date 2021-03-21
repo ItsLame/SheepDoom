@@ -70,15 +70,17 @@ public class ProjectileSettings : MonoBehaviour
 
         }
 
-        else if (col.gameObject.CompareTag("BaseMinion"))
+        else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 9)
         {
-            col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
+            col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
             Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
             if (destroyOnContact)
             {
                 Object.Destroy(this.gameObject);
+
             }
+
         }
         /*
         else if (col.tag == "Base")

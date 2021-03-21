@@ -24,7 +24,7 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     private float speed = 15.0f;
     private Vector3 wayPointPos;
     // public float howclose;
-   // private float dist;
+    // private float dist;
     public float CreepMoveSpeed = 2.0f;
 
     //Attacking
@@ -34,6 +34,8 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     //states 
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
+
+    public bool TeamCoalition;
 
     //layermask
     public LayerMask whatisplayer;
@@ -58,14 +60,13 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 
     [Space(15)]
     GameObject player;
+    public bool isplayer = false;
 
     public event Action<float> OnHealthPctChanged = delegate { };
 
     void Start()
     {
 
-        // GameObject player = GameObject.FindGameObjectWithTag("Player");
-        // playerTransf = player.GetComponent<Transform>();
 
         player = null;
         playerTransf = null;
@@ -80,11 +81,17 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.layer == 9)
         {
-         //   playerInView = true;
+            //   playerInView = true;
             player = other.gameObject;
             playerTransf = player.transform;
+        }
+        else if (other.gameObject.layer == 9 && other.gameObject.CompareTag("Player"))
+        {
+            player = other.gameObject;
+            playerTransf = player.transform;
+            isplayer = true;
         }
     }
 
@@ -102,7 +109,7 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     void Update()
     {
 
-       // dist = Vector3.Distance(playerTransf.position, transform.position);
+        // dist = Vector3.Distance(playerTransf.position, transform.position);
         //Check if Player in sightrange
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
 
@@ -139,9 +146,18 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 
         if (currenthealth <= 0)
         {
-            currenthealth = 0;
-            player.GetComponent<CharacterGold>().varyGold(goldValue);
-            Destroyy();
+            if (isplayer == true)
+            {
+                currenthealth = 0;
+                player.GetComponent<CharacterGold>().varyGold(goldValue);
+                Destroyy();
+
+            }
+            else
+            {
+                currenthealth = 0;
+                Destroyy();
+            }
         }
 
     }
