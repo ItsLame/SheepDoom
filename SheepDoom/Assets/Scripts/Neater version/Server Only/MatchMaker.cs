@@ -70,6 +70,7 @@ namespace SheepDoom
     public class SyncListMatch : SyncList<Match>
     {
     }
+
     public class MatchMaker : NetworkBehaviour
     {
         public static MatchMaker instance;
@@ -210,6 +211,8 @@ namespace SheepDoom
 
                 GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
 
+                Debug.Log("@MatchMaker(host) -> lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
+
                 return true;
             }
             else
@@ -241,7 +244,7 @@ namespace SheepDoom
                             //if(GetLobby() != null)
                             GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
 
-                            Debug.Log("@MatchMaker -> lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
+                            Debug.Log("@MatchMaker(join) -> lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
                         }
                         else if(matches[i].GetTeam2Count() < 3)
                         {
@@ -256,7 +259,7 @@ namespace SheepDoom
                             //if(GetLobby() != null)
                             GetLobby().GetComponent<LobbyManager>().myTeam2Count++;
 
-                            Debug.Log("@MatchMaker -> lobbymanager team2count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
+                            Debug.Log("@MatchMaker(join) -> lobbymanager team2count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
                         }
                         break;
                     }

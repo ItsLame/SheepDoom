@@ -13,75 +13,76 @@ namespace SheepDoom
     //to set player transform (in lobby)
     public class PlayerLobbyUI : NetworkBehaviour
     {
-        public static PlayerLobbyUI instance;
-
-        //retrieve early birds
-        /*public void AddPlayerToList(LobbyUIManager _instance, GameObject _team1GO, GameObject _team2GO)
+        [SyncVar] private Transform myParentObj = null;
+        [SyncVar] public PlayerObj myPlayerObj = null;
+        private float nextActionTime = 0.0f;
+        private float period = 1.0f;
+        
+        //existing player will call this
+        void Update ()
         {
-            CmdAddPlayerToList(_instance, _team1GO, _team2GO);
+            //if myPlayerObj & myParentObj not null, rpc every 1 second
+            if (Time.time > nextActionTime && myPlayerObj != null && myParentObj != null)
+            {
+                //Debug.Log(myPlayerObj + " RPC!");
+                nextActionTime += period;
+
+                //execute block of code here
+                RetrievePlayers();
+            }
         }
 
+        //start initializing process
+        public void InitPlayer(PlayerObj _playerObj, Transform _parentObj)
+        {
+            if(hasAuthority)
+                CmdInitPlayer(_playerObj, _parentObj);
+        }
+
+        //(to server) initialize _playerObj & _parentObj
         [Command]
-        private void CmdAddPlayerToList(LobbyUIManager _instance, GameObject _team1GO, GameObject _team2GO)
+        private void CmdInitPlayer(PlayerObj _playerObj, Transform _parentObj)
         {
-            _instance.playersInLobby.Add(PlayerObj.instance);
-            RpcAddPlayerToList(_instance, _team1GO, _team2GO);
+            myParentObj = _parentObj;
+            myPlayerObj = _playerObj;
         }
 
-        [ClientRpc]
-        private void RpcAddPlayerToList(LobbyUIManager _instance, GameObject _team1GO, GameObject _team2GO)
+        //function to retrieve players
+        public void RetrievePlayers()
         {
-            if(_instance.playersInLobby == null)
-            {
-                Debug.Log(PlayerObj.instance + "is first player!");
-            }
-            else if(_instance.playersInLobby != null)
-            {
-                for(int i = 0 ; i != _instance.playersInLobby.Count ; i++)
-                {
-                    if(_instance.playersInLobby[i].GetTeamIndex() == 1)
-                    {
-                        Debug.Log("PREVIOUS updating team1 UI");
-                        _instance.playersInLobby[i].GetComponent<PlayerLobbyUI>().PlayerSetParent(_team1GO.transform);
-                    }
-                    if(_instance.playersInLobby[i].GetTeamIndex() == 2)
-                    {
-                        Debug.Log("PREVIOUS updating team2 UI");
-                        _instance.playersInLobby[i].GetComponent<PlayerLobbyUI>().PlayerSetParent(_team2GO.transform);
-                    }
-                }
-            }
-        }*/
-
-        public void PlayerSetParent(Transform _parentObj)
-        {
-            StartCoroutine(StartTransform(_parentObj));
+            StartCoroutine(StartTransform(myPlayerObj, myParentObj));
         }
 
-        IEnumerator StartTransform(Transform _parentObj)
+        //start _playerObj set parent
+        IEnumerator StartTransform(PlayerObj _playerObj, Transform _parentObj)
         {
-            //transform for client
-            PlayerObj.instance.transform.SetParent(_parentObj);
+            //transform for client (you) first
+            _playerObj.transform.SetParent(_parentObj, false);
 
-            yield return "client ok, now the server";
+            while(_playerObj.transform.parent != _parentObj)
+                yield return _playerObj + " not in parent!";
 
             //transform for server
-            CmdPlayerSetParent(PlayerObj.instance, _parentObj);
+            if(hasAuthority)
+                CmdPlayerSetParent(_playerObj, _parentObj);
         }
 
+        //(to server) set player obj's parent
         [Command]
         private void CmdPlayerSetParent(PlayerObj _playerObj, Transform _parentObj)
         {
-            _playerObj.transform.SetParent(_parentObj);
+            //can comment out; just visual when vieweing in unity as server (won't matter in server build i think)
+            _playerObj.transform.SetParent(_parentObj, false);
+
             RpcPlayerSetParent(_playerObj, _parentObj);
         }
 
-        //to all client (doesn't apply to late comers)
+        //(to all client) set player obj's parent (doesn't apply to late comers)
         [ClientRpc]
         private void RpcPlayerSetParent(PlayerObj _playerObj, Transform _parentObj)
         {
-            _playerObj.transform.SetParent(_parentObj);
-        }        
+            _playerObj.transform.SetParent(_parentObj, false);
+        }
     
         #region Start & Stop Callbacks
 

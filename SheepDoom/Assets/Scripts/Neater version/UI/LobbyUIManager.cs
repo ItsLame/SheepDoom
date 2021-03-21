@@ -16,12 +16,12 @@ namespace SheepDoom
     {
         public static LobbyUIManager instance;
         [Header("Lobby UI Manager Setup")]
-        [SyncVar] [SerializeField] private GameObject matchIDText;
-        [SyncVar] [SerializeField] private GameObject team1GameObject;
-        [SyncVar] [SerializeField] private GameObject team2GameObject;
+        [SerializeField] private GameObject matchIDText;
+        [SerializeField] private GameObject team1GameObject;
+        [SerializeField] private GameObject team2GameObject;
         [SyncVar] private string matchID = string.Empty;
         [SyncVar] private int matchIndex = 0;
-        public SyncList<PlayerObj> playersInLobby = new SyncList<PlayerObj>();
+        //private SyncList<GameObject> playersInLobby = new SyncList<GameObject>();
         
         #region Properties
         
@@ -55,6 +55,14 @@ namespace SheepDoom
             set {matchIndex = value;}
         }
 
+        /*
+        public SyncList<GameObject> P_playersInLobby
+        {
+            get {return playersInLobby;}
+            set {playersInLobby = value;}
+        }
+        */
+
         #endregion
 
         private void Start()
@@ -63,6 +71,14 @@ namespace SheepDoom
                 ServerStartSetting();
             if(isClient)
                 ClientStartSetting();
+        }
+
+        private void Update()
+        {
+            /*
+            if(isServer)
+                P_playersInLobby = MatchMaker.instance.GetPlayerObjList(matchIndex);
+            */
         }
 
         public void ServerStartSetting()
@@ -76,9 +92,11 @@ namespace SheepDoom
             //if matchIDText UI on client's side does not match syncvar's
             while(P_matchIDText.GetComponent<Text>().text != P_matchID)
             {
+                //set it to match
                 P_matchIDText.GetComponent<Text>().text = P_matchID;
             }
 
+            //begin setting player UI position
             StartCoroutine(SetUI_Team());
         }
 
@@ -92,7 +110,6 @@ namespace SheepDoom
 
                 while(P_matchID == null)
                 {
-                    //Debug.Log();
                     yield return "matchID still null!";
                 }
 
@@ -105,23 +122,14 @@ namespace SheepDoom
 
         IEnumerator SetUI_Team()
         {
-            yield return "firstly, ";
+            while(!PlayerObj.instance)
+                yield return "playerObj where are you";
 
-            //to retrieve early birds but not working yet
-            //PlayerObj.instance.GetComponent<PlayerLobbyUI>().AddPlayerToList(instance, P_team1GameObject, P_team2GameObject);
-
-            Debug.Log("playerObj added into synclist, now transforming...");
-
+            //initialize playerObj's instance and parent object inside PlayerLobbyUI
             if(PlayerObj.instance.GetTeamIndex() == 1)
-            {
-                Debug.Log("updating team1 UI");
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().PlayerSetParent(P_team1GameObject.transform);
-            }
-            if(PlayerObj.instance.GetTeamIndex() == 2)
-            {
-                Debug.Log("updating team2 UI");
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().PlayerSetParent(P_team2GameObject.transform);
-            }
+                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitPlayer(PlayerObj.instance, P_team1GameObject.transform);
+            else if(PlayerObj.instance.GetTeamIndex() == 2)
+                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitPlayer(PlayerObj.instance, P_team2GameObject.transform);
         }
 
         #region Start & Stop Callbacks
