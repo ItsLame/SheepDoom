@@ -203,7 +203,7 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
             Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
 
             rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            rb.AddForce(transform.up * 8, ForceMode.Impulse);
+        //    rb.AddForce(transform.up * 8, ForceMode.Impulse);
 
             alreadyattacked = true;
             Invoke("ResetAttack", timeBetweenAttacks);
