@@ -6,7 +6,7 @@ using UnityEngine;
 public class ProjectileSettings : MonoBehaviour
 {
     //projectileOwner
-    public GameObject player;
+    public GameObject owner;
 
     [Space(15)]
     //rotation controls
@@ -73,7 +73,8 @@ public class ProjectileSettings : MonoBehaviour
         else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 9)
         {
             col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
-            Debug.Log("health: baseMinion hit by " + m_Rigidbody);
+            col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().Murderer = owner;
+          //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
             if (destroyOnContact)
             {

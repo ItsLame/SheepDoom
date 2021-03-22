@@ -58,9 +58,10 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
     public float goldValue;
 
     [Space(15)]
-    GameObject targetObject;
+    public GameObject targetObject;
+    public GameObject Murderer;
     private Transform targetTransf;
-    private bool isLockedOn;
+    private bool isLockedOn = false;
    // public bool isplayer = false;
 
 
@@ -104,16 +105,16 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
         } */
     }
 
-    /*
+    
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player " + other.gameObject.name + " has left minion zone");
-            player = null;
-            playerTransf = null;
+           // Debug.Log("Player " + other.gameObject.name + " has left minion zone");
+            targetObject = null;
+            targetTransf = null;
         }
-    } */
+    } 
 
     void Update()
     {
@@ -137,6 +138,7 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
         if (!playerInSightRange && !playerInAttackRange)
         {
             StartMovingToWayPoint();
+            isLockedOn = false;
         }
 
         if (playerInSightRange && !playerInAttackRange)
@@ -155,19 +157,30 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
 
         if (currenthealth <= 0)
         {
-            Debug.Log(this.gameObject.name + "has died");
+           // Debug.Log(this.gameObject.name + "has died");
+
+            //if a murderer is detected 
+            if (Murderer != null)
+            {
+                Murderer.GetComponent<CharacterGold>().varyGold(goldValue);
+                Destroyy();
+            } 
 
             //if targetobject still around
             if (targetObject == true)
             {
                 currenthealth = 0;
-                if (targetObject.CompareTag("Player"))
+
+                //if murderer not found, take the target that is locked on
+                if (!Murderer)
                 {
-                    targetObject.GetComponent<CharacterGold>().varyGold(goldValue);
+                    if (targetObject.CompareTag("Player"))
+                    {
+                        Murderer = targetObject;
+                        Murderer.GetComponent<CharacterGold>().varyGold(goldValue);
+                    }
+                    Destroyy();
                 }
-
-                Destroyy();
-
             }
 
             Destroyy();
