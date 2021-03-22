@@ -169,8 +169,6 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
             //if targetobject still around
             if (targetObject == true)
             {
-                currenthealth = 0;
-
                 //if murderer not found, take the target that is locked on
                 if (!Murderer)
                 {

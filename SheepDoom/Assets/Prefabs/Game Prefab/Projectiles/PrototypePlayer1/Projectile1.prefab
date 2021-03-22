@@ -123,11 +123,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77eea89e6c691be448b734990ff93ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2073488717789443023, guid: d15db42559947dc46aa944550c7b8f8d, type: 3}
+  owner: {fileID: 0}
   x_rotaspeed: 0
   y_rotaspeed: 0
   z_rotaspeed: 0
   damage: 10
   m_Speed: 6000
-  m_Lifespan: 0.5
+  m_Lifespan: 0.8
   destroyOnContact: 1

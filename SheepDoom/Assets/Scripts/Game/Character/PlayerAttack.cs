@@ -65,7 +65,9 @@ public class PlayerAttack : MonoBehaviour
             //if off cd
             if (cooldown1_inGame <= 0 && ismeeleeattack == false)
             {
-                Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
+                var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
+                FiredProjectile.GetComponent<ProjectileSettings>().owner = this.gameObject;
+
                 //resetcd
                 cooldown1_inGame = cooldown1;
             }
@@ -95,7 +97,8 @@ public class PlayerAttack : MonoBehaviour
             {
                 if (cooldown2_inGame <= 0)
                 {
-                    Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
+                    var FiredProjectile =  Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
+                    FiredProjectile.GetComponent<ProjectileSettings>().owner = this.gameObject;
                     cooldown2_inGame = cooldown2;
                 }
             }
@@ -115,7 +118,8 @@ public class PlayerAttack : MonoBehaviour
             {
                 if (cooldown3_inGame <= 0)
                 {
-                    Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
+                    var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
+                    FiredProjectile.GetComponent<ProjectileSettings>().owner = this.gameObject;
                     cooldown3_inGame = cooldown3;
                 }
             }
