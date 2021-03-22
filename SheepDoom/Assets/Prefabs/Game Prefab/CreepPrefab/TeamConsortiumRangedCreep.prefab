@@ -338,7 +338,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8278160488922250821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 448.59857, y: 31.994507, z: 660.8252}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 6181575291275588499}
@@ -404,7 +404,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 16
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2232297401316802236
 MonoBehaviour:
@@ -446,6 +446,8 @@ MonoBehaviour:
   meleedamage: 50
   maxHealth: 50
   goldValue: 2
+  targetObject: {fileID: 0}
+  Murderer: {fileID: 0}
 --- !u!195 &1726418527979177131
 NavMeshAgent:
   m_ObjectHideFlags: 0
