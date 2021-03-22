@@ -66,8 +66,6 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
 
     void Start()
     {
-
-
         player = null;
         playerTransf = null;
         charAnim = GetComponent<Animator>();
