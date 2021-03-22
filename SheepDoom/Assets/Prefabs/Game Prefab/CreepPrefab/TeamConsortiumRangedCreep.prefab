@@ -445,7 +445,7 @@ MonoBehaviour:
     m_Bits: 256
   meleedamage: 50
   maxHealth: 50
-  goldValue: 0
+  goldValue: 2
   isplayer: 0
 --- !u!195 &1726418527979177131
 NavMeshAgent:

@@ -409,7 +409,7 @@ MonoBehaviour:
     m_Bits: 512
   meleedamage: 50
   maxHealth: 50
-  goldValue: 0
+  goldValue: 2
   isplayer: 0
 --- !u!1 &8339675222085536139
 GameObject:
