@@ -25,13 +25,13 @@ public class TeamCoalitionCreepProjectilesettings : MonoBehaviour
         if (col.gameObject.layer == 9 && col.gameObject.CompareTag("Player"))
         {
             col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
-            Debug.Log("health: hit by " + m_Rigidbody);
+        //    Debug.Log("health: hit by " + m_Rigidbody);
             Object.Destroy(this.gameObject);
         }
         else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 9)
         {
              col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
-             Debug.Log("health: baseMinion hit by " + m_Rigidbody); 
+         //    Debug.Log("health: baseMinion hit by " + m_Rigidbody); 
         }
     }
 

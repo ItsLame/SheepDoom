@@ -145,6 +145,7 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
 
         if (currenthealth <= 0)
         {
+            Debug.Log(this.gameObject.name + "has died");
             if (isplayer == true)
             {
                 currenthealth = 0;
@@ -152,6 +153,7 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
                 Destroyy();
 
             }
+
             else
             {
                 currenthealth = 0;

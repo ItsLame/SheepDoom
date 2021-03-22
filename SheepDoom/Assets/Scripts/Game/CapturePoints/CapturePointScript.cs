@@ -59,7 +59,7 @@ public class CapturePointScript : MonoBehaviour
             //TowerInGameHP += TowerRegenRate * Time.deltaTime;
             modifyinghealth(TowerRegenRate * Time.deltaTime);
             //debug showing tower HP
-            Debug.Log(this.name + " HP: " + TowerInGameHP);
+            //Debug.Log(this.name + " HP: " + TowerInGameHP);
         }
 
         //once HP = 0, notify the scoring and convert the tower
@@ -96,10 +96,10 @@ public class CapturePointScript : MonoBehaviour
     public void modifyinghealth(float amount)
     {
         TowerInGameHP += amount;
-        Debug.Log("health: tower in game hp:  " + TowerInGameHP);
+        //Debug.Log("health: tower in game hp:  " + TowerInGameHP);
         float currenthealthPct = TowerInGameHP /TowerHP;
         OnHealthPctChangedTower(currenthealthPct);
-        Debug.Log("health tower ================================== changed");
+        //Debug.Log("health tower ================================== changed");
     }
 
     //check for player enter
@@ -126,7 +126,7 @@ public class CapturePointScript : MonoBehaviour
                 //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
 
                 //debug showing tower HP
-                Debug.Log(this.name + " HP: " + TowerInGameHP);
+               // Debug.Log(this.name + " HP: " + TowerInGameHP);
             }
         }
     }

@@ -9,6 +9,7 @@ public class CamSwitchManager : MonoBehaviour
 
     bool camViewChanged = false;
 
+
     //to check whether sides are touched
     public bool topScreenClicked = false;
     public bool bottomScreenClicked = false;
@@ -78,17 +79,18 @@ public class CamSwitchManager : MonoBehaviour
         // Update is called once per frame
         void Update()
         {
-        if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
-        {
-            Debug.Log("Stop camera tracking");
-            camFollowscript.enabled = false;
-        }
+            if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
+            {
 
-        else 
-        {
-            Debug.Log("Enable camera tracking");
-            camFollowscript.enabled = true;
-        }
+                Debug.Log("Stop camera tracking");
+                camFollowscript.enabled = false;
+            }
+
+            else
+            {
+                Debug.Log("Enable camera tracking");
+                camFollowscript.enabled = true;
+            }
 
 
             if (camViewChanged == false)
@@ -109,6 +111,7 @@ public class CamSwitchManager : MonoBehaviour
                 {
             //        Debug.Log("Snapping back to character");
                     camViewChanged = false;
+
                   //  camRoamscript.enabled = false;
                     camFollowscript.enabled = true;
                 }

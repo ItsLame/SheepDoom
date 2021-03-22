@@ -21,6 +21,7 @@ public class CharacterGold : MonoBehaviour
     //gold number manipulation function
     public void varyGold(float goldValueChange)
     {
+        Debug.Log("Gold increased by " + goldValueChange);
         CurrentGold += goldValueChange;
     }
 

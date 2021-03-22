@@ -31,7 +31,7 @@ public class HealingPad : MonoBehaviour
             if (other.gameObject.GetComponent<PlayerHealth>().isFullHealth == false)
             {
                 other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(HealRate);
-                Debug.Log("healing: " + HealRate * Time.deltaTime);
+               // Debug.Log("healing: " + HealRate * Time.deltaTime);
             }
         }
     }
