@@ -13,7 +13,7 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
     private Vector3 target;
     private Vector3 direction;
     [Space(15)]
-    private Transform playerTransf;
+
     private NavMeshAgent agent;
     [Space(15)]
     public bool ismeleeattack = false;
@@ -58,17 +58,20 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
     public float goldValue;
 
     [Space(15)]
-    GameObject player;
-    public bool isplayer = false;
+    GameObject targetObject;
+    private Transform targetTransf;
+    private bool isLockedOn;
+   // public bool isplayer = false;
+
 
     public event Action<float> OnHealthPctChanged = delegate { };
 
     void Start()
     {
 
-
-        player = null;
-        playerTransf = null;
+        targetObject = null;
+        targetTransf = null;
+        isLockedOn = false;
         charAnim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
 
@@ -82,16 +85,23 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 8)
         {
-            //   playerInView = true;
-            player = other.gameObject;
-            playerTransf = player.transform;
+            if (!isLockedOn)
+            {
+                targetObject = other.gameObject;
+                targetTransf = targetObject.transform;
+                isLockedOn = true;
+            }    
+
         }
+
+        /*
         else if (other.gameObject.layer == 8 && other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Player Spotted By " + this.gameObject.name);
             player = other.gameObject;
             playerTransf = player.transform;
             isplayer = true;
-        }
+        } */
     }
 
     /*
@@ -117,8 +127,9 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
 
         if (target == null)
         {
-            player = null;
-            playerTransf = null;
+            targetObject = null;
+            targetTransf = null;
+            isLockedOn = false;
             StartMovingToWayPoint();
             return;
         }
@@ -139,26 +150,34 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
         }
         if (playerInAttackRange && playerInSightRange && ismeleeattack == true)
         {
-
             MeleeAttackPlayer();
         }
 
         if (currenthealth <= 0)
         {
             Debug.Log(this.gameObject.name + "has died");
-            if (isplayer == true)
+
+            //if targetobject still around
+            if (targetObject == true)
             {
                 currenthealth = 0;
-                player.GetComponent<CharacterGold>().varyGold(goldValue);
+                if (targetObject.CompareTag("Player"))
+                {
+                    targetObject.GetComponent<CharacterGold>().varyGold(goldValue);
+                }
+
                 Destroyy();
 
             }
 
+            Destroyy();
+
+            /*
             else
             {
                 currenthealth = 0;
                 Destroyy();
-            }
+            }*/
 
         }
 
@@ -167,7 +186,7 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
     void ChasePlayer()
     {
 
-        agent.SetDestination(playerTransf.position);
+        agent.SetDestination(targetTransf.position);
 
     }
     void MeleeAttackPlayer()
@@ -175,12 +194,12 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
         //Make sure enemy doesn't move
         agent.SetDestination(transform.position);
 
-        transform.LookAt(playerTransf);
+        transform.LookAt(targetTransf);
 
         if (!alreadyattacked)
         {
             //Meele attack for dog
-            transform.LookAt(playerTransf);
+            transform.LookAt(targetTransf);
             animator.SetTrigger("Attack");
             animator.SetTrigger("AttackToIdle");
             Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
@@ -201,11 +220,11 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
         //Make sure enemy doesn't move
         agent.SetDestination(transform.position);
 
-        transform.LookAt(playerTransf);
+        transform.LookAt(targetTransf);
 
         if (!alreadyattacked)
         {
-            transform.LookAt(playerTransf);
+            transform.LookAt(targetTransf);
             //Attack
             Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
 

@@ -31,7 +31,8 @@ public class TeamConsortiumprojectilesettings : MonoBehaviour
         else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 8)
         {
              col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
-           //  Debug.Log("health: baseMinion hit by " + m_Rigidbody); 
+            Object.Destroy(this.gameObject);
+            //  Debug.Log("health: baseMinion hit by " + m_Rigidbody); 
         }
     }
 

@@ -129,5 +129,5 @@ MonoBehaviour:
   z_rotaspeed: 0
   damage: 20
   m_Speed: 5000
-  m_Lifespan: 3
+  m_Lifespan: 2
   destroyOnContact: 1

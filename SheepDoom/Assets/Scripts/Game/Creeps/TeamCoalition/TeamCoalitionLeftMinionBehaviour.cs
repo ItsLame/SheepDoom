@@ -148,16 +148,13 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
         {
             if (isplayer == true)
             {
-                currenthealth = 0;
+                //currenthealth = 0;
                 player.GetComponent<CharacterGold>().varyGold(goldValue);
                 Destroyy();
 
             }
-            else
-            {
-                currenthealth = 0;
-                Destroyy();
-            }
+
+            Destroyy();
         }
 
     }
