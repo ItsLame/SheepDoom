@@ -14,13 +14,20 @@ namespace SheepDoom
     //set matchid and players in match
     public class LobbyUIManager : NetworkBehaviour
     {
-        public static LobbyUIManager instance;
+        //public static LobbyUIManager instance;
+
         [Header("Lobby UI Manager Setup")]
         [SerializeField] private GameObject matchIDText;
         [SerializeField] private GameObject team1GameObject;
         [SerializeField] private GameObject team2GameObject;
+
+        [Header("Inputs For Client")]
         [SerializeField] private GameObject toTeam1Button;
         [SerializeField] private GameObject toTeam2Button;
+        [SerializeField] private GameObject readyButton;
+        [SerializeField] private GameObject startButton;
+
+        //room matchID and matchIndex
         [SyncVar] private string matchID = string.Empty;
         [SyncVar] private int matchIndex = 0;
         //private SyncList<GameObject> playersInLobby = new SyncList<GameObject>();
