@@ -16,7 +16,7 @@ namespace SheepDoom
         [SyncVar] private Transform myParentObj = null;
         [SyncVar] public PlayerObj myPlayerObj = null;
         private float nextActionTime = 0.0f;
-        private float period = 1.0f;
+        private float period = 1.0f;    //change this value to change update speed
         
         //existing player will call this
         void Update ()
