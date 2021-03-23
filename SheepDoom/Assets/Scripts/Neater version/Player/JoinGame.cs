@@ -35,6 +35,11 @@ namespace SheepDoom
                 };
                 connectionToClient.Send(msg);
                 Debug.Log("Server joined game successfully");
+
+                //set ishost=false when successfuly join
+                pO.SetIsHost(false);
+                //players not ready by default
+                pO.SetIsReady(false);
             }
             else
             {

@@ -13,9 +13,12 @@ namespace SheepDoom
         
         [Header("Player profile")]
         [SyncVar(hook = nameof(OnNameUpdate))] private string syncName; 
-        [SyncVar(hook = nameof(OnMatchJoin))] private string matchID;
-        [SyncVar] public int teamIndex = 0;
+        [SyncVar] private string matchID;
+        [SyncVar] private int teamIndex = 0;
         [SyncVar] private int playerSortIndex = 0;
+        [SyncVar] private bool updateCount = false;
+        [SyncVar] private bool isHost = false;
+        [SyncVar] private bool isReady = false;
 
         private void Start()
         {
@@ -43,21 +46,61 @@ namespace SheepDoom
             return playerSortIndex;
         }
 
+        public bool GetIsHost()
+        {
+            return isHost;
+        }
+
+        public bool GetIsReady()
+        {
+            return isReady;
+        }
+
+        public bool GetUpdateCount()
+        {
+            return updateCount;
+        }
+
         #endregion
 
         #region Set
+
         public void SetPlayerName(string name)
         {
-            CmdSetName(name);
+            if(hasAuthority)
+                CmdSetName(name);
         }
 
-        // playerobj match settings
+        [Command]
+        private void CmdSetName(string name)
+        {
+            syncName = name;
+        }
+
         public void SetMatchID(string _matchID)
+        {
+            if(isServer)
+                matchID = _matchID;
+            else if(hasAuthority)
+                CmdSetMatchID(_matchID);
+        }
+
+        [Command]
+        private void CmdSetMatchID(string _matchID)
         {
             matchID = _matchID;
         }
         
         public void SetTeamIndex(int _teamIndex)
+        {
+            if(isServer)
+                teamIndex = _teamIndex;
+            else if(hasAuthority)
+                CmdSetTeamIndex(_teamIndex);
+        }
+
+        [Command]
+        private void CmdSetTeamIndex(int _teamIndex)
         {
             teamIndex = _teamIndex;
         }
@@ -67,18 +110,69 @@ namespace SheepDoom
             playerSortIndex = _playerSortIndex;
         }
 
-        #endregion
-        
-        [Command]
-        private void CmdSetName(string name)
+        public void SetIsHost(bool _isHost)
         {
-            syncName = name;
+            if(isServer)
+                isHost = _isHost;
+            else if(hasAuthority)
+                CmdSetIsHost(_isHost);
         }
+
+        [Command]
+        private void CmdSetIsHost(bool _isHost)
+        {
+            isHost = _isHost;
+        }
+
+        public void SetIsReady(bool _isReady)
+        {
+            if(isServer)
+                isReady = _isReady;
+            else if(hasAuthority)
+                CmdSetIsReady(_isReady);
+        }
+
+        [Command]
+        private void CmdSetIsReady(bool _isReady)
+        {
+            isReady = _isReady;
+        }
+
+        public void SetUpdateCount(bool _updateCount)
+        {
+            if(isServer)
+                updateCount = _updateCount;
+            else if(hasAuthority)
+                CmdSetUpdateCount(_updateCount);
+        }
+
+        [Command]
+        private void CmdSetUpdateCount(bool _updateCount)
+        {
+                updateCount = _updateCount;
+        }
+
+        #endregion
 
         private void OnNameUpdate(string prev, string next)
         {
             if (hasAuthority)
                 MainMenu.instance.SetPlayerName(next);
+        }
+
+        public void UpdateTeamCount()
+        {
+            if (hasAuthority)
+            {
+                SetUpdateCount(true);
+                CmdUpdateTeamCount(this.gameObject);
+            }
+        }
+
+        [Command]
+        private void CmdUpdateTeamCount(GameObject _playerObj)
+        {
+            MatchMaker.instance.TeamCount(MatchMaker.instance.GetMatchIndex(), _playerObj);
         }
 
         [Client]

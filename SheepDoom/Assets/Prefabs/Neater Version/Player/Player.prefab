@@ -250,7 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  myPlayerObj: {fileID: 0}
+  myPlayerReadyText: {fileID: 551460844941935673}
 --- !u!114 &6268230098934346722
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
@@ -13,13 +14,26 @@ namespace SheepDoom
     //to set player transform (in lobby)
     public class PlayerLobbyUI : NetworkBehaviour
     {
+        [SerializeField] private GameObject myPlayerReadyText = null;
+        [SyncVar] private string myPlayerReadyString = null;
         [SyncVar] private Transform myParentObj = null;
-        [SyncVar] public PlayerObj myPlayerObj = null;
+        [SyncVar] private PlayerObj myPlayerObj = null;
+        [SyncVar] private bool myPlayerReady = false;
         private float nextActionTime = 0.0f;
-        private float period = 1.0f;    //change this value to change update speed
-        
+        private float period = 0.5f;    //change this value to change update speed
+
+        #region Properties
+
+        public string P_myPlayerReadyString
+        {
+            get{return myPlayerReadyString;}
+            set{myPlayerReadyString = value;}
+        }
+
+        #endregion
+
         //existing player will call this
-        void Update ()
+        void Update()
         {
             //if myPlayerObj & myParentObj not null, rpc every 1 second
             if (Time.time > nextActionTime && myPlayerObj != null && myParentObj != null)
@@ -47,14 +61,52 @@ namespace SheepDoom
             myPlayerObj = _playerObj;
         }
 
+        public void InitReady(PlayerObj _playerObj, bool _isReady)
+        {
+            if(hasAuthority)
+                CmdInitReady(_playerObj, _isReady);
+        }
+
+        [Command]
+        private void CmdInitReady(PlayerObj _playerObj, bool _isReady)
+        {
+            myPlayerReady = _isReady;
+        }
+
         //function to retrieve players
         public void RetrievePlayers()
         {
-            StartCoroutine(StartTransform(myPlayerObj, myParentObj));
+            StartCoroutine(StartTransform(myPlayerObj, myParentObj, myPlayerReady));
+        }
+
+        private void PlayerSetReady(PlayerObj _playerObj, bool _isReady)
+        {
+            //range is 0-255
+            byte r = 0;
+            byte g = 0;
+            byte b = 0;
+            
+            if(_isReady == true)
+            {
+                P_myPlayerReadyString = "Ready!";
+                r = 211;
+                g = 255;
+                b = 136;
+            }
+            else if(_isReady == false)
+            {
+                P_myPlayerReadyString = "Not Ready";
+                r = 255;
+                g = 183;
+                b = 136;
+            }
+
+            myPlayerReadyText.GetComponent<Text>().text = P_myPlayerReadyString;
+            myPlayerReadyText.GetComponent<Text>().color = new Color32(r, g, b, 255);
         }
 
         //start _playerObj set parent
-        IEnumerator StartTransform(PlayerObj _playerObj, Transform _parentObj)
+        private IEnumerator StartTransform(PlayerObj _playerObj, Transform _parentObj, bool _isReady)
         {
             //transform for client (you) first
             _playerObj.transform.SetParent(_parentObj, false);
@@ -62,26 +114,34 @@ namespace SheepDoom
             while(_playerObj.transform.parent != _parentObj)
                 yield return _playerObj + " not in parent!";
 
+            //ready status
+            PlayerSetReady(_playerObj, _isReady);
+
             //transform for server
             if(hasAuthority)
-                CmdPlayerSetParent(_playerObj, _parentObj);
+                CmdPlayerSetParent(_playerObj, _parentObj, _isReady);
         }
 
         //(to server) set player obj's parent
         [Command]
-        private void CmdPlayerSetParent(PlayerObj _playerObj, Transform _parentObj)
+        private void CmdPlayerSetParent(PlayerObj _playerObj, Transform _parentObj, bool _isReady)
         {
             //can comment out; just visual when vieweing in unity as server (won't matter in server build i think)
             _playerObj.transform.SetParent(_parentObj, false);
+            PlayerSetReady(_playerObj, _isReady);
 
-            RpcPlayerSetParent(_playerObj, _parentObj);
+            RpcPlayerSetParent(_playerObj, _parentObj, _isReady);
         }
 
         //(to all client) set player obj's parent (doesn't apply to late comers)
         [ClientRpc]
-        private void RpcPlayerSetParent(PlayerObj _playerObj, Transform _parentObj)
+        private void RpcPlayerSetParent(PlayerObj _playerObj, Transform _parentObj, bool _isReady)
         {
+            //set parent
             _playerObj.transform.SetParent(_parentObj, false);
+            
+            //ready status
+            PlayerSetReady(_playerObj, _isReady);
         }
     
         #region Start & Stop Callbacks

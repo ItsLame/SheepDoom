@@ -29,6 +29,11 @@ namespace SheepDoom
             if (MatchMaker.instance.HostGame(pO.GetMatchID(), gameObject))
             {
                 StartCoroutine(WaitForSyncList(MatchMaker.instance.GetLobbyScenes().Count));
+
+                //set ishost=true when successfuly join
+                pO.SetIsHost(true);
+                //host ready by default
+                pO.SetIsReady(false);
             }
             else
             {

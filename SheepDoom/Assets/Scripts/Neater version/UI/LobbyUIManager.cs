@@ -24,13 +24,14 @@ namespace SheepDoom
         [Header("Inputs For Client")]
         [SerializeField] private GameObject toTeam1Button;
         [SerializeField] private GameObject toTeam2Button;
-        [SerializeField] private GameObject readyButton;
         [SerializeField] private GameObject startButton;
-
+        [SerializeField] private GameObject readyButton;
+        
         //room matchID and matchIndex
         [SyncVar] private string matchID = string.Empty;
         [SyncVar] private int matchIndex = 0;
-        //private SyncList<GameObject> playersInLobby = new SyncList<GameObject>();
+        [SyncVar] private bool allPlayersReady = false;
+        public SyncList<GameObject> playersInLobby = new SyncList<GameObject>();
         
         #region Properties
         
@@ -63,14 +64,12 @@ namespace SheepDoom
             get {return matchIndex;}
             set {matchIndex = value;}
         }
-
-        /*
+        
         public SyncList<GameObject> P_playersInLobby
         {
             get {return playersInLobby;}
             set {playersInLobby = value;}
         }
-        */
 
         public GameObject P_toTeam1Button
         {
@@ -82,6 +81,12 @@ namespace SheepDoom
         {
             get{return toTeam2Button;}
             set{toTeam2Button = value;}
+        }
+
+        public bool P_allPlayersReady
+        {
+            get{return allPlayersReady;}
+            set{allPlayersReady = value;}
         }
 
         #endregion
@@ -96,31 +101,20 @@ namespace SheepDoom
 
         private void Update()
         {
-            /*
             if(isServer)
+            {
                 P_playersInLobby = MatchMaker.instance.GetPlayerObjList(matchIndex);
-            */
+                CheckAllReady();
+            }
         }
+
+        #region Server Functions
 
         public void ServerStartSetting()
         {
             //begin setting matchID
             StartCoroutine(SetUI_MatchID());
         }
-
-        public void ClientStartSetting()
-        {
-            //if matchIDText UI on client's side does not match syncvar's
-            while(P_matchIDText.GetComponent<Text>().text != P_matchID)
-            {
-                //set it to match
-                P_matchIDText.GetComponent<Text>().text = P_matchID;
-            }
-
-            //begin setting player UI position
-            StartCoroutine(SetUI_Team());
-        }
-
         private IEnumerator SetUI_MatchID()
         {
             //get matchid from lobby manager first (from server)
@@ -139,6 +133,52 @@ namespace SheepDoom
 
             //set matchID to syncvar variable (matchIDText UI)
             P_matchIDText.GetComponent<Text>().text = P_matchID;
+        }
+
+        private void CheckAllReady()
+        {
+            if(LobbyManager.instance.myTeam1Count < 1 || LobbyManager.instance.myTeam2Count < 1)
+            {
+                P_allPlayersReady = false;
+            }
+            else
+            {
+                for(int i = 0 ; i < P_playersInLobby.Count ; i++)
+                {
+                    if(P_playersInLobby[i].GetComponent<PlayerObj>().GetIsReady() == false)
+                    {
+                        P_allPlayersReady = false;
+                        break;
+                    }
+                    else
+                    {
+                        P_allPlayersReady = true;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Client Functions
+
+        public void ClientStartSetting()
+        {
+            //if matchIDText UI on client's side does not match syncvar's
+            while(P_matchIDText.GetComponent<Text>().text != P_matchID)
+            {
+                //set it to match
+                P_matchIDText.GetComponent<Text>().text = P_matchID;
+            }
+
+            //set ready state to false
+            PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, false);
+
+            //begin setting player UI position
+            StartCoroutine(SetUI_Team());
+
+            //set player ready/start button
+            StartCoroutine(SetUI_StartReady());
         }
 
         private IEnumerator SetUI_Team()
@@ -163,6 +203,26 @@ namespace SheepDoom
             }
         }
 
+        private IEnumerator SetUI_StartReady()
+        {
+            while(startButton == null || readyButton == null)
+                yield return "start/ready button missing!";
+
+            if(PlayerObj.instance.GetIsHost() == true)
+            {
+                startButton.SetActive(true);
+                readyButton.SetActive(false);
+
+                //host will be ready by default
+                //PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, true);
+            }
+            else if(PlayerObj.instance.GetIsHost() == false)
+            {
+                startButton.SetActive(false);
+                readyButton.SetActive(true);
+            }
+        }
+
         public void GoTeam1()
         {  
             if(isClient)
@@ -175,20 +235,82 @@ namespace SheepDoom
                 StartCoroutine(SetUI_TeamSwitch(2));
         }
 
-        IEnumerator SetUI_TeamSwitch(int GoTeam)
+        private IEnumerator SetUI_TeamSwitch(int GoTeam)
         {
             while(GoTeam < 1 || GoTeam  > 2)
                 yield return "invalid team number!";
 
             if(GoTeam == 1)
+            {
                 PlayerObj.instance.SetTeamIndex(1);
-
+                PlayerObj.instance.UpdateTeamCount();
+            }
             else if(GoTeam == 2)
+            {
                 PlayerObj.instance.SetTeamIndex(2);
+                PlayerObj.instance.UpdateTeamCount();
+            }
 
             //set UI according to updated team index
             StartCoroutine(SetUI_Team());
         }
+
+        public void GoStart()
+        {
+            if(isClient)
+            {
+                //if player is host, set ready to true upon clicking start
+                if(PlayerObj.instance.GetIsHost() == true)
+                {
+                    PlayerObj.instance.SetIsReady(true);
+
+                    //if all players ready, set host UI status to ready
+                    if(P_allPlayersReady == true)
+                    {
+                        PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, true);
+                        Debug.Log("Start Success!");
+                    }
+                    //if some players not ready, set host ready status and UI to false
+                    else
+                    {
+                        PlayerObj.instance.SetIsReady(false);
+                        PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, false);
+                        Debug.Log("All players need to be ready!");
+                    }
+                }
+            }
+        }
+
+        public void GoReady()
+        {
+            if(isClient)
+            {
+                if(PlayerObj.instance.GetIsReady() == true)
+                    StartCoroutine(SetUI_Ready(false));
+                else if(PlayerObj.instance.GetIsReady() == false)
+                    StartCoroutine(SetUI_Ready(true));
+            }
+        }
+
+        private IEnumerator SetUI_Ready(bool GoReady)
+        {
+            yield return null;
+
+            if(GoReady == true)
+            {   
+                PlayerObj.instance.SetIsReady(true);
+                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, true);
+                readyButton.transform.GetChild(0).GetComponent<Text>().text = "Cancel";
+            }
+            else if(GoReady == false)
+            {
+                PlayerObj.instance.SetIsReady(false);
+                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, false);
+                readyButton.transform.GetChild(0).GetComponent<Text>().text = "Ready";
+            }
+        }
+
+        #endregion
 
         #region Start & Stop Callbacks
 

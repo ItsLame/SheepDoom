@@ -500,7 +500,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5365596538334777774
 RectTransform:
   m_ObjectHideFlags: 0
@@ -601,8 +601,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1028867931, guid: 57f02a4be7ccd114c83624ecc73eaca6, type: 3}
-        m_MethodName: StartGame
+      - m_Target: {fileID: 3640130093700603538}
+        m_MethodName: GoStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1429,8 +1429,8 @@ MonoBehaviour:
   team2GameObject: {fileID: 5365596537989824514}
   toTeam1Button: {fileID: 5365596540005298398}
   toTeam2Button: {fileID: 5365596538080611655}
-  readyButton: {fileID: 0}
-  startButton: {fileID: 0}
+  startButton: {fileID: 5365596538334777775}
+  readyButton: {fileID: 5365596539919752995}
 --- !u!1 &5365596539379761035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1759,8 +1759,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: ReadyGamePressed
+      - m_Target: {fileID: 3640130093700603538}
+        m_MethodName: GoReady
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

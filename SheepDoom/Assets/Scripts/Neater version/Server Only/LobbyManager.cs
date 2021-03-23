@@ -18,9 +18,6 @@ namespace SheepDoom
         [Scene]
         public string lobbyScene;
         [SyncVar] public string matchID = string.Empty;
-        //private Transform UIPlayerParentTeam1;
-        //private Transform UIPlayerParentTeam2;
-
         [SyncVar] public int matchIndex = 0;
         [SyncVar] private int team1Count = 0;
         [SyncVar] private int team2Count = 0;
