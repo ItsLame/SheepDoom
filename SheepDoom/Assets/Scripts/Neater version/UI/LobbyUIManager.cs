@@ -14,7 +14,7 @@ namespace SheepDoom
     //set matchid and players in match
     public class LobbyUIManager : NetworkBehaviour
     {
-        //public static LobbyUIManager instance;
+        public static LobbyUIManager instance;
 
         [Header("Lobby UI Manager Setup")]
         [SerializeField] private GameObject matchIDText;
@@ -94,11 +94,12 @@ namespace SheepDoom
         private void Start()
         {
             if(isServer)
-                ServerStartSetting();
+                ServerStartSetting(LobbyManager.instance.P_matchID);
             if(isClient)
                 ClientStartSetting();
         }
 
+        /*
         private void Update()
         {
             if(isServer)
@@ -107,34 +108,28 @@ namespace SheepDoom
                 CheckAllReady();
             }
         }
+        */
 
         #region Server Functions
 
-        public void ServerStartSetting()
+        public void ServerStartSetting(string _matchID)
         {
             //begin setting matchID
-            StartCoroutine(SetUI_MatchID());
+            SetUI_MatchID(_matchID);
         }
-        private IEnumerator SetUI_MatchID()
+
+        private void SetUI_MatchID(string _matchID)
         {
-            //get matchid from lobby manager first (from server)
-            if(P_matchID == string.Empty)
+            if(P_matchIDText.GetComponent<Text>().text == string.Empty)
             {
-                P_matchID = LobbyManager.instance.GetMatchID();
-                P_matchIndex = LobbyManager.instance.GetMatchIndex();
-
-                while(P_matchID == null)
-                {
-                    yield return "matchID still null!";
-                }
-
-                Debug.Log("matchID not null anymore!");
+                P_matchID = _matchID;
+                P_matchIDText.GetComponent<Text>().text = P_matchID;
             }
 
-            //set matchID to syncvar variable (matchIDText UI)
-            P_matchIDText.GetComponent<Text>().text = P_matchID;
+            StartCoroutine(SetUI_Lobby(P_matchID));
         }
 
+        /*
         private void CheckAllReady()
         {
             if(LobbyManager.instance.myTeam1Count < 1 || LobbyManager.instance.myTeam2Count < 1)
@@ -157,6 +152,7 @@ namespace SheepDoom
                 }
             }
         }
+        */
 
         #endregion
 
@@ -164,6 +160,7 @@ namespace SheepDoom
 
         public void ClientStartSetting()
         {
+            /*
             //if matchIDText UI on client's side does not match syncvar's
             while(P_matchIDText.GetComponent<Text>().text != P_matchID)
             {
@@ -179,8 +176,51 @@ namespace SheepDoom
 
             //set player ready/start button
             StartCoroutine(SetUI_StartReady());
+            */
+
+            StartCoroutine(SetUI_Lobby(P_matchID));
         }
 
+        [Command(ignoreAuthority = true)]
+        private void CmdRequestLobbyUpdate(string _matchID, GameObject _player)
+        {
+            Debug.Log("Count in networkid-conn list: " + SDNetworkManager.LocalPlayersNetId.Count);
+            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+            {
+                //Debug.Log("Did i find the correct connection?");
+                foreach(var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
+                {
+                    TargetUpdateJoiner(conn, player);
+                }
+
+                RpcUpdateExisting(_player);
+            }
+            else
+            {
+                Debug.Log("Connection with this netID does not exist");
+            }
+        }
+
+        [TargetRpc]
+        private void TargetUpdateJoiner(NetworkConnection conn, GameObject _player)
+        {
+            //Debug.Log("Did i run?");
+            if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                _player.transform.SetParent(team1GameObject.transform);
+            else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                _player.transform.SetParent(team2GameObject.transform);
+        }
+
+        [ClientRpc]
+        private void RpcUpdateExisting(GameObject _player)
+        {
+            if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                _player.transform.SetParent(team1GameObject.transform);
+            else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                _player.transform.SetParent(team2GameObject.transform);
+        }
+
+        /*
         private IEnumerator SetUI_Team()
         {
             while(!PlayerObj.instance)
@@ -309,6 +349,43 @@ namespace SheepDoom
                 readyButton.transform.GetChild(0).GetComponent<Text>().text = "Ready";
             }
         }
+        */
+
+        #endregion
+
+        #region Server & Client Functions
+
+        private IEnumerator SetUI_Lobby(string _matchID)
+        {
+            if(isClient)
+            {
+                while(_matchID == string.Empty)
+                    yield return null;
+
+                P_matchIDText.GetComponent<Text>().text = _matchID;
+                Debug.Log("Player object's matchID: " + PlayerObj.instance.GetMatchID() + " = " + "lobbyUI's matchID: " + _matchID);
+
+                CmdRequestLobbyUpdate(_matchID, PlayerObj.instance.gameObject);
+            }
+
+            if(isServer)
+            {
+                while(!MatchMaker.instance.GetMatches()[_matchID].GetLobbyManager().P_lobbySceneLoaded)
+                    yield return null;
+
+                foreach(var _player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
+                {
+                    Debug.Log("Player matchID: " + _player.GetComponent<PlayerObj>().GetMatchID());
+                    Debug.Log("Player index: " + _player.GetComponent<PlayerObj>().GetTeamIndex());
+
+                    if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team1GameObject.transform);
+                    else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team2GameObject.transform);
+                    
+                }
+            }
+        }
 
         #endregion
 
@@ -319,7 +396,11 @@ namespace SheepDoom
         /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
-        public override void OnStartServer() { }
+        public override void OnStartServer()
+        {
+            instance = this;
+            MatchMaker.instance.GetMatches()[LobbyManager.instance.P_matchID].SetLobbyUIManager(instance);
+        }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned
@@ -331,7 +412,10 @@ namespace SheepDoom
         /// Called on every NetworkBehaviour when it is activated on a client.
         /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
         /// </summary>
-        public override void OnStartClient() { }
+        public override void OnStartClient()
+        {
+            instance = this;
+        }
 
         /// <summary>
         /// This is invoked on clients when the server has caused this object to be destroyed.
@@ -361,3 +445,22 @@ namespace SheepDoom
         #endregion
     }
 }
+
+/*
+            //get matchid from lobby manager first (from server)
+            if(P_matchID == string.Empty)
+            {
+                P_matchID = LobbyManager.instance.GetMatchID();
+                P_matchIndex = LobbyManager.instance.GetMatchIndex();
+
+                while(P_matchID == null)
+                {
+                    yield return "matchID still null!";
+                }
+
+                Debug.Log("matchID not null anymore!");
+            }
+
+            //set matchID to syncvar variable (matchIDText UI)
+            P_matchIDText.GetComponent<Text>().text = P_matchID;
+            */

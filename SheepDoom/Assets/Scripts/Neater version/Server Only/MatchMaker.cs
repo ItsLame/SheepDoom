@@ -17,15 +17,21 @@ namespace SheepDoom
         private int team2Count;
         private int countReady;
         private SyncListGameObject players = new SyncListGameObject();
+        private Scene scene;
+        private LobbyManager lobbyManager;
+        private LobbyUIManager lobbyUIManager;
 
-        public Match(string matchID, GameObject player)
+        public Match(string matchID, GameObject player, LobbyManager lobbyManager)
         {
             this.matchID = matchID;
             players.Add(player);
             team1Count++;
             countReady++;
+            this.lobbyManager = lobbyManager;
         }
 
+        #region Get
+        
         public string GetMatchID()
         {
             return matchID;
@@ -41,11 +47,30 @@ namespace SheepDoom
             return team1Count;
         }
 
-        public void SetTeam1Count(int _team1Count)
+        public int GetTeam2Count()
         {
-            team1Count = _team1Count;
+            return team2Count;
         }
-        
+
+        public LobbyManager GetLobbyManager()
+        {
+            return lobbyManager;
+        }
+
+        public LobbyUIManager GetLobbyUIManager()
+        {
+            return lobbyUIManager;
+        }
+
+        public Scene GetScene()
+        {
+            return scene;
+        }
+
+        #endregion
+
+        #region Set
+
         public void AddTeam1Count()
         {
             team1Count++;
@@ -54,16 +79,6 @@ namespace SheepDoom
         public void MinusTeam1Count()
         {
             team1Count--;
-        }
-
-        public int GetTeam2Count()
-        {
-            return team2Count;
-        }
-
-        public void SetTeam2Count(int _team2Count)
-        {
-            team2Count = _team2Count;
         }
 
         public void AddTeam2Count()
@@ -76,108 +91,61 @@ namespace SheepDoom
             team2Count--;
         }
 
+        public void SetLobbyUIManager(LobbyUIManager lobbyUIManager)
+        {
+            this.lobbyUIManager = lobbyUIManager;
+        }
+
+        public void SetScene(Scene scene)
+        {
+            this.scene = scene;
+        }
+
+        #endregion
+
         public Match() { }
     }
 
     [System.Serializable]
     // to store a list of game objects that needs to be synced between clients
-    public class SyncListGameObject : SyncList<GameObject>
-    {
-    }
+    public class SyncListGameObject : SyncList<GameObject> { }
 
-    [System.Serializable]
+    //[System.Serializable]
     // to store the list of matches of class Match
-    public class SyncListMatch : SyncList<Match>
-    {
-    }
+    //public class SyncListMatch : SyncList<Match> { }
 
     public class MatchMaker : NetworkBehaviour
     {
         public static MatchMaker instance;
 
-        // track matches
-        private SyncListMatch matches = new SyncListMatch();
-        private SyncList<string> matchIDs = new SyncList<string>();
-        private readonly SyncDictionary<string, Scene> subLobbyScenes = new SyncDictionary<string, Scene>();
+        // track matches (old)
+        //private SyncListMatch matches = new SyncListMatch();
+        //private SyncList<string> matchIDs = new SyncList<string>();
+        //private readonly SyncDictionary<string, Scene> subLobbyScenes = new SyncDictionary<string, Scene>();
+        
+        // track matches (new)
+        private SyncDictionary<string, Match> matches = new SyncDictionary<string, Match>();
         [SerializeField] GameObject lobbyManager;
-        GameObject matchLobby;
+        
+        /*GameObject matchLobby;
         private GameObject lobby = null;
         private int matchIndex = 0;
-        private string matchID = "";
+        private string matchID = "";*/
 
-        void Start()
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void Start()
         {
             instance = this;
         }
 
-        #region Get
-
-        public SyncDictionary<string, Scene> GetLobbyScenes()
+        public SyncDictionary<string, Match> GetMatches()
         {
-            return subLobbyScenes;
+            return matches;
         }
-        public int GetMatchCount()
-        {
-            return matches.Count;
-        }
-        public int GetTeam1Count()
-        {
-            return matches[GetMatchIndex()].GetTeam1Count();
-        }
-
-        public int GetTeam2Count()
-        {
-            return matches[GetMatchIndex()].GetTeam2Count();
-        }
-        public int GetMatchIndex()
-        {
-            return matchIndex;
-        }
-
-        public string GetMatchID()
-        {
-            return matchID;
-        }
-
-        public SyncList<GameObject> GetPlayerObjList(int _matchIndex)
-        {
-            return matches[_matchIndex].GetPlayerObjList();
-        }
-
-        public GameObject GetLobby()
-        {
-            return lobby;
-        }
-
-        #endregion
-
-        #region Set
-
-        public void SetTeam1Count(int _team1Count)
-        {
-            matches[GetMatchIndex()].SetTeam1Count(_team1Count);
-        }
-        public void SetTeam2Count(int _team2Count)
-        {
-            matches[GetMatchIndex()].SetTeam2Count(_team2Count);
-        }
-
-        public void SetMatchIndex(int _matchIndex)
-        {
-            matchIndex = _matchIndex;
-        }
-
-        public void SetMatchID(string _matchID)
-        {
-            matchID = _matchID;
-        }
-
-        public void SetLobby(GameObject _lobby)
-        {
-            lobby = _lobby;
-        }
-
-        #endregion
 
         //generate random match ID
         public static string GetRandomMatchID()
@@ -208,10 +176,23 @@ namespace SheepDoom
             return _id;
         }
 
-        public bool HostGame(string _matchID, GameObject _player)
+        public bool HostGame(string _matchID, GameObject _player, NetworkConnection conn)
         {
-            if(!matchIDs.Contains(_matchID))
+            if(!matches.ContainsKey(_matchID))
             {
+                GameObject matchLobby = Instantiate(lobbyManager);
+                NetworkServer.Spawn(matchLobby);
+
+                Match newMatch = new Match(_matchID, _player, matchLobby.GetComponent<LobbyManager>());
+                matches.Add(_matchID, newMatch);
+
+                newMatch.GetLobbyManager().StartLobbyScene(conn);
+                newMatch.GetLobbyManager().P_matchID = _matchID;
+
+                _player.GetComponent<PlayerObj>().SetTeamIndex(1);          // syncvared
+                _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1);    // syncvared
+
+                /*
                 matchIDs.Add(_matchID);
                 matches.Add(new Match(_matchID, _player));
                 matchLobby = Instantiate(lobbyManager);
@@ -226,6 +207,7 @@ namespace SheepDoom
                 SetLobby(matchLobby);
 
                 TeamCount(GetMatchIndex(), _player);
+                */
 
                 return true;
             }
@@ -238,8 +220,25 @@ namespace SheepDoom
 
         public bool JoinGame(string _matchID, GameObject _player)
         {
-            if(matchIDs.Contains(_matchID))
+            if(matches.ContainsKey(_matchID))
             {
+                matches[_matchID].GetPlayerObjList().Add(_player);
+
+                if(matches[_matchID].GetTeam1Count() < 3)
+                {
+                    matches[_matchID].AddTeam1Count();
+
+                    _player.GetComponent<PlayerObj>().SetTeamIndex(1);
+                    _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[_matchID].GetTeam1Count());
+                }
+                else if(matches[_matchID].GetTeam2Count() < 3)
+                {
+                    matches[_matchID].AddTeam2Count();
+
+                    _player.GetComponent<PlayerObj>().SetTeamIndex(2);
+                    _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[_matchID].GetTeam2Count());
+                }
+                /*
                 for(int i = 0; i < matches.Count; i++)
                 {
                     if(_matchID == matches[i].GetMatchID())
@@ -268,58 +267,13 @@ namespace SheepDoom
                         break;
                     }
                 }
+                */
                 return true;
             }
             else
             {
                 Debug.Log("Match ID does not exist");
                 return false;
-            }
-        }
-
-        public void TeamCount(int _matchIndex, GameObject _player)
-        {
-            if(_player.GetComponent<PlayerObj>().GetUpdateCount() == false)
-            {
-                if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                {
-                    matches[_matchIndex].AddTeam1Count();
-                   
-                    GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
-
-                    Debug.Log("@MatchMaker(new player) -> lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
-                }
-                else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                {
-                    matches[matchIndex].AddTeam2Count();
-
-                    GetLobby().GetComponent<LobbyManager>().myTeam2Count++;
-
-                    Debug.Log("@MatchMaker(new player) -> lobbymanager team2count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);    
-                }
-            }
-            else if(_player.GetComponent<PlayerObj>().GetUpdateCount() == true)
-            {
-                if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                {
-                    matches[_matchIndex].AddTeam1Count();
-                    matches[_matchIndex].MinusTeam2Count();
-
-                    GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
-                    GetLobby().GetComponent<LobbyManager>().myTeam2Count--;
-
-                    Debug.Log("@MatchMaker -> lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
-                }
-                else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-                {
-                    matches[_matchIndex].AddTeam2Count();
-                    matches[_matchIndex].MinusTeam1Count();
-
-                    GetLobby().GetComponent<LobbyManager>().myTeam2Count++;
-                    GetLobby().GetComponent<LobbyManager>().myTeam1Count--;
-
-                    Debug.Log("@MatchMaker -> lobbymanager team2count: " + GetLobby().GetComponent<LobbyManager>().myTeam2Count);
-                }
             }
         }
 
@@ -390,3 +344,123 @@ namespace SheepDoom
         }
     }
 }
+
+        /*        
+        #region Get
+
+        public SyncDictionary<string, Scene> GetLobbyScenes()
+        {
+            return subLobbyScenes;
+        }
+
+        public int GetMatchCount()
+        {
+            return matches.Count;
+        }
+        public int GetTeam1Count()
+        {
+            return matches[GetMatchIndex()].GetTeam1Count();
+        }
+
+        public int GetTeam2Count()
+        {
+            return matches[GetMatchIndex()].GetTeam2Count();
+        }
+        public int GetMatchIndex()
+        {
+            return matchIndex;
+        }
+
+        public string GetMatchID()
+        {
+            return matchID;
+        }
+
+        public SyncList<GameObject> GetPlayerObjList(int _matchIndex)
+        {
+            return matches[_matchIndex].GetPlayerObjList();
+        }
+
+        public GameObject GetLobby()
+        {
+            return lobby;
+        }
+
+        #endregion
+
+        #region Set
+
+        public void SetTeam1Count(int _team1Count)
+        {
+            matches[GetMatchIndex()].SetTeam1Count(_team1Count);
+        }
+        public void SetTeam2Count(int _team2Count)
+        {
+            matches[GetMatchIndex()].SetTeam2Count(_team2Count);
+        }
+
+        public void SetMatchIndex(int _matchIndex)
+        {
+            matchIndex = _matchIndex;
+        }
+
+        public void SetMatchID(string _matchID)
+        {
+            matchID = _matchID;
+        }
+
+        public void SetLobby(GameObject _lobby)
+        {
+            lobby = _lobby;
+        }
+
+        #endregion
+        */
+
+        /*
+        public void TeamCount(int _matchIndex, GameObject _player)
+        {
+            if(_player.GetComponent<PlayerObj>().GetUpdateCount() == false)
+            {
+                if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                {
+                    matches[_matchIndex].AddTeam1Count();
+                   
+                    GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
+
+                    Debug.Log("@MatchMaker(new player) -> lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
+                }
+                else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                {
+                    matches[matchIndex].AddTeam2Count();
+
+                    GetLobby().GetComponent<LobbyManager>().myTeam2Count++;
+
+                    Debug.Log("@MatchMaker(new player) -> lobbymanager team2count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);    
+                }
+            }
+            else if(_player.GetComponent<PlayerObj>().GetUpdateCount() == true)
+            {
+                if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                {
+                    matches[_matchIndex].AddTeam1Count();
+                    matches[_matchIndex].MinusTeam2Count();
+
+                    GetLobby().GetComponent<LobbyManager>().myTeam1Count++;
+                    GetLobby().GetComponent<LobbyManager>().myTeam2Count--;
+
+                    Debug.Log("@MatchMaker -> lobbymanager team1count: " + GetLobby().GetComponent<LobbyManager>().myTeam1Count);
+                }
+                else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                {
+                    matches[_matchIndex].AddTeam2Count();
+                    matches[_matchIndex].MinusTeam1Count();
+
+                    GetLobby().GetComponent<LobbyManager>().myTeam2Count++;
+                    GetLobby().GetComponent<LobbyManager>().myTeam1Count--;
+
+                    Debug.Log("@MatchMaker -> lobbymanager team2count: " + GetLobby().GetComponent<LobbyManager>().myTeam2Count);
+                }
+            }
+        }
+        */

@@ -24,16 +24,19 @@ namespace SheepDoom
         [Command]
         void CmdHostGame()
         {
-            string _matchID = MatchMaker.GetRandomMatchID();
-            pO.SetMatchID(_matchID); // syncvared
-            if (MatchMaker.instance.HostGame(pO.GetMatchID(), gameObject))
+            string matchID = MatchMaker.GetRandomMatchID();
+            pO.SetMatchID(matchID); // syncvared
+
+            if(MatchMaker.instance.HostGame(matchID, gameObject, connectionToClient))
             {
-                StartCoroutine(WaitForSyncList(MatchMaker.instance.GetLobbyScenes().Count));
+                //StartCoroutine(WaitForSyncList(MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().rootCount));
 
                 //set ishost=true when successfuly join
-                pO.SetIsHost(true);
+                //pO.SetIsHost(true);
                 //host ready by default
-                pO.SetIsReady(false);
+                //pO.SetIsReady(false);
+
+                StartCoroutine(MoveToLobby(connectionToClient));
             }
             else
             {
@@ -42,21 +45,36 @@ namespace SheepDoom
             }
         }
 
+        private IEnumerator MoveToLobby(NetworkConnection conn)
+        {
+            if(isServer)
+            {
+                while(!MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetLobbyManager().P_lobbySceneLoaded)
+                    yield return null;
+
+                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
+                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
+            }
+        }
+
+        /*
         IEnumerator WaitForSyncList(int oldCount)
         {
-            while (MatchMaker.instance.GetLobbyScenes().Count == oldCount)
+            //MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene())
+            while (MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().rootCount == oldCount)
                 yield return null;
             // Before, I passed in Client.client.gameObject as the 1st parameter, so I kept passing in the same clientinstance, not linking it to connectionToClient
             // So I used connectionToClient to reliably retrieve the correct client to pass in
-            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetLobbyScenes()[pO.GetMatchID()]);
-            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetLobbyScenes()[pO.GetMatchID()]);
+            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
+            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
             SceneMessage msg = new SceneMessage
             {
-                sceneName = MatchMaker.instance.GetLobbyScenes()[pO.GetMatchID()].name,
+                sceneName = MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().name,
                 sceneOperation = SceneOperation.LoadAdditive
             };
             connectionToClient.Send(msg);
         }
+        */
 
         #region Start & Stop Callbacks
 
