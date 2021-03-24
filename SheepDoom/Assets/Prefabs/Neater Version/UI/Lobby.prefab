@@ -925,7 +925,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ASDUH
+  m_Text: A MATCH ID
 --- !u!114 &6897101692273889002
 MonoBehaviour:
   m_ObjectHideFlags: 0

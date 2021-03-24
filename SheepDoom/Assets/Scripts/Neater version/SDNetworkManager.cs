@@ -15,7 +15,6 @@ namespace SheepDoom
         // Like an associative array - key client conns, value = their network identities
         public static Dictionary<NetworkConnection, NetworkIdentity> LocalPlayers = new Dictionary<NetworkConnection, NetworkIdentity>();
         public static Dictionary<NetworkIdentity, NetworkConnection> LocalPlayersNetId = new Dictionary<NetworkIdentity, NetworkConnection>();
-        
         [SerializeField] private NetworkIdentity matchMaker;
 
         #region Unity Callbacks
@@ -180,7 +179,9 @@ namespace SheepDoom
         /// </summary>
         /// <param name="conn">Connection from client.</param>
         /// <param name="errorCode">Error code.</param>
-        //public override void OnServerError(NetworkConnection conn, int errorCode) { }
+
+        [ObsoleteAttribute("OnServerError method is obsolete.", true)]
+        public override void OnServerError(NetworkConnection conn, int errorCode) { }
 
         #endregion
 

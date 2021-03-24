@@ -10,6 +10,8 @@
 [Ll]ogs/
 [Mm]emoryCaptures/
 [Ss]heepDoom_Clone_[0-9]/
+[Ss]heepDoom_Clone_Su/
+[Ss]heepDoom_Clone_Su_Clone_[0-9]/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta

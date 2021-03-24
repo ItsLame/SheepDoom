@@ -68,7 +68,7 @@ namespace SheepDoom
 
         private IEnumerator LoadLobbyScene()
         {
-            if(isServer && !lobbySceneLoaded)
+            if(isServer && !P_lobbySceneLoaded)
             {
                 // load lobby scenes
                 AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(P_lobbyScene, LoadSceneMode.Additive);
@@ -86,7 +86,7 @@ namespace SheepDoom
             
             if(isClient)
             {
-                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(lobbyScene, LoadSceneMode.Additive);
+                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(P_lobbyScene, LoadSceneMode.Additive);
                 
                 while(!asyncLoad.isDone)
                     yield return null;

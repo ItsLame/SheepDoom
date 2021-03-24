@@ -31,7 +31,7 @@ namespace SheepDoom
         [SyncVar] private string matchID = string.Empty;
         [SyncVar] private int matchIndex = 0;
         [SyncVar] private bool allPlayersReady = false;
-        public SyncList<GameObject> playersInLobby = new SyncList<GameObject>();
+        //public SyncList<GameObject> playersInLobby = new SyncList<GameObject>();
         
         #region Properties
         
@@ -65,11 +65,13 @@ namespace SheepDoom
             set {matchIndex = value;}
         }
         
+        /*
         public SyncList<GameObject> P_playersInLobby
         {
             get {return playersInLobby;}
             set {playersInLobby = value;}
         }
+        */
 
         public GameObject P_toTeam1Button
         {
@@ -120,7 +122,7 @@ namespace SheepDoom
 
         private void SetUI_MatchID(string _matchID)
         {
-            if(P_matchIDText.GetComponent<Text>().text == string.Empty)
+            if(P_matchIDText.GetComponent<Text>().text == string.Empty || P_matchIDText.GetComponent<Text>().text != _matchID)
             {
                 P_matchID = _matchID;
                 P_matchIDText.GetComponent<Text>().text = P_matchID;
@@ -206,18 +208,18 @@ namespace SheepDoom
         {
             //Debug.Log("Did i run?");
             if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                _player.transform.SetParent(team1GameObject.transform);
+                _player.transform.SetParent(team1GameObject.transform, false);
             else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-                _player.transform.SetParent(team2GameObject.transform);
+                _player.transform.SetParent(team2GameObject.transform, false);
         }
 
         [ClientRpc]
         private void RpcUpdateExisting(GameObject _player)
         {
             if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                _player.transform.SetParent(team1GameObject.transform);
+                _player.transform.SetParent(team1GameObject.transform, false);
             else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-                _player.transform.SetParent(team2GameObject.transform);
+                _player.transform.SetParent(team2GameObject.transform, false);
         }
 
         /*
@@ -379,9 +381,9 @@ namespace SheepDoom
                     Debug.Log("Player index: " + _player.GetComponent<PlayerObj>().GetTeamIndex());
 
                     if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team1GameObject.transform);
+                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team1GameObject.transform, false);
                     else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team2GameObject.transform);
+                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team2GameObject.transform, false);
                     
                 }
             }

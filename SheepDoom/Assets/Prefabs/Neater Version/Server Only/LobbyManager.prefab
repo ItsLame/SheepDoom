@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  serverOnly: 1
+  serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
 --- !u!114 &-2976797983084035639
@@ -79,5 +79,3 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   lobbyScene: Assets/Scenes/Lobby.unity
-  matchID: 
-  matchIndex: 0
