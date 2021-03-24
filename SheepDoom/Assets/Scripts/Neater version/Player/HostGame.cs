@@ -36,8 +36,9 @@ namespace SheepDoom
                 //host ready by default
                 //pO.SetIsReady(false);
 
-                Debug.Log("CMDHOSTGAME");
                 StartCoroutine(MoveToLobby(connectionToClient));
+
+                pO.SetIsHost(true);
             }
             else
             {
@@ -53,12 +54,8 @@ namespace SheepDoom
                 while(!MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetLobbyManager().P_lobbySceneLoaded)
                     yield return null;
 
-                Debug.Log("MOVE CLIENT TO SCENE");
                 SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-                Debug.Log("MOVE PLAYER OBJ TO SCENE");
                 SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-
-                Debug.Log("MOVE TO LOBBY FINISH!");
             }
         }
 

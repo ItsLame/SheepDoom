@@ -52,6 +52,11 @@ namespace SheepDoom
             return team2Count;
         }
 
+        public int GetReadyCount()
+        {
+            return countReady;
+        }
+
         public LobbyManager GetLobbyManager()
         {
             return lobbyManager;
@@ -89,6 +94,15 @@ namespace SheepDoom
         public void MinusTeam2Count()
         {
             team2Count--;
+        }
+
+        public void AddCountReady()
+        {
+            countReady++;
+        }
+        public void MinusCountReady()
+        {
+            countReady--;
         }
 
         public void SetLobbyUIManager(LobbyUIManager lobbyUIManager)
@@ -238,6 +252,9 @@ namespace SheepDoom
                     _player.GetComponent<PlayerObj>().SetTeamIndex(2);
                     _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[_matchID].GetTeam2Count());
                 }
+
+                Debug.Log("JOINED! TEAM1COUNT: " + matches[_matchID].GetTeam1Count());
+                Debug.Log("JOINED! TEAM2COUNT: " + matches[_matchID].GetTeam2Count());
                 /*
                 for(int i = 0; i < matches.Count; i++)
                 {

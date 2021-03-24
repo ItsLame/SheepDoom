@@ -85,6 +85,18 @@ namespace SheepDoom
             set{toTeam2Button = value;}
         }
 
+        public GameObject P_startButton
+        {
+            get{return startButton;}
+            set{startButton = value;}
+        }
+
+        public GameObject P_readyButton
+        {
+            get{return readyButton;}
+            set{readyButton = value;}
+        }
+
         public bool P_allPlayersReady
         {
             get{return allPlayersReady;}
@@ -183,13 +195,20 @@ namespace SheepDoom
             StartCoroutine(SetUI_Lobby(P_matchID));
         }
 
+        private IEnumerator RequestLobbyUpdate(string _matchID, GameObject _player)
+        {
+            CmdRequestLobbyUpdate(_matchID, _player);
+
+            yield return null;
+        }
+
         [Command(ignoreAuthority = true)]
         private void CmdRequestLobbyUpdate(string _matchID, GameObject _player)
         {
             Debug.Log("Count in networkid-conn list: " + SDNetworkManager.LocalPlayersNetId.Count);
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
             {
-                //Debug.Log("Did i find the correct connection?");
+                Debug.Log("Did i find the correct connection?");
                 foreach(var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
                 {
                     TargetUpdateJoiner(conn, player);
@@ -222,81 +241,104 @@ namespace SheepDoom
                 _player.transform.SetParent(team2GameObject.transform, false);
         }
 
-        /*
-        private IEnumerator SetUI_Team()
-        {
-            while(!PlayerObj.instance)
-                yield return "playerObj where are you";
-
-            //initialize playerObj's instance and parent object inside PlayerLobbyUI
-            if(PlayerObj.instance.GetTeamIndex() == 1)
-            {
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitPlayer(PlayerObj.instance, P_team1GameObject.transform);
-                
-                P_toTeam1Button.SetActive(false);
-                P_toTeam2Button.SetActive(true);
-            }
-            else if(PlayerObj.instance.GetTeamIndex() == 2)
-            {
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitPlayer(PlayerObj.instance, P_team2GameObject.transform);
-
-                P_toTeam1Button.SetActive(true);
-                P_toTeam2Button.SetActive(false);
-            }
-        }
-
-        private IEnumerator SetUI_StartReady()
+        private IEnumerator SetUI_StartReadyButton(GameObject _player)
         {
             while(startButton == null || readyButton == null)
                 yield return "start/ready button missing!";
 
-            if(PlayerObj.instance.GetIsHost() == true)
+            //set start/ready buttons
+            if(_player.GetComponent<PlayerObj>().GetIsHost() == true)
             {
-                startButton.SetActive(true);
-                readyButton.SetActive(false);
-
-                //host will be ready by default
-                //PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, true);
+                P_startButton.SetActive(true);
+                P_readyButton.SetActive(false);
             }
-            else if(PlayerObj.instance.GetIsHost() == false)
+            else if(_player.GetComponent<PlayerObj>().GetIsHost() == false)
             {
-                startButton.SetActive(false);
-                readyButton.SetActive(true);
+                P_startButton.SetActive(false);
+                P_readyButton.SetActive(true);
+            }
+        }
+
+        private IEnumerator SetUI_SwapButton(GameObject _player)
+        {
+            while(P_toTeam1Button == null && P_toTeam2Button == null)
+                yield return "swap buttons button missing!";
+
+            //set swap buttons
+            if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+            {
+                P_toTeam1Button.SetActive(false);
+                P_toTeam2Button.SetActive(true);
+            }
+            else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+            {
+                P_toTeam1Button.SetActive(true);
+                P_toTeam2Button.SetActive(false);
             }
         }
 
         public void GoTeam1()
         {  
             if(isClient)
-                StartCoroutine(SetUI_TeamSwitch(1));
+                StartCoroutine(SetUI_TeamSwitch(1, PlayerObj.instance.gameObject));
         }
 
         public void GoTeam2()
         {
             if(isClient)
-                StartCoroutine(SetUI_TeamSwitch(2));
+                StartCoroutine(SetUI_TeamSwitch(2, PlayerObj.instance.gameObject));
         }
 
-        private IEnumerator SetUI_TeamSwitch(int GoTeam)
+        private IEnumerator SetUI_TeamSwitch(int GoTeam, GameObject _player)
         {
             while(GoTeam < 1 || GoTeam  > 2)
                 yield return "invalid team number!";
 
+            yield return StartCoroutine(RequestSwapUpdate(GoTeam, _player));
+            StartCoroutine(SetUI_SwapButton(_player));
+            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
+        }
+
+        private IEnumerator RequestSwapUpdate(int GoTeam, GameObject _player)
+        {
+            CmdRequestSwapUpdate(GoTeam, _player);
+
+            while(_player.GetComponent<PlayerObj>().GetTeamIndex() != GoTeam)
+                yield return null;
+        }
+
+        [Command(ignoreAuthority = true)]
+        private void CmdRequestSwapUpdate(int GoTeam, GameObject _player)
+        {
             if(GoTeam == 1)
             {
-                PlayerObj.instance.SetTeamIndex(1);
-                PlayerObj.instance.UpdateTeamCount();
+                while(_player.GetComponent<PlayerObj>().GetTeamIndex() != 1)
+                {
+                     _player.GetComponent<PlayerObj>().SetTeamIndex(1);
+                }
+
+                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].AddTeam1Count();
+                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].MinusTeam2Count();
             }
             else if(GoTeam == 2)
             {
-                PlayerObj.instance.SetTeamIndex(2);
-                PlayerObj.instance.UpdateTeamCount();
+                while(_player.GetComponent<PlayerObj>().GetTeamIndex() != 2)
+                {
+                    _player.GetComponent<PlayerObj>().SetTeamIndex(2);
+                }
+                
+                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].AddTeam2Count();
+                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].MinusTeam1Count();
             }
 
-            //set UI according to updated team index
-            StartCoroutine(SetUI_Team());
+            Debug.Log("TEAM1: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count());
+            Debug.Log("TEAM2: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
         }
 
+            //set UI according to updated team index
+            //StartCoroutine(SetUI_Team());
+
+        /*
         public void GoStart()
         {
             if(isClient)
@@ -321,8 +363,9 @@ namespace SheepDoom
                     }
                 }
             }
-        }
+        }*/
 
+        /*
         public void GoReady()
         {
             if(isClient)
@@ -367,7 +410,9 @@ namespace SheepDoom
                 P_matchIDText.GetComponent<Text>().text = _matchID;
                 Debug.Log("Player object's matchID: " + PlayerObj.instance.GetMatchID() + " = " + "lobbyUI's matchID: " + _matchID);
 
-                CmdRequestLobbyUpdate(_matchID, PlayerObj.instance.gameObject);
+                StartCoroutine(RequestLobbyUpdate(_matchID, PlayerObj.instance.gameObject));
+                StartCoroutine(SetUI_StartReadyButton(PlayerObj.instance.gameObject));
+                StartCoroutine(SetUI_SwapButton(PlayerObj.instance.gameObject));
             }
 
             if(isServer)
@@ -384,7 +429,6 @@ namespace SheepDoom
                         _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team1GameObject.transform, false);
                     else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
                         _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team2GameObject.transform, false);
-                    
                 }
             }
         }
@@ -447,7 +491,6 @@ namespace SheepDoom
         #endregion
     }
 }
-
 /*
             //get matchid from lobby manager first (from server)
             if(P_matchID == string.Empty)
@@ -466,3 +509,27 @@ namespace SheepDoom
             //set matchID to syncvar variable (matchIDText UI)
             P_matchIDText.GetComponent<Text>().text = P_matchID;
             */
+
+                    /*
+        private IEnumerator SetUI_Team()
+        {
+            while(!PlayerObj.instance)
+                yield return "playerObj where are you";
+
+            //initialize playerObj's instance and parent object inside PlayerLobbyUI
+            if(PlayerObj.instance.GetTeamIndex() == 1)
+            {
+                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitPlayer(PlayerObj.instance, P_team1GameObject.transform);
+                
+                P_toTeam1Button.SetActive(false);
+                P_toTeam2Button.SetActive(true);
+            }
+            else if(PlayerObj.instance.GetTeamIndex() == 2)
+            {
+                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitPlayer(PlayerObj.instance, P_team2GameObject.transform);
+
+                P_toTeam1Button.SetActive(true);
+                P_toTeam2Button.SetActive(false);
+            }
+        }
+        */

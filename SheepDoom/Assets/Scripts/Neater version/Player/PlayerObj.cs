@@ -88,6 +88,11 @@ namespace SheepDoom
             playerSortIndex = _playerSortIndex;
         }
 
+        public void SetIsHost(bool _isHost)
+        {
+            isHost = _isHost;
+        }
+
         #endregion
         
         private void OnNameUpdate(string prev, string next)
