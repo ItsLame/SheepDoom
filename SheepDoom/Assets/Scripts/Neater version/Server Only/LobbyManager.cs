@@ -71,7 +71,7 @@ namespace SheepDoom
             if(isServer && !lobbySceneLoaded)
             {
                 // load lobby scenes
-                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(lobbyScene, LoadSceneMode.Additive);
+                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(P_lobbyScene, LoadSceneMode.Additive);
                 
                 while (!asyncLoad.isDone)
                     yield return null;
@@ -81,7 +81,7 @@ namespace SheepDoom
                 MatchMaker.instance.GetMatches()[matchID].SetScene(newLobbyScene);                
                 SceneManager.MoveGameObjectToScene(gameObject, newLobbyScene);
 
-                lobbySceneLoaded = true;
+                P_lobbySceneLoaded = true;
             }
             
             if(isClient)

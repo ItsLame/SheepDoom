@@ -14,6 +14,7 @@ namespace SheepDoom
     //to set player transform (in lobby)
     public class PlayerLobbyUI : NetworkBehaviour
     {
+        /*
         [SerializeField] private GameObject myPlayerReadyText = null;
         [SyncVar] private string myPlayerReadyString = null;
         [SyncVar] private Transform myParentObj = null;
@@ -191,5 +192,6 @@ namespace SheepDoom
         public override void OnStopAuthority() { }
 
         #endregion
+    */
     }
 }
