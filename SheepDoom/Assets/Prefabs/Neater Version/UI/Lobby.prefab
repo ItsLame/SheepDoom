@@ -624,12 +624,12 @@ GameObject:
   - component: {fileID: 5365596538383036848}
   - component: {fileID: 5365596538383036849}
   m_Layer: 5
-  m_Name: debug text
+  m_Name: Start Status Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5365596538383036862
 RectTransform:
   m_ObjectHideFlags: 0
@@ -646,8 +646,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000076294, y: -29}
-  m_SizeDelta: {x: 300, y: 75}
+  m_AnchoredPosition: {x: 0.000076294, y: -438.7}
+  m_SizeDelta: {x: 1155.7917, y: 92.70682}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5365596538383036848
 CanvasRenderer:
@@ -670,14 +670,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.7176471, b: 0.53333336, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 2a7448465cf9e9840bb4c8e7e217c603, type: 3}
     m_FontSize: 14
     m_FontStyle: 1
     m_BestFit: 1
@@ -1431,6 +1431,7 @@ MonoBehaviour:
   toTeam2Button: {fileID: 5365596538080611655}
   startButton: {fileID: 5365596538334777775}
   readyButton: {fileID: 5365596539919752995}
+  startStatusText: {fileID: 5365596538383036863}
 --- !u!1 &5365596539379761035
 GameObject:
   m_ObjectHideFlags: 0

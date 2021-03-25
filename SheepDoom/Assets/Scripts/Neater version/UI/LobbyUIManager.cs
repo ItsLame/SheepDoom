@@ -26,12 +26,13 @@ namespace SheepDoom
         [SerializeField] private GameObject toTeam2Button;
         [SerializeField] private GameObject startButton;
         [SerializeField] private GameObject readyButton;
+
+        [Header("Warning Messages")]
+        [SerializeField] private GameObject startStatusText;
         
         //room matchID and matchIndex
         [SyncVar] private string matchID = string.Empty;
-        [SyncVar] private int matchIndex = 0;
-        [SyncVar] private bool allPlayersReady = false;
-        //public SyncList<GameObject> playersInLobby = new SyncList<GameObject>();
+        [SyncVar] public string startStatusMsg = string.Empty;
         
         #region Properties
         
@@ -59,20 +60,6 @@ namespace SheepDoom
             set {matchID = value;}
         }
 
-        public int P_matchIndex
-        {
-            get {return matchIndex;}
-            set {matchIndex = value;}
-        }
-        
-        /*
-        public SyncList<GameObject> P_playersInLobby
-        {
-            get {return playersInLobby;}
-            set {playersInLobby = value;}
-        }
-        */
-
         public GameObject P_toTeam1Button
         {
             get{return toTeam1Button;}
@@ -97,10 +84,16 @@ namespace SheepDoom
             set{readyButton = value;}
         }
 
-        public bool P_allPlayersReady
+        public GameObject P_startStatusText
         {
-            get{return allPlayersReady;}
-            set{allPlayersReady = value;}
+            get{return startStatusText;}
+            set{startStatusText = value;}
+        }
+
+        public string P_startStatusMsg
+        {
+            get{return startStatusMsg;}
+            set{startStatusMsg = value;}
         }
 
         #endregion
@@ -112,17 +105,6 @@ namespace SheepDoom
             if(isClient)
                 ClientStartSetting();
         }
-
-        /*
-        private void Update()
-        {
-            if(isServer)
-            {
-                P_playersInLobby = MatchMaker.instance.GetPlayerObjList(matchIndex);
-                CheckAllReady();
-            }
-        }
-        */
 
         #region Server Functions
 
@@ -174,24 +156,6 @@ namespace SheepDoom
 
         public void ClientStartSetting()
         {
-            /*
-            //if matchIDText UI on client's side does not match syncvar's
-            while(P_matchIDText.GetComponent<Text>().text != P_matchID)
-            {
-                //set it to match
-                P_matchIDText.GetComponent<Text>().text = P_matchID;
-            }
-
-            //set ready state to false
-            PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, false);
-
-            //begin setting player UI position
-            StartCoroutine(SetUI_Team());
-
-            //set player ready/start button
-            StartCoroutine(SetUI_StartReady());
-            */
-
             StartCoroutine(SetUI_Lobby(P_matchID));
         }
 
@@ -333,6 +297,12 @@ namespace SheepDoom
             }
         }
 
+        private IEnumerator SetUI_StartStatusMsg()
+        {
+            P_startStatusText.GetComponent<Text>().text = P_startStatusMsg;
+            yield return null;
+        }
+
         #region Swap
 
         public void GoTeam1()
@@ -393,36 +363,76 @@ namespace SheepDoom
 
         #region Start
 
-        /*
         public void GoStart()
         {
             if(isClient)
-            {
-                //if player is host, set ready to true upon clicking start
-                if(PlayerObj.instance.GetIsHost() == true)
-                {
-                    PlayerObj.instance.SetIsReady(true);
+                StartCoroutine(CheckStart(PlayerObj.instance.gameObject));
+        }
 
-                    //if all players ready, set host UI status to ready
-                    if(P_allPlayersReady == true)
-                    {
-                        PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, true);
-                        Debug.Log("Start Success!");
-                    }
-                    //if some players not ready, set host ready status and UI to false
-                    else
-                    {
-                        PlayerObj.instance.SetIsReady(false);
-                        PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, false);
-                        Debug.Log("All players need to be ready!");
-                    }
+        private IEnumerator CheckStart(GameObject _player)
+        {
+            if(_player.GetComponent<PlayerObj>().GetIsHost() == true)
+            {
+                yield return StartCoroutine(RequestCheckStart(_player));
+                yield return new WaitForSecondsRealtime(0.1f);
+                StartCoroutine(SetUI_StartStatusMsg());
+                StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
+            }   
+        }
+
+        private IEnumerator RequestCheckStart(GameObject _player)
+        {
+            CmdRequestCheckStart(_player);
+
+            yield return null;
+        }
+
+        [Command(ignoreAuthority = true)]
+        private void CmdRequestCheckStart(GameObject _player)
+        {
+            Debug.Log("--- BEGIN START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
+            Debug.Log("CHECK READY COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount());
+            Debug.Log("CHECK PLAYERS COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetPlayerObjList().Count);
+            Debug.Log("CHECK TEAM1 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count());
+            Debug.Log("CHECK TEAM2 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
+
+            P_startStatusMsg = string.Empty;
+
+            // if all players are ready
+            if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount() ==
+                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetPlayerObjList().Count)
+            {
+                Debug.Log("START PASS CHECK 1");
+                P_startStatusMsg = "";
+
+                // if there's at least 1 player in each team
+                if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count() > 0 &&
+                    MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count() > 0)
+                {
+                        _player.GetComponent<PlayerObj>().SetIsReady(true);
+                        P_startStatusMsg = "SUCCESS";
+                        Debug.Log("START PASS CHECK 2, SUCCESS");
+                }
+                else
+                {
+                    Debug.Log("START CHECK 2 FAIL");
+
+                    _player.GetComponent<PlayerObj>().SetIsReady(false);
+                    if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count() <= 0)
+                        P_startStatusMsg  = "Team 1 is empty!";
+                    else if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count() <= 0)
+                        P_startStatusMsg  = "Team 2 is empty!";
                 }
             }
-        }*/
+            else
+            {
+                Debug.Log("START CHECK 1 FAIL");
 
-        public void GoStart()
-        {
-            
+                _player.GetComponent<PlayerObj>().SetIsReady(false);
+                P_startStatusMsg  = "Some players not ready!";
+            }
+
+            Debug.Log("--- END START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
         }
 
         #endregion
