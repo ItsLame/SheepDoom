@@ -93,6 +93,11 @@ namespace SheepDoom
             isHost = _isHost;
         }
 
+        public void SetIsReady(bool _isReady)
+        {
+            isReady = _isReady;
+        }
+
         #endregion
         
         private void OnNameUpdate(string prev, string next)

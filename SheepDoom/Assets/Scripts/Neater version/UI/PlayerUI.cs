@@ -9,6 +9,7 @@ namespace SheepDoom
     public class PlayerUI : MonoBehaviour
     {
         [SerializeField] private Text playerName;
+        
         // Start is called before the first frame update
         void Start()
         {

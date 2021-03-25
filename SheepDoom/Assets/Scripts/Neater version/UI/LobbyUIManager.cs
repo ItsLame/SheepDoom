@@ -230,6 +230,30 @@ namespace SheepDoom
                 _player.transform.SetParent(team1GameObject.transform, false);
             else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
                 _player.transform.SetParent(team2GameObject.transform, false);
+
+            // range is 0-255
+            byte r = 0;
+            byte g = 0;
+            byte b = 0;
+
+            if(_player.GetComponent<PlayerObj>().GetIsReady() == false)
+            {
+                r = 255;
+                g = 183;
+                b = 136;
+
+                _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Not Ready";
+                _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
+            }
+            else if(_player.GetComponent<PlayerObj>().GetIsReady() == true)
+            {
+                r = 211;
+                g = 255;
+                b = 136;
+
+                _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Ready!";
+                _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
+            }
         }
 
         [ClientRpc]
@@ -239,11 +263,35 @@ namespace SheepDoom
                 _player.transform.SetParent(team1GameObject.transform, false);
             else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
                 _player.transform.SetParent(team2GameObject.transform, false);
+
+            // range is 0-255
+            byte r = 0;
+            byte g = 0;
+            byte b = 0;
+
+            if(_player.GetComponent<PlayerObj>().GetIsReady() == false)
+            {
+                r = 255;
+                g = 183;
+                b = 136;
+
+                _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Not Ready";
+                _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
+            }
+            else if(_player.GetComponent<PlayerObj>().GetIsReady() == true)
+            {
+                r = 211;
+                g = 255;
+                b = 136;
+
+                _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Ready!";
+                _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
+            }
         }
 
         private IEnumerator SetUI_StartReadyButton(GameObject _player)
         {
-            while(startButton == null || readyButton == null)
+            while(startButton == null && readyButton == null)
                 yield return "start/ready button missing!";
 
             //set start/ready buttons
@@ -254,8 +302,16 @@ namespace SheepDoom
             }
             else if(_player.GetComponent<PlayerObj>().GetIsHost() == false)
             {
-                P_startButton.SetActive(false);
-                P_readyButton.SetActive(true);
+                if(!P_readyButton.activeSelf)
+                {
+                    P_startButton.SetActive(false);
+                    P_readyButton.SetActive(true);
+                }
+
+                if(_player.GetComponent<PlayerObj>().GetIsReady() == true)
+                    readyButton.transform.GetChild(0).GetComponent<Text>().text = "Cancel";
+                else if(_player.GetComponent<PlayerObj>().GetIsReady() == false)
+                    readyButton.transform.GetChild(0).GetComponent<Text>().text = "Ready";
             }
         }
 
@@ -277,19 +333,21 @@ namespace SheepDoom
             }
         }
 
+        #region Swap
+
         public void GoTeam1()
         {  
             if(isClient)
-                StartCoroutine(SetUI_TeamSwitch(1, PlayerObj.instance.gameObject));
+                StartCoroutine(SetUI_TeamSwap(1, PlayerObj.instance.gameObject));
         }
 
         public void GoTeam2()
         {
             if(isClient)
-                StartCoroutine(SetUI_TeamSwitch(2, PlayerObj.instance.gameObject));
+                StartCoroutine(SetUI_TeamSwap(2, PlayerObj.instance.gameObject));
         }
 
-        private IEnumerator SetUI_TeamSwitch(int GoTeam, GameObject _player)
+        private IEnumerator SetUI_TeamSwap(int GoTeam, GameObject _player)
         {
             while(GoTeam < 1 || GoTeam  > 2)
                 yield return "invalid team number!";
@@ -313,9 +371,7 @@ namespace SheepDoom
             if(GoTeam == 1)
             {
                 while(_player.GetComponent<PlayerObj>().GetTeamIndex() != 1)
-                {
                      _player.GetComponent<PlayerObj>().SetTeamIndex(1);
-                }
 
                 MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].AddTeam1Count();
                 MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].MinusTeam2Count();
@@ -323,9 +379,7 @@ namespace SheepDoom
             else if(GoTeam == 2)
             {
                 while(_player.GetComponent<PlayerObj>().GetTeamIndex() != 2)
-                {
                     _player.GetComponent<PlayerObj>().SetTeamIndex(2);
-                }
                 
                 MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].AddTeam2Count();
                 MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].MinusTeam1Count();
@@ -335,8 +389,9 @@ namespace SheepDoom
             Debug.Log("TEAM2: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
         }
 
-            //set UI according to updated team index
-            //StartCoroutine(SetUI_Team());
+        #endregion
+
+        #region Start
 
         /*
         public void GoStart()
@@ -365,36 +420,56 @@ namespace SheepDoom
             }
         }*/
 
-        /*
+        public void GoStart()
+        {
+            
+        }
+
+        #endregion
+
+        #region Ready
         public void GoReady()
         {
             if(isClient)
-            {
-                if(PlayerObj.instance.GetIsReady() == true)
-                    StartCoroutine(SetUI_Ready(false));
-                else if(PlayerObj.instance.GetIsReady() == false)
-                    StartCoroutine(SetUI_Ready(true));
-            }
+                ChangeReady(PlayerObj.instance.gameObject);
         }
 
-        private IEnumerator SetUI_Ready(bool GoReady)
+        private void ChangeReady(GameObject _player)
         {
-            yield return null;
-
-            if(GoReady == true)
-            {   
-                PlayerObj.instance.SetIsReady(true);
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, true);
-                readyButton.transform.GetChild(0).GetComponent<Text>().text = "Cancel";
-            }
-            else if(GoReady == false)
-            {
-                PlayerObj.instance.SetIsReady(false);
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitReady(PlayerObj.instance, false);
-                readyButton.transform.GetChild(0).GetComponent<Text>().text = "Ready";
-            }
+            if(_player.GetComponent<PlayerObj>().GetIsReady() == true)
+                StartCoroutine(SetUI_Ready(false, _player));
+            else if(_player.GetComponent<PlayerObj>().GetIsReady() == false)
+                StartCoroutine(SetUI_Ready(true, _player));
         }
-        */
+
+        private IEnumerator SetUI_Ready(bool ChangeReady, GameObject _player)
+        {
+            yield return StartCoroutine(RequestReadyUpdate(ChangeReady, _player));
+            StartCoroutine(SetUI_StartReadyButton(_player));
+            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
+        }
+
+        private IEnumerator RequestReadyUpdate(bool ChangeReady, GameObject _player)
+        {
+            CmdRequestReadyUpdate(ChangeReady, _player);
+
+            while(ChangeReady != _player.GetComponent<PlayerObj>().GetIsReady())
+                yield return null;     
+        }
+
+        [Command(ignoreAuthority = true)]
+        private void CmdRequestReadyUpdate(bool ChangeReady, GameObject _player)
+        {
+            _player.GetComponent<PlayerObj>().SetIsReady(ChangeReady);
+            
+            if(_player.GetComponent<PlayerObj>().GetIsReady() == true)
+                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].AddCountReady();
+            else if(_player.GetComponent<PlayerObj>().GetIsReady() == false)
+                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].MinusCountReady();
+
+            Debug.Log(_player.GetComponent<PlayerObj>().GetMatchID() + " READY COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount());
+        }
+        #endregion
 
         #endregion
 
@@ -410,11 +485,10 @@ namespace SheepDoom
                 P_matchIDText.GetComponent<Text>().text = _matchID;
                 Debug.Log("Player object's matchID: " + PlayerObj.instance.GetMatchID() + " = " + "lobbyUI's matchID: " + _matchID);
 
-                StartCoroutine(RequestLobbyUpdate(_matchID, PlayerObj.instance.gameObject));
                 StartCoroutine(SetUI_StartReadyButton(PlayerObj.instance.gameObject));
                 StartCoroutine(SetUI_SwapButton(PlayerObj.instance.gameObject));
+                StartCoroutine(RequestLobbyUpdate(_matchID, PlayerObj.instance.gameObject));
             }
-
             if(isServer)
             {
                 while(!MatchMaker.instance.GetMatches()[_matchID].GetLobbyManager().P_lobbySceneLoaded)

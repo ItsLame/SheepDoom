@@ -287,7 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  teamIndex: 0
+  ci: {fileID: 0}
 --- !u!114 &3993221575969340184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  myPlayerReadyText: {fileID: 136153020269662940}
+  playerReady: {fileID: 1577668978949817839}
 --- !u!114 &6268230098934346722
 MonoBehaviour:
   m_ObjectHideFlags: 0
