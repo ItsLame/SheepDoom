@@ -32,7 +32,6 @@ namespace SheepDoom
         
         //room matchID and matchIndex
         [SyncVar] private string matchID = string.Empty;
-        [SyncVar] public string startStatusMsg = string.Empty;
         
         #region Properties
         
@@ -88,12 +87,6 @@ namespace SheepDoom
         {
             get{return startStatusText;}
             set{startStatusText = value;}
-        }
-
-        public string P_startStatusMsg
-        {
-            get{return startStatusMsg;}
-            set{startStatusMsg = value;}
         }
 
         #endregion
@@ -175,7 +168,7 @@ namespace SheepDoom
                 Debug.Log("Did i find the correct connection?");
                 foreach(var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
                 {
-                    TargetUpdateJoiner(conn, player);
+                        TargetUpdateJoiner(conn, player);
                 }
 
                 RpcUpdateExisting(_player);
@@ -297,12 +290,6 @@ namespace SheepDoom
             }
         }
 
-        private IEnumerator SetUI_StartStatusMsg()
-        {
-            P_startStatusText.GetComponent<Text>().text = P_startStatusMsg;
-            yield return null;
-        }
-
         #region Swap
 
         public void GoTeam1()
@@ -374,8 +361,6 @@ namespace SheepDoom
             if(_player.GetComponent<PlayerObj>().GetIsHost() == true)
             {
                 yield return StartCoroutine(RequestCheckStart(_player));
-                yield return new WaitForSecondsRealtime(0.1f);
-                StartCoroutine(SetUI_StartStatusMsg());
                 StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
             }   
         }
@@ -396,21 +381,21 @@ namespace SheepDoom
             Debug.Log("CHECK TEAM1 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count());
             Debug.Log("CHECK TEAM2 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
 
-            P_startStatusMsg = string.Empty;
+            string startStatusMsg = string.Empty;
 
             // if all players are ready
             if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount() ==
                 MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetPlayerObjList().Count)
             {
                 Debug.Log("START PASS CHECK 1");
-                P_startStatusMsg = "";
+                startStatusMsg = "";
 
                 // if there's at least 1 player in each team
                 if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count() > 0 &&
                     MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count() > 0)
                 {
                         _player.GetComponent<PlayerObj>().SetIsReady(true);
-                        P_startStatusMsg = "SUCCESS";
+                        startStatusMsg = "SUCCESS";
                         Debug.Log("START PASS CHECK 2, SUCCESS");
                 }
                 else
@@ -419,9 +404,9 @@ namespace SheepDoom
 
                     _player.GetComponent<PlayerObj>().SetIsReady(false);
                     if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count() <= 0)
-                        P_startStatusMsg  = "Team 1 is empty!";
+                        startStatusMsg  = "Team 1 is empty!";
                     else if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count() <= 0)
-                        P_startStatusMsg  = "Team 2 is empty!";
+                        startStatusMsg  = "Team 2 is empty!";
                 }
             }
             else
@@ -429,10 +414,19 @@ namespace SheepDoom
                 Debug.Log("START CHECK 1 FAIL");
 
                 _player.GetComponent<PlayerObj>().SetIsReady(false);
-                P_startStatusMsg  = "Some players not ready!";
+                startStatusMsg  = "Some players not ready!";
             }
 
+            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                TargetRequestStartCheck(conn, startStatusMsg);
+
             Debug.Log("--- END START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
+        }
+
+        [TargetRpc]
+        private void TargetRequestStartCheck(NetworkConnection conn, string _startStatusMsg)
+        {
+            P_startStatusText.GetComponent<Text>().text = _startStatusMsg;
         }
 
         #endregion
