@@ -53,6 +53,7 @@ public class NeutralCreepScript : MonoBehaviour
     //leash function, called by the attached zone's collider exit 
     public void BackToLocation()
     {
+
         //snap back for now
         this.gameObject.transform.position = StartingLocation.transform.position;
         //reset aggro
@@ -61,6 +62,9 @@ public class NeutralCreepScript : MonoBehaviour
         Debug.Log(gameObject.name + " stopped chasing " + Attacker.name);
         //ResetHP
         NeutralHPInGame = NeutralHP;
+        float currenthealthPct = (float)NeutralHPInGame / (float)NeutralHP;
+        OnHealthPctChanged(currenthealthPct);
+
 
     }
 

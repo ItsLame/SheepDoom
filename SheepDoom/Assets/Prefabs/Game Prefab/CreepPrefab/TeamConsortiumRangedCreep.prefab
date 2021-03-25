@@ -426,7 +426,7 @@ MonoBehaviour:
   - {fileID: 3033225961934240665, guid: a20fc79918f04c34d8841859db12bae8, type: 3}
   StartIndex: 0
   ismeleeattack: 0
-  CreepMoveSpeed: 10
+  CreepMoveSpeed: 20
   timeBetweenAttacks: 2
   sightRange: 32
   attackRange: 20

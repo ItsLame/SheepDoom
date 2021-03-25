@@ -57,11 +57,14 @@ public class ProjectileSettings : MonoBehaviour
         else if (col.gameObject.CompareTag("NeutralMinion"))
         {
             //  Debug.Log("NeutralMinion hit by " + player.gameObject.name);
-            //inform that its under atk
-            col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
+
+
 
             //take damage
+            col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
             col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
+            //inform that its under atk
+            col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
 
             if (destroyOnContact)
             {
