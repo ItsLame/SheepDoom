@@ -82,13 +82,13 @@ public class CamSwitchManager : MonoBehaviour
             if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
             {
 
-                Debug.Log("Stop camera tracking");
+           //     Debug.Log("Stop camera tracking");
                 camFollowscript.enabled = false;
             }
 
             else
             {
-                Debug.Log("Enable camera tracking");
+             //   Debug.Log("Enable camera tracking");
                 camFollowscript.enabled = true;
             }
 
@@ -116,6 +116,6 @@ public class CamSwitchManager : MonoBehaviour
                     camFollowscript.enabled = true;
                 }
             }
-        Debug.Log("SnapToPlayer: " + snapBackToPlayer);
+      //  Debug.Log("SnapToPlayer: " + snapBackToPlayer);
     }
 }

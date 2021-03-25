@@ -15,7 +15,7 @@ public class CameraRoaming : MonoBehaviour
 
 
     public bool screenTouched = false;
-    public Text m_Text;
+   // public Text m_Text;
     // Update is called once per frame
     void Update()
     {
@@ -23,7 +23,7 @@ public class CameraRoaming : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            m_Text.text = "Touch Position : " + touch.position;
+          //  m_Text.text = "Touch Position : " + touch.position;
       //      Debug.Log("Screen has been touched");
       //      Debug.Log("Position X:" + Input.GetTouch(0).position.x);
      //       Debug.Log("Position Y:" + Input.GetTouch(0).position.y);
@@ -32,7 +32,7 @@ public class CameraRoaming : MonoBehaviour
 
         else
         {
-            m_Text.text = "No touch contacts";
+           // m_Text.text = "No touch contacts";
         }
 
     //    Debug.Log("Screentouched: " + screenTouched);
