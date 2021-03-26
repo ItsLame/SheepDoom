@@ -336,7 +336,6 @@ namespace SheepDoom
             if(_player.GetComponent<PlayerObj>().GetIsHost() == true)
             {
                 yield return StartCoroutine(RequestCheckStart(_player));
-                StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
             }   
         }
 
@@ -393,15 +392,16 @@ namespace SheepDoom
             }
 
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
-                TargetRequestCheckStart(conn, startStatusMsg);
+                TargetRequestCheckStart(conn, startStatusMsg, _player);
 
             Debug.Log("--- END START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
         }
 
         [TargetRpc]
-        private void TargetRequestCheckStart(NetworkConnection conn, string _startStatusMsg)
+        private void TargetRequestCheckStart(NetworkConnection conn, string _startStatusMsg, GameObject _player)
         {
             P_startStatusText.GetComponent<Text>().text = _startStatusMsg;
+            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
         }
 
         #endregion
