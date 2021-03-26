@@ -13,7 +13,7 @@ namespace SheepDoom
         public static LobbyManager instance;
         // these will activate on host/join game, not on starting of application
         [Header("MultiScene Setup")]
-        [Scene] public string lobbyScene;
+        [Scene] private string lobbyScene;
         [SyncVar] private string matchID = string.Empty;
         private bool lobbySceneLoaded = false;
 

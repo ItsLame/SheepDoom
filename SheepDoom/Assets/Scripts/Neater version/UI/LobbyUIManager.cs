@@ -393,13 +393,13 @@ namespace SheepDoom
             }
 
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
-                TargetRequestStartCheck(conn, startStatusMsg);
+                TargetRequestCheckStart(conn, startStatusMsg);
 
             Debug.Log("--- END START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
         }
 
         [TargetRpc]
-        private void TargetRequestStartCheck(NetworkConnection conn, string _startStatusMsg)
+        private void TargetRequestCheckStart(NetworkConnection conn, string _startStatusMsg)
         {
             P_startStatusText.GetComponent<Text>().text = _startStatusMsg;
         }
