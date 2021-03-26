@@ -21,10 +21,13 @@ public class GameTimerScript : MonoBehaviour
     public GameObject CreepSpawner1;
     public GameObject CreepSpawner2;
     public GameObject BaseWall;
+    public GameObject BossSpawner;
 
     [Space(15)]
     private bool TwentySecMarkPassed = false;
     private bool ThirtySecMarkPassed = false;
+    private bool OnehundredTwentysecondSecMarkPassed = false;
+    private bool OnehundredEightysecondSecMarkPassed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +64,19 @@ public class GameTimerScript : MonoBehaviour
             CreepSpawner2.gameObject.SetActive(true);
             BaseWall.gameObject.SetActive(false);
             ThirtySecMarkPassed = true;
+        }
+        if (SecondsTimer >= 120 && OnehundredTwentysecondSecMarkPassed == false)
+        {
+            AnnouncerText.GetComponent<AnnouncerTextScript>().ResetText(5);
+            AnnouncerText.text = "The Boss Creep MegaBox have arrived!";
+            BossSpawner.gameObject.SetActive(true);
+            OnehundredTwentysecondSecMarkPassed = true;
+        }
+        if (SecondsTimer >= 180 && OnehundredEightysecondSecMarkPassed == false)
+        {
+            AnnouncerText.GetComponent<AnnouncerTextScript>().ResetText(5);
+            AnnouncerText.text = "The Boss Creep MegaBox have begun patroling";
+            OnehundredEightysecondSecMarkPassed = true;
         }
     }
 

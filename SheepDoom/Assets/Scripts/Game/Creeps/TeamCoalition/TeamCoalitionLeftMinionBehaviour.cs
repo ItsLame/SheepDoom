@@ -160,7 +160,11 @@ public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
     void ChasePlayer()
     {
 
-        agent.SetDestination(playerTransf.position);
+        if (playerTransf != null)
+        {
+            agent.SetDestination(playerTransf.position);
+        }
+
 
     }
     void MeleeAttackPlayer()

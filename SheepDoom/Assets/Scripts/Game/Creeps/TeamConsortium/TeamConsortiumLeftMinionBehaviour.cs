@@ -197,7 +197,10 @@ public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
     void ChasePlayer()
     {
 
-        agent.SetDestination(targetTransf.position);
+        if (targetTransf != null || targetObject != null)
+        {
+            agent.SetDestination(targetTransf.position);
+        }
 
     }
     void MeleeAttackPlayer()

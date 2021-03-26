@@ -91,6 +91,19 @@ public class ProjectileSettings : MonoBehaviour
             }
 
         }
+        else if (col.gameObject.CompareTag("MegaBoss"))
+        {
+            col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
+            col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().Murderer = owner;
+            //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
+
+            if (destroyOnContact)
+            {
+                Object.Destroy(this.gameObject);
+
+            }
+
+        }
         /*
         else if (col.tag == "Base")
         {
