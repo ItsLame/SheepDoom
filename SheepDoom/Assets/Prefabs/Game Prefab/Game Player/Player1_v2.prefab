@@ -274,6 +274,7 @@ GameObject:
   - component: {fileID: 8824205157880689771}
   - component: {fileID: 8824205157880689770}
   - component: {fileID: 7109216976071157666}
+  - component: {fileID: -1936616481822329411}
   m_Layer: 8
   m_Name: Player1_v2
   m_TagString: Player
@@ -467,6 +468,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentGoldUI: {fileID: 0}
   CurrentGoldInShopUI: {fileID: 0}
+--- !u!114 &-1936616481822329411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6612838615250131336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 741744a3e1efcc3419bce88c2014568b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnLocation: {fileID: 0}
+  respawnTimer: 5
+  respawnTimerInGame: 0
+  isDead: 0
+  respawnText: {fileID: 0}
+  deathOverlay: {fileID: 0}
 --- !u!1 &7502239345329053212
 GameObject:
   m_ObjectHideFlags: 0
