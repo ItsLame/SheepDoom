@@ -118,31 +118,6 @@ namespace SheepDoom
             StartCoroutine(SetUI_Lobby(P_matchID));
         }
 
-        /*
-        private void CheckAllReady()
-        {
-            if(LobbyManager.instance.myTeam1Count < 1 || LobbyManager.instance.myTeam2Count < 1)
-            {
-                P_allPlayersReady = false;
-            }
-            else
-            {
-                for(int i = 0 ; i < P_playersInLobby.Count ; i++)
-                {
-                    if(P_playersInLobby[i].GetComponent<PlayerObj>().GetIsReady() == false)
-                    {
-                        P_allPlayersReady = false;
-                        break;
-                    }
-                    else
-                    {
-                        P_allPlayersReady = true;
-                    }
-                }
-            }
-        }
-        */
-
         #endregion
 
         #region Client Functions
@@ -473,6 +448,7 @@ namespace SheepDoom
 
             Debug.Log(_player.GetComponent<PlayerObj>().GetMatchID() + " READY COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount());
         }
+        
         #endregion
 
         #endregion
@@ -569,45 +545,3 @@ namespace SheepDoom
         #endregion
     }
 }
-/*
-            //get matchid from lobby manager first (from server)
-            if(P_matchID == string.Empty)
-            {
-                P_matchID = LobbyManager.instance.GetMatchID();
-                P_matchIndex = LobbyManager.instance.GetMatchIndex();
-
-                while(P_matchID == null)
-                {
-                    yield return "matchID still null!";
-                }
-
-                Debug.Log("matchID not null anymore!");
-            }
-
-            //set matchID to syncvar variable (matchIDText UI)
-            P_matchIDText.GetComponent<Text>().text = P_matchID;
-            */
-
-                    /*
-        private IEnumerator SetUI_Team()
-        {
-            while(!PlayerObj.instance)
-                yield return "playerObj where are you";
-
-            //initialize playerObj's instance and parent object inside PlayerLobbyUI
-            if(PlayerObj.instance.GetTeamIndex() == 1)
-            {
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitPlayer(PlayerObj.instance, P_team1GameObject.transform);
-                
-                P_toTeam1Button.SetActive(false);
-                P_toTeam2Button.SetActive(true);
-            }
-            else if(PlayerObj.instance.GetTeamIndex() == 2)
-            {
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().InitPlayer(PlayerObj.instance, P_team2GameObject.transform);
-
-                P_toTeam1Button.SetActive(true);
-                P_toTeam2Button.SetActive(false);
-            }
-        }
-        */

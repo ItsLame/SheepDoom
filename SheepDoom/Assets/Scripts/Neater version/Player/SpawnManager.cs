@@ -44,16 +44,6 @@ namespace SheepDoom
 
         public void SetPlayerObj(GameObject _currentPlayerObj)
         {
-            /*_currentPlayerObj = null;
-            if (currentPlayerObj != null)
-            {
-                Debug.Log("Retrieved current player object on client");
-                _currentPlayerObj = currentPlayerObj;
-            }
-            else
-                Debug.Log("Failed to retrieve current player object on client, it is empty");
-            return _currentPlayerObj;*/
-
             currentPlayerObj = _currentPlayerObj;
         }
 
