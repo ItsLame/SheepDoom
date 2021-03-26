@@ -38,12 +38,17 @@ public class ProjectileSettings : MonoBehaviour
         //if hit player
         if (col.gameObject.CompareTag("Player"))    
         {
-            col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
-           // Debug.Log("health: player hit by " + m_Rigidbody);
-            if (destroyOnContact)
+            //dont hurt the owner of the projectile
+            if (col.gameObject != owner)
             {
-                Object.Destroy(this.gameObject);
+                col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
+                // Debug.Log("health: player hit by " + m_Rigidbody);
+                if (destroyOnContact)
+                {
+                    Object.Destroy(this.gameObject);
+                }
             }
+
 
         }
 

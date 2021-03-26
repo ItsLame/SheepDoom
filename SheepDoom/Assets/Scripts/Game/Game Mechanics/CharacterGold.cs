@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CharacterGold : MonoBehaviour
 {
     //float to hold player's current gold
-    private float CurrentGold;
+    public float CurrentGold;
 
     //UI showing gold amount
     public Text CurrentGoldUI;

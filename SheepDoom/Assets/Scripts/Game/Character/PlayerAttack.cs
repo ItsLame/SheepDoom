@@ -65,6 +65,7 @@ public class PlayerAttack : MonoBehaviour
             //if off cd
             if (cooldown1_inGame <= 0 && ismeeleeattack == false)
             {
+                Debug.Log("Firing Normal Atk");
                 var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
                 FiredProjectile.GetComponent<ProjectileSettings>().owner = this.gameObject;
 
@@ -97,6 +98,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 if (cooldown2_inGame <= 0)
                 {
+                    Debug.Log("Firing Special Atk");
                     var FiredProjectile =  Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
                     FiredProjectile.GetComponent<ProjectileSettings>().owner = this.gameObject;
                     cooldown2_inGame = cooldown2;
@@ -118,6 +120,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 if (cooldown3_inGame <= 0)
                 {
+                    Debug.Log("Firing Ultimate Atk");
                     var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
                     FiredProjectile.GetComponent<ProjectileSettings>().owner = this.gameObject;
                     cooldown3_inGame = cooldown3;
