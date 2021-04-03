@@ -17,8 +17,8 @@ namespace MirrorBasics
         [SyncVar] public int teamIndex;
         
         //syncvar timer
-        [SyncVar] public float selectionTimer;
-        [SyncVar] public bool selectionTimerReset = true;
+        [SyncVar] public float selectionTimer; // should be in UI_lobby
+        [SyncVar] public bool selectionTimerReset = true; // should be in UI_lobby
 
         [SyncVar] public bool isReady = false;
         [SyncVar] private bool isReadyUI = false;

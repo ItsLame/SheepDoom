@@ -21,7 +21,7 @@ namespace MirrorBasics {
         [Header("Lobby")]
         [SerializeField] Transform UIPlayerParentTeam1;
         [SerializeField] Transform UIPlayerParentTeam2;
-        [SerializeField] public GameObject UIPlayerPrefab;
+        [SerializeField] public GameObject UIPlayerPrefab; // should be in Lobby_Player
         [SerializeField] public GameObject MoveToTeam1Btn;
         [SerializeField] public GameObject MoveToTeam2Btn;
         [SerializeField] Text matchIDText;

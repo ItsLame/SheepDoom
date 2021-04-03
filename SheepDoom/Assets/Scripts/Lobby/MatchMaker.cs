@@ -20,8 +20,6 @@ namespace MirrorBasics {
         public int team2;
         //int to count players ready
         public int countReady;
-        public bool imReady;
-        //public bool inMatch = false;
 
         //constructor that takes in matchID and the host
         public Match(string matchID, GameObject player)
