@@ -73,7 +73,7 @@ public class CaptureBaseScript : MonoBehaviour
             //BaseInGameHP = BaseHP;
             modifyinghealth(BaseHP);
             //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
-            scoreGameObject.GetComponent<Score>().GameEnd(1);
+            scoreGameObject.GetComponent<GameScore>().GameEnd(1);
         }
 
         //change color when captured by blue

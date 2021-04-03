@@ -75,7 +75,7 @@ public class CapturePointScript : MonoBehaviour
           //  TowerInGameHP = TowerHP;
 
             //reference the score script to increase score function
-            scoreGameObject.GetComponent<Score>().blueScoreUp();
+            scoreGameObject.GetComponent<GameScore>().blueScoreUp();
         }
 
         //change color when captured by blue

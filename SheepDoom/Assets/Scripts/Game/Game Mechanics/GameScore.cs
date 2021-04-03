@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Score : MonoBehaviour
+public class GameScore : MonoBehaviour
 {
     //the display text for tower scores
     [Space(20)]
