@@ -60,8 +60,8 @@ public class GameTimerScript : MonoBehaviour
         {
             AnnouncerText.GetComponent<AnnouncerTextScript>().ResetText(5);
             AnnouncerText.text = "Go forth and be victorious!";
-            CreepSpawner1.gameObject.SetActive(true);
-            CreepSpawner2.gameObject.SetActive(true);
+       //     CreepSpawner1.gameObject.SetActive(true);
+        //    CreepSpawner2.gameObject.SetActive(true);
             BaseWall.gameObject.SetActive(false);
             ThirtySecMarkPassed = true;
         }
@@ -69,7 +69,7 @@ public class GameTimerScript : MonoBehaviour
         {
             AnnouncerText.GetComponent<AnnouncerTextScript>().ResetText(5);
             AnnouncerText.text = "The Boss Creep MegaBox have arrived!";
-            BossSpawner.gameObject.SetActive(true);
+      //      BossSpawner.gameObject.SetActive(true);
             OnehundredTwentysecondSecMarkPassed = true;
         }
         if (SecondsTimer >= 180 && OnehundredEightysecondSecMarkPassed == false)
@@ -83,70 +83,4 @@ public class GameTimerScript : MonoBehaviour
 
 }
 
-/*
-if (MinutesTimer == 0)
-{
-    //update the time
-
-
-//if less than 10s
-if (SecondsTimer < 10)
-{
-    TimerText.text = "0" + SecondsTimer.ToString("0");
-} 
-
-        //else more than 10s
-else
-{
-    TimerText.text = SecondsTimer.ToString("0");
-}   
- */
-/*
-//when hit one min
-if (SecondsTimer >= 60)
-{
-    TimerText.text = "1:" + "00";
-
-    if (SecondsTimer >= 61)
-    {
-        SecondsTimer = 1;
-        MinutesTimer += 1;
-    }
-}
-        //after one minute
-else
-{
-//update the time
-SecondsTimer += Time.deltaTime;
-
-//if less than 10s
-if (SecondsTimer < 10)
-{
-    TimerText.text = MinutesTimer.ToString() + ":" + "0" + SecondsTimer.ToString("0");
-}
-
-else
-{
-    TimerText.text = MinutesTimer.ToString() + ":" + SecondsTimer.ToString("0");
-
-    //once a minute passes, reset seconds to 0 and add to minutes counter and change the displayed text
-
-    if (SecondsTimer >= 60)
-    {
-
-        TimerText.text = MinutesTimer.ToString() + ":" + "00";
-
-        if (SecondsTimer >= 61)
-        {
-            MinutesTimer += 1;
-            SecondsTimer = 1;
-        }
-    }
-}
-
-}
-
-
-
-}*/
 
