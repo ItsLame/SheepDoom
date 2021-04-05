@@ -13,6 +13,7 @@ TagManager:
   - EnemyMinion
   - NeutralMinion
   - BaseMinion
+  - MegaBoss
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - Map
   - Background
   - Towers
-  - 
+  - PlayerCollisionbox
   - 
   - 
   - 
