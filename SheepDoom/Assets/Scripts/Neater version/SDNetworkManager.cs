@@ -15,7 +15,7 @@ namespace SheepDoom
         // Like an associative array - key client conns, value = their network identities
         public static Dictionary<NetworkConnection, NetworkIdentity> LocalPlayers = new Dictionary<NetworkConnection, NetworkIdentity>();
         public static Dictionary<NetworkIdentity, NetworkConnection> LocalPlayersNetId = new Dictionary<NetworkIdentity, NetworkConnection>();
-        [SerializeField] private NetworkIdentity matchMaker;
+        //[SerializeField] private NetworkIdentity matchMaker;
 
         #region Unity Callbacks
 
@@ -243,8 +243,8 @@ namespace SheepDoom
         /// </summary>
         public override void OnStartServer() 
         {
-            GameObject mm = Instantiate(matchMaker.gameObject);
-            NetworkServer.Spawn(mm);
+            //GameObject mm = Instantiate(matchMaker.gameObject);
+            //NetworkServer.Spawn(mm);
             //DontDestroyOnLoad(mm);
         }
 

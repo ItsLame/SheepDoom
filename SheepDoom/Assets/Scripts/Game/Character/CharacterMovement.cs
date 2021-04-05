@@ -2,37 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using Mirror;
 
-public class CharacterMovement : MonoBehaviour
-{
-    public float speed;
-    private int idle;
-    private Rigidbody myRigidBody;
-
-    [Space(15)]
-    public bool isDead;
-
-    // Start is called before the first frame update
-    void Start()
+namespace SheepDoom
+{   [RequireComponent(typeof(Rigidbody))]
+    public class CharacterMovement : NetworkBehaviour
     {
-        myRigidBody = GetComponent<Rigidbody>();
-        isDead = false;
-    }
+        public float speed;
+        private int idle;
+        private Rigidbody myRigidBody;
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        //if player is alive
-        if (!isDead)
+        [Space(15)]
+        public bool isDead;
+
+        // Start is called before the first frame update
+        void Awake()
         {
-            Vector3 moveMe = new Vector3(CrossPlatformInputManager.GetAxis("Vertical"), 0.0f,
-                                         -CrossPlatformInputManager.GetAxis("Horizontal")) * speed;
+            myRigidBody = GetComponent<Rigidbody>();
+            isDead = false;
+        }
 
-            if ((moveMe.x != 0) || (moveMe.z != 0))
+        // Update is called once per frame
+        void FixedUpdate()
+        {
+            if (!hasAuthority) return;
+            Debug.Log("Did i run fixedupdate");
+            Move();
+        }
+
+        private void Move()
+        {
+            if (!isDead)
             {
-                myRigidBody.rotation = Quaternion.LookRotation(moveMe);
+                Debug.Log("Did i run in ifstatement1");
+                Vector3 moveMe = new Vector3(CrossPlatformInputManager.GetAxis("Vertical"), 0.0f,
+                                             -CrossPlatformInputManager.GetAxis("Horizontal")) * speed;
+
+                if ((moveMe.x != 0) || (moveMe.z != 0))
+                {
+                    Debug.Log("Did i run in ifstatement2");
+                    myRigidBody.rotation = Quaternion.LookRotation(moveMe);
+                }
+                myRigidBody.velocity = moveMe;
             }
-            myRigidBody.velocity = moveMe;
         }
     }
 }

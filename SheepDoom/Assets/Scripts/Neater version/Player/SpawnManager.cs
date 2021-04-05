@@ -11,8 +11,10 @@ namespace SheepDoom
         public static SpawnManager instance;
         
         [Header("Setting up player")]
+        //[SerializeField]
+        //private NetworkIdentity playerPrefab = null;
         [SerializeField]
-        private NetworkIdentity playerPrefab = null;
+        private NetworkIdentity gameplayPlayerPrefab = null;
         private GameObject currentPlayerObj = null;
         private ClientName _cn;
 
@@ -61,7 +63,7 @@ namespace SheepDoom
         [Server]
         private void NetworkSpawnPlayer()
         {
-            GameObject spawn = Instantiate(playerPrefab.gameObject);
+            GameObject spawn = Instantiate(gameplayPlayerPrefab.gameObject);
             SetPlayerObj(spawn);
             NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
         }

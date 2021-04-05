@@ -110,3 +110,5 @@ MonoBehaviour:
   syncInterval: 0.1
   playerPrefab: {fileID: 8812519712293616597, guid: 887d73d39868dd74684111b8284d4913,
     type: 3}
+  gameplayPlayerPrefab: {fileID: 7372281217914315522, guid: f28094ccf13a8ea43b8c019750d4c992,
+    type: 3}
