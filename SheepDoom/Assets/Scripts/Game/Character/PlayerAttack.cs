@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerAttack : NetworkBehaviour
 {
     [Space(15)]
     //for checking if player purchased special and ulti
@@ -60,6 +61,7 @@ public class PlayerAttack : MonoBehaviour
     //if atk button is pressed
     public void AttackClick()
     {
+        if (!hasAuthority) return;
         //if not dead
         if (!isDead)
         {
@@ -92,6 +94,7 @@ public class PlayerAttack : MonoBehaviour
     //if special skill is pressed
     public void SpecialSkillClick()
     {
+        if (!hasAuthority) return;
         if (!isDead)
         {
             //only available if special skill is purchased
@@ -115,6 +118,7 @@ public class PlayerAttack : MonoBehaviour
     //if ulti button is pressed
     public void UltiClick()
     {
+        if (!hasAuthority) return;
         if (!isDead)
         {
             if (hasPurchasedUlti)

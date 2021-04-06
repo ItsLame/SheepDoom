@@ -45,6 +45,10 @@ namespace SheepDoom
             Debug.Log("Player object spawned");
             OnClientPlayerSpawned?.Invoke(_player);
 
+            Debug.Log("Are buttons assigned? 4");
+            assignButtons(currentPlayerObj);
+            Debug.Log("Are buttons assigned 5?");
+
 
         }
 
@@ -82,7 +86,9 @@ namespace SheepDoom
             UnityAction ultiAttack = new UnityAction(player.GetComponent<PlayerAttack>().UltiClick);
 
             _NormalButton.onClick.AddListener(normalAttack);
-            Debug.Log("Are buttons assigned 2?");
+            _SpecialButton.onClick.AddListener(specialAttack);
+            _UltiButton.onClick.AddListener(ultiAttack);
+            Debug.Log("Are buttons assigned inside?");
         }
 
         [Server]
@@ -92,10 +98,11 @@ namespace SheepDoom
             SetPlayerObj(spawn);
 
             //assign player attack functions to buttons
+
+            NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
             Debug.Log("Are buttons assigned?");
             assignButtons(spawn);
             Debug.Log("Are buttons assigned 3?");
-            NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
         }
 
 
