@@ -10,6 +10,7 @@ public class PlayerAttack : MonoBehaviour
     public bool hasPurchasedSpecial = false;
     public bool hasPurchasedUlti = false;
 
+    public GameObject NormalButton;
     public GameObject SpecialButton;
     public GameObject UltiButton;
 
@@ -74,8 +75,8 @@ public class PlayerAttack : MonoBehaviour
             }
             else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
             {
-                animator.SetTrigger("Attack");
-                animator.SetTrigger("AttackToIdle");
+               // animator.SetTrigger("Attack");
+               // animator.SetTrigger("AttackToIdle");
                 Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 
                 foreach (Collider enemy in hitenmies)

@@ -3,11 +3,19 @@ using Mirror;
 using System.Collections.Generic;
 using System.Collections;
 using System;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace SheepDoom
 {
     public class SpawnManager : NetworkBehaviour
     {
+        [Header("UI Attack Buttons")]
+        public Button _NormalButton;
+        public Button _SpecialButton;
+        public Button _UltiButton;
+
+        [Space(15)]
         public static SpawnManager instance;
         
         [Header("Setting up player")]
@@ -36,6 +44,8 @@ namespace SheepDoom
             _cn.SetPlayerName(_cn.GetClientName());
             Debug.Log("Player object spawned");
             OnClientPlayerSpawned?.Invoke(_player);
+
+
         }
 
         // only works on client
@@ -60,13 +70,34 @@ namespace SheepDoom
             NetworkSpawnPlayer();
         }
 
+        public void assignButtons(GameObject player)
+        {
+            _NormalButton = GameObject.Find("AttackButton").GetComponent<Button>();
+            _SpecialButton = GameObject.Find("SpecialButton").GetComponent<Button>();
+            _UltiButton = GameObject.Find("UltimateButton").GetComponent<Button>();
+
+            //get the action
+            UnityAction normalAttack = new UnityAction(player.GetComponent<PlayerAttack>().AttackClick);
+            UnityAction specialAttack = new UnityAction(player.GetComponent<PlayerAttack>().SpecialSkillClick);
+            UnityAction ultiAttack = new UnityAction(player.GetComponent<PlayerAttack>().UltiClick);
+
+            _NormalButton.onClick.AddListener(normalAttack);
+            Debug.Log("Are buttons assigned 2?");
+        }
+
         [Server]
         private void NetworkSpawnPlayer()
         {
             GameObject spawn = Instantiate(gameplayPlayerPrefab.gameObject);
             SetPlayerObj(spawn);
+
+            //assign player attack functions to buttons
+            Debug.Log("Are buttons assigned?");
+            assignButtons(spawn);
+            Debug.Log("Are buttons assigned 3?");
             NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
         }
+
 
         #region Start & Stop Callbacks
 
