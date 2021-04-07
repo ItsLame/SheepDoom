@@ -14,6 +14,8 @@ TagManager:
   - NeutralMinion
   - BaseMinion
   - MegaBoss
+  - Team1
+  - lobbyPlayer
   layers:
   - Default
   - TransparentFX

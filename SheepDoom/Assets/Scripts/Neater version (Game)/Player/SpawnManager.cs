@@ -10,17 +10,17 @@ namespace SheepDoom
 {
     public class SpawnManager : NetworkBehaviour
     {
-        [Header("UI Attack Buttons")]
+        /*[Header("UI Attack Buttons")]
         public Button _NormalButton;
         public Button _SpecialButton;
         public Button _UltiButton;
 
         [Space(15)]
-        public static SpawnManager instance;
+        public static SpawnManager instance;*/
         
         [Header("Setting up player")]
-        //[SerializeField]
-        //private NetworkIdentity playerPrefab = null;
+        [SerializeField]
+        private NetworkIdentity playerPrefab = null;
         [SerializeField]
         private NetworkIdentity gameplayPlayerPrefab = null;
         private GameObject currentPlayerObj = null;
@@ -40,12 +40,18 @@ namespace SheepDoom
         public void InvokePlayerObjectSpawned(GameObject _player)
         {
             currentPlayerObj = _player;
-            _cn.SetClientName();
-            _cn.SetPlayerName(_cn.GetClientName());
-            Debug.Log("Player object spawned");
-            OnClientPlayerSpawned?.Invoke(_player);
-
-
+            if(_player.CompareTag("Player"))
+            {
+                OnClientPlayerSpawned?.Invoke(_player);
+                Debug.Log("Player object spawned");
+            }
+            else if (_player.CompareTag("lobbyPlayer"))
+            {
+                _cn.SetClientName();
+                _cn.SetPlayerName(_cn.GetClientName());
+                OnClientPlayerSpawned?.Invoke(_player);
+                Debug.Log("Player object spawned");
+            }    
         }
 
         // only works on client
@@ -61,16 +67,24 @@ namespace SheepDoom
 
         public override void OnStartLocalPlayer()
         {
-            CmdRequestPlayerObjSpawn();
+            //CmdRequestPlayerObjSpawn(playerPrefab.gameObject);
+            //Debug.Log("does player prefab exist here? " + gameplayPlayerPrefab.gameObject);
+            //SpawnPlayer("lobby");
+            SpawnPlayer("game");
+        }
+
+        public void SpawnPlayer(string playerType)
+        {
+            CmdRequestPlayerObjSpawn(playerType);
         }
 
         [Command] // Request player object to be spawned for client
-        void CmdRequestPlayerObjSpawn()
+        void CmdRequestPlayerObjSpawn(string playerType)
         {
-            NetworkSpawnPlayer();
+            NetworkSpawnPlayer(playerType);
         }
 
-        public void assignButtons(GameObject player)
+        /*public void assignButtons(GameObject player)
         {
             _NormalButton = GameObject.Find("AttackButton").GetComponent<Button>();
             _SpecialButton = GameObject.Find("SpecialButton").GetComponent<Button>();
@@ -83,21 +97,24 @@ namespace SheepDoom
 
             _NormalButton.onClick.AddListener(normalAttack);
             Debug.Log("Are buttons assigned 2?");
-        }
+        }*/
 
         [Server]
-        private void NetworkSpawnPlayer()
+        private void NetworkSpawnPlayer(string playerType)
         {
-            GameObject spawn = Instantiate(gameplayPlayerPrefab.gameObject);
+            GameObject spawn = null;
+            if (playerType == "lobby")
+                spawn = Instantiate(playerPrefab.gameObject);
+            else if (playerType == "game")
+                spawn = Instantiate(gameplayPlayerPrefab.gameObject, transform.position, Quaternion.identity);
             SetPlayerObj(spawn);
 
             //assign player attack functions to buttons
-            Debug.Log("Are buttons assigned?");
-            assignButtons(spawn);
-            Debug.Log("Are buttons assigned 3?");
+            //Debug.Log("Are buttons assigned?");
+            //assignButtons(spawn);
+            //Debug.Log("Are buttons assigned 3?");
             NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
         }
-
 
         #region Start & Stop Callbacks
 

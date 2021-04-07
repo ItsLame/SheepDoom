@@ -9,11 +9,7 @@ namespace SheepDoom
 {
     public class PlayerObjSpawned : NetworkBehaviour
     {
-        /// <summary>
-        /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
-        /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
-        /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
-        /// </summary>
+        // camera setup
 
         public override void OnStartAuthority() 
         {
@@ -22,7 +18,12 @@ namespace SheepDoom
 
         private void OnClientPlayerSpawned()
         {
-            Client.client.GetComponent<SpawnManager>().InvokePlayerObjectSpawned(gameObject);
+            if(gameObject.CompareTag("Player"))
+            {
+                Client.client.GetComponent<SpawnManager>().InvokePlayerObjectSpawned(gameObject);
+            }
+            else if(gameObject.CompareTag("lobbyPlayer"))
+                Client.client.GetComponent<SpawnManager>().InvokePlayerObjectSpawned(gameObject);
         } 
 
         #region Start & Stop Callbacks

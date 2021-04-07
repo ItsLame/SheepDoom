@@ -108,5 +108,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  _NormalButton: {fileID: 0}
+  _SpecialButton: {fileID: 0}
+  _UltiButton: {fileID: 0}
+  playerPrefab: {fileID: 8812519712293616597, guid: 887d73d39868dd74684111b8284d4913,
+    type: 3}
   gameplayPlayerPrefab: {fileID: 8449280143259454606, guid: 9137392e5df5a964689d24c6355ba9bc,
     type: 3}
