@@ -12,12 +12,6 @@ public class CameraFollow : MonoBehaviour
     [Range(0.01f, 1.0f)]
     public float smoothness = 0.5f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -26,6 +20,5 @@ public class CameraFollow : MonoBehaviour
         {
             transform.position = new Vector3(player.transform.position.x + fixXdist, player.transform.position.y + fixYdist, player.transform.position.z + fixZdist);
         }
-
     }
 }
