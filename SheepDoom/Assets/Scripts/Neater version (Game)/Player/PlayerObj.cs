@@ -21,6 +21,14 @@ namespace SheepDoom
         [SyncVar] private bool isHost = false;
         [SyncVar] private bool isReady = false;
 
+        private PlayerName _pn;
+
+        void Awake()
+        {
+            if (gameObject.CompareTag("Player"))
+                _pn = GetComponent<PlayerName>();
+        }
+
         #region Get
         public string GetPlayerName()
         {
@@ -102,7 +110,8 @@ namespace SheepDoom
         
         private void OnNameUpdate(string prev, string next)
         {
-            if(hasAuthority)
+            if (!hasAuthority) return;
+            if (gameObject.CompareTag("lobbyPlayer"))
                 MainMenu.instance.SetPlayerName(next);
         }
 
@@ -146,7 +155,8 @@ namespace SheepDoom
         /// </summary>
         public override void OnStopServer()
         {
-            MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Remove(gameObject);
+            if (MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Contains(gameObject))
+                MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Remove(gameObject);
 
             if(GetTeamIndex() == 1)
             {

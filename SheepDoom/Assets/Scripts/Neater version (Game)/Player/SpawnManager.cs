@@ -40,18 +40,10 @@ namespace SheepDoom
         public void InvokePlayerObjectSpawned(GameObject _player)
         {
             currentPlayerObj = _player;
-            if(_player.CompareTag("Player"))
-            {
-                OnClientPlayerSpawned?.Invoke(_player);
-                Debug.Log("Player object spawned");
-            }
-            else if (_player.CompareTag("lobbyPlayer"))
-            {
-                _cn.SetClientName();
-                _cn.SetPlayerName(_cn.GetClientName());
-                OnClientPlayerSpawned?.Invoke(_player);
-                Debug.Log("Player object spawned");
-            }    
+            _cn.SetClientName();
+            _cn.SetPlayerName(_cn.GetClientName());
+            OnClientPlayerSpawned?.Invoke(_player);
+            Debug.Log("Player object spawned");
         }
 
         // only works on client
