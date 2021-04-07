@@ -18,12 +18,7 @@ namespace SheepDoom
 
         private void OnClientPlayerSpawned()
         {
-            if(gameObject.CompareTag("Player"))
-            {
-                Client.client.GetComponent<SpawnManager>().InvokePlayerObjectSpawned(gameObject);
-            }
-            else if(gameObject.CompareTag("lobbyPlayer"))
-                Client.client.GetComponent<SpawnManager>().InvokePlayerObjectSpawned(gameObject);
+            Client.client.GetComponent<SpawnManager>().InvokePlayerObjectSpawned(gameObject);
         } 
 
         #region Start & Stop Callbacks
