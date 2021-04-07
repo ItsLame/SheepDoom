@@ -719,13 +719,15 @@ GameObject:
   - component: {fileID: 7849262506739605477}
   - component: {fileID: 5347440393087361214}
   - component: {fileID: 5660135970397916287}
+  - component: {fileID: 8044131760561688928}
   - component: {fileID: 5660135970397916280}
   - component: {fileID: 4028721829292908613}
   - component: {fileID: 3294719002493811009}
+  - component: {fileID: 661708659848374511}
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
   m_Layer: 8
-  m_Name: Player1_v3-networked
+  m_Name: GamePlayer1_v3-networked
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -841,6 +843,40 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.143536, y: 1.893136, z: 0.5}
   m_Center: {x: 0.04803894, y: 0.053431988, z: 0}
+--- !u!114 &8044131760561688928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf7336327a1c244ca493c0327e8bfab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasPurchasedSpecial: 0
+  hasPurchasedUlti: 0
+  NormalButton: {fileID: 0}
+  SpecialButton: {fileID: 0}
+  UltiButton: {fileID: 0}
+  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
+    type: 3}
+  Projectile2: {fileID: 0}
+  Projectile3: {fileID: 0}
+  SpawnPoint: {fileID: 5660135970150263288}
+  cooldown1: 0
+  cooldown2: 0
+  cooldown3: 0
+  ismeeleeattack: 0
+  animator: {fileID: 0}
+  attackPoint: {fileID: 0}
+  attackRange: 0.5
+  meleedamage: 50
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  isDead: 0
 --- !u!114 &5660135970397916280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,6 +923,21 @@ MonoBehaviour:
   syncInterval: 0.1
   PlayerCamera: {fileID: 7944493282106236459, guid: 899dd7c84f4affb49a6f93e8b4445574,
     type: 3}
+--- !u!114 &661708659848374511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57fb4bd049396314191841658978b117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NormalButton: {fileID: 0}
+  _SpecialButton: {fileID: 0}
+  _UltiButton: {fileID: 0}
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,7 +952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: 9137392e5df5a964689d24c6355ba9bc
   hasSpawned: 0
 --- !u!114 &6459418408009445500
 MonoBehaviour:

@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerAttack : NetworkBehaviour
 {
     [Space(15)]
     //for checking if player purchased special and ulti
@@ -49,6 +50,7 @@ public class PlayerAttack : MonoBehaviour
     // Start is called before the first frame update    
     void Start()
     {
+        if (!hasAuthority) return;
         cooldown1_inGame = cooldown1;
         cooldown2_inGame = cooldown2;
         cooldown3_inGame = cooldown3;
@@ -57,8 +59,27 @@ public class PlayerAttack : MonoBehaviour
         UltiButton.GetComponent<Button>().interactable = false;
     }
 
-    //if atk button is pressed
     public void AttackClick()
+    {
+        if (!hasAuthority) return;
+        CmdAttackClick();
+    }
+
+    public void SpecialSkillClick()
+    {
+        if (!hasAuthority) return;
+        CmdAttackClick();
+    }
+
+    public void UltiClick()
+    {
+        if (!hasAuthority) return;
+        CmdAttackClick();
+    }
+
+    [Command]
+    //if atk button is pressed
+    public void CmdAttackClick()
     {
         //if not dead
         if (!isDead)
@@ -69,6 +90,7 @@ public class PlayerAttack : MonoBehaviour
                 Debug.Log("Firing Normal Atk");
                 var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
                 FiredProjectile.GetComponent<ProjectileSettings>().owner = this.gameObject;
+                NetworkServer.Spawn(FiredProjectile);
 
                 //resetcd
                 cooldown1_inGame = cooldown1;
@@ -90,7 +112,8 @@ public class PlayerAttack : MonoBehaviour
     }
 
     //if special skill is pressed
-    public void SpecialSkillClick()
+    [Command]
+    public void CmdSpecialSkillClick()
     {
         if (!isDead)
         {
@@ -113,7 +136,8 @@ public class PlayerAttack : MonoBehaviour
     }
 
     //if ulti button is pressed
-    public void UltiClick()
+    [Command]
+    public void CmdUltiClick()
     {
         if (!isDead)
         {
