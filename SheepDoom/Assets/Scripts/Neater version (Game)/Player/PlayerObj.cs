@@ -21,14 +21,6 @@ namespace SheepDoom
         [SyncVar] private bool isHost = false;
         [SyncVar] private bool isReady = false;
 
-        private PlayerName _pn;
-
-        void Awake()
-        {
-            if (gameObject.CompareTag("Player"))
-                _pn = GetComponent<PlayerName>();
-        }
-
         #region Get
         public string GetPlayerName()
         {
