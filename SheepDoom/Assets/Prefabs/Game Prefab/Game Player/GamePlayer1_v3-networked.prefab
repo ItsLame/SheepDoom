@@ -324,7 +324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5660135970150263288}
   m_Layer: 0
-  m_Name: SpawnPoint
+  m_Name: ProjectileSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -882,7 +882,9 @@ GameObject:
   - component: {fileID: 4028721829292908613}
   - component: {fileID: 3294719002493811009}
   - component: {fileID: 7229376032539379508}
-  - component: {fileID: 6363993959270391123}
+  - component: {fileID: 2783071687169317075}
+  - component: {fileID: 4896812141411699882}
+  - component: {fileID: 3665192994374769649}
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
   m_Layer: 8
@@ -1064,7 +1066,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   ci: {fileID: 0}
---- !u!114 &6363993959270391123
+--- !u!114 &2783071687169317075
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1073,10 +1075,63 @@ MonoBehaviour:
   m_GameObject: {fileID: 8015437381331526034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4216f6d58b728b94980a43e71d743f62, type: 3}
+  m_Script: {fileID: 11500000, guid: d670d4127b6d4354e830563aa2cc0a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: {fileID: 750191605}
+--- !u!114 &4896812141411699882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57fb4bd049396314191841658978b117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _NormalButton: {fileID: 0}
+  _SpecialButton: {fileID: 0}
+  _UltiButton: {fileID: 0}
+--- !u!114 &3665192994374769649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf7336327a1c244ca493c0327e8bfab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  hasPurchasedSpecial: 0
+  hasPurchasedUlti: 0
+  NormalButton: {fileID: 0}
+  SpecialButton: {fileID: 0}
+  UltiButton: {fileID: 0}
+  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
+    type: 3}
+  Projectile2: {fileID: 0}
+  Projectile3: {fileID: 0}
+  SpawnPoint: {fileID: 5660135970150263288}
+  cooldown1: 0
+  cooldown2: 0
+  cooldown3: 0
+  ismeeleeattack: 0
+  animator: {fileID: 0}
+  attackPoint: {fileID: 0}
+  attackRange: 0.5
+  meleedamage: 50
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  isDead: 0
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0
