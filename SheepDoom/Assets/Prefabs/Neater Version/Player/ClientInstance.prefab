@@ -108,10 +108,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _NormalButton: {fileID: 0}
-  _SpecialButton: {fileID: 0}
-  _UltiButton: {fileID: 0}
   playerPrefab: {fileID: 8812519712293616597, guid: 887d73d39868dd74684111b8284d4913,
     type: 3}
   gameplayPlayerPrefab: {fileID: 8449280143259454606, guid: 9137392e5df5a964689d24c6355ba9bc,
+    type: 3}
+  playerSpawnPoint1: {fileID: 4577573630412624709, guid: 03167dbdeaf29e046ba2b43aa859b236,
+    type: 3}
+  playerSpawnPoint2: {fileID: 7530824978741564694, guid: 848c802a94391d3469d01443b222f696,
+    type: 3}
+  playerSpawnPoint3: {fileID: 1320144642447614861, guid: d327bc8fc816d5841a14bf92a721977a,
     type: 3}

@@ -42,7 +42,7 @@ public class ProjectileSettings : MonoBehaviour
             if (col.gameObject != owner)
             {
                 col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
-                // Debug.Log("health: player hit by " + m_Rigidbody);
+                Debug.Log(col.gameObject.name + "'s health: " + col.gameObject.GetComponent<PlayerHealth>().getHealth());
                 if (destroyOnContact)
                 {
                     Object.Destroy(this.gameObject);

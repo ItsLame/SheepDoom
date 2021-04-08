@@ -8,9 +8,9 @@ using System;
         [SerializeField]
         private float maxHealth = 100.0f;
 
-        private float currenthealth;
+        public float currenthealth;
 
-        public event Action<float> OnHealthPctChanged = delegate { };
+        //public event Action<float> OnHealthPctChanged = delegate { };
 
         public bool isFullHealth;
 
@@ -23,8 +23,8 @@ using System;
         {
             currenthealth += amount;
 
-            float currenthealthPct = currenthealth / maxHealth;
-            OnHealthPctChanged(currenthealthPct);
+        //    float currenthealthPct = currenthealth / maxHealth;
+        //    OnHealthPctChanged(currenthealthPct);
         }
         // Update is called once per frame
         void Update()
@@ -49,7 +49,7 @@ using System;
         void GameOver()
         {
             //added respawn
-            this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
+            //this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
 
             //StartCoroutine(TimeBeforeDeath());
             Debug.Log("health: ded");
@@ -65,5 +65,10 @@ using System;
         public void RefillHealth()
         {
             currenthealth = maxHealth;
+        }
+
+        public float getHealth()
+        {
+            return currenthealth;
         }
     }

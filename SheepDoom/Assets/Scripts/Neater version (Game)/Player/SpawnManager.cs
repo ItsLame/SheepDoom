@@ -22,8 +22,13 @@ namespace SheepDoom
         private GameObject currentPlayerObj = null;
         private ClientName _cn;
 
-
-
+        [Space(15)]
+        [Header("Player number based on the order they are spawned")]
+        private float currentPlayerNumber;
+        [Header("Spawn position")]
+        public GameObject playerSpawnPoint1;
+        public GameObject playerSpawnPoint2;
+        public GameObject playerSpawnPoint3;
 
         // dynamically store and call functions and dispatched on the player object spawned by the client
         // note that client prefab/object and player prefab/object are 2 different things but are connected
@@ -32,6 +37,11 @@ namespace SheepDoom
         void Awake()
         {
             _cn = GetComponent<ClientName>();
+
+        }
+        private void Start()
+        {
+            currentPlayerNumber = 0;
         }
 
         // This function will be called when player object is spawned for a client, make sure to pass the player obj
@@ -77,9 +87,34 @@ namespace SheepDoom
         {
             GameObject spawn = null;
             if (playerType == "lobby")
+            {
                 spawn = Instantiate(playerPrefab.gameObject);
+            }
+
             else if (playerType == "game")
-                spawn = Instantiate(gameplayPlayerPrefab.gameObject, transform.position, Quaternion.identity);
+            {
+                //add 1 to the playercounter in script in networkmanager
+                GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().addPlayer();
+                currentPlayerNumber = GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().PlayerCount;
+
+                Debug.Log("Number of players: " + currentPlayerNumber);
+
+                if (currentPlayerNumber == 1)
+                {
+                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
+                }
+
+                else if (currentPlayerNumber == 2)
+                {
+                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint2.transform.position, Quaternion.identity);
+                }
+
+                else if (currentPlayerNumber == 3)
+                {
+                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint3.transform.position, Quaternion.identity);
+                }
+            }
+ 
             SetPlayerObj(spawn);
 
             //assign player attack functions to buttons
