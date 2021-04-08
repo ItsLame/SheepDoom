@@ -127,15 +127,15 @@ namespace SheepDoom
             StartCoroutine(SetUI_Lobby(P_matchID));
         }
 
-        private IEnumerator RequestLobbyUpdate(string _matchID, GameObject _player)
+        private IEnumerator RequestLobbyUpdate(string _matchID, GameObject _player, bool _startMatch)
         {
-            CmdRequestLobbyUpdate(_matchID, _player);
+            CmdRequestLobbyUpdate(_matchID, _player, _startMatch);
 
             yield return null;
         }
 
         [Command(ignoreAuthority = true)]
-        private void CmdRequestLobbyUpdate(string _matchID, GameObject _player)
+        private void CmdRequestLobbyUpdate(string _matchID, GameObject _player, bool _startMatch)
         {
             Debug.Log("Count in networkid-conn list: " + SDNetworkManager.LocalPlayersNetId.Count);
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
@@ -146,7 +146,7 @@ namespace SheepDoom
                         TargetUpdateJoiner(conn, player);
                 }
 
-                RpcUpdateExisting(_player);
+                RpcUpdateExisting(_player, _startMatch);
             }
             else
             {
@@ -189,7 +189,7 @@ namespace SheepDoom
         }
 
         [ClientRpc]
-        private void RpcUpdateExisting(GameObject _player)
+        private void RpcUpdateExisting(GameObject _player, bool _startMatch)
         {
             if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                 _player.transform.SetParent(team1GameObject.transform, false);
@@ -219,6 +219,10 @@ namespace SheepDoom
                 _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Ready!";
                 _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
             }
+
+            //if(_startMatch == true)
+                //_player.GetComponent<PlayerObj>().GetComponent<SpawnManager>().SpawnPlayer("game");
+                //_player.GetComponent<PlayerObj>().ci.GetComponent<SpawnManager>().SpawnPlayer("game");
         }
 
         private IEnumerator SetUI_StartReadyButton(GameObject _player)
@@ -286,7 +290,7 @@ namespace SheepDoom
 
             yield return StartCoroutine(RequestSwapUpdate(GoTeam, _player));
             StartCoroutine(SetUI_SwapButton(_player));
-            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
+            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false));
         }
 
         private IEnumerator RequestSwapUpdate(int GoTeam, GameObject _player)
@@ -356,6 +360,7 @@ namespace SheepDoom
             Debug.Log("CHECK TEAM2 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
 
             string startStatusMsg = string.Empty;
+            bool startMatch = false;
 
             // if all players are ready
             if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount() ==
@@ -363,6 +368,7 @@ namespace SheepDoom
             {
                 Debug.Log("START PASS CHECK 1");
                 startStatusMsg = "";
+                startMatch = false;
 
                 // if there's at least 1 player in each team
                 if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count() > 0 &&
@@ -371,6 +377,8 @@ namespace SheepDoom
                         _player.GetComponent<PlayerObj>().SetIsReady(true);
                         startStatusMsg = "SUCCESS";
                         Debug.Log("START PASS CHECK 2, SUCCESS");
+
+                        startMatch = true;
                 }
                 else
                 {
@@ -381,6 +389,8 @@ namespace SheepDoom
                         startStatusMsg  = "Team 1 is empty!";
                     else if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count() <= 0)
                         startStatusMsg  = "Team 2 is empty!";
+                    
+                    startMatch = false;
                 }
             }
             else
@@ -389,19 +399,20 @@ namespace SheepDoom
 
                 _player.GetComponent<PlayerObj>().SetIsReady(false);
                 startStatusMsg  = "Some players not ready!";
+                startMatch = false;
             }
 
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
-                TargetRequestCheckStart(conn, startStatusMsg, _player);
+                TargetRequestCheckStart(conn, startStatusMsg, _player, startMatch);
 
             Debug.Log("--- END START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
         }
 
         [TargetRpc]
-        private void TargetRequestCheckStart(NetworkConnection conn, string _startStatusMsg, GameObject _player)
+        private void TargetRequestCheckStart(NetworkConnection conn, string _startStatusMsg, GameObject _player, bool _startMatch)
         {
             P_startStatusText.GetComponent<Text>().text = _startStatusMsg;
-            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
+            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, _startMatch));
         }
 
         #endregion
@@ -425,7 +436,7 @@ namespace SheepDoom
         {
             yield return StartCoroutine(RequestReadyUpdate(ChangeReady, _player));
             StartCoroutine(SetUI_StartReadyButton(_player));
-            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player));
+            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false));
         }
 
         private IEnumerator RequestReadyUpdate(bool ChangeReady, GameObject _player)
@@ -467,7 +478,7 @@ namespace SheepDoom
 
                 StartCoroutine(SetUI_StartReadyButton(PlayerObj.instance.gameObject));
                 StartCoroutine(SetUI_SwapButton(PlayerObj.instance.gameObject));
-                StartCoroutine(RequestLobbyUpdate(_matchID, PlayerObj.instance.gameObject));
+                StartCoroutine(RequestLobbyUpdate(_matchID, PlayerObj.instance.gameObject, false));
             }
             if(isServer)
             {
