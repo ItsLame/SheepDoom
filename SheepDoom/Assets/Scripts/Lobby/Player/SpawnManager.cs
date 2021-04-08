@@ -37,7 +37,6 @@ namespace SheepDoom
         void Awake()
         {
             _cn = GetComponent<ClientName>();
-
         }
         private void Start()
         {
@@ -68,7 +67,7 @@ namespace SheepDoom
 
         public override void OnStartLocalPlayer()
         {
-            SpawnPlayer("game");
+            SpawnPlayer("lobby");
         }
 
         public void SpawnPlayer(string playerType)
@@ -86,11 +85,11 @@ namespace SheepDoom
         private void NetworkSpawnPlayer(string playerType)
         {
             GameObject spawn = null;
+            
             if (playerType == "lobby")
             {
                 spawn = Instantiate(playerPrefab.gameObject);
             }
-
             else if (playerType == "game")
             {
                 //add 1 to the playercounter in script in networkmanager
