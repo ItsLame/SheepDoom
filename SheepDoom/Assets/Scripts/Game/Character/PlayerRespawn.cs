@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace SheepDoom
+{
     public class PlayerRespawn : MonoBehaviour
     {
         //target respawn location
@@ -72,3 +74,4 @@ using UnityEngine.UI;
         }
     }
 
+}

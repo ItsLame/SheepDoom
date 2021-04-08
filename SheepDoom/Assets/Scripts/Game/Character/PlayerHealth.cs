@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+namespace SheepDoom
+{
     public class PlayerHealth : MonoBehaviour
     {
         [SerializeField]
@@ -67,3 +69,4 @@ using System;
             currenthealth = maxHealth;
         }
     }
+}

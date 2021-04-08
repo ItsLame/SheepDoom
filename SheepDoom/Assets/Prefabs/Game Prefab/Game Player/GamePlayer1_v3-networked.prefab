@@ -887,6 +887,7 @@ GameObject:
   - component: {fileID: 3276492568727392572}
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
+  - component: {fileID: 2014472282729360730}
   m_Layer: 8
   m_Name: GamePlayer1_v3-networked
   m_TagString: Player
@@ -1099,9 +1100,6 @@ MonoBehaviour:
   syncInterval: 0.1
   hasPurchasedSpecial: 0
   hasPurchasedUlti: 0
-  NormalButton: {fileID: 0}
-  SpecialButton: {fileID: 0}
-  UltiButton: {fileID: 0}
   Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
     type: 3}
   Projectile2: {fileID: 0}
@@ -1166,6 +1164,21 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &2014472282729360730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
 --- !u!1 &8934511409369775478
 GameObject:
   m_ObjectHideFlags: 0

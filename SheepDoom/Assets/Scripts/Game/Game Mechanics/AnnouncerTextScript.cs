@@ -3,27 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AnnouncerTextScript : MonoBehaviour
+namespace SheepDoom
 {
-    public Text AnnouncerText;
-    public float ClearTimer;
-
-    private void Update()
+    public class AnnouncerTextScript : MonoBehaviour
     {
-        if (ClearTimer >= 0)
+        public Text AnnouncerText;
+        public float ClearTimer;
+
+        private void Update()
         {
-            ClearTimer -= Time.deltaTime;
+            if (ClearTimer >= 0)
+            {
+                ClearTimer -= Time.deltaTime;
+            }
+
+            if (ClearTimer <= 0)
+            {
+                AnnouncerText.text = null;
+            }
+        }
+        public void ResetText(float seconds)
+        {
+            ClearTimer = seconds;
         }
 
-        if (ClearTimer <= 0)
-        {
-            AnnouncerText.text = null;
-        }
     }
-    public void ResetText(float seconds)
-    {
-        ClearTimer = seconds;
-    }
-
-
 }
