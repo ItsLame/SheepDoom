@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Mirror;
 
 namespace SheepDoom
 {
-    public class PlayerHealth : MonoBehaviour
+    public class PlayerHealth : NetworkBehaviour
     {
         [SerializeField]
         private float maxHealth = 100.0f;
 
+        [SyncVar(hook = nameof(healthUpdate))]
         public float currenthealth;
 
         //public event Action<float> OnHealthPctChanged = delegate { };
@@ -19,6 +21,12 @@ namespace SheepDoom
         private void Start()
         {
             currenthealth = maxHealth;
+        }
+
+        //for syncvar to sync player health
+        private void healthUpdate(float oldHealth, float newHealth)
+        {
+            Debug.Log("Old HP: " + oldHealth + " New HP: " + newHealth);
         }
 
         public void modifyinghealth(float amount)
@@ -54,7 +62,7 @@ namespace SheepDoom
             this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
 
             //StartCoroutine(TimeBeforeDeath());
-            Debug.Log("health: ded");
+           // Debug.Log("health: ded");
         }
 
         IEnumerator TimeBeforeDeath()

@@ -30,6 +30,12 @@ namespace SheepDoom
         public GameObject playerSpawnPoint2;
         public GameObject playerSpawnPoint3;
 
+        [Space(15)]
+        //the time we will use
+        public float SecondsTimer = 0;
+        public float MinutesTimer = 0;
+        private TimeSpan timePlaying;
+
         // dynamically store and call functions and dispatched on the player object spawned by the client
         // note that client prefab/object and player prefab/object are 2 different things but are connected
         public static event Action<GameObject> OnClientPlayerSpawned;
