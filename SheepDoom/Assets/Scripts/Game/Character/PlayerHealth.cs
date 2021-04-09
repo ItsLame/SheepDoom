@@ -49,7 +49,7 @@ using System;
         void GameOver()
         {
             //added respawn
-            //this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
+            this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
 
             //StartCoroutine(TimeBeforeDeath());
             Debug.Log("health: ded");

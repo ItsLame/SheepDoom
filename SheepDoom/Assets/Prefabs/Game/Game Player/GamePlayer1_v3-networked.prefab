@@ -886,6 +886,7 @@ GameObject:
   - component: {fileID: 3665192994374769649}
   - component: {fileID: 3276492568727392572}
   - component: {fileID: -771400089307640272}
+  - component: {fileID: 2668921912398802697}
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
   m_Layer: 8
@@ -1146,7 +1147,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  currenthealth: 0
   isFullHealth: 0
+--- !u!114 &2668921912398802697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 741744a3e1efcc3419bce88c2014568b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnLocation: {fileID: 4577573630412624709, guid: 03167dbdeaf29e046ba2b43aa859b236,
+    type: 3}
+  respawnTimerRef: 5
+  respawnTimerInGame: 0
+  isDead: 0
+  deathOverlay: {fileID: 7072208613197537347, guid: af933045f5f2ec54f89114511f0edef0,
+    type: 3}
+  deadTextObject: {fileID: 0}
+  respawninginObject: {fileID: 0}
+  PlayerRespawnTimerObject: {fileID: 0}
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0

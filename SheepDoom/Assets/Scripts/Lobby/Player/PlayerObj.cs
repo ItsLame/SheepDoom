@@ -128,6 +128,11 @@ namespace SheepDoom
             }
         }
 
+        public string getPlayerName()
+        {
+            return syncName;
+        }
+
         #region Start & Stop Callbacks
 
         /// <summary>

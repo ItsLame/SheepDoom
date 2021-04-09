@@ -23,6 +23,11 @@ namespace SheepDoom
 
             playerName.text = this.GetComponent<PlayerObj>().GetPlayerName();
         }
+
+        public Text getPlayerName()
+        {
+            return playerName;
+        }
     }
 }
 
