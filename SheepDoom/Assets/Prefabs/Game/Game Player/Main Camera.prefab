@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  fixXdist: -270
-  fixYdist: 266.5
-  fixZdist: 22
+  fixXdist: -500
+  fixYdist: 495
+  fixZdist: 42
   smoothness: 0.5
