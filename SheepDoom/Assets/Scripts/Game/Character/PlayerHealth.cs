@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+namespace SheepDoom
+{
     public class PlayerHealth : MonoBehaviour
     {
         [SerializeField]
@@ -23,8 +25,8 @@ using System;
         {
             currenthealth += amount;
 
-        //    float currenthealthPct = currenthealth / maxHealth;
-        //    OnHealthPctChanged(currenthealthPct);
+            //    float currenthealthPct = currenthealth / maxHealth;
+            //    OnHealthPctChanged(currenthealthPct);
         }
         // Update is called once per frame
         void Update()
@@ -72,3 +74,4 @@ using System;
             return currenthealth;
         }
     }
+}
