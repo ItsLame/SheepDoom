@@ -7,7 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Login.unity
-    guid: d3b6ba12a5c1ee24e83d02cf2c0a6c1b
+    guid: 31c354a3639a9c14bade2ad40baadf19
   - enabled: 0
     path: Assets/Scenes/Main Menu.unity
     guid: cd5d373037b373f4b8b637d666f960ab
@@ -21,6 +21,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MapScene Version2.0.unity
     guid: 7901318ad059a974ca67dcefa219fb08
   - enabled: 1
-    path: Assets/Scenes/dummy networking.unity
-    guid: 2de65819957e1854ca4689b0168fe0ab
+    path: Assets/Scenes/Game Networking Scene 1.0.unity
+    guid: 1217269099c7ba540bd17b72b9d1b781
   m_configObjects: {}
