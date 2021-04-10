@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html

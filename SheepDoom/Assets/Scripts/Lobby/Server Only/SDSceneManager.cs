@@ -82,6 +82,9 @@ namespace SheepDoom
                 StartCoroutine(LoadScene(P_characterSelectScene, P_characterSelectSceneLoaded));
                 ClientLoadScene(P_characterSelectScene, P_characterSelectSceneLoaded);
             }
+            
+            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[PlayerObj.instance.GetComponent<PlayerObj>().GetMatchID()].GetScene());
+            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[PlayerObj.instance.GetMatchID()].GetScene());
         }
 
         public void StartGameScene(NetworkConnection conn)
