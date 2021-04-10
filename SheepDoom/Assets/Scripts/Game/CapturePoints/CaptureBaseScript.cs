@@ -104,7 +104,7 @@ public class CaptureBaseScript : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Player In Zone");
+        //    Debug.Log("Player In Zone");
             numOfCapturersBase += 1;
         }
     }
@@ -117,7 +117,7 @@ public class CaptureBaseScript : MonoBehaviour
             //single player mode, so only blue team
             if (!CapturedByBlue2)
             {
-                Debug.Log(other.name + "capturing Base");
+          //      Debug.Log(other.name + "capturing Base");
                 //BaseInGameHP -= BaseCaptureRate * Time.deltaTime;
                 modifyinghealth(-(BaseCaptureRate * Time.deltaTime));
                 //debug showing base hp
@@ -131,7 +131,7 @@ public class CaptureBaseScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player Left Zone");
+        //    Debug.Log("Player Left Zone");
             numOfCapturersBase -= 1;
         }
     }

@@ -109,7 +109,7 @@ namespace SheepDoom
         {
             if (other.tag == "Player")
             {
-                Debug.Log("Player In Zone");
+             //   Debug.Log("Player In Zone");
                 numOfCapturers += 1;
             }
         }
@@ -138,7 +138,7 @@ namespace SheepDoom
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Player Left Zone");
+            //    Debug.Log("Player Left Zone");
                 numOfCapturers -= 1;
             }
         }
