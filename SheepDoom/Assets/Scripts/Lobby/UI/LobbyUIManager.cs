@@ -151,7 +151,12 @@ namespace SheepDoom
 
                 if(_startMatch == true)
                 {
-                    MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartCharacterSelectScene();
+                    //SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetScene());
+                    MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartCharacterSelectScene(conn);
+                    
+                    //move to existing lobby on server
+                    //SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetScene());
+                    //SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetScene());
                 }
             }
             else
@@ -370,7 +375,7 @@ namespace SheepDoom
             {
                 Debug.Log("START PASS CHECK 1");
                 startStatusMsg = "";
-                startMatch = false;
+                startMatch = true;
 
                 // if there's at least 1 player in each team
                 if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count() > 0 &&
@@ -392,7 +397,7 @@ namespace SheepDoom
                     else if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count() <= 0)
                         startStatusMsg  = "Team 2 is empty!";
                     
-                    startMatch = false;
+                    startMatch = true;
                 }
             }
             else
@@ -401,7 +406,7 @@ namespace SheepDoom
 
                 _player.GetComponent<PlayerObj>().SetIsReady(false);
                 startStatusMsg  = "Some players not ready!";
-                startMatch = false;
+                startMatch = true;
             }
 
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))

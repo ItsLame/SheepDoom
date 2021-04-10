@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
@@ -29,14 +30,14 @@ namespace SheepDoom
 
         public GameObject P_team1GameObject
         {
-            get{return P_team1GameObject;}
-            set{P_team1GameObject = value;}
+            get{return team1GameObject;}
+            set{team1GameObject = value;}
         }
 
         public GameObject P_team2GameObject
         {
-            get{return P_team2GameObject;}
-            set{P_team2GameObject = value;}
+            get{return team2GameObject;}
+            set{team2GameObject = value;}
         }
 
         #endregion
@@ -45,7 +46,8 @@ namespace SheepDoom
         {
             if(isServer)
                 ServerStartSetting(SDSceneManager.instance.P_matchID);
-            //if(isClient)
+            if(isClient)
+                PlayerObj.instance.ci.GetComponent<SpawnManager>().SpawnPlayer("select");
                 //ClientStartSetting();
         }
 
@@ -100,6 +102,12 @@ namespace SheepDoom
         {
             instance = this;
             MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].SetCharacterSelectUIManager(instance);
+
+            foreach(var player in MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetPlayerObjList())
+            {
+                SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn);
+                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, SceneManager.GetSceneByName(MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetScene().name));
+            }
         }
 
         /// <summary>
@@ -114,6 +122,7 @@ namespace SheepDoom
         /// </summary>
         public override void OnStartClient()
         {
+            instance = this;
             //PlayerObj.instance.GetComponent<SpawnManager>().SpawnPlayer("character select");
         }
 

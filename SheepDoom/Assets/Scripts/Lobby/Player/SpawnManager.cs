@@ -89,7 +89,7 @@ namespace SheepDoom
             {
                 spawn = Instantiate(playerPrefab.gameObject);
             }
-            else if (playerType == "character select")
+            else if (playerType == "select")
             {
                 spawn = Instantiate(playerSelectPrefab.gameObject);
             }
