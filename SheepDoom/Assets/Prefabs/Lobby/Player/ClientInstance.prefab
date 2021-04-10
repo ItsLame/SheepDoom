@@ -110,7 +110,9 @@ MonoBehaviour:
   syncInterval: 0.1
   playerPrefab: {fileID: 8812519712293616597, guid: 887d73d39868dd74684111b8284d4913,
     type: 3}
-  gameplayPlayerPrefab: {fileID: 8449280143259454606, guid: 9137392e5df5a964689d24c6355ba9bc,
+  playerSelectPrefab: {fileID: 8812519712293616597, guid: 8506a642a33c97f469b98cf8b09f1f57,
+    type: 3}
+  playerGameplayPrefab: {fileID: 8449280143259454606, guid: 9137392e5df5a964689d24c6355ba9bc,
     type: 3}
   playerSpawnPoint1: {fileID: 4577573630412624709, guid: 03167dbdeaf29e046ba2b43aa859b236,
     type: 3}

@@ -20,6 +20,7 @@ namespace SheepDoom
         private Scene scene;
         private SDSceneManager sdSceneManager;
         private LobbyUIManager lobbyUIManager;
+        private CharacterSelectUIManager characterSelectUIManager;
 
         public Match(string matchID, GameObject player, SDSceneManager sdSceneManager)
         {
@@ -67,6 +68,11 @@ namespace SheepDoom
             return lobbyUIManager;
         }
 
+        public CharacterSelectUIManager GetCharacterSelectUIManager()
+        {
+            return characterSelectUIManager;
+        }
+
         public Scene GetScene()
         {
             return scene;
@@ -108,6 +114,11 @@ namespace SheepDoom
         public void SetLobbyUIManager(LobbyUIManager lobbyUIManager)
         {
             this.lobbyUIManager = lobbyUIManager;
+        }
+
+        public void SetCharacterSelectUIManager(CharacterSelectUIManager characterSelectUIManager)
+        {
+            this.characterSelectUIManager = characterSelectUIManager;
         }
 
         public void SetScene(Scene scene)

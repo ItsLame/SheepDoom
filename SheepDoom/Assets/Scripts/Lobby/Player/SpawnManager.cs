@@ -15,10 +15,9 @@ namespace SheepDoom
         public static SpawnManager instance;*/
 
         [Header("Setting up player")]
-        [SerializeField]
-        private NetworkIdentity playerPrefab = null;
-        [SerializeField]
-        private NetworkIdentity gameplayPlayerPrefab = null;
+        [SerializeField] private NetworkIdentity playerPrefab = null;
+        [SerializeField] private NetworkIdentity playerSelectPrefab = null;
+        [SerializeField] private NetworkIdentity playerGameplayPrefab = null;
         private GameObject currentPlayerObj = null;
         private ClientName _cn;
 
@@ -90,6 +89,10 @@ namespace SheepDoom
             {
                 spawn = Instantiate(playerPrefab.gameObject);
             }
+            else if (playerType == "character select")
+            {
+                spawn = Instantiate(playerSelectPrefab.gameObject);
+            }
             else if (playerType == "game")
             {
                 //add 1 to the playercounter in script in networkmanager
@@ -100,17 +103,17 @@ namespace SheepDoom
 
                 if (currentPlayerNumber == 1)
                 {
-                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
+                    spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
                 }
 
                 else if (currentPlayerNumber == 2)
                 {
-                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint2.transform.position, Quaternion.identity);
+                    spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint2.transform.position, Quaternion.identity);
                 }
 
                 else if (currentPlayerNumber == 3)
                 {
-                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint3.transform.position, Quaternion.identity);
+                    spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint3.transform.position, Quaternion.identity);
                 }
             }
  
