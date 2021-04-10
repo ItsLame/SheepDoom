@@ -2,32 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseCreepSpawner : MonoBehaviour
-{
-    private float nextspawntime;
-
-    [SerializeField]
-    private GameObject Minionmelee;
-    [SerializeField]
-    private float spawndelay = 10;
-    private int noofenemies;
-
-    private void Update()
+namespace SheepDoom
+{ 
+    public class BaseCreepSpawner : MonoBehaviour
     {
-        if (ShouldSpawn())
+        private float nextspawntime;
+
+        [SerializeField]
+        private GameObject Minionmelee;
+        [SerializeField]
+        private float spawndelay = 10;
+        private int noofenemies;
+
+        private void Update()
         {
-            spawn();
+            if (ShouldSpawn())
+            {
+                spawn();
+            }
+        }
+
+        private void spawn()
+        {
+            nextspawntime = Time.time + spawndelay;
+            Instantiate(Minionmelee, transform.position, transform.rotation);
+        }
+
+        private bool ShouldSpawn()
+        {
+            return Time.time >= nextspawntime;
         }
     }
-
-    private void spawn()
-    {
-        nextspawntime = Time.time + spawndelay;
-        Instantiate(Minionmelee, transform.position, transform.rotation);
-    }
-
-    private bool ShouldSpawn()
-    {
-        return Time.time >= nextspawntime;
-    }
-    }
+}

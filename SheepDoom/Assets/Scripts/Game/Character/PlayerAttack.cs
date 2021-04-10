@@ -13,9 +13,9 @@ namespace SheepDoom
         public bool hasPurchasedSpecial = false;
         public bool hasPurchasedUlti = false;
 
-        public GameObject NormalButton;
+        /*public GameObject NormalButton;
         public GameObject SpecialButton;
-        public GameObject UltiButton;
+        public GameObject UltiButton;*/
 
         [Space(15)]
         //Skill projectiles
@@ -49,7 +49,7 @@ namespace SheepDoom
         [Space(15)]
         [SyncVar] public bool isDead;
 
-        // Start is called before the first frame update    
+        // Start is called before the first frame update
         void Start()
         {
             if (!hasAuthority) return;
@@ -57,8 +57,8 @@ namespace SheepDoom
             cooldown2_inGame = cooldown2;
             cooldown3_inGame = cooldown3;
 
-            SpecialButton.GetComponent<Button>().interactable = false;
-            UltiButton.GetComponent<Button>().interactable = false;
+            //SpecialButton.GetComponent<Button>().interactable = false;
+            //UltiButton.GetComponent<Button>().interactable = false;
         }
 
         public void AttackClick()
@@ -70,18 +70,18 @@ namespace SheepDoom
         public void SpecialSkillClick()
         {
             if (!hasAuthority) return;
-            CmdAttackClick();
+            CmdSpecialSkillClick();
         }
 
         public void UltiClick()
         {
             if (!hasAuthority) return;
-            CmdAttackClick();
+            CmdUltiClick();
         }
 
         [Command]
         //if atk button is pressed
-        public void CmdAttackClick()
+        void CmdAttackClick()
         {
             //if not dead
             if (!isDead)
@@ -115,7 +115,7 @@ namespace SheepDoom
 
         //if special skill is pressed
         [Command]
-        public void CmdSpecialSkillClick()
+        void CmdSpecialSkillClick()
         {
             if (!isDead)
             {
@@ -139,7 +139,7 @@ namespace SheepDoom
 
         //if ulti button is pressed
         [Command]
-        public void CmdUltiClick()
+        void CmdUltiClick()
         {
             if (!isDead)
             {

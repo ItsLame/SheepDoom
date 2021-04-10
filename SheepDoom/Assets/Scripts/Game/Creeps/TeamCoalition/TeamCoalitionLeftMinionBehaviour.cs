@@ -33,7 +33,7 @@ namespace SheepDoom
         public float timeBetweenAttacks;
         bool alreadyattacked;
 
-        //states 
+        //states
         public float sightRange, attackRange;
         public bool playerInSightRange, playerInAttackRange;
 

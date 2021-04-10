@@ -34,7 +34,7 @@ namespace SheepDoom
         public float timeBetweenAttacks;
         bool alreadyattacked;
 
-        //states 
+        //states
         public float sightRange, attackRange;
         public bool playerInSightRange, playerInAttackRange;
 
@@ -168,7 +168,7 @@ namespace SheepDoom
             {
                 // Debug.Log(this.gameObject.name + "has died");
 
-                //if a murderer is detected 
+                //if a murderer is detected
                 if (Murderer != null)
                 {
                     Murderer.GetComponent<CharacterGold>().varyGold(goldValue);

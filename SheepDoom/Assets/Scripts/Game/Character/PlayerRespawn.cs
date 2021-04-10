@@ -64,7 +64,7 @@ namespace SheepDoom
                     this.gameObject.GetComponent<CharacterMovement>().isDead = true;
                     this.gameObject.GetComponent<PlayerAttack>().isDead = true;
                     RpcPlayerDead();
-                }    
+                }
             }
         }
 
@@ -103,7 +103,7 @@ namespace SheepDoom
             deadTextObject.GetComponent<Text>().enabled = false;
             respawninginObject.GetComponent<Text>().enabled = false;
             PlayerRespawnTimerObject.GetComponent<Text>().enabled = false;
-            
+
             CmdPlayerAlive();
             StartCoroutine(WaitForDeathStatus());
         }
@@ -139,7 +139,7 @@ namespace SheepDoom
             respawnTimerInGame = respawnTimerRef;
         }
 
-       
+
     }
 
 }

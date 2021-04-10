@@ -120,7 +120,7 @@ namespace SheepDoom
                     spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint3.transform.position, Quaternion.identity);
                 }
             }
- 
+
             SetPlayerObj(spawn);
 
             //assign player attack functions to buttons
