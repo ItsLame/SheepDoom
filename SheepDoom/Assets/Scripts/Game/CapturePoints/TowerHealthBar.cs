@@ -13,7 +13,7 @@ public class TowerHealthBar : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        GetComponentInParent<CapturePointScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
+        //GetComponentInParent<CapturePointScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
     }
     private void HandleHealthChangedTower(float pct)
     {

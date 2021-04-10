@@ -26,7 +26,7 @@ namespace SheepDoom
         //for capture hp reduction when staying in area
         private void OnTriggerStay(Collider other)
         {
-            Debug.Log("inside healing pad");
+            //Debug.Log("inside healing pad");
             if (other.CompareTag("Player"))
             {
                 //if not full health
