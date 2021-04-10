@@ -47,7 +47,7 @@ namespace SheepDoom
         [Space(15)]
         public LayerMask enemyLayers;
         [Space(15)]
-        public bool isDead;
+        [SyncVar] public bool isDead;
 
         // Start is called before the first frame update    
         void Start()

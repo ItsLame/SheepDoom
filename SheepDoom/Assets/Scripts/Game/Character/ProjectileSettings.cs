@@ -45,7 +45,7 @@ namespace SheepDoom
                 {
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
                     string playerName = col.gameObject.GetComponent<PlayerUI>().getPlayerName().text;
-                    Debug.Log(playerName + "'s health: " + col.gameObject.GetComponent<PlayerHealth>().getHealth());
+                    //Debug.Log(playerName + "'s health: " + col.gameObject.GetComponent<PlayerHealth>().getHealth());
                     if (destroyOnContact)
                     {
                         Object.Destroy(this.gameObject);

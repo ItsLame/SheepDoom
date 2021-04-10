@@ -16,7 +16,7 @@ namespace SheepDoom
         [SerializeField]
         private float respawnTimerInGame;
         private float respawnDisplayNumber;
-        public bool isDead = false;
+        [SyncVar] public bool isDead = false;
 
         [Space(15)]
         //the time we will use
@@ -50,29 +50,25 @@ namespace SheepDoom
             if (isDead)
             {
                 //if dead show dead UI
-                if (respawnTimerInGame > 0)
+                if (isClient && hasAuthority)
                 {
-                    showPlayerDeadUI();
+                    if (respawnTimerInGame > 0)
+                        showPlayerDeadUI();
+                    else //respawn once timer == 0
+                        RespawnPlayer(); //respawn player
                 }
 
-                //respawn once timer == 0
-                else
+                if (isServer)
                 {
-                    //disable their components
-                    deathOverlay.GetComponent<Image>().enabled = false;
-                    deadTextObject.GetComponent<Text>().enabled = false;
-                    respawninginObject.GetComponent<Text>().enabled = false;
-                    PlayerRespawnTimerObject.GetComponent<Text>().enabled = false;
-
-                    //respawn player
-                    RespawnPlayer();
-
-                }
+                    //deactivate movement
+                    this.gameObject.GetComponent<CharacterMovement>().isDead = true;
+                    this.gameObject.GetComponent<PlayerAttack>().isDead = true;
+                    RpcPlayerDead();
+                }    
             }
         }
 
-        [TargetRpc]
-        private void showPlayerDeadUI()
+        private void showPlayerDeadUI() // Show on local client which is urself that u died
         {
             //enable their components
             deathOverlay.GetComponent<Image>().enabled = true;
@@ -80,51 +76,70 @@ namespace SheepDoom
             respawninginObject.GetComponent<Text>().enabled = true;
             PlayerRespawnTimerObject.GetComponent<Text>().enabled = true;
 
-            //splat body
-            Rigidbody myRigidBody = GetComponent<Rigidbody>();
-            Vector3 moveMe = new Vector3(0, 1, 0);
-            myRigidBody.rotation = Quaternion.LookRotation(moveMe);
-
-            //deactivate movement
-            this.gameObject.GetComponent<CharacterMovement>().isDead = true;
-            this.gameObject.GetComponent<PlayerAttack>().isDead = true;
-
             //subtract time as respawn time passes
             respawnTimerInGame -= Time.deltaTime;
 
-
-            //calculating time 
-            respawnTimerInGame -= Time.deltaTime;
             timePlaying = TimeSpan.FromSeconds(respawnTimerInGame);
 
             //updating text
             Text respawnText = PlayerRespawnTimerObject.GetComponent<Text>();
             string timePlayingStr = timePlaying.ToString("ss");
             respawnText.text = timePlayingStr;
-
-
         }
 
-        [TargetRpc]
-        public void RespawnPlayer()
+        [ClientRpc]
+        void RpcPlayerDead() // Show everyone that u died
         {
-            //move player to respawn position
-            this.gameObject.transform.position = respawnLocation.transform.position;
-            //not dead anymore
+            //splat body
+            Rigidbody myRigidBody = GetComponent<Rigidbody>();
+            Vector3 moveMe = new Vector3(0, 1, 0);
+            myRigidBody.rotation = Quaternion.LookRotation(moveMe);
+        }
+
+        private void RespawnPlayer()
+        {
+            // components here only need to be disabled on local client that died
+            deathOverlay.GetComponent<Image>().enabled = false;
+            deadTextObject.GetComponent<Text>().enabled = false;
+            respawninginObject.GetComponent<Text>().enabled = false;
+            PlayerRespawnTimerObject.GetComponent<Text>().enabled = false;
+            
+            CmdPlayerAlive();
+            StartCoroutine(WaitForDeathStatus());
+        }
+
+        [Command]
+        void CmdPlayerAlive()
+        {
+            // change components on server, syncvared to client
             this.gameObject.GetComponent<PlayerHealth>().RefillHealth();
             this.gameObject.GetComponent<CharacterMovement>().isDead = false;
             this.gameObject.GetComponent<PlayerAttack>().isDead = false;
             isDead = false;
+            RpcPlayerAlive();
+        }
 
-            //reset death timer
-            respawnTimerInGame = respawnTimerRef;
-
+        [ClientRpc]
+        void RpcPlayerAlive()
+        {
+            //move player to respawn position
+            this.gameObject.transform.position = respawnLocation.transform.position;
             //flip body right up
             Rigidbody myRigidBody = GetComponent<Rigidbody>();
             Vector3 moveMe = new Vector3(0, 0, 0);
             myRigidBody.rotation = Quaternion.LookRotation(moveMe);
         }
 
+        //reset death timer
+        IEnumerator WaitForDeathStatus()
+        {
+            // wait for it to be false
+            while (isDead)
+                yield return null;
+            respawnTimerInGame = respawnTimerRef;
+        }
+
+       
     }
 
 }

@@ -26,7 +26,8 @@ namespace SheepDoom
         //for syncvar to sync player health
         private void healthUpdate(float oldHealth, float newHealth)
         {
-            Debug.Log("Old HP: " + oldHealth + " New HP: " + newHealth);
+            if(hasAuthority)
+                Debug.Log("Old HP: " + oldHealth + " New HP: " + newHealth);
         }
 
         public void modifyinghealth(float amount)

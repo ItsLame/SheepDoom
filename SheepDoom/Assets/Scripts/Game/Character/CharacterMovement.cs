@@ -10,8 +10,8 @@ namespace SheepDoom
     {
         public float speed;
 
-        [Space(15)]
-        public bool isDead;
+       [Space(15)]
+       [SyncVar] public bool isDead;
 
         // Start is called before the first frame update
         void Awake()
