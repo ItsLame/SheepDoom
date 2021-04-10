@@ -139,16 +139,15 @@ namespace SheepDoom
                 {
                     P_lobbySceneLoaded = _sceneLoaded;
                 }
-                   
                 else if(_scene == P_characterSelectScene)
                 {
                     P_characterSelectSceneLoaded = _sceneLoaded;
-                    SceneManager.UnloadSceneAsync(P_lobbyScene);
+                    //SceneManager.UnloadSceneAsync(P_lobbyScene);
                 }
                 else if(_scene == gameScene)
                 {
                     P_gameSceneLoaded = _sceneLoaded;
-                    SceneManager.UnloadSceneAsync(P_characterSelectScene);
+                    //SceneManager.UnloadSceneAsync(P_characterSelectScene);
                 }
             }
             
@@ -167,10 +166,10 @@ namespace SheepDoom
 
                 asyncLoad.allowSceneActivation = true;
 
-                if(_scene == P_characterSelectScene)
+                /*if(_scene == P_characterSelectScene)
                     SceneManager.UnloadSceneAsync(P_lobbyScene);
                 else if(_scene == P_gameScene)
-                    SceneManager.UnloadSceneAsync(P_characterSelectScene);
+                    SceneManager.UnloadSceneAsync(P_characterSelectScene);*/
             }
         }
         

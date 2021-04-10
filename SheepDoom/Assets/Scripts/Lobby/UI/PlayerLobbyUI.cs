@@ -14,6 +14,8 @@ namespace SheepDoom
     //to set player transform (in lobby)
     public class PlayerLobbyUI : NetworkBehaviour
     {
+        [SerializeField] GameObject playerLobbyObject;
+        [SerializeField] GameObject playerCharacterSelectObject;
         [SerializeField] private Text playerReady;
         
         #region Properties
@@ -22,6 +24,18 @@ namespace SheepDoom
         {
             get{return playerReady;}
             set{playerReady = value;}
+        }
+
+        public GameObject P_playerLobbyObject
+        {
+            get{return playerLobbyObject;}
+            set{playerLobbyObject = value;}
+        }
+
+        public GameObject P_playerCharacterSelectObject
+        {
+            get{return playerCharacterSelectObject;}
+            set{playerCharacterSelectObject = value;}
         }
 
         #endregion

@@ -47,7 +47,14 @@ namespace SheepDoom
             if(isServer)
                 ServerStartSetting(SDSceneManager.instance.P_matchID);
             if(isClient)
-                PlayerObj.instance.ci.GetComponent<SpawnManager>().SpawnPlayer("select");
+            {
+                //PlayerObj.instance.ci.GetComponent<SpawnManager>().SpawnPlayer("select");
+                PlayerObj.instance.GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
+                PlayerObj.instance.GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
+                PlayerObj.instance.gameObject.transform.SetParent(team1GameObject.transform, false);
+                //PlayerObj.instance.gameObject.transform.SetParent(team1GameObject, false);
+            }
+                
                 //ClientStartSetting();
         }
 
