@@ -123,7 +123,7 @@ namespace SheepDoom
                 while (asyncLoad.progress < 0.9f)
                 {
                     Debug.Log("LOADING: "+asyncLoad.progress);    
-                    yield return new WaitForSecondsRealtime(0.5f);
+                    yield return new WaitForSecondsRealtime(0.25f);
                 }           
 
                 asyncLoad.allowSceneActivation = true;
