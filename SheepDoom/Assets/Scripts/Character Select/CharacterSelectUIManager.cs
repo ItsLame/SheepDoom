@@ -40,6 +40,12 @@ namespace SheepDoom
             set{team2GameObject = value;}
         }
 
+        public string P_matchID
+        {
+            get{return matchID;}
+            set{matchID = value;}
+        }
+
         #endregion
 
         private void Start()
@@ -47,19 +53,12 @@ namespace SheepDoom
             if(isServer)
                 ServerStartSetting(SDSceneManager.instance.P_matchID);
             if(isClient)
-            {
-                //PlayerObj.instance.ci.GetComponent<SpawnManager>().SpawnPlayer("select");
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
-                PlayerObj.instance.GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
-                PlayerObj.instance.gameObject.transform.SetParent(team1GameObject.transform, false);
-                //PlayerObj.instance.gameObject.transform.SetParent(team1GameObject, false);
-            }
-                
-                //ClientStartSetting();
+                ClientStartSetting();
         }
 
         private void ServerStartSetting(string _matchID)
         {
+            P_matchID = _matchID;
             StartCoroutine(SetUI_CharacterSelect(_matchID));
         }
 
@@ -72,31 +71,89 @@ namespace SheepDoom
 
                 foreach(var _player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
                 {
-                    Debug.Log("SETUI: CHARACTER SELECT");
-                    //Debug.Log("Player matchID: " + _player.GetComponent<PlayerObj>().GetMatchID());
-                    //Debug.Log("Player index: " + _player.GetComponent<PlayerObj>().GetTeamIndex());
-
                     if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                     {
                         MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.SetActive(true);
                         MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team2GameObject.SetActive(false);
-                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team1GameObject.transform, false);
+
+                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.transform, false);
                     }
                         
                     else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
                     {
                         MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.SetActive(false);
                         MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team2GameObject.SetActive(true);
-                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team2GameObject.transform, false);
+
+                        _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team2GameObject.transform, false);
                     }
                 }
             }
         }
 
-        /*public void ClientStartSetting()
+        private void ClientStartSetting()
         {
-            //StartCoroutine(SetUI_CharacterSelect(P_matchID));
-        }*/
+            StartCoroutine(RequestCharacterSelectUpdate(P_matchID, PlayerObj.instance.gameObject, false));
+        }
+
+        private IEnumerator RequestCharacterSelectUpdate(string _matchID, GameObject _player, bool _startGame)
+        {
+            CmdRequestCharacterSelectUpdate(_matchID, _player, _startGame);
+
+            if(_startGame == true)
+                _player.GetComponent<PlayerObj>().ci.GetComponent<SpawnManager>().SpawnPlayer("game");
+
+            yield return null;
+        }
+
+        [Command(ignoreAuthority = true)]
+        private void CmdRequestCharacterSelectUpdate(string _matchID, GameObject _player, bool _startGame)
+        {
+             _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
+             _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
+
+            RpcUpdateExisting(_player);
+
+            if(_startGame == true)
+                MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartGameScene();
+        }
+
+        [ClientRpc]
+        private void RpcUpdateExisting(GameObject _player)
+        {
+            if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+            {
+                P_team1GameObject.SetActive(true);
+                P_team2GameObject.SetActive(false);
+
+                _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(P_team1GameObject.transform, false);
+            }
+                
+            else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+            {
+                P_team1GameObject.SetActive(false);
+                P_team2GameObject.SetActive(true);
+
+                _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(P_team2GameObject.transform, false);
+            }
+
+            _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
+            _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
+        }
+        public void ForceStart()
+        {
+            StartCoroutine(RequestCharacterSelectUpdate(PlayerObj.instance.GetMatchID(), PlayerObj.instance.gameObject, true));
+        }
+
+        private IEnumerator UnloadLobbyScene()
+        {
+            if(isServer)
+                //SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
+            if(isClient)
+            {
+                yield return new WaitForSecondsRealtime(0.5f);
+                //SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
+            }
+        }
 
         #region Start & Stop Callbacks
 
@@ -115,6 +172,8 @@ namespace SheepDoom
                 SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn);
                 SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, SceneManager.GetSceneByName(MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetScene().name));
             }
+
+            StartCoroutine(UnloadLobbyScene());
         }
 
         /// <summary>
@@ -130,7 +189,8 @@ namespace SheepDoom
         public override void OnStartClient()
         {
             instance = this;
-            //PlayerObj.instance.GetComponent<SpawnManager>().SpawnPlayer("character select");
+
+            StartCoroutine(UnloadLobbyScene());
         }
 
         /// <summary>

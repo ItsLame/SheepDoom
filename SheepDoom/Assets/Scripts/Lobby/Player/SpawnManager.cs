@@ -95,7 +95,16 @@ namespace SheepDoom
             }
             else if (playerType == "game")
             {
+                foreach(var player in MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetPlayerObjList())
+                {
+                    if(player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                        spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
+                    else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                        spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint2.transform.position, Quaternion.identity);
+                }
+
                 //add 1 to the playercounter in script in networkmanager
+                /*
                 GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().addPlayer();
                 currentPlayerNumber = GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().PlayerCount;
 
@@ -115,6 +124,7 @@ namespace SheepDoom
                 {
                     spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint3.transform.position, Quaternion.identity);
                 }
+                */
             }
  
             SetPlayerObj(spawn);

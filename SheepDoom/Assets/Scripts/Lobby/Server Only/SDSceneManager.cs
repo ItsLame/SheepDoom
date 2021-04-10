@@ -75,21 +75,21 @@ namespace SheepDoom
             }
         }
 
-        public void StartCharacterSelectScene(NetworkConnection conn)
+        public void StartCharacterSelectScene()
         {
             if(isServer)
             {
                 StartCoroutine(LoadScene(P_characterSelectScene, P_characterSelectSceneLoaded));
-                TargetClientLoadScene(conn, P_characterSelectScene, P_characterSelectSceneLoaded);
+                RpcClientLoadScene(P_characterSelectScene, P_characterSelectSceneLoaded);
             }
         }
 
-        public void StartGameScene(NetworkConnection conn)
+        public void StartGameScene()
         {
             if(isServer)
             {
                 StartCoroutine(LoadScene(P_gameScene, P_gameSceneLoaded));
-                TargetClientLoadScene(conn, P_gameScene, P_gameSceneLoaded);
+                RpcClientLoadScene(P_gameScene, P_gameSceneLoaded);
             }
         }
 
@@ -100,7 +100,7 @@ namespace SheepDoom
         }
 
         [ClientRpc]
-        private void ClientLoadScene(string _scene, bool _sceneLoaded)
+        private void RpcClientLoadScene(string _scene, bool _sceneLoaded)
         {
             StartCoroutine(LoadScene(_scene, _sceneLoaded));
         }
@@ -136,19 +136,11 @@ namespace SheepDoom
                 _sceneLoaded = true;
 
                 if(_scene == lobbyScene)
-                {
                     P_lobbySceneLoaded = _sceneLoaded;
-                }
                 else if(_scene == P_characterSelectScene)
-                {
                     P_characterSelectSceneLoaded = _sceneLoaded;
-                    //SceneManager.UnloadSceneAsync(P_lobbyScene);
-                }
                 else if(_scene == gameScene)
-                {
                     P_gameSceneLoaded = _sceneLoaded;
-                    //SceneManager.UnloadSceneAsync(P_characterSelectScene);
-                }
             }
             
             if(isClient)
@@ -165,11 +157,6 @@ namespace SheepDoom
                 }
 
                 asyncLoad.allowSceneActivation = true;
-
-                /*if(_scene == P_characterSelectScene)
-                    SceneManager.UnloadSceneAsync(P_lobbyScene);
-                else if(_scene == P_gameScene)
-                    SceneManager.UnloadSceneAsync(P_characterSelectScene);*/
             }
         }
         
