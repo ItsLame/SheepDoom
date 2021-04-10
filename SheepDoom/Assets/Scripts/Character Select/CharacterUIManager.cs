@@ -1,83 +1,16 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.SceneManagement;
+
+/*
+	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
+	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
+*/
 
 namespace SheepDoom
 {
-    public class HostGame : NetworkBehaviour
+    public class CharacterSelectUIManager : NetworkBehaviour
     {
-        private PlayerObj pO;
-
-        void Awake()
-        {
-            pO = GetComponent<PlayerObj>();
-        }
-        
-        public void Host()
-        {
-            CmdHostGame();
-        }
-
-        [Command]
-        void CmdHostGame()
-        {
-            string matchID = MatchMaker.GetRandomMatchID();
-            pO.SetMatchID(matchID); // syncvared
-
-            if(MatchMaker.instance.HostGame(matchID, gameObject, connectionToClient))
-            {
-                //StartCoroutine(WaitForSyncList(MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().rootCount));
-
-                //set ishost=true when successfuly join
-                //pO.SetIsHost(true);
-                //host ready by default
-                //pO.SetIsReady(false);
-
-                StartCoroutine(MoveToLobby(connectionToClient));
-
-                pO.SetIsHost(true);
-            }
-            else
-            {
-                pO.SetMatchID(string.Empty);
-                Debug.Log("Failed to command server to host game");
-            }
-        }
-
-        private IEnumerator MoveToLobby(NetworkConnection conn)
-        {
-            if(isServer)
-            {
-                while(!MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().P_lobbySceneLoaded)
-                    yield return null;
-
-                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-            }
-        }
-
-        /*
-        IEnumerator WaitForSyncList(int oldCount)
-        {
-            //MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene())
-            while (MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().rootCount == oldCount)
-                yield return null;
-            // Before, I passed in Client.client.gameObject as the 1st parameter, so I kept passing in the same clientinstance, not linking it to connectionToClient
-            // So I used connectionToClient to reliably retrieve the correct client to pass in
-            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-            SceneMessage msg = new SceneMessage
-            {
-                sceneName = MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().name,
-                sceneOperation = SceneOperation.LoadAdditive
-            };
-            connectionToClient.Send(msg);
-        }
-        */
-
         #region Start & Stop Callbacks
 
         /// <summary>

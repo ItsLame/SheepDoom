@@ -18,16 +18,16 @@ namespace SheepDoom
         private int countReady;
         private SyncListGameObject players = new SyncListGameObject();
         private Scene scene;
-        private LobbyManager lobbyManager;
+        private SDSceneManager sdSceneManager;
         private LobbyUIManager lobbyUIManager;
 
-        public Match(string matchID, GameObject player, LobbyManager lobbyManager)
+        public Match(string matchID, GameObject player, SDSceneManager sdSceneManager)
         {
             this.matchID = matchID;
             players.Add(player);
             team1Count++;
             countReady++;
-            this.lobbyManager = lobbyManager;
+            this.sdSceneManager = sdSceneManager;
         }
 
         #region Get
@@ -57,9 +57,9 @@ namespace SheepDoom
             return countReady;
         }
 
-        public LobbyManager GetLobbyManager()
+        public SDSceneManager GetSDSceneManager()
         {
-            return lobbyManager;
+            return sdSceneManager;
         }
 
         public LobbyUIManager GetLobbyUIManager()
@@ -130,7 +130,7 @@ namespace SheepDoom
   
         // track matches
         private SyncDictionary<string, Match> matches = new SyncDictionary<string, Match>();
-        [SerializeField] GameObject lobbyManager;
+        [SerializeField] GameObject SDSceneManager;
 
         private void Awake()
         {
@@ -180,14 +180,14 @@ namespace SheepDoom
         {
             if(!matches.ContainsKey(_matchID))
             {
-                GameObject matchLobby = Instantiate(lobbyManager);
+                GameObject matchLobby = Instantiate(SDSceneManager);
                 NetworkServer.Spawn(matchLobby);
 
-                Match newMatch = new Match(_matchID, _player, matchLobby.GetComponent<LobbyManager>());
+                Match newMatch = new Match(_matchID, _player, matchLobby.GetComponent<SDSceneManager>());
                 matches.Add(_matchID, newMatch);
 
-                newMatch.GetLobbyManager().StartLobbyScene(conn);
-                newMatch.GetLobbyManager().P_matchID = _matchID;
+                newMatch.GetSDSceneManager().StartLobbyScene(conn);
+                newMatch.GetSDSceneManager().P_matchID = _matchID;
 
                 _player.GetComponent<PlayerObj>().SetTeamIndex(1);          // syncvared
                 _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1);    // syncvared

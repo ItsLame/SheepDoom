@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
@@ -32,6 +33,7 @@ namespace SheepDoom
         
         //room matchID and matchIndex
         [SyncVar] private string matchID = string.Empty;
+        [SyncVar] private bool startMatch = false;
         
         #region Properties
         
@@ -94,7 +96,7 @@ namespace SheepDoom
         private void Start()
         {
             if(isServer)
-                ServerStartSetting(LobbyManager.instance.P_matchID);
+                ServerStartSetting(SDSceneManager.instance.P_matchID);
             if(isClient)
                 ClientStartSetting();
         }
@@ -143,10 +145,15 @@ namespace SheepDoom
                 Debug.Log("Did i find the correct connection?");
                 foreach(var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
                 {
-                        TargetUpdateJoiner(conn, player);
+                        TargetUpdateJoiner(conn, player, _startMatch, MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager());
                 }
 
-                RpcUpdateExisting(_player, _startMatch);
+                RpcUpdateExisting(_player, _startMatch, MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager());
+
+                if(_startMatch == true)
+                {
+                    MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartCharacterSelectScene();
+                }
             }
             else
             {
@@ -155,7 +162,7 @@ namespace SheepDoom
         }
 
         [TargetRpc]
-        private void TargetUpdateJoiner(NetworkConnection conn, GameObject _player)
+        private void TargetUpdateJoiner(NetworkConnection conn, GameObject _player, bool _startMatch, SDSceneManager _sceneManager)
         {
             //Debug.Log("Did i run?");
             if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
@@ -186,10 +193,23 @@ namespace SheepDoom
                 _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Ready!";
                 _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
             }
+
+            if(_startMatch == true)
+            {
+                //_sceneManager.StartCharacterSelectScene(conn);
+                //P_startMatch = _startMatch;
+                //P_SDSceneM = MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager();
+                /*foreach(var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
+                {
+                    Debug.Log("startmatch "+_startMatch+", playerobj netid: "+ player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>());
+                    SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection _conn);
+                    TargetPlayersInMatch(_conn, MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager());
+                }*/
+            }
         }
 
         [ClientRpc]
-        private void RpcUpdateExisting(GameObject _player, bool _startMatch)
+        private void RpcUpdateExisting(GameObject _player, bool _startMatch, SDSceneManager _sceneManager)
         {
             if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                 _player.transform.SetParent(team1GameObject.transform, false);
@@ -220,9 +240,18 @@ namespace SheepDoom
                 _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
             }
 
-            //if(_startMatch == true)
-                //_player.GetComponent<PlayerObj>().GetComponent<SpawnManager>().SpawnPlayer("game");
-                //_player.GetComponent<PlayerObj>().ci.GetComponent<SpawnManager>().SpawnPlayer("game");
+            if(_startMatch == true)
+            {
+                _sceneManager.StartCharacterSelectScene();
+                //P_startMatch = _startMatch;
+                //P_SDSceneM = MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager();
+                /*foreach(var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
+                {
+                    Debug.Log("startmatch "+_startMatch+", playerobj netid: "+ player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>());
+                    SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection _conn);
+                    TargetPlayersInMatch(_conn, MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager());
+                }*/
+            }
         }
 
         private IEnumerator SetUI_StartReadyButton(GameObject _player)
@@ -354,13 +383,13 @@ namespace SheepDoom
         private void CmdRequestCheckStart(GameObject _player)
         {
             Debug.Log("--- BEGIN START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
-            Debug.Log("CHECK READY COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount());
-            Debug.Log("CHECK PLAYERS COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetPlayerObjList().Count);
-            Debug.Log("CHECK TEAM1 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count());
-            Debug.Log("CHECK TEAM2 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
+            //Debug.Log("CHECK READY COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount());
+            //Debug.Log("CHECK PLAYERS COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetPlayerObjList().Count);
+            //Debug.Log("CHECK TEAM1 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count());
+            //Debug.Log("CHECK TEAM2 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
 
             string startStatusMsg = string.Empty;
-            bool startMatch = false;
+            //bool startMatch = false;
 
             // if all players are ready
             if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount() ==
@@ -411,6 +440,7 @@ namespace SheepDoom
         [TargetRpc]
         private void TargetRequestCheckStart(NetworkConnection conn, string _startStatusMsg, GameObject _player, bool _startMatch)
         {
+            Debug.Log("startmatch true/false? "+_startMatch);
             P_startStatusText.GetComponent<Text>().text = _startStatusMsg;
             StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, _startMatch));
         }
@@ -482,7 +512,7 @@ namespace SheepDoom
             }
             if(isServer)
             {
-                while(!MatchMaker.instance.GetMatches()[_matchID].GetLobbyManager().P_lobbySceneLoaded)
+                while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_lobbySceneLoaded)
                     yield return null;
 
                 foreach(var _player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
@@ -510,7 +540,7 @@ namespace SheepDoom
         public override void OnStartServer()
         {
             instance = this;
-            MatchMaker.instance.GetMatches()[LobbyManager.instance.P_matchID].SetLobbyUIManager(instance);
+            MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].SetLobbyUIManager(instance);
         }
 
         /// <summary>

@@ -1,82 +1,94 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+
+/*
+	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
+	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
+*/
 
 namespace SheepDoom
 {
-    public class HostGame : NetworkBehaviour
+    public class CharacterManager : NetworkBehaviour
     {
-        private PlayerObj pO;
+        public static CharacterManager instance;
+        // these will activate on host/join game, not on starting of application
+        [Header("MultiScene Setup")]
+        [Scene] public string characterSelectScene;
+        [SyncVar] private string matchID = string.Empty;
+        private bool characterSelectSceneLoaded = false;
 
-        void Awake()
+        #region Properties
+        public string P_characterSelectScene
         {
-            pO = GetComponent<PlayerObj>();
-        }
-        
-        public void Host()
-        {
-            CmdHostGame();
-        }
-
-        [Command]
-        void CmdHostGame()
-        {
-            string matchID = MatchMaker.GetRandomMatchID();
-            pO.SetMatchID(matchID); // syncvared
-
-            if(MatchMaker.instance.HostGame(matchID, gameObject, connectionToClient))
-            {
-                //StartCoroutine(WaitForSyncList(MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().rootCount));
-
-                //set ishost=true when successfuly join
-                //pO.SetIsHost(true);
-                //host ready by default
-                //pO.SetIsReady(false);
-
-                StartCoroutine(MoveToLobby(connectionToClient));
-
-                pO.SetIsHost(true);
-            }
-            else
-            {
-                pO.SetMatchID(string.Empty);
-                Debug.Log("Failed to command server to host game");
-            }
+            get {return characterSelectScene;}
+            set {characterSelectScene = value;}
         }
 
-        private IEnumerator MoveToLobby(NetworkConnection conn)
+        public string P_matchID
+        {
+            get {return matchID;}
+            set {matchID = value;}
+        }
+
+        public bool P_characterSelectSceneLoaded
+        {
+            get {return characterSelectSceneLoaded;}
+            set {characterSelectSceneLoaded = value;}
+        }
+
+        #endregion
+
+        public void StartCharacterSelectScene(NetworkConnection conn)
         {
             if(isServer)
             {
-                while(!MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().P_lobbySceneLoaded)
-                    yield return null;
-
-                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
+                StartCoroutine(LoadCharacterSelectScene());
+                TargetClientLoadCharacterSelectScene(conn);
             }
         }
 
-        /*
-        IEnumerator WaitForSyncList(int oldCount)
+        [TargetRpc]
+        private void TargetClientLoadCharacterSelectScene(NetworkConnection conn)
         {
-            //MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene())
-            while (MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().rootCount == oldCount)
-                yield return null;
-            // Before, I passed in Client.client.gameObject as the 1st parameter, so I kept passing in the same clientinstance, not linking it to connectionToClient
-            // So I used connectionToClient to reliably retrieve the correct client to pass in
-            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-            SceneMessage msg = new SceneMessage
-            {
-                sceneName = MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().name,
-                sceneOperation = SceneOperation.LoadAdditive
-            };
-            connectionToClient.Send(msg);
+            StartCoroutine(LoadCharacterSelectScene());
         }
-        */
+
+        public void JoinLobby(string _matchID)
+        {
+            if(isServer)
+                MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().ServerStartSetting(_matchID);
+        }
+
+        private IEnumerator LoadCharacterSelectScene()
+        {
+            if(isServer && !P_characterSelectSceneLoaded)
+            {
+                // load lobby scenes
+                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(P_characterSelectScene, LoadSceneMode.Additive);
+                
+                while (!asyncLoad.isDone)
+                    yield return null;
+
+                Scene newLobbyScene = SceneManager.GetSceneAt(MatchMaker.instance.GetMatches().Count); 
+
+                MatchMaker.instance.GetMatches()[matchID].SetScene(newLobbyScene);                
+                SceneManager.MoveGameObjectToScene(gameObject, newLobbyScene);
+
+                P_characterSelectSceneLoaded = true;
+            }
+            
+            if(isClient)
+            {
+                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(P_characterSelectScene, LoadSceneMode.Additive);
+                
+                while(!asyncLoad.isDone)
+                    yield return null;
+            }
+        }
 
         #region Start & Stop Callbacks
 
@@ -85,7 +97,10 @@ namespace SheepDoom
         /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
-        public override void OnStartServer() { }
+        public override void OnStartServer()
+        {
+            instance = this;
+        }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned

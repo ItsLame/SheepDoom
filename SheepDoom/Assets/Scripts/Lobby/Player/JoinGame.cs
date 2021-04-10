@@ -32,7 +32,7 @@ namespace SheepDoom
                 SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
                 Debug.Log("MATCHID IN JOINGAMESCRIPT: " + matchIdInput);
                 
-                MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetLobbyManager().JoinLobby(matchIdInput);
+                MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinLobby(matchIdInput);
                 SceneMessage msg = new SceneMessage
                 {
                     sceneName = MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().name,
