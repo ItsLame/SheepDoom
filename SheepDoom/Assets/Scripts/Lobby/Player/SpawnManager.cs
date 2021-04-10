@@ -22,9 +22,6 @@ namespace SheepDoom
         private GameObject currentPlayerObj = null;
         private ClientName _cn;
 
-
-
-
         // dynamically store and call functions and dispatched on the player object spawned by the client
         // note that client prefab/object and player prefab/object are 2 different things but are connected
         public static event Action<GameObject> OnClientPlayerSpawned;
