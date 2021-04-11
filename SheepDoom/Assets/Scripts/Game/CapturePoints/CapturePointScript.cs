@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Mirror;
 
 namespace SheepDoom
 {
-    public class CapturePointScript : MonoBehaviour
+    public class CapturePointScript : NetworkBehaviour
     {
         //attach the score gameobject to count the score
         public GameObject scoreGameObject;
@@ -18,6 +19,7 @@ namespace SheepDoom
         [Tooltip("How much HP the tower has, edit this")]
         private float TowerHP;
         [SerializeField]
+        [SyncVar]
         private float TowerInGameHP; //to be used in game, gonna be the one fluctuating basically
 
         //rate of capture
@@ -31,8 +33,10 @@ namespace SheepDoom
         //captured bools
         [Space(20)]
         [SerializeField]
+        [SyncVar]
         private bool CapturedByBlue;
         [SerializeField]
+        [SyncVar]
         private bool CapturedByRed;
         [SerializeField]
         private int numOfCapturers; //logging number to check if tower is under capture or not
@@ -45,9 +49,6 @@ namespace SheepDoom
             //set the tower's hp based on the settings
             TowerInGameHP = TowerHP;
 
-            //single player mode, red team ownership at start
-            CapturedByRed = true;
-
             //no one is capturing it at start so put at 0
             numOfCapturers = 0;
         }
@@ -58,8 +59,8 @@ namespace SheepDoom
             //regen hp if tower is not under capture
             if ((numOfCapturers == 0) && (TowerInGameHP < TowerHP))
             {
-                //TowerInGameHP += TowerRegenRate * Time.deltaTime;
                 modifyinghealth(TowerRegenRate * Time.deltaTime);
+
                 //debug showing tower HP
                 //Debug.Log(this.name + " HP: " + TowerInGameHP);
             }
@@ -95,13 +96,14 @@ namespace SheepDoom
             }
         }
 
+
         public void modifyinghealth(float amount)
         {
             TowerInGameHP += amount;
+
             //Debug.Log("health: tower in game hp:  " + TowerInGameHP);
             //float currenthealthPct = TowerInGameHP /TowerHP;
             //OnHealthPctChangedTower(currenthealthPct);
-            //Debug.Log("health tower ================================== changed");
         }
 
         //check for player enter
@@ -109,8 +111,21 @@ namespace SheepDoom
         {
             if (other.tag == "Player")
             {
-             //   Debug.Log("Player In Zone");
-                numOfCapturers += 1;
+                //get player's team ID
+                float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+
+                //if point belongs to red, it can be captured by blue players
+                if (CapturedByRed && (tID == 1))
+                {
+                    numOfCapturers += 1;
+                }
+
+                //if point belongs to blue, it can be captured by red players
+                if (CapturedByBlue && (tID == 2))
+                {
+                    numOfCapturers += 1;
+                }
+
             }
         }
 
@@ -119,17 +134,24 @@ namespace SheepDoom
         {
             if (other.CompareTag("Player"))
             {
-                //single player mode, so only blue team
-                if (!CapturedByBlue)
-                {
-                    //Debug.Log(other.name + "capturing Tower");
+                float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
 
+                //if point belongs to red, it can be captured by blue
+                if (CapturedByRed && (tID == 1))
+                {
                     modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
                     //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
 
-                    //debug showing tower HP
-                    // Debug.Log(this.name + " HP: " + TowerInGameHP);
                 }
+
+                //if point belongs to blue, it can be captured by red
+                if (CapturedByBlue && (tID == 2))
+                {
+                    modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
+                    //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
+                }
+
+
             }
         }
 
@@ -138,8 +160,20 @@ namespace SheepDoom
         {
             if (other.CompareTag("Player"))
             {
-            //    Debug.Log("Player Left Zone");
-                numOfCapturers -= 1;
+                //get player's team ID
+                float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+
+                //if point belongs to red, it can be captured by blue players
+                if (CapturedByRed && (tID == 1))
+                {
+                    numOfCapturers -= 1;
+                }
+
+                //if point belongs to blue, it can be captured by red players
+                if (CapturedByBlue && (tID == 2))
+                {
+                    numOfCapturers -= 1;
+                }
             }
         }
 

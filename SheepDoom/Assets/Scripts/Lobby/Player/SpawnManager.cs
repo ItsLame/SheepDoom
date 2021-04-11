@@ -25,10 +25,20 @@ namespace SheepDoom
         [Space(15)]
         [Header("Player number based on the order they are spawned")]
         private float currentPlayerNumber;
-        [Header("Spawn position")]
+        public float team1PlayerNumber;
+        public float team2PlayerNumber;
+
+        [Header("Spawn position (Team 1)")]
         public GameObject playerSpawnPoint1;
         public GameObject playerSpawnPoint2;
         public GameObject playerSpawnPoint3;
+
+
+        [Header("Spawn position (Team 2)")]
+        [Space(15)]
+        public GameObject playerSpawnPoint4;
+        public GameObject playerSpawnPoint5;
+        public GameObject playerSpawnPoint6;
 
         [Space(15)]
         //the time we will use
