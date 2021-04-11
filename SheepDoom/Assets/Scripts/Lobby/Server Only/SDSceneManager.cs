@@ -123,7 +123,7 @@ namespace SheepDoom
                 while (asyncLoad.progress < 0.9f)
                 {
                     Debug.Log("LOADING: "+asyncLoad.progress);    
-                    yield return new WaitForSecondsRealtime(0.25f);
+                    yield return new WaitForSecondsRealtime(0.5f);
                 }           
 
                 asyncLoad.allowSceneActivation = true;
@@ -157,6 +157,9 @@ namespace SheepDoom
                 }
 
                 asyncLoad.allowSceneActivation = true;
+
+                //SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByPath(_scene));
+                //SceneManager.MoveGameObjectToScene(PlayerObj.instance.gameObject, SceneManager.GetSceneByPath(_scene));
             }
         }
         
