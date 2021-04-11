@@ -51,7 +51,7 @@ namespace SheepDoom
         private void Start()
         {
             if(isServer)
-                ServerStartSetting(SDSceneManager.instance.P_matchID);
+                //ServerStartSetting(SDSceneManager.instance.P_matchID);
             if(isClient)
                 ClientStartSetting();
         }
@@ -99,6 +99,20 @@ namespace SheepDoom
         {
             CmdRequestCharacterSelectUpdate(_matchID, _player, _startGame);
 
+            _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
+            _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
+
+            if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+            {
+                P_team1GameObject.SetActive(true);
+                P_team2GameObject.SetActive(false);
+            }
+            else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+            {
+                P_team1GameObject.SetActive(false);
+                P_team2GameObject.SetActive(true);
+            }
+
             if(_startGame == true)
                 _player.GetComponent<PlayerObj>().ci.GetComponent<SpawnManager>().SpawnPlayer("game");
 
@@ -108,8 +122,13 @@ namespace SheepDoom
         [Command(ignoreAuthority = true)]
         private void CmdRequestCharacterSelectUpdate(string _matchID, GameObject _player, bool _startGame)
         {
-             _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
-             _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
+            _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
+            _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
+            
+            if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(P_team1GameObject.transform, false);
+            else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(P_team2GameObject.transform, false);
 
             RpcUpdateExisting(_player);
 
@@ -121,24 +140,14 @@ namespace SheepDoom
         private void RpcUpdateExisting(GameObject _player)
         {
             if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-            {
-                P_team1GameObject.SetActive(true);
-                P_team2GameObject.SetActive(false);
-
                 _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(P_team1GameObject.transform, false);
-            }
-                
             else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-            {
-                P_team1GameObject.SetActive(false);
-                P_team2GameObject.SetActive(true);
-
                 _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(P_team2GameObject.transform, false);
-            }
 
             _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
             _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
         }
+
         public void ForceStart()
         {
             StartCoroutine(RequestCharacterSelectUpdate(PlayerObj.instance.GetMatchID(), PlayerObj.instance.gameObject, true));
@@ -147,11 +156,11 @@ namespace SheepDoom
         private IEnumerator UnloadLobbyScene()
         {
             if(isServer)
-                //SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
+                SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
             if(isClient)
             {
                 yield return new WaitForSecondsRealtime(0.5f);
-                //SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
+                SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
             }
         }
 
@@ -173,7 +182,7 @@ namespace SheepDoom
                 SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, SceneManager.GetSceneByName(MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetScene().name));
             }
 
-            StartCoroutine(UnloadLobbyScene());
+            //StartCoroutine(UnloadLobbyScene());
         }
 
         /// <summary>
@@ -190,7 +199,7 @@ namespace SheepDoom
         {
             instance = this;
 
-            StartCoroutine(UnloadLobbyScene());
+            //StartCoroutine(UnloadLobbyScene());
         }
 
         /// <summary>

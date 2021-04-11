@@ -113,6 +113,7 @@ namespace SheepDoom
             if(P_matchIDText.GetComponent<Text>().text == string.Empty || P_matchIDText.GetComponent<Text>().text != _matchID)
             {
                 P_matchID = _matchID;
+                
                 P_matchIDText.GetComponent<Text>().text = P_matchID;
             }
 
@@ -144,11 +145,11 @@ namespace SheepDoom
                 Debug.Log("Did i find the correct connection?");
                 foreach(var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
                 {
-                        TargetUpdateJoiner(conn, player);
+                    TargetUpdateJoiner(conn, player);
                 }
 
                 RpcUpdateExisting(_player);
-
+                
                 if(_startMatch == true)
                     MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartCharacterSelectScene();
             }
