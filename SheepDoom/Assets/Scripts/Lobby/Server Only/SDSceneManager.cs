@@ -113,42 +113,44 @@ namespace SheepDoom
 
         private IEnumerator LoadScene(string _scene, bool _sceneLoaded)
         {
-            if(isServer && !_sceneLoaded)
+            if(isServer && !lobbySceneLoaded)//!_sceneLoaded)
             {
                 // load lobby scenes
                 AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_scene, LoadSceneMode.Additive);
-                
-                asyncLoad.allowSceneActivation = false;
 
-                while (asyncLoad.progress < 0.9f)
+                //asyncLoad.allowSceneActivation = false;
+
+               /* while (asyncLoad.progress < 0.9f)
                 {
                     Debug.Log("LOADING: "+asyncLoad.progress);    
                     yield return new WaitForSecondsRealtime(0.5f);
-                }           
+                }*/
+                while (!asyncLoad.isDone)
+                    yield return null;
 
-                asyncLoad.allowSceneActivation = true;
+                //asyncLoad.allowSceneActivation = true;
 
-                Scene newLobbyScene = SceneManager.GetSceneByPath(_scene);
+                Scene newLobbyScene = SceneManager.GetSceneAt(MatchMaker.instance.GetMatches().Count);
 
                 MatchMaker.instance.GetMatches()[matchID].SetScene(newLobbyScene);
                 SceneManager.MoveGameObjectToScene(gameObject, newLobbyScene);
-                
-                _sceneLoaded = true;
+                lobbySceneLoaded = true;
+               /* _sceneLoaded = true;
 
                 if(_scene == lobbyScene)
                     P_lobbySceneLoaded = _sceneLoaded;
                 else if(_scene == P_characterSelectScene)
                     P_characterSelectSceneLoaded = _sceneLoaded;
                 else if(_scene == gameScene)
-                    P_gameSceneLoaded = _sceneLoaded;
+                    P_gameSceneLoaded = _sceneLoaded;*/
             }
             
             if(isClient)
             {
                 // load lobby scenes
                 AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_scene, LoadSceneMode.Additive);
-                
-                asyncLoad.allowSceneActivation = false;
+
+                /*asyncLoad.allowSceneActivation = false;
 
                 while (asyncLoad.progress < 0.9f)
                 {
@@ -156,7 +158,9 @@ namespace SheepDoom
                     yield return new WaitForSecondsRealtime(0.2f);
                 }
 
-                asyncLoad.allowSceneActivation = true;
+                asyncLoad.allowSceneActivation = true;*/
+                while (!asyncLoad.isDone)
+                    yield return null;
 
                 //SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByPath(_scene));
                 //SceneManager.MoveGameObjectToScene(PlayerObj.instance.gameObject, SceneManager.GetSceneByPath(_scene));
