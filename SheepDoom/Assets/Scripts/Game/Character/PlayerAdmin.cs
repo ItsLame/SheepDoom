@@ -12,7 +12,6 @@ public class PlayerAdmin : NetworkBehaviour
     private float TeamIndex;
 
     [Header("Player scores")]
-    [Space(15)]
     public float PlayerKills;
     public float PlayerDeaths;
     public float TowerCaptures;

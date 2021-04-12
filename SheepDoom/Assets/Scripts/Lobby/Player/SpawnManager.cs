@@ -19,14 +19,17 @@ namespace SheepDoom
         private NetworkIdentity playerPrefab = null;
         [SerializeField]
         private NetworkIdentity gameplayPlayerPrefab = null;
+
+        //second player
+        [SerializeField]
+        private NetworkIdentity gameplayPlayerPrefab2 = null;
         private GameObject currentPlayerObj = null;
         private ClientName _cn;
 
         [Space(15)]
         [Header("Player number based on the order they are spawned")]
         private float currentPlayerNumber;
-        public float team1PlayerNumber;
-        public float team2PlayerNumber;
+        public float playerTeamID;
 
         [Header("Spawn position (Team 1)")]
         public GameObject playerSpawnPoint1;
@@ -113,21 +116,23 @@ namespace SheepDoom
                 GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().addPlayer();
                 currentPlayerNumber = GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().PlayerCount;
 
+                //get the teamID selected in menu
+                GameObject teamD = GameObject.Find("TeamDebug");
+                Debug.Log("GameObject teamD found");
+                playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
+                Debug.Log("playerTeamID: " + playerTeamID);
+
+
                 Debug.Log("Number of players: " + currentPlayerNumber);
 
-                if (currentPlayerNumber == 1)
+                if (playerTeamID == 1)
                 {
                     spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
                 }
 
-                else if (currentPlayerNumber == 2)
+                else
                 {
-                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint2.transform.position, Quaternion.identity);
-                }
-
-                else if (currentPlayerNumber == 3)
-                {
-                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint3.transform.position, Quaternion.identity);
+                    spawn = Instantiate(gameplayPlayerPrefab2.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
                 }
             }
 

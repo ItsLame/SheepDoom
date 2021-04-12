@@ -112,9 +112,15 @@ MonoBehaviour:
     type: 3}
   gameplayPlayerPrefab: {fileID: 8449280143259454606, guid: 9137392e5df5a964689d24c6355ba9bc,
     type: 3}
-  playerSpawnPoint1: {fileID: 4577573630412624709, guid: 03167dbdeaf29e046ba2b43aa859b236,
+  gameplayPlayerPrefab2: {fileID: 1088759763548799350, guid: b9f33189f64b5e04f87fa4467deaf77a,
     type: 3}
-  playerSpawnPoint2: {fileID: 7530824978741564694, guid: 848c802a94391d3469d01443b222f696,
+  playerSpawnPoint1: {fileID: 3580123260074344118, guid: 93e41b64510bf6e4f88f6ba284cc6991,
     type: 3}
-  playerSpawnPoint3: {fileID: 1320144642447614861, guid: d327bc8fc816d5841a14bf92a721977a,
+  playerSpawnPoint2: {fileID: 0}
+  playerSpawnPoint3: {fileID: 0}
+  playerSpawnPoint4: {fileID: 6425602078007353856, guid: 41b240c0cbfb07c46939ae68e9a9eb19,
     type: 3}
+  playerSpawnPoint5: {fileID: 0}
+  playerSpawnPoint6: {fileID: 0}
+  SecondsTimer: 0
+  MinutesTimer: 0

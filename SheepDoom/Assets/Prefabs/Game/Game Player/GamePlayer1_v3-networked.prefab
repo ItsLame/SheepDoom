@@ -1186,6 +1186,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b65cce4e7dd66148a452f4aaf296870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  TeamIndex: 1
+  PlayerKills: 0
+  PlayerDeaths: 0
+  TowerCaptures: 0
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0
