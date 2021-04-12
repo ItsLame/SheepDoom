@@ -117,9 +117,9 @@ namespace SheepDoom
                 currentPlayerNumber = GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().PlayerCount;
 
                 //get the teamID selected in menu
-                GameObject teamD = GameObject.Find("TeamDebug");
+                GameObject teamD = GameObject.Find("NetworkManager");
                 Debug.Log("GameObject teamD found");
-              //  playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
+                playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
                 Debug.Log("playerTeamID: " + playerTeamID);
 
 
@@ -127,11 +127,13 @@ namespace SheepDoom
 
                 if (playerTeamID == 1)
                 {
+                    Debug.Log("Spawning in blue team");
                     spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
                 }
 
-                else
+                if (playerTeamID == 2)
                 {
+                    Debug.Log("Spawning in red team");
                     spawn = Instantiate(gameplayPlayerPrefab2.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
                 }
             }

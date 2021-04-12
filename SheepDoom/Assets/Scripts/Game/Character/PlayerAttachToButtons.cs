@@ -37,7 +37,7 @@ namespace SheepDoom
             _NormalButton.onClick.AddListener(normalAttack);
             _SpecialButton.onClick.AddListener(specialAttack);
             _UltiButton.onClick.AddListener(ultiAttack);
-            Debug.Log("Are buttons assigned inside?");
+           // Debug.Log("Are buttons assigned inside?");
         }
     }
 }

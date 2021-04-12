@@ -66,13 +66,28 @@ namespace SheepDoom
             }
 
             //once HP = 0, notify the scoring and convert the tower
-            //for now since single player mode, only use blue team's settings
+            //from red to blue (captured by blue team)
             if (TowerInGameHP <= 0 && !CapturedByBlue)
             {
                 //show which point is captured, change point authority and max out towerHP
                 Debug.Log(this.name + " Captured By Blue Team");
                 CapturedByBlue = true;
                 CapturedByRed = false;
+
+                modifyinghealth(TowerHP);
+                //  TowerInGameHP = TowerHP;
+
+                //reference the score script to increase score function
+                scoreGameObject.GetComponent<GameScore>().blueScoreUp();
+            }
+
+            //from blue to red (captured by red team)
+            else if (TowerInGameHP <= 0 && !CapturedByRed)
+            {
+                //show which point is captured, change point authority and max out towerHP
+                Debug.Log(this.name + " Captured By Blue Team");
+                CapturedByRed = true;
+                CapturedByBlue = false;
 
                 modifyinghealth(TowerHP);
                 //  TowerInGameHP = TowerHP;
@@ -101,7 +116,7 @@ namespace SheepDoom
         {
             TowerInGameHP += amount;
 
-            //Debug.Log("health: tower in game hp:  " + TowerInGameHP);
+            Debug.Log("health: tower in game hp:  " + TowerInGameHP);
             //float currenthealthPct = TowerInGameHP /TowerHP;
             //OnHealthPctChangedTower(currenthealthPct);
         }

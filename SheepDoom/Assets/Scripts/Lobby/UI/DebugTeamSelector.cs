@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//using Mirror;
+using Mirror;
 
 //used for the buttons in login to force select your team
 // BLUE IS 1, RED IS 2
-public class DebugTeamSelector : MonoBehaviour
+public class DebugTeamSelector : NetworkBehaviour
 {
     public GameObject notifyingText;
 
     //teamID
     // BLUE IS 1, RED IS 2
     [SerializeField]
-//    [SyncVar]
+    [SyncVar]
     private float teamID;
     private Text displayTeam;
 
