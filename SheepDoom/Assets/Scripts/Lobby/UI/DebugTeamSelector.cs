@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
+//using Mirror;
 
 //used for the buttons in login to force select your team
 // BLUE IS 1, RED IS 2
@@ -13,6 +13,7 @@ public class DebugTeamSelector : MonoBehaviour
     //teamID
     // BLUE IS 1, RED IS 2
     [SerializeField]
+//    [SyncVar]
     private float teamID;
     private Text displayTeam;
 
@@ -23,6 +24,7 @@ public class DebugTeamSelector : MonoBehaviour
         return teamID;
     }
 
+//    [Command]
     //select blue team (TEAM 1)
     public void selectBlue()
     {
@@ -31,7 +33,7 @@ public class DebugTeamSelector : MonoBehaviour
         joinBlue();
     }
 
-
+ //   [Command]
     //select blue team (TEAM 2)
     public void selectRed()
     {
@@ -47,7 +49,7 @@ public class DebugTeamSelector : MonoBehaviour
         Debug.Log("Team ID = " + teamID);
     }
 
-  //  [TargetRpc]
+//   [TargetRpc]
     public void joinRed()
     {
         teamID = 2;

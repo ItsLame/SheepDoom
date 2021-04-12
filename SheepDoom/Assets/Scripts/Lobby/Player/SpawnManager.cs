@@ -119,7 +119,7 @@ namespace SheepDoom
                 //get the teamID selected in menu
                 GameObject teamD = GameObject.Find("TeamDebug");
                 Debug.Log("GameObject teamD found");
-                playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
+              //  playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
                 Debug.Log("playerTeamID: " + playerTeamID);
 
 
