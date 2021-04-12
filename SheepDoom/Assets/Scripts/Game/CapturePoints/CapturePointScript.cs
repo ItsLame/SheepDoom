@@ -93,7 +93,7 @@ namespace SheepDoom
                 //  TowerInGameHP = TowerHP;
 
                 //reference the score script to increase score function
-                scoreGameObject.GetComponent<GameScore>().blueScoreUp();
+                scoreGameObject.GetComponent<GameScore>().redScoreUp();
             }
 
             //change color when captured by blue

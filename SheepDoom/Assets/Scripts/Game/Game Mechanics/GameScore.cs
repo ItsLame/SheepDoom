@@ -20,9 +20,9 @@ public class GameScore : MonoBehaviour
     //hard coded for now
     [Space(20)]
     [SerializeField]
-    private float blueCaptureScore = 0;
+    private float blueCaptureScore;
     [SerializeField]
-    private float redCaptureScore = 4;
+    private float redCaptureScore;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +49,12 @@ public class GameScore : MonoBehaviour
         redCaptureScore -= 1;
     }
 
+    public void redScoreUp()
+    {
+        //if blue scores, red will -1
+        blueCaptureScore -= 1;
+        redCaptureScore += 1;
+    }
 
     // game winning condition (will be called when base is taken)
     // shows scoreboard etc when game ends, will add timer counter condition in the future

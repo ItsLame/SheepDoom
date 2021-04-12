@@ -133,6 +133,7 @@ namespace SheepDoom
                 {
                     Debug.Log("Spawning in blue team");
                     spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
+                    spawn.gameObject.GetComponent<PlayerAdmin>().setTeamIndex(1);
                 }
 
                 if (playerTeamID_TEMP == 2)
@@ -140,6 +141,7 @@ namespace SheepDoom
                 {
                     Debug.Log("Spawning in red team");
                     spawn = Instantiate(gameplayPlayerPrefab2.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
+                    spawn.gameObject.GetComponent<PlayerAdmin>().setTeamIndex(2);
                 }
             }
 

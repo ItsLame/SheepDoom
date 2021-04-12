@@ -413,7 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  respawnLocation: {fileID: 4577573630412624709, guid: 03167dbdeaf29e046ba2b43aa859b236,
+  respawnLocation: {fileID: 6425602078007353856, guid: 41b240c0cbfb07c46939ae68e9a9eb19,
     type: 3}
   respawnTimerRef: 5
   respawnTimerInGame: 0

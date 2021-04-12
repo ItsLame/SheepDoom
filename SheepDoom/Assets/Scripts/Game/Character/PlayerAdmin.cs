@@ -26,9 +26,4 @@ public class PlayerAdmin : NetworkBehaviour
     {
         TeamIndex = value;
     }
-    private void Start()
-    {
-        float value = GameObject.Find("NetworkManager").GetComponent<DebugTeamSelector>().getTeamID();
-        setTeamIndex(value);
-    }
 }
