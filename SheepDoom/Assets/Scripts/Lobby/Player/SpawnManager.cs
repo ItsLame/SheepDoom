@@ -49,6 +49,9 @@ namespace SheepDoom
         public float MinutesTimer = 0;
         private TimeSpan timePlaying;
 
+        //TEMPORARY
+        [SyncVar] private float playerTeamID_TEMP = 0;
+
         // dynamically store and call functions and dispatched on the player object spawned by the client
         // note that client prefab/object and player prefab/object are 2 different things but are connected
         public static event Action<GameObject> OnClientPlayerSpawned;
@@ -117,21 +120,23 @@ namespace SheepDoom
                 currentPlayerNumber = GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().PlayerCount;
 
                 //get the teamID selected in menu
-                GameObject teamD = GameObject.Find("NetworkManager");
-                Debug.Log("GameObject teamD found");
-                playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
-                Debug.Log("playerTeamID: " + playerTeamID);
+                //GameObject teamD = GameObject.Find("NetworkManager");
+                //Debug.Log("GameObject teamD found");
+                //playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
 
+                //Debug.Log("playerTeamID: " + playerTeamID);
 
-                Debug.Log("Number of players: " + currentPlayerNumber);
+                //Debug.Log("Number of players: " + currentPlayerNumber);
 
-                if (playerTeamID == 1)
+                //if (playerTeamID == 1)
+                if (playerTeamID_TEMP == 1)
                 {
                     Debug.Log("Spawning in blue team");
                     spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
                 }
 
-                if (playerTeamID == 2)
+                if (playerTeamID_TEMP == 2)
+                //if (playerTeamID == 2)
                 {
                     Debug.Log("Spawning in red team");
                     spawn = Instantiate(gameplayPlayerPrefab2.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
@@ -148,6 +153,22 @@ namespace SheepDoom
         }
 
         #region Start & Stop Callbacks
+
+        public override void OnStartClient()
+        {
+            //get the teamID selected in menu
+            GameObject teamD = GameObject.Find("NetworkManager");
+            Debug.Log("GameObject teamD found");
+            playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
+            
+            CmdTeamID_TEMP(playerTeamID);
+        }
+
+        [Command]
+        private void CmdTeamID_TEMP(float playerTeamID)
+        {
+            playerTeamID_TEMP = playerTeamID;
+        }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned

@@ -13,7 +13,6 @@ public class DebugTeamSelector : NetworkBehaviour
     //teamID
     // BLUE IS 1, RED IS 2
     [SerializeField]
-    [SyncVar]
     private float teamID;
     private Text displayTeam;
 
@@ -56,12 +55,10 @@ public class DebugTeamSelector : NetworkBehaviour
         Debug.Log("Team ID = " + teamID);
     }
 
-
     //default is blue
     private void Start()
     {
         displayTeam = notifyingText.GetComponent<Text>();
         teamID = 1;
     }
-
 }
