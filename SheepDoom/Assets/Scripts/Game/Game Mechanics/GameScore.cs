@@ -15,6 +15,7 @@ public class GameScore : MonoBehaviour
 
     [SerializeField]
     public GameObject completeGameUI;
+    public GameObject completeGameUI2;
 
     //counters for tower captures per team
     //hard coded for now
@@ -72,6 +73,8 @@ public class GameScore : MonoBehaviour
         if (TeamID == 2)
         {
             Debug.Log("Red Team Wins!");
+            completeGameUI2.SetActive(true);
+            completeGameUI2.GetComponent<Animator>().SetTrigger("Complete");
         }
     }
 }

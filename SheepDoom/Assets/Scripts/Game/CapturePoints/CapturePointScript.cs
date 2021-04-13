@@ -158,7 +158,29 @@ namespace SheepDoom
         {
             if (other.CompareTag("Player"))
             {
+                //get player teamID
                 float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+
+                //increase the player score when tower is captured
+                if (giveScoreToCapturers == true)
+                {
+                    if (CapturedByRed)
+                    {
+                        //if its red means it was previously blue, so give score to red player
+                        if (tID == 1) return;
+                        Debug.Log("Giving Score to Red Team Players in Range");
+                        increasePlayerCaptureScore(other.gameObject);
+                        giveScoreToCapturers = false;
+                    }
+
+                    //else blue  team captured red point, give score to blue
+                    else
+                    {
+                        increasePlayerCaptureScore(other.gameObject);
+                        giveScoreToCapturers = false;
+                    }
+
+                }
 
                 //if point belongs to red, it can be captured by blue
                 if (CapturedByRed && (tID == 1))
@@ -217,7 +239,7 @@ namespace SheepDoom
             }
         }
 
-        [Command]
+//        [Command]
         public void increasePlayerCaptureScore(GameObject player)
         {
             player.gameObject.GetComponent<PlayerAdmin>().increaseCaptureCount();

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Mirror;
 
-public class CaptureBaseScript : MonoBehaviour
+public class CaptureBaseScript : NetworkBehaviour
 {
     //attach the score gameobject to count the score
     public GameObject scoreGameObject;
@@ -16,6 +17,7 @@ public class CaptureBaseScript : MonoBehaviour
     [Tooltip("How much HP the Base has, edit this")]
     private float BaseHP;
     [SerializeField]
+    [SyncVar]
     private float BaseInGameHP; //to be used in game, gonna be the one fluctuating basically
 
     //rate of capture
@@ -29,8 +31,10 @@ public class CaptureBaseScript : MonoBehaviour
     //captured bools
     [Space(20)]
     [SerializeField]
+    [SyncVar]
     private bool CapturedByBlue2;
     [SerializeField]
+    [SyncVar]
     private bool CapturedByRed2;
     [SerializeField]
     private int numOfCapturersBase; //logging number to check if Base is under capture or not
@@ -42,9 +46,6 @@ public class CaptureBaseScript : MonoBehaviour
     {
         //set the Base's hp based on the settings
         BaseInGameHP = BaseHP;
-
-        //single player mode, red team ownership at start
-        CapturedByRed2 = true;
 
         //no one is capturing it at start so put at 0
         numOfCapturersBase = 0;
@@ -59,21 +60,21 @@ public class CaptureBaseScript : MonoBehaviour
             //BaseInGameHP += BaseRegenRate * Time.deltaTime;
             modifyinghealth(BaseRegenRate * Time.deltaTime);
             //debug showing base hp
-            Debug.Log(this.name + " HP: " + BaseInGameHP);
+      //     Debug.Log(this.name + " HP: " + BaseInGameHP);
         }
 
-        //once HP = 0, notify the scoring and convert the Base
-        //for now since single player mode, only use blue team's settings
+        //blue team victory when base hp 0
         if (BaseInGameHP <= 0 && !CapturedByBlue2)
         {
-            //show which point is captured, change point authority and max out BaseHP
-            Debug.Log(this.name + " Captured By Blue Team");
-            CapturedByBlue2 = true;
-            CapturedByRed2 = false;
-            //BaseInGameHP = BaseHP;
-            modifyinghealth(BaseHP);
             //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
             scoreGameObject.GetComponent<GameScore>().GameEnd(1);
+        }
+
+        //red team victory if base hp 0
+        if (BaseInGameHP <= 0 && !CapturedByRed2)
+        {
+            //reference the score script to END THE GAME IN RED VICTORY   <------------------------------------------------- GAME END CALL
+            scoreGameObject.GetComponent<GameScore>().GameEnd(2);
         }
 
         //change color when captured by blue
