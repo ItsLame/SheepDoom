@@ -244,5 +244,7 @@ namespace SheepDoom
         {
             player.gameObject.GetComponent<PlayerAdmin>().increaseCaptureCount();
         }
+
+
     }
 }
