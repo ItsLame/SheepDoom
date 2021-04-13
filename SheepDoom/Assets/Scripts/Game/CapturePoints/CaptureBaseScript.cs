@@ -35,7 +35,7 @@ public class CaptureBaseScript : MonoBehaviour
     [SerializeField]
     private int numOfCapturersBase; //logging number to check if Base is under capture or not
 
-    public event Action<float> OnHealthPctChangedTower = delegate { };
+ //   public event Action<float> OnHealthPctChangedTower = delegate { };
 
     // Start is called before the first frame update
     void Start()
@@ -96,7 +96,7 @@ public class CaptureBaseScript : MonoBehaviour
         BaseInGameHP += amount;
 
         float currenthealthPct = BaseInGameHP / BaseHP;
-        OnHealthPctChangedTower(currenthealthPct);
+ //       OnHealthPctChangedTower(currenthealthPct);
     }
 
     //check for player enter
@@ -104,8 +104,21 @@ public class CaptureBaseScript : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-        //    Debug.Log("Player In Zone");
-            numOfCapturersBase += 1;
+            //get player's team ID
+            float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+
+            //if point belongs to red, it can be captured by blue players
+            if (CapturedByRed2 && (tID == 1))
+            {
+                numOfCapturersBase += 1;
+            }
+
+            //if point belongs to blue, it can be captured by red players
+            if (CapturedByBlue2 && (tID == 2))
+            {
+                numOfCapturersBase += 1;
+            }
+
         }
     }
 
@@ -114,15 +127,26 @@ public class CaptureBaseScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //single player mode, so only blue team
-            if (!CapturedByBlue2)
+            float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+
+            //if point belongs to red, it can be captured by blue
+            if (CapturedByRed2 && (tID == 1))
             {
-          //      Debug.Log(other.name + "capturing Base");
-                //BaseInGameHP -= BaseCaptureRate * Time.deltaTime;
                 modifyinghealth(-(BaseCaptureRate * Time.deltaTime));
-                //debug showing base hp
-                Debug.Log(this.name + " HP: " + BaseInGameHP);
+                //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
+
+
+
             }
+
+            //if point belongs to blue, it can be captured by red
+            if (CapturedByBlue2 && (tID == 2))
+            {
+                modifyinghealth(-(BaseCaptureRate * Time.deltaTime));
+                //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
+            }
+
+
         }
     }
 
@@ -131,8 +155,20 @@ public class CaptureBaseScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-        //    Debug.Log("Player Left Zone");
-            numOfCapturersBase -= 1;
+            //get player's team ID
+            float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+
+            //if point belongs to red, it can be captured by blue players
+            if (CapturedByRed2 && (tID == 1))
+            {
+                numOfCapturersBase -= 1;
+            }
+
+            //if point belongs to blue, it can be captured by red players
+            if (CapturedByBlue2 && (tID == 2))
+            {
+                numOfCapturersBase -= 1;
+            }
         }
     }
 

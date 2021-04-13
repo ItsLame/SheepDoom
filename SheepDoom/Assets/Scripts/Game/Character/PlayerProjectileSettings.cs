@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SheepDoom
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class ProjectileSettings : MonoBehaviour
+    public class PlayerProjectileSettings : MonoBehaviour
     {
         //projectileOwner
         public GameObject owner;
@@ -23,6 +23,9 @@ namespace SheepDoom
         public bool destroyOnContact; //if projectile ill stop on first contact
 
         private Rigidbody m_Rigidbody;
+
+        //bool for calling kill counter increase once
+        bool killCounterIncreaseCalled = false;
 
         void Awake()
         {
@@ -43,9 +46,22 @@ namespace SheepDoom
                 //dont hurt the owner of the projectile
                 if (col.gameObject != owner)
                 {
+                    //reduce HP of hit target
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
                     string playerName = col.gameObject.GetComponent<PlayerUI>().getPlayerName().text;
                     //Debug.Log(playerName + "'s health: " + col.gameObject.GetComponent<PlayerHealth>().getHealth());
+
+                    //increase killer's kill count if target is killed
+                    if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
+                    {
+ //                       if (killCounterIncreaseCalled == false)
+ //                       {
+                            owner.gameObject.GetComponent<PlayerAdmin>().increasePlayerKillCount();
+ //                           killCounterIncreaseCalled = true;
+ //                       }
+
+                    }
+
                     if (destroyOnContact)
                     {
                         Object.Destroy(this.gameObject);

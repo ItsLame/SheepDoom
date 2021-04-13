@@ -320,9 +320,10 @@ GameObject:
   - component: {fileID: 8654435748735961151}
   - component: {fileID: 2942269989861401250}
   - component: {fileID: 2852996945789832678}
-  - component: {fileID: 4292487628444148003}
   - component: {fileID: 3258880482461731996}
   - component: {fileID: 3258880482461731975}
+  - component: {fileID: 4292487628444148003}
+  - component: {fileID: 6854108854905648062}
   m_Layer: 0
   m_Name: CapturePoint
   m_TagString: Untagged
@@ -406,26 +407,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 3.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4292487628444148003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3258880482461731998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adca1b76d4660e04abe7e6575befac9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreGameObject: {fileID: 0}
-  TowerHP: 100
-  TowerInGameHP: 0
-  TowerCaptureRate: 50
-  TowerRegenRate: 20
-  CapturedByBlue: 0
-  CapturedByRed: 0
-  numOfCapturers: 0
 --- !u!54 &3258880482461731996
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -456,3 +437,41 @@ CapsuleCollider:
   m_Height: 2.8706725
   m_Direction: 1
   m_Center: {x: 0.00000004148069, y: -0.042752486, z: -0.00000008296138}
+--- !u!114 &4292487628444148003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3258880482461731998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adca1b76d4660e04abe7e6575befac9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  scoreGameObject: {fileID: 0}
+  TowerHP: 100
+  TowerInGameHP: 0
+  TowerCaptureRate: 50
+  TowerRegenRate: 20
+  CapturedByBlue: 0
+  CapturedByRed: 0
+  numOfCapturers: 0
+--- !u!114 &6854108854905648062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3258880482461731998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0

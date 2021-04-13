@@ -36,8 +36,8 @@ public class GameScore : MonoBehaviour
     void Update()
     {
         //display both of em on screen
-        blueCaptureCounter.text = "Blue:" + blueCaptureScore;
-        redCaptureCounter.text = "Red:" + redCaptureScore;
+        blueCaptureCounter.text = blueCaptureScore.ToString();
+        redCaptureCounter.text =  redCaptureScore.ToString();
     }
 
     //scoring functions

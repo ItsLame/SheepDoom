@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.UI;
 
 public class PlayerAdmin : NetworkBehaviour
 {
@@ -12,18 +13,72 @@ public class PlayerAdmin : NetworkBehaviour
     private float TeamIndex;
 
     [Header("Player scores")]
+//    [SyncVar]
     public float PlayerKills;
+    public Text PlayerKillsText;
+//    [SyncVar]
     public float PlayerDeaths;
+    public Text PlayerDeathsText;
+//    [SyncVar]
     public float TowerCaptures;
+    public Text TowerCapturesText;
 
-    //accessor method
+    //accessor method for team index
     public float getTeamIndex()
     {
         return TeamIndex;
     }
 
+    //set method for teamindex
     public void setTeamIndex(float value)
     {
         TeamIndex = value;
+    }
+
+    //increasing methods for kills, deaths
+    [TargetRpc]
+    public void increasePlayerKillCount()
+    {
+        PlayerKills += 1;
+        Debug.Log("Player Kills increased to " + PlayerKills);
+        PlayerKillsText.text = PlayerKills.ToString();
+    }
+
+    [TargetRpc]
+    public void increasePlayerDeathCount()
+    {
+        PlayerDeaths += 1;
+        Debug.Log("Player Deaths increased to " + PlayerDeaths);
+        PlayerDeathsText.text = PlayerDeaths.ToString();
+    }
+
+    [TargetRpc]
+    public void increaseCaptureCount()
+    {
+        TowerCaptures += 1;
+        Debug.Log("Captures increased to " + TowerCaptures);
+        TowerCapturesText.text = TowerCaptures.ToString();
+    }
+
+    //start
+    private void Start()
+    {
+        if (!hasAuthority) return;
+        //set scores
+        PlayerKills = 0;
+        PlayerDeaths = 0;
+        TowerCaptures = 0;
+
+        //get the UI
+        PlayerKillsText = GameObject.Find("KText").GetComponent<Text>();
+ //       Debug.Log("playerkillstext found");
+        PlayerDeathsText = GameObject.Find("DText").GetComponent<Text>();
+ //       Debug.Log("playerdeathtext found");
+        TowerCapturesText = GameObject.Find("CText").GetComponent<Text>();
+ //       Debug.Log("towercapturetext found");
+
+        PlayerKillsText.text = PlayerKills.ToString();
+        PlayerDeathsText.text = PlayerDeaths.ToString();
+        TowerCapturesText.text = TowerCaptures.ToString();
     }
 }

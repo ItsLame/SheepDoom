@@ -18,6 +18,10 @@ namespace SheepDoom
 
         public bool isFullHealth;
 
+        //for calling death function
+        bool deathCounterCalled = false;
+
+
         private void Start()
         {
             currenthealth = maxHealth;
@@ -43,8 +47,16 @@ namespace SheepDoom
             if (currenthealth <= 0)
             {
                 currenthealth = 0;
+
+                //increase death by 1
+                if (deathCounterCalled == false)
+                {
+                    this.gameObject.GetComponent<PlayerAdmin>().increasePlayerDeathCount();
+                    deathCounterCalled = true;
+                }
+
                 GameOver();
-            }
+            }   
             if (currenthealth > maxHealth)
             {
                 currenthealth = maxHealth;
@@ -76,6 +88,7 @@ namespace SheepDoom
         public void RefillHealth()
         {
             currenthealth = maxHealth;
+            deathCounterCalled = false;
         }
 
         public float getHealth()

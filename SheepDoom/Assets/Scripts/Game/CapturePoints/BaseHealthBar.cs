@@ -13,8 +13,9 @@ public class BaseHealthBar : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        GetComponentInParent<CaptureBaseScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
+ //       GetComponentInParent<CaptureBaseScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
     }
+
     private void HandleHealthChangedTower(float pct)
     {
         StartCoroutine(ChangedToPctTower(pct));
