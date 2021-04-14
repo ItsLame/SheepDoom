@@ -137,15 +137,16 @@ namespace SheepDoom
             {
                 //get player's team ID
                 float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                bool isDed = other.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
 
                 //if point belongs to red, it can be captured by blue players
-                if (CapturedByRed && (tID == 1))
+                if (CapturedByRed && (tID == 1) && !isDed)
                 {
                     numOfCapturers += 1;
                 }
 
                 //if point belongs to blue, it can be captured by red players
-                if (CapturedByBlue && (tID == 2))
+                if (CapturedByBlue && (tID == 2) && !isDed)
                 {
                     numOfCapturers += 1;
                 }
@@ -160,6 +161,9 @@ namespace SheepDoom
             {
                 //get player teamID
                 float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                //get info of is player dead or alive
+                bool isDed = other.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
+
 
                 //increase the player score when tower is captured
                 if (giveScoreToCapturers == true)
@@ -183,34 +187,34 @@ namespace SheepDoom
                 }
 
                 //if point belongs to red, it can be captured by blue
-                if (CapturedByRed && (tID == 1))
+                if (CapturedByRed && (tID == 1) && !isDed)
                 {
                     modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
                     //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
 
-                    //increase the player score when tower is captured
+                    /* increase the player score when tower is captured
                     if (giveScoreToCapturers == true)
                     {
                         Debug.Log("Giving Score to Blue Team Players in Range");
                         increasePlayerCaptureScore(other.gameObject);
                         giveScoreToCapturers = false;
-                    }
+                    } */
 
                 }
 
                 //if point belongs to blue, it can be captured by red
-                if (CapturedByBlue && (tID == 2))
+                if (CapturedByBlue && (tID == 2) && !isDed)
                 {
                     modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
                     //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
 
-                    //increase the player score when tower is captured
+                    /* increase the player score when tower is captured
                     if (giveScoreToCapturers == true)
                     {
                         Debug.Log("Giving Score to Red Team Players in Range");
                         increasePlayerCaptureScore(other.gameObject);
                         giveScoreToCapturers = false;
-                    }
+                    } */
                 }
 
 

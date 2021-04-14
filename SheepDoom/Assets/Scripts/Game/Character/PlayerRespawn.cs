@@ -113,6 +113,7 @@ namespace SheepDoom
         {
             // change components on server, syncvared to client
             this.gameObject.GetComponent<PlayerHealth>().RefillHealth();
+            this.gameObject.GetComponent<PlayerHealth>().revivePlayer();
             this.gameObject.GetComponent<CharacterMovement>().isDead = false;
             this.gameObject.GetComponent<PlayerAttack>().isDead = false;
             isDead = false;

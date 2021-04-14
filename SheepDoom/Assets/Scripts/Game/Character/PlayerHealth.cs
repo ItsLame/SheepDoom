@@ -21,6 +21,9 @@ namespace SheepDoom
         //for calling death function
         bool deathCounterCalled = false;
 
+        //is character dead?
+        [SyncVar]
+        bool playerDead = false;
 
         private void Start()
         {
@@ -48,6 +51,7 @@ namespace SheepDoom
             {
                 currenthealth = 0;
 
+
                 //increase death by 1
                 if (deathCounterCalled == false)
                 {
@@ -73,9 +77,10 @@ namespace SheepDoom
         {
             //added respawn
             this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
+            playerDead = true;
 
             //StartCoroutine(TimeBeforeDeath());
-           // Debug.Log("health: ded");
+            // Debug.Log("health: ded");
         }
 
         IEnumerator TimeBeforeDeath()
@@ -94,6 +99,18 @@ namespace SheepDoom
         public float getHealth()
         {
             return currenthealth;
+        }
+
+        //to set playerdead to false when player is respawned
+        public void revivePlayer()
+        {
+            playerDead = false;
+        }
+
+        //accessor method for playerdead
+        public bool isPlayerDead()
+        {
+            return playerDead;
         }
     }
 }

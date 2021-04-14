@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 1087264228214064072}
   - component: {fileID: 6869177918369833713}
   - component: {fileID: 3201915219564466321}
+  - component: {fileID: 3913887420858538012}
   - component: {fileID: 1088759763548799350}
   - component: {fileID: 2592283840863600004}
   - component: {fileID: 7037161822337196194}
@@ -439,8 +440,28 @@ MonoBehaviour:
   syncInterval: 0.1
   TeamIndex: 2
   PlayerKills: 0
+  PlayerKillsText: {fileID: 0}
   PlayerDeaths: 0
+  PlayerDeathsText: {fileID: 0}
   TowerCaptures: 0
+  TowerCapturesText: {fileID: 0}
+--- !u!114 &3913887420858538012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540617473773694058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc94119df873f54197a8a7471114fda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  CurrentGold: 10
+  CurrentGoldUI: {fileID: 0}
+  CurrentGoldInShopUI: {fileID: 0}
 --- !u!114 &1088759763548799350
 MonoBehaviour:
   m_ObjectHideFlags: 0

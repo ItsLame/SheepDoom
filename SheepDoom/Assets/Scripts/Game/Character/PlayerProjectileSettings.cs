@@ -54,12 +54,9 @@ namespace SheepDoom
                     //increase killer's kill count if target is killed
                     if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
                     {
- //                       if (killCounterIncreaseCalled == false)
- //                       {
-                            owner.gameObject.GetComponent<PlayerAdmin>().increasePlayerKillCount();
- //                           killCounterIncreaseCalled = true;
- //                       }
-
+                        //dont increase score if hitting dead player
+                        if (col.gameObject.GetComponent<PlayerHealth>().isPlayerDead()) return;
+                        owner.gameObject.GetComponent<PlayerAdmin>().increasePlayerKillCount();
                     }
 
                     if (destroyOnContact)

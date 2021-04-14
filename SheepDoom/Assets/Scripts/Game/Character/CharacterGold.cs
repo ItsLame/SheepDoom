@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class CharacterGold : MonoBehaviour
+public class CharacterGold : NetworkBehaviour
 {
     //float to hold player's current gold
+    [SyncVar]
     public float CurrentGold;
 
     //UI showing gold amount
@@ -19,18 +21,22 @@ public class CharacterGold : MonoBehaviour
     }
 
     //gold number manipulation function
+    [TargetRpc]
     public void varyGold(float goldValueChange)
     {
         Debug.Log("Gold increased by " + goldValueChange);
         CurrentGold += goldValueChange;
+        CurrentGoldUI.text = CurrentGold.ToString();
+//        CurrentGoldInShopUI.text = CurrentGold.ToString();
     }
 
 
-
     // Update is called once per frame
-    void Update()
+    void Start()
     {
+        if (!hasAuthority) return;
+        CurrentGoldUI = GameObject.Find("PlayerGoldText").GetComponent<Text>();
         CurrentGoldUI.text = CurrentGold.ToString();
-        CurrentGoldInShopUI.text = CurrentGold.ToString();
+ //       CurrentGoldInShopUI.text = CurrentGold.ToString();
     }
 }
