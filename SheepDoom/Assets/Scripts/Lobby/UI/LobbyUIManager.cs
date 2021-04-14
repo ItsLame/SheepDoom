@@ -209,7 +209,10 @@ namespace SheepDoom
             if(MatchMaker.instance.GetMatches()[_matchID].GetTeam1Count() == MatchMaker.instance.GetMatches()[_matchID].GetTeam2Count()) // equal number of players on both sides
             {
                 if (MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == MatchMaker.instance.GetMatches()[_matchID].GetReadyCount()) // all ready
+                {
+                    MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_startStatusMsg = "Game starting..";
                     _player.GetComponent<StartGame>().StartCharSelect(_matchID);
+                }
                 else
                     MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_startStatusMsg = "Some players not ready!";
             }
