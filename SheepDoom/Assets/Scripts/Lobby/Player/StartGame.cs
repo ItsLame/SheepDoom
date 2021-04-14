@@ -40,6 +40,7 @@ namespace SheepDoom
             gameObject.transform.SetParent(null);
             SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0)); // move to main menu first, then up to u, can move to a parent under character select scene if u want
         }
+
         #region Start & Stop Callbacks
 
         /// <summary>
