@@ -154,7 +154,7 @@ namespace SheepDoom
                 else if (_start)
                 {
                     RequestCheckStart(conn, _matchID, _player, _start);
-                    TargetUpdateOwner(conn, _player, false, false, _start);
+                    TargetUpdateOwner(conn, _player, false, false, _start); // only need to show host player start status text
                 }
                 /*if (_startMatch == true)
                     MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartCharacterSelectScene();*/
@@ -173,15 +173,14 @@ namespace SheepDoom
                 _player.GetComponent<PlayerObj>().SetTeamIndex(2); // syncvar delay here
                 MatchMaker.instance.GetMatches()[_matchID].AddTeam2Count();
                 MatchMaker.instance.GetMatches()[_matchID].MinusTeam1Count();
-                StartCoroutine(SetUI_Lobby(_matchID));
             }
             else if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 2) // go to team 1
             {
                 _player.GetComponent<PlayerObj>().SetTeamIndex(1); // syncvar delay here
                 MatchMaker.instance.GetMatches()[_matchID].AddTeam1Count();
                 MatchMaker.instance.GetMatches()[_matchID].MinusTeam2Count();
-                StartCoroutine(SetUI_Lobby(_matchID));
             }
+            StartCoroutine(SetUI_Lobby(_matchID));
             Debug.Log(_matchID + " TEAM1: " + MatchMaker.instance.GetMatches()[_matchID].GetTeam1Count());
             Debug.Log(_matchID + " TEAM2: " + MatchMaker.instance.GetMatches()[_matchID].GetTeam2Count());
         }
@@ -257,7 +256,7 @@ namespace SheepDoom
                 StartCoroutine(WaitForReadyUpdate(_player, _player.GetComponent<PlayerObj>().GetIsReady(), isOwner));
             else if (_start) // for start
                 // deal with syncvar delay
-                StartCoroutine(WaitForStartStatusUpdate(_player, P_startStatusMsg)); // only need to show host player start status text
+                StartCoroutine(WaitForStartStatusUpdate(_player, P_startStatusMsg)); 
                 
         }
 
