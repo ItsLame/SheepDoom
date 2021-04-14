@@ -66,7 +66,7 @@ namespace SheepDoom
         {
             if(isServer)
             {
-                while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_characterSelectSceneLoaded)
+                //while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_characterSelectSceneLoaded)
                     yield return null;
 
                 foreach(var _player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
@@ -132,8 +132,8 @@ namespace SheepDoom
 
             RpcUpdateExisting(_player);
 
-            if(_startGame == true)
-                MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartGameScene();
+            /*if(_startGame == true)
+                MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartGameScene();*/
         }
 
         [ClientRpc]
@@ -179,7 +179,7 @@ namespace SheepDoom
             foreach(var player in MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetPlayerObjList())
             {
                 SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn);
-                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, SceneManager.GetSceneByName(MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetScene().name));
+                //SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, SceneManager.GetSceneByName(MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetLoadedLobbyScene().name));
             }
 
             //StartCoroutine(UnloadLobbyScene());

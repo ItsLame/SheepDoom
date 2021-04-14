@@ -14,6 +14,7 @@ namespace SheepDoom
 
         [Header("Player profile")]
         [SyncVar(hook = nameof(OnNameUpdate))] private string syncName; 
+        [SerializeField]
         [SyncVar] private string matchID;
         [SyncVar] private int teamIndex = 0;
         [SyncVar] private int playerSortIndex = 0;

@@ -29,15 +29,7 @@ namespace SheepDoom
 
             if(MatchMaker.instance.HostGame(matchID, gameObject, connectionToClient))
             {
-                //StartCoroutine(WaitForSyncList(MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().rootCount));
-
-                //set ishost=true when successfuly join
-                //pO.SetIsHost(true);
-                //host ready by default
-                //pO.SetIsReady(false);
-
                 StartCoroutine(MoveToLobby(connectionToClient));
-
                 pO.SetIsHost(true);
             }
             else
@@ -49,34 +41,11 @@ namespace SheepDoom
 
         private IEnumerator MoveToLobby(NetworkConnection conn)
         {
-            if(isServer)
-            {
-                while(!MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().P_lobbySceneLoaded)
-                    yield return null;
-
-                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-            }
+            while(!MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().P_scenesLoaded)
+                yield return null;           
+            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
+            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
         }
-
-        /*
-        IEnumerator WaitForSyncList(int oldCount)
-        {
-            //MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene())
-            while (MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().rootCount == oldCount)
-                yield return null;
-            // Before, I passed in Client.client.gameObject as the 1st parameter, so I kept passing in the same clientinstance, not linking it to connectionToClient
-            // So I used connectionToClient to reliably retrieve the correct client to pass in
-            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-            SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-            SceneMessage msg = new SceneMessage
-            {
-                sceneName = MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().name,
-                sceneOperation = SceneOperation.LoadAdditive
-            };
-            connectionToClient.Send(msg);
-        }
-        */
 
         #region Start & Stop Callbacks
 

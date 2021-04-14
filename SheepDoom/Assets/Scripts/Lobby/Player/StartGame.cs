@@ -1,95 +1,45 @@
 ﻿using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
-/*
-	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
-	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
-*/
 
 namespace SheepDoom
 {
-    public class CharacterManager : NetworkBehaviour
+    // for hosts only
+    public class StartGame : NetworkBehaviour
     {
-        public static CharacterManager instance;
-        // these will activate on host/join game, not on starting of application
-        [Header("MultiScene Setup")]
-        [Scene] public string characterSelectScene;
-        [SyncVar] private string matchID = string.Empty;
-        private bool characterSelectSceneLoaded = false;
+        private PlayerObj pO;
 
-        #region Properties
-        public string P_characterSelectScene
+        void Awake()
         {
-            get {return characterSelectScene;}
-            set {characterSelectScene = value;}
+            pO = GetComponent<PlayerObj>();
         }
 
-        public string P_matchID
+        [Server]
+        public void StartCharSelect(string _matchID)
         {
-            get {return matchID;}
-            set {matchID = value;}
+            if (pO.GetMatchID() == _matchID) // check matchID
+                MatchMaker.instance.StartCharSelect(_matchID);
+            else
+                Debug.Log("Match ID: " + _matchID + " does not exist");
         }
 
-        public bool P_characterSelectSceneLoaded
+        [Server]
+        public void MoveToCharSelect(Scene _scene, string _matchID)
         {
-            get {return characterSelectSceneLoaded;}
-            set {characterSelectSceneLoaded = value;}
-        }
-
-        #endregion
-
-        public void StartCharacterSelectScene(NetworkConnection conn)
-        {
-            if(isServer)
-            {
-                StartCoroutine(LoadCharacterSelectScene());
-                TargetClientLoadCharacterSelectScene(conn);
-            }
+            TargetRemoveParent(connectionToClient);
+            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
+            gameObject.transform.SetParent(null);
+            SceneManager.MoveGameObjectToScene(gameObject, _scene);
+            MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, true, false);
         }
 
         [TargetRpc]
-        private void TargetClientLoadCharacterSelectScene(NetworkConnection conn)
+        void TargetRemoveParent(NetworkConnection conn)
         {
-            StartCoroutine(LoadCharacterSelectScene());
+            gameObject.transform.SetParent(null);
+            SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0)); // move to main menu first, then up to u, can move to a parent under character select scene if u want
         }
-
-        public void JoinLobby(string _matchID)
-        {
-            if(isServer)
-                MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().ServerStartSetting(_matchID);
-        }
-
-        private IEnumerator LoadCharacterSelectScene()
-        {
-            if(isServer && !P_characterSelectSceneLoaded)
-            {
-                // load lobby scenes
-                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(P_characterSelectScene, LoadSceneMode.Additive);
-                
-                while (!asyncLoad.isDone)
-                    yield return null;
-
-                Scene newLobbyScene = SceneManager.GetSceneAt(MatchMaker.instance.GetMatches().Count); 
-
-                //MatchMaker.instance.GetMatches()[matchID].SetLobbyScene(newLobbyScene);                
-                SceneManager.MoveGameObjectToScene(gameObject, newLobbyScene);
-
-                P_characterSelectSceneLoaded = true;
-            }
-            
-            if(isClient)
-            {
-                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(P_characterSelectScene, LoadSceneMode.Additive);
-                
-                while(!asyncLoad.isDone)
-                    yield return null;
-            }
-        }
-
         #region Start & Stop Callbacks
 
         /// <summary>
@@ -97,10 +47,7 @@ namespace SheepDoom
         /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
-        public override void OnStartServer()
-        {
-            instance = this;
-        }
+        public override void OnStartServer() { }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned

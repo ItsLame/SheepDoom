@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-namespace SheepDoom
+/*namespace SheepDoom
 {
     // The gameobject this script is attached to should only be spawned as a prefab on the server
     public class LobbyManager : NetworkBehaviour
@@ -72,7 +72,7 @@ namespace SheepDoom
 
                 Scene newLobbyScene = SceneManager.GetSceneAt(MatchMaker.instance.GetMatches().Count); 
 
-                MatchMaker.instance.GetMatches()[matchID].SetScene(newLobbyScene);                
+                MatchMaker.instance.GetMatches()[matchID].SetLobbyScene(newLobbyScene);                
                 SceneManager.MoveGameObjectToScene(gameObject, newLobbyScene);
 
                 P_lobbySceneLoaded = true;
@@ -141,4 +141,4 @@ namespace SheepDoom
 
         #endregion
     }
-}
+}*/

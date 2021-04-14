@@ -28,7 +28,7 @@ namespace SheepDoom
             foreach(var player in MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetPlayerObjList())
             {
                 SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn);
-                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, SceneManager.GetSceneByName(MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetScene().name));
+                //SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, SceneManager.GetSceneByName(MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetLoadedLobbyScene().name));
             }
         }
 

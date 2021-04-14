@@ -25,28 +25,15 @@ namespace SheepDoom
         {
             if (MatchMaker.instance.JoinGame(matchIdInput, gameObject))
             {
-                pO.SetMatchID(matchIdInput);
+                pO.SetMatchID(matchIdInput); // syncVared
                 
                 //move to existing lobby on server
-                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
-                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene());
+                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
+                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
                 Debug.Log("MATCHID IN JOINGAMESCRIPT: " + matchIdInput);
                 
-                MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinLobby(matchIdInput);
-                SceneMessage msg = new SceneMessage
-                {
-                    sceneName = MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScene().name,
-                    sceneOperation = SceneOperation.LoadAdditive
-                };
-                connectionToClient.Send(msg);
+                MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinLobby(connectionToClient, matchIdInput);
                 Debug.Log("Server joined game successfully");
-
-                pO.SetIsHost(false);
-
-                //set ishost=false when successfuly join
-                //pO.SetIsHost(false);
-                //players not ready by default
-                //pO.SetIsReady(false);
             }
             else
             {

@@ -17,7 +17,7 @@ namespace SheepDoom
         private int team2Count;
         private int countReady;
         private SyncListGameObject players = new SyncListGameObject();
-        private Scene scene;
+        private SyncList<Scene> matchScenes = new SyncList<Scene>(); // 0 = lobby, 1 = character select, 2 = game
         private SDSceneManager sdSceneManager;
         private LobbyUIManager lobbyUIManager;
         private CharacterSelectUIManager characterSelectUIManager;
@@ -27,7 +27,7 @@ namespace SheepDoom
             this.matchID = matchID;
             players.Add(player);
             team1Count++;
-            countReady++;
+            countReady++; // host by default already ready
             this.sdSceneManager = sdSceneManager;
         }
 
@@ -73,9 +73,24 @@ namespace SheepDoom
             return characterSelectUIManager;
         }
 
-        public Scene GetScene()
+        /*public Scene GetLoadedLobbyScene()
         {
-            return scene;
+            return loadedLobbyScene;
+        }
+
+        public Scene GetLoadedCharSelectScene()
+        {
+            return loadedCharSelectScene;
+        }
+
+        public Scene GetLoadedGameScene()
+        {
+            return loadedGameScene;
+        }*/
+
+        public SyncList<Scene> GetScenes()
+        {
+            return matchScenes;
         }
 
         #endregion
@@ -123,8 +138,22 @@ namespace SheepDoom
 
         public void SetScene(Scene scene)
         {
-            this.scene = scene;
+            matchScenes.Add(scene);
         }
+        /*public void SetLobbyScene(Scene scene)
+        {
+            loadedLobbyScene = scene;
+        }
+
+        public void SetCharSelectScene(Scene scene)
+        {
+            loadedCharSelectScene = scene;
+        }
+
+        public void SetGameScene(Scene scene)
+        {
+            loadedGameScene = scene;
+        }*/
 
         #endregion
 
@@ -142,11 +171,6 @@ namespace SheepDoom
         // track matches
         private SyncDictionary<string, Match> matches = new SyncDictionary<string, Match>();
         [SerializeField] GameObject SDSceneManager;
-
-        private void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-        }
 
         private void Start()
         {
@@ -191,13 +215,12 @@ namespace SheepDoom
         {
             if(!matches.ContainsKey(_matchID))
             {
-                GameObject matchLobby = Instantiate(SDSceneManager);
-                NetworkServer.Spawn(matchLobby);
+                GameObject sceneManager = Instantiate(SDSceneManager);
+                NetworkServer.Spawn(sceneManager);
 
-                Match newMatch = new Match(_matchID, _player, matchLobby.GetComponent<SDSceneManager>());
+                Match newMatch = new Match(_matchID, _player, sceneManager.GetComponent<SDSceneManager>());
                 matches.Add(_matchID, newMatch);
-
-                newMatch.GetSDSceneManager().StartLobbyScene(conn);
+                newMatch.GetSDSceneManager().StartScenes(conn);
                 newMatch.GetSDSceneManager().P_matchID = _matchID;
 
                 _player.GetComponent<PlayerObj>().SetTeamIndex(1);          // syncvared
@@ -245,6 +268,16 @@ namespace SheepDoom
             }
         }
 
+        public void StartCharSelect(string _matchID)
+        {
+            if (matches.ContainsKey(_matchID))
+            {
+                matches[_matchID].GetSDSceneManager().MoveToCharSelect(matches[_matchID].GetScenes()[1]);
+                foreach(GameObject player in matches[_matchID].GetPlayerObjList())
+                    player.GetComponent<StartGame>().MoveToCharSelect(matches[_matchID].GetScenes()[1], _matchID);
+            }
+        }
+
         #region Start & Stop Callbacks
 
         /// <summary>
@@ -264,7 +297,10 @@ namespace SheepDoom
         /// Called on every NetworkBehaviour when it is activated on a client.
         /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
         /// </summary>
-        public override void OnStartClient() { }
+        public override void OnStartClient() 
+        {
+            DontDestroyOnLoad(gameObject);
+        }
 
         /// <summary>
         /// This is invoked on clients when the server has caused this object to be destroyed.
@@ -293,7 +329,7 @@ namespace SheepDoom
 
         #endregion
     }
-
+    /*
     //converting id to guid using some service
     //convert 5 digit string into a guid
     //remember hashing in system security? huehehue
@@ -310,5 +346,5 @@ namespace SheepDoom
 
             return new Guid(hashBytes);
         }
-    }
+    }*/
 }
