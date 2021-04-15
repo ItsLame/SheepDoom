@@ -19,6 +19,8 @@ namespace SheepDoom
         [Header("Character Select UI Manager Setup")]
         [SerializeField] private GameObject team1GameObject;
         [SerializeField] private GameObject team2GameObject;
+        [SerializeField] private Image heroInfoImg;
+        [SerializeField] private Text heroInfoText;
 
         [Header("Inputs For Client")]
         [SerializeField] private GameObject lockInButton;
@@ -44,6 +46,18 @@ namespace SheepDoom
         {
             get{return matchID;}
             set{matchID = value;}
+        }
+
+        public Image P_heroInfoImg
+        {
+            get{return heroInfoImg;}
+            set{heroInfoImg = value;}
+        }
+
+        public Text P_heroInfoText
+        {
+            get{return heroInfoText;}
+            set{heroInfoText = value;}
         }
 
         #endregion

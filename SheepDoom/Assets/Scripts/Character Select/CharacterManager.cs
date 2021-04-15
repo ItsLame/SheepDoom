@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
@@ -9,7 +10,7 @@ using UnityEngine.SceneManagement;
 	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
 */
-
+/*
 namespace SheepDoom
 {
     public class CharacterManager : NetworkBehaviour
@@ -142,3 +143,4 @@ namespace SheepDoom
         #endregion
     }
 }
+*/
