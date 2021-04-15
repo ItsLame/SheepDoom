@@ -26,13 +26,14 @@ namespace SheepDoom
         {
             float preChangedPct = foregroundimage.fillAmount;
             float elasped1 = 0f;
-
+            
             while (elasped1 < updatespeedseconds)
             {
                 elasped1 += Time.deltaTime;
                 foregroundimage.fillAmount = Mathf.Lerp(preChangedPct, pct, elasped1 / updatespeedseconds);
                 yield return null;
             }
+            
             foregroundimage.fillAmount = pct;
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 public class BaseHealthBar : MonoBehaviour
 {
@@ -13,9 +14,8 @@ public class BaseHealthBar : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
- //       GetComponentInParent<CaptureBaseScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
+        GetComponentInParent<CaptureBaseScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
     }
-
     private void HandleHealthChangedTower(float pct)
     {
         StartCoroutine(ChangedToPctTower(pct));

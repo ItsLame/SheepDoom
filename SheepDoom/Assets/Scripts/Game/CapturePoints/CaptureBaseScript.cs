@@ -39,7 +39,7 @@ public class CaptureBaseScript : NetworkBehaviour
     [SerializeField]
     private int numOfCapturersBase; //logging number to check if Base is under capture or not
 
- //   public event Action<float> OnHealthPctChangedTower = delegate { };
+    public event Action<float> OnHealthPctChangedTower = delegate { };
 
     // Start is called before the first frame update
     void Start()
@@ -97,7 +97,7 @@ public class CaptureBaseScript : NetworkBehaviour
         BaseInGameHP += amount;
 
         float currenthealthPct = BaseInGameHP / BaseHP;
- //       OnHealthPctChangedTower(currenthealthPct);
+        OnHealthPctChangedTower(currenthealthPct);
     }
 
     //check for player enter

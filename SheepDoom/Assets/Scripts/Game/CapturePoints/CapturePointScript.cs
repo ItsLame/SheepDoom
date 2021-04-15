@@ -44,7 +44,7 @@ namespace SheepDoom
         //scoring bools
         private bool giveScoreToCapturers = false;
 
-        //public event Action<float> OnHealthPctChangedTower = delegate { };
+        public event Action<float> OnHealthPctChangedTower = delegate { };
 
         // Start is called before the first frame update
         void Start()
@@ -126,8 +126,8 @@ namespace SheepDoom
             TowerInGameHP += amount;
 
             Debug.Log("health: tower in game hp:  " + TowerInGameHP);
-            //float currenthealthPct = TowerInGameHP /TowerHP;
-            //OnHealthPctChangedTower(currenthealthPct);
+            float currenthealthPct = TowerInGameHP /TowerHP;
+            OnHealthPctChangedTower(currenthealthPct);
         }
 
         //check for player enter
