@@ -42,10 +42,12 @@ namespace SheepDoom
 
         private void Start()
         {
-            InitHeroInfo();
+            InitHeroInfo(); // initialize hero info (name and description)
         }
 
         protected abstract void InitHeroInfo();
+
+        public abstract void SetTaken(bool _isTaken);
 
         public virtual void OnClickHero()
         {
@@ -53,12 +55,15 @@ namespace SheepDoom
             CharacterSelectUIManager.instance.P_heroInfoImg.sprite = P_heroIcon;
             CharacterSelectUIManager.instance.P_heroInfoText.text = P_heroName + "\n-----\n" + P_heroDesc;
 
-            // set lock in button to interactable after clicking on hero
-            CharacterSelectUIManager.instance.P_lockInButton.GetComponent<Button>().interactable = true; 
+            if(P_isTaken == false)
+                // set lock in button to interactable after clicking on hero
+                CharacterSelectUIManager.instance.P_lockInButton.GetComponent<Button>().interactable = true;
+            else
+                // set lock in button to not interactable if another client has locked in to the hero
+                CharacterSelectUIManager.instance.P_lockInButton.GetComponent<Button>().interactable = false;
 
-            //if(P_isTaken == false)
-                // update view for other clients (of player's hero text under player's name)
-                CharacterSelectUIManager.instance.ClientRequestUpdate(P_heroName, false);
+            // update view for other clients (of player's hero text under player's name)
+            CharacterSelectUIManager.instance.ClientRequestUpdate(P_heroName, false);
         }
     }
 }

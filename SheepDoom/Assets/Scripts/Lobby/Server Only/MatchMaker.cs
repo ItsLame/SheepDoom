@@ -16,6 +16,7 @@ namespace SheepDoom
         private int team1Count;
         private int team2Count;
         private int countReady;
+        private int countLockIn;
         private SyncListGameObject players = new SyncListGameObject();
         private SyncListGameObject heroes = new SyncListGameObject();
         private SyncList<Scene> matchScenes = new SyncList<Scene>(); // 0 = lobby, 1 = character select, 2 = game
@@ -62,6 +63,11 @@ namespace SheepDoom
         public int GetReadyCount()
         {
             return countReady;
+        }
+
+        public int GetLockInCount()
+        {
+            return countLockIn;
         }
 
         public SDSceneManager GetSDSceneManager()
@@ -127,9 +133,20 @@ namespace SheepDoom
         {
             countReady++;
         }
+
         public void MinusCountReady()
         {
             countReady--;
+        }
+
+        public void AddCountLockIn()
+        {
+            countLockIn++;
+        }
+
+        public void MinusCountLockIn()
+        {
+            countLockIn--;
         }
 
         public void SetLobbyUIManager(LobbyUIManager lobbyUIManager)
@@ -281,14 +298,6 @@ namespace SheepDoom
                 matches[_matchID].GetSDSceneManager().MoveToCharSelect(matches[_matchID].GetScenes()[1]);
                 foreach(GameObject player in matches[_matchID].GetPlayerObjList())
                     player.GetComponent<StartGame>().MoveToCharSelect(matches[_matchID].GetScenes()[1], _matchID);
-            }
-        }
-
-        public void LockInChar(string _matchID)
-        {
-            if(matches.ContainsKey(_matchID))
-            {
-                
             }
         }
 

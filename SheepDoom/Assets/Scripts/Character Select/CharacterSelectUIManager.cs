@@ -19,11 +19,11 @@ namespace SheepDoom
         [Header("Character Select UI Manager Setup")]
         [SerializeField] private GameObject team1GameObject;
         [SerializeField] private GameObject team2GameObject;
+        [Header("Inputs For Client")]
         [SerializeField] private Image heroInfoImg;
         [SerializeField] private Text heroInfoText;
-
-        [Header("Inputs For Client")]
         [SerializeField] private GameObject lockInButton;
+        [SerializeField] private GameObject statusPanel;
         
         //room matchID
         [SyncVar] private string matchID = string.Empty;
@@ -66,6 +66,12 @@ namespace SheepDoom
             set{lockInButton = value;}
         }
 
+        public GameObject P_statusPanel
+        {
+            get{return statusPanel;}
+            set{statusPanel = value;}
+        }
+
         #endregion
 
         private void Start()
@@ -85,18 +91,44 @@ namespace SheepDoom
         }
 
         [Command(ignoreAuthority = true)]
-        private void CmdRequestCharSelectUpdate(GameObject _player, string _heroName, bool _init, bool _lockIn)
+        private void CmdRequestCharSelectUpdate(GameObject _player, string _heroName, int _teamIndex, bool _init, bool _lockIn)
         {
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
             {
                 if(_init)
                 {
-                    SetUI_Player(_player);                                  // server view
-                    SetUI_Team(_player);                                    // server view
+                    SetUI_Player(_player);  // server view
+                    SetUI_Team(_player, _teamIndex);    // server view
+                    SetUI_Hero(_player, _heroName, _lockIn);    // server view
+                    TargetUpdateOwner(conn, _player, _heroName, true, _init, _lockIn);  // local client view
+                    RpcUpdateOthers(_player, _heroName, _teamIndex, _init, _lockIn);    // other client view
                 }
-                SetUI_Hero(_player, _heroName, _lockIn);                     // server view
-                TargetUpdateOwner(conn, _player, _heroName, _init, _lockIn); // local client view
-                RpcUpdateOthers(_player, _heroName, _init, _lockIn);         // other client view
+                else if(_lockIn)
+                {
+                    bool _isOwner = false;
+
+                    MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();   // lock in true, count lock in ++
+
+                    foreach(var player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
+                    {
+                        if(player.GetComponent<PlayerObj>().GetTeamIndex() == _teamIndex)
+                        {
+                            if(player.GetComponent<PlayerObj>().ci == _player.GetComponent<PlayerObj>().ci)
+                                _isOwner = true;
+                            else
+                                _isOwner = false;
+
+                            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection _conn))
+                                TargetUpdateOwner(_conn, player, _heroName, _isOwner, _init, _lockIn);  // 4th parameter determines if it's owner
+                        }
+                    }
+                }
+                else
+                {
+                    SetUI_Hero(_player, _heroName, _lockIn);    // server view
+                    TargetUpdateOwner(conn, _player, _heroName, true, _init, _lockIn);  // local client view
+                    RpcUpdateOthers(_player, _heroName, _teamIndex, _init, _lockIn);    // other client view
+                }
             }
             else
             {
@@ -111,44 +143,67 @@ namespace SheepDoom
         private void ClientStartSetting()
         {
             GameObject _player = PlayerObj.instance.gameObject;
+            int _teamIndex = _player.GetComponent<PlayerObj>().GetTeamIndex();
 
             lockInButton.GetComponent<Button>().interactable = false;   // false since haven't picked a hero yet (prevent null lock in)
 
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestCharSelectUpdate(_player, string.Empty, true, false);  // 3rd parameter set to true to set initial settings
+                CmdRequestCharSelectUpdate(_player, string.Empty, _teamIndex, true, false);  // 3rd parameter set to true to set initial settings
         }
 
         public void ClientRequestUpdate(string _heroName, bool _lockIn)
         {
             GameObject _player = PlayerObj.instance.gameObject;
+            int _teamIndex = _player.GetComponent<PlayerObj>().GetTeamIndex();
 
             if(_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestCharSelectUpdate(_player, _heroName, false, _lockIn); // 4th parameter set to true to start lock in request
+                CmdRequestCharSelectUpdate(_player, _heroName, _teamIndex, false, _lockIn); // 4th parameter set to true to start lock in request
         }
 
         public void LockInHero()
         {
             string _heroName = PlayerObj.instance.GetComponent<PlayerObj>().GetHeroName();
+
             ClientRequestUpdate(_heroName, true);
         }
 
         [ClientRpc]
-        private void RpcUpdateOthers(GameObject _player, string _heroName, bool _init, bool _lockIn)
+        private void RpcUpdateOthers(GameObject _player, string _heroName, int _teamIndex, bool _init, bool _lockIn)
         {
             if(_init)
             {
                 SetUI_Player(_player);
-                SetUI_Team(_player);
+                SetUI_Team(_player, _teamIndex);
             }
             
             SetUI_Hero(_player, _heroName, _lockIn);
         }
 
         [TargetRpc]
-        private void TargetUpdateOwner(NetworkConnection conn, GameObject _player, string _heroName, bool _init, bool _lockIn)
+        private void TargetUpdateOwner(NetworkConnection conn, GameObject _player, string _heroName, bool _isOwner, bool _init, bool _lockIn)
         {
             if(_init)
                 SetUI_Parent(_player);
+
+            if(_lockIn)
+            {
+                // when other players (from same team) attempt to pick the hero, lock in button will be disabled
+                GameObject.Find(_heroName).SendMessage("SetTaken", _lockIn);
+                GameObject.Find(_heroName).SendMessage("OnClickHero");
+
+                Debug.Log("TARGET UPDATE ISOWNER? " + _isOwner);
+                Debug.Log("TARGET UPDATE PLAYER: " + _player.GetComponent<PlayerObj>().GetPlayerName() + " of team " +_player.GetComponent<PlayerObj>().GetTeamIndex());
+
+                if(_isOwner)
+                {
+                    // activates status panel to local player to prevent them from clicking other heroes
+                    P_statusPanel.SetActive(_lockIn);
+                    // set lock in button to not interactable once locked in (can't un lock in)
+                    P_lockInButton.GetComponent<Button>().interactable = !_lockIn;
+                    // change text of button to indicate locked in status
+                    P_lockInButton.GetComponentInChildren<Text>().text = "Locked In";
+                }
+            }
         }
 
         #endregion
@@ -173,14 +228,12 @@ namespace SheepDoom
             }
         }
 
-        private void SetUI_Team(GameObject _player)
+        private void SetUI_Team(GameObject _player, int _teamIndex)
         {
-            int teamIndex = _player.GetComponent<PlayerObj>().GetTeamIndex();
-
             // assign player object to parent
-            if(teamIndex == 1)
+            if(_teamIndex == 1)
                 _player.transform.SetParent(P_team1GameObject.transform, false);
-            else if(teamIndex == 2)
+            else if(_teamIndex == 2)
                 _player.transform.SetParent(P_team2GameObject.transform, false);
         }
 

@@ -8,20 +8,26 @@ namespace SheepDoom
 {
     public class Yoshi : Hero
     {
-        [SerializeField] private Image heroIcon;
+        [SerializeField] private Image heroImage;
 
         [Client]
         protected override void InitHeroInfo()
         {
             P_heroName = "Yoshi";
             P_heroDesc = "A dragon.. right?";
-            P_heroIcon = heroIcon.sprite;
+            P_heroIcon = heroImage.sprite;
         }
 
         [Client]
         public override void OnClickHero()
         {
             base.OnClickHero();
+        }
+
+        [Client]
+        public override void SetTaken(bool _isTaken)
+        {
+            P_isTaken = _isTaken;
         }
     }
 }
