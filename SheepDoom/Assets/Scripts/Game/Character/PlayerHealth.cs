@@ -14,7 +14,7 @@ namespace SheepDoom
         [SyncVar(hook = nameof(healthUpdate))]
         public float currenthealth;
 
-        //public event Action<float> OnHealthPctChanged = delegate { };
+        public event Action<float> OnHealthPctChanged = delegate { };
 
         public bool isFullHealth;
 
@@ -41,8 +41,8 @@ namespace SheepDoom
         {
             currenthealth += amount;
 
-            //    float currenthealthPct = currenthealth / maxHealth;
-            //    OnHealthPctChanged(currenthealthPct);
+            float currenthealthPct = currenthealth / maxHealth;
+            OnHealthPctChanged(currenthealthPct);
         }
         // Update is called once per frame
         void Update()

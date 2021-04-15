@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 namespace SheepDoom
 {
@@ -15,7 +16,7 @@ namespace SheepDoom
         // Start is called before the first frame update
         private void Awake()
         {
-            //GetComponentInParent<PlayerHealth>().OnHealthPctChanged += HandleHealthChanged;
+            GetComponentInParent<PlayerHealth>().OnHealthPctChanged += HandleHealthChanged;
         }
         private void HandleHealthChanged(float pct)
         {
@@ -44,3 +45,4 @@ namespace SheepDoom
         }
     }
 }
+

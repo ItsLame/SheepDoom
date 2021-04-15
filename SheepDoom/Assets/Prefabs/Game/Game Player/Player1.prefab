@@ -144,7 +144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6930b3b70c481404b8069355d56680aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   speed: 30
+  isDead: 0
 --- !u!114 &4428966398550810156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,10 +160,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf7336327a1c244ca493c0327e8bfab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   hasPurchasedSpecial: 0
   hasPurchasedUlti: 0
-  SpecialButton: {fileID: 0}
-  UltiButton: {fileID: 0}
   Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
     type: 3}
   Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
@@ -179,6 +182,7 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 0
+  isDead: 0
 --- !u!114 &4428966398550810157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +195,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6ebf06e52ba1e48ba5cb885112b99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   maxHealth: 100
+  currenthealth: 0
+  isFullHealth: 0
 --- !u!114 &2713987787899735525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +212,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dc94119df873f54197a8a7471114fda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  CurrentGold: 0
   CurrentGoldUI: {fileID: 0}
   CurrentGoldInShopUI: {fileID: 0}
 --- !u!1 &3395230610697679963
@@ -390,7 +401,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4428966397742675408}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -473,7 +484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.1792453, g: 1, b: 0.18053445, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -547,7 +558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
