@@ -255,6 +255,7 @@ MonoBehaviour:
   playerLobbyObject: {fileID: 6178415634043368304}
   playerCharacterSelectObject: {fileID: 982594697040312904}
   playerReady: {fileID: 3820033044068957410}
+  playerCharacter: {fileID: 7811255664889285195}
 --- !u!114 &6268230098934346722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -785,7 +786,7 @@ GameObject:
   - component: {fileID: 8040599229670391435}
   - component: {fileID: 7811255664889285195}
   m_Layer: 5
-  m_Name: Ready Text
+  m_Name: Character Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

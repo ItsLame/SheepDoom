@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 namespace SheepDoom
 {
-    public abstract class Hero : MonoBehaviour, IHeroBehaviour
+    public abstract class Hero : NetworkBehaviour, IHeroBehaviour
     {
         private string heroName;
         private string heroDesc;
@@ -47,8 +48,12 @@ namespace SheepDoom
 
         public virtual void OnClickHero()
         {
+            // set hero info locally
             CharacterSelectUIManager.instance.P_heroInfoImg.sprite = P_heroIcon;
             CharacterSelectUIManager.instance.P_heroInfoText.text = P_heroName + "\n-----\n" + P_heroDesc;
+
+            // update view for other clients (of player's hero text under player's name)
+            CharacterSelectUIManager.instance.ClientRequestUpdate(P_heroName);
         }
     }
 }

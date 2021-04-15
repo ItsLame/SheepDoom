@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 namespace SheepDoom
 {
@@ -9,6 +10,7 @@ namespace SheepDoom
     {
         [SerializeField] private Image luigiIcon;
 
+        [Client]
         protected override void InitHeroInfo()
         {
             Debug.Log("OVERRIDE INIT HERO INFO");
@@ -18,6 +20,7 @@ namespace SheepDoom
             P_heroIcon = luigiIcon.sprite;
         }
 
+        [Client]
         public override void OnClickHero()
         {
             base.OnClickHero();
