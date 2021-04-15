@@ -8,16 +8,14 @@ namespace SheepDoom
 {
     public class Peach : Hero
     {
-        [SerializeField] private Image peachIcon;
+        [SerializeField] private Image heroIcon;
 
         [Client]
         protected override void InitHeroInfo()
         {
-            Debug.Log("OVERRIDE INIT HERO INFO");
-
             P_heroName = "Peach";
             P_heroDesc = "A princess";
-            P_heroIcon = peachIcon.sprite;
+            P_heroIcon = heroIcon.sprite;
         }
 
         [Client]

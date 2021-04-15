@@ -21,6 +21,7 @@ namespace SheepDoom
         [SyncVar] private bool updateCount = false;
         [SyncVar] private bool isHost = false;
         [SyncVar] private bool isReady = false;
+        [SyncVar] private string heroName;
 
         #region Get
         public string GetPlayerName()
@@ -56,6 +57,11 @@ namespace SheepDoom
         public bool GetUpdateCount()
         {
             return updateCount;
+        }
+
+        public string GetHeroName()
+        {
+            return heroName;
         }
 
         #endregion
@@ -97,6 +103,11 @@ namespace SheepDoom
         public void SetIsReady(bool _isReady)
         {
             isReady = _isReady;
+        }
+
+        public void SetHeroName(string _heroName)
+        {
+            heroName = _heroName;
         }
 
         #endregion
