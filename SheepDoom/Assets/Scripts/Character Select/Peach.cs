@@ -5,17 +5,17 @@ using UnityEngine.UI;
 
 namespace SheepDoom
 {
-    public class Mario : Hero
+    public class Peach : Hero
     {
-        [SerializeField] private Image marioIcon;
+        [SerializeField] private Image peachIcon;
 
         protected override void InitHeroInfo()
         {
             Debug.Log("OVERRIDE INIT HERO INFO");
 
-            P_heroName = "Mario";
-            P_heroDesc = "A red hat plumber";
-            P_heroIcon = marioIcon.sprite;
+            P_heroName = "Peach";
+            P_heroDesc = "A princess";
+            P_heroIcon = peachIcon.sprite;
         }
 
         public override void OnClickHero()

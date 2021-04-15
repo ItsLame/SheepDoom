@@ -43,7 +43,7 @@ namespace SheepDoom
             Debug.Log("Hero icon: "+P_heroIcon);
         }
 
-        public abstract void InitHeroInfo();
+        protected abstract void InitHeroInfo();
 
         public virtual void OnClickHero()
         {
