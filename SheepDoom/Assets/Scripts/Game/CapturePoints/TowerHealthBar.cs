@@ -39,10 +39,11 @@ namespace SheepDoom
         // Update is called once per frame
         void LateUpdate()
         {
-            if(Camera.main)
+            if (Camera.main)
+            {
                 transform.LookAt(Camera.main.transform);
-            
-            transform.Rotate(0, 180, 0);
+                transform.Rotate(0, 180, 0);
+            }
         }
     }
 }
