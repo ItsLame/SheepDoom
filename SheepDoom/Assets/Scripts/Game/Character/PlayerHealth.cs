@@ -71,6 +71,7 @@ namespace SheepDoom
             {
                 isFullHealth = false;
             }
+            modifyinghealth(0);
         }
 
         void GameOver()

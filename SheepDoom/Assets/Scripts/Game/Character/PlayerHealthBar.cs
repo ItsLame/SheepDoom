@@ -11,7 +11,7 @@ namespace SheepDoom
         [SerializeField]
         private Image foregroundimage;
         [SerializeField]
-        private float updatespeedseconds = 0.5f;
+        private float updatespeedseconds = 0.1f;
 
         // Start is called before the first frame update
         private void Awake()
@@ -26,23 +26,23 @@ namespace SheepDoom
         {
             float preChangedPct = foregroundimage.fillAmount;
             float elasped1 = 0f;
-            
+
             while (elasped1 < updatespeedseconds)
             {
                 elasped1 += Time.deltaTime;
                 foregroundimage.fillAmount = Mathf.Lerp(preChangedPct, pct, elasped1 / updatespeedseconds);
                 yield return null;
             }
-            
+
             foregroundimage.fillAmount = pct;
         }
 
         // Update is called once per frame
         void LateUpdate()
         {
+            Debug.Log("Camera.main.transform: " + Camera.main.transform);
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
-
         }
     }
 }
