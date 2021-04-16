@@ -41,7 +41,6 @@ namespace SheepDoom
         {
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
-
         }
     }
 }
