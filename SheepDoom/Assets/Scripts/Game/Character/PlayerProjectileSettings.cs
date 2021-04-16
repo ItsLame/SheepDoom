@@ -51,8 +51,6 @@ namespace SheepDoom
                 {
                     //reduce HP of hit target
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
-                    //string playerName = col.gameObject.GetComponent<PlayerUI>().getPlayerName().text;
-                    //Debug.Log(playerName + "'s health: " + col.gameObject.GetComponent<PlayerHealth>().getHealth());
 
                     //increase killer's kill count if target is killed
                     if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
@@ -134,7 +132,6 @@ namespace SheepDoom
         }
 
         //command to set owner of projectile
-        [Client]
         public void CMD_setOwnerProjectile(GameObject player)
         {
             owner = player;
