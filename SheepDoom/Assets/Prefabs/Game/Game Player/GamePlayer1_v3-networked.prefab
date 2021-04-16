@@ -1212,7 +1212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  CurrentGold: 5
+  CurrentGold: 20
   CurrentGoldUI: {fileID: 0}
   CurrentGoldInShopUI: {fileID: 0}
 --- !u!114 &8449280143259454606

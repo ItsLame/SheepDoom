@@ -57,8 +57,6 @@ namespace SheepDoom
             cooldown2_inGame = cooldown2;
             cooldown3_inGame = cooldown3;
 
-            //SpecialButton.GetComponent<Button>().interactable = false;
-            //UltiButton.GetComponent<Button>().interactable = false;
         }
 
         public void AttackClick()
@@ -127,6 +125,7 @@ namespace SheepDoom
                         Debug.Log("Firing Special Atk");
                         var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
                         FiredProjectile.GetComponent<PlayerProjectileSettings>().owner = this.gameObject;
+                        NetworkServer.Spawn(FiredProjectile);
                         cooldown2_inGame = cooldown2;
                     }
                 }
@@ -150,6 +149,7 @@ namespace SheepDoom
                         Debug.Log("Firing Ultimate Atk");
                         var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
                         FiredProjectile.GetComponent<PlayerProjectileSettings>().owner = this.gameObject;
+                        NetworkServer.Spawn(FiredProjectile);
                         cooldown3_inGame = cooldown3;
                     }
                 }
@@ -161,7 +161,19 @@ namespace SheepDoom
 
         }
 
+        //command to set purchasespecial to true
+        [Command]
+        public void CMD_playerHasPurchasedSpecial()
+        {
+            hasPurchasedSpecial = true;
+        }
 
+        //command to set purchasedulti to true
+        [Command]
+        public void CMD_playerHasPurchasedUlti()
+        {
+            hasPurchasedUlti = true;
+        }
 
         // Update is called once per frame
         void Update()

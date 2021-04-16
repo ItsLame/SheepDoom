@@ -21,7 +21,6 @@ public class CharacterGold : NetworkBehaviour
     }
 
     //gold number manipulation function
-    [TargetRpc]
     public void varyGold(float goldValueChange)
     {
         Debug.Log("Gold increased by " + goldValueChange);

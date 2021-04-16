@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-//https://gamedev.stackexchange.com/questions/187764/how-do-i-get-the-local-player reference to get local player
-
 namespace SheepDoom
 {
     public class Shop : NetworkBehaviour
@@ -117,6 +115,7 @@ namespace SheepDoom
             ShopMenuUI.GetComponent<Canvas>().enabled = false;
         }
 
+
         //first special selection button
         public void SelectFirstSpecial()
         {
@@ -129,11 +128,11 @@ namespace SheepDoom
                 //if choose 1st, disable 2nd
                 SpecialButton2.GetComponent<Button>().interactable = false;
                 //enable special button
-                PlayerSpecialButton.GetComponent<Button>().interactable = true;
+//                PlayerSpecialButton.GetComponent<Button>().interactable = true;
                 hasPurchasedSpecial = true;
 
                 //set player bool 'haspurchasedspecial' to true
-                Player.GetComponent<PlayerAttack>().hasPurchasedSpecial = true;
+                Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedSpecial();
             }
 
         }
@@ -149,11 +148,11 @@ namespace SheepDoom
 
                 //if choose 2nd, disable 1st
                 SpecialButton1.GetComponent<Button>().interactable = false;
-                PlayerSpecialButton.GetComponent<Button>().interactable = true;
+ //               PlayerSpecialButton.GetComponent<Button>().interactable = true;
                 hasPurchasedSpecial = true;
 
                 //set player bool 'haspurchasedspecial' to true
-                Player.GetComponent<PlayerAttack>().hasPurchasedSpecial = true;
+                Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedSpecial();
             }
         }
 
@@ -166,11 +165,11 @@ namespace SheepDoom
 
                 //if choose 1st, disable 2nd
                 UltiButton2.GetComponent<Button>().interactable = false;
-                PlayerUltiButton.GetComponent<Button>().interactable = true;
+//                PlayerUltiButton.GetComponent<Button>().interactable = true;
                 hasPurchasedUlti = true;
 
                 //set player bool 'haspurchasedulti' to true
-                Player.GetComponent<PlayerAttack>().hasPurchasedUlti = true;
+                Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedUlti();
             }
         }
 
@@ -182,11 +181,11 @@ namespace SheepDoom
                 Player.GetComponent<CharacterGold>().varyGold(-UltiCost);
                 //if choose 2nd, disable 1st
                 UltiButton1.GetComponent<Button>().interactable = false;
-                PlayerUltiButton.GetComponent<Button>().interactable = true;
+  //              PlayerUltiButton.GetComponent<Button>().interactable = true;
                 hasPurchasedUlti = true;
 
                 //set player bool 'haspurchasedulti' to true
-                Player.GetComponent<PlayerAttack>().hasPurchasedUlti = true;
+                Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedUlti();
             }
         }
     }
