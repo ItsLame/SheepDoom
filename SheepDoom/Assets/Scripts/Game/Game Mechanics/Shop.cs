@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
+
+//https://gamedev.stackexchange.com/questions/187764/how-do-i-get-the-local-player reference to get local player
 
 namespace SheepDoom
 {
-    public class Shop : MonoBehaviour
+    public class Shop : NetworkBehaviour
     {
         //linking to player
         public GameObject Player;
@@ -38,11 +41,14 @@ namespace SheepDoom
         public bool hasPurchasedSpecial = false;
         public bool hasPurchasedUlti = false;
 
+        private void Start()
+        {
+            ShopMenuUI = GameObject.Find("ShopUI");
+        }
+
         //for pressing the shop with raycast
         private void Update()
         {
-            //get player's current gold
-            PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
 
             //if more than one touch and at the beginning of the touch
             if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
@@ -69,7 +75,7 @@ namespace SheepDoom
             {
                 //store the info of hit object
                 RaycastHit hit;
-                Debug.Log("Mouse 0 down");
+ //               Debug.Log("Mouse 0 down");
                 //get a raycast to where you are touching
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -80,7 +86,7 @@ namespace SheepDoom
                     //if hit something
                     if (hit.collider.gameObject.CompareTag("Shop"))
                     {
-                        Debug.Log("Shop Pressed!");
+                        Debug.Log("Shop Pressed, running OpenShopUI()");
                         OpenShopUI();
                     }
                 }
@@ -92,18 +98,25 @@ namespace SheepDoom
         //opening shop
         public void OpenShopUI()
         {
+          //  if (!hasAuthority) return;
+            Debug.Log("Opening Shop UI");
+            //get player's current gold
+            PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
+
             //disable the controlling UI
             GameUI.GetComponent<Canvas>().enabled = false;
+
             //enable shopUI
-            ShopMenuUI.SetActive(true);
+            ShopMenuUI.GetComponent<Canvas>().enabled = true;
         }
 
         public void CloseShopUI()
         {
+            if (!hasAuthority) return;
             //enable control UI
             GameUI.GetComponent<Canvas>().enabled = true;
             //disable shopUI
-            ShopMenuUI.SetActive(false);
+            ShopMenuUI.GetComponent<Canvas>().enabled = false;
         }
 
         //first special selection button

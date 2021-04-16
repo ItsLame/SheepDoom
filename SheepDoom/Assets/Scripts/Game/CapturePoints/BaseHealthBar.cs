@@ -4,41 +4,45 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-public class BaseHealthBar : MonoBehaviour
+namespace SheepDoom
 {
-    [SerializeField]
-    private Image foregroundimage;
-    [SerializeField]
-    private float updatespeedseconds = 0.5f;
+    public class BaseHealthBar : MonoBehaviour
+    {
+        [SerializeField]
+        private Image foregroundimage;
+        [SerializeField]
+        private float updatespeedseconds = 0.5f;
 
-    // Start is called before the first frame update
-    private void Awake()
-    {
-        GetComponentInParent<CaptureBaseScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
-    }
-    private void HandleHealthChangedTower(float pct)
-    {
-        StartCoroutine(ChangedToPctTower(pct));
-    }
-    private IEnumerator ChangedToPctTower(float pct)
-    {
-        float preChangedPct = foregroundimage.fillAmount;
-        float elasped1 = 0f;
-
-        while (elasped1 < updatespeedseconds)
+        // Start is called before the first frame update
+        private void Awake()
         {
-            elasped1 += Time.deltaTime;
-            foregroundimage.fillAmount = Mathf.Lerp(preChangedPct, pct, elasped1 / updatespeedseconds);
-            yield return null;
+            GetComponentInParent<CaptureBaseScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
         }
-        foregroundimage.fillAmount = pct;
+        private void HandleHealthChangedTower(float pct)
+        {
+            StartCoroutine(ChangedToPctTower(pct));
+        }
+        private IEnumerator ChangedToPctTower(float pct)
+        {
+            float preChangedPct = foregroundimage.fillAmount;
+            float elasped1 = 0f;
+
+            while (elasped1 < updatespeedseconds)
+            {
+                elasped1 += Time.deltaTime;
+                foregroundimage.fillAmount = Mathf.Lerp(preChangedPct, pct, elasped1 / updatespeedseconds);
+                yield return null;
+            }
+            foregroundimage.fillAmount = pct;
+        }
+
+        // Update is called once per frame
+        void LateUpdate()
+        {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+
+        }
     }
 
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        transform.LookAt(Camera.main.transform);
-        transform.Rotate(0, 180, 0);
-
-    }
 }
