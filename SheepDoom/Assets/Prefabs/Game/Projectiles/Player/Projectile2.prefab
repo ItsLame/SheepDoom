@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 738438897868185392}
   - component: {fileID: -8817962291198315760}
   - component: {fileID: -8781045267611185837}
+  - component: {fileID: 4309939885416895172}
   m_Layer: 0
   m_Name: Projectile2
   m_TagString: Skill
@@ -131,3 +132,19 @@ MonoBehaviour:
   m_Speed: 5000
   m_Lifespan: 2
   destroyOnContact: 1
+--- !u!114 &4309939885416895172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7103345307366881107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0

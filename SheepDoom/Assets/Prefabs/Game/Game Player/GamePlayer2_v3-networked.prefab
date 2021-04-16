@@ -355,8 +355,10 @@ MonoBehaviour:
   hasPurchasedUlti: 0
   Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
     type: 3}
-  Projectile2: {fileID: 0}
-  Projectile3: {fileID: 0}
+  Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
+    type: 3}
+  Projectile3: {fileID: 3543547152907490667, guid: 2ccd3ae1f3b84704f8d3ce10d513d664,
+    type: 3}
   SpawnPoint: {fileID: 3805828759594656768}
   cooldown1: 0
   cooldown2: 0
