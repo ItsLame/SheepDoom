@@ -98,7 +98,6 @@ namespace SheepDoom
         //opening shop
         public void OpenShopUI()
         {
-          //  if (!hasAuthority) return;
             Debug.Log("Opening Shop UI");
             //get player's current gold
             PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
@@ -112,7 +111,6 @@ namespace SheepDoom
 
         public void CloseShopUI()
         {
-            if (!hasAuthority) return;
             //enable control UI
             GameUI.GetComponent<Canvas>().enabled = true;
             //disable shopUI
