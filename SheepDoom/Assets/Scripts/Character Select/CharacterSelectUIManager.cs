@@ -97,14 +97,15 @@ namespace SheepDoom
             {
                 if(_init)
                 {
+                    Debug.Log("CMD INIT");
                     SetUI_Player(_player);  // server view
                     SetUI_Team(_player, _teamIndex);    // server view
                     SetUI_Hero(_player, _heroName, _lockIn);    // server view
                     TargetUpdateOwner(conn, _player, _heroName, true, _init, _lockIn);  // local client view
-                    RpcUpdateOthers(_player, _heroName, _teamIndex, _init, _lockIn);    // other client view
                 }
                 else if(_lockIn)
                 {
+                    Debug.Log("CMD LOCK IN");
                     bool _isOwner = false;
 
                     MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();   // lock in true, count lock in ++
@@ -123,12 +124,14 @@ namespace SheepDoom
                         }
                     }
                 }
-                else
+                else if(!_lockIn)
                 {
+                    Debug.Log("CMD ELSE");
                     SetUI_Hero(_player, _heroName, _lockIn);    // server view
                     TargetUpdateOwner(conn, _player, _heroName, true, _init, _lockIn);  // local client view
-                    RpcUpdateOthers(_player, _heroName, _teamIndex, _init, _lockIn);    // other client view
                 }
+
+                RpcUpdateOthers(_player, _heroName, _teamIndex, _init, _lockIn);    // other client view
             }
             else
             {
@@ -147,8 +150,8 @@ namespace SheepDoom
 
             lockInButton.GetComponent<Button>().interactable = false;   // false since haven't picked a hero yet (prevent null lock in)
 
-            if (_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestCharSelectUpdate(_player, string.Empty, _teamIndex, true, false);  // 3rd parameter set to true to set initial settings
+            if(_player.GetComponent<NetworkIdentity>().hasAuthority)
+                CmdRequestCharSelectUpdate(_player, string.Empty, _teamIndex, true, false);  // 4th parameter set to true to set initial settings
         }
 
         public void ClientRequestUpdate(string _heroName, bool _lockIn)
@@ -157,12 +160,13 @@ namespace SheepDoom
             int _teamIndex = _player.GetComponent<PlayerObj>().GetTeamIndex();
 
             if(_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestCharSelectUpdate(_player, _heroName, _teamIndex, false, _lockIn); // 4th parameter set to true to start lock in request
+                CmdRequestCharSelectUpdate(_player, _heroName, _teamIndex, false, _lockIn); // 5th parameter set to true to start lock in request
         }
 
         public void LockInHero()
         {
             string _heroName = PlayerObj.instance.GetComponent<PlayerObj>().GetHeroName();
+            Debug.Log("HERONAME: " + _heroName);
 
             ClientRequestUpdate(_heroName, true);
         }
@@ -176,6 +180,8 @@ namespace SheepDoom
                 SetUI_Team(_player, _teamIndex);
             }
             
+            Debug.Log("Player: "+_player.GetComponent<PlayerObj>().GetPlayerName()+"\tSet HeroName: "+_heroName+"\nInit Status: "+_init+"\tLock In Status: "+_lockIn);
+
             SetUI_Hero(_player, _heroName, _lockIn);
         }
 
@@ -184,8 +190,7 @@ namespace SheepDoom
         {
             if(_init)
                 SetUI_Parent(_player);
-
-            if(_lockIn)
+            else if(_lockIn)
             {
                 // when other players (from same team) attempt to pick the hero, lock in button will be disabled
                 GameObject.Find(_heroName).SendMessage("SetTaken", _lockIn);
@@ -249,16 +254,18 @@ namespace SheepDoom
             // will need to add another bool when hero lock-in is implemented
             if(!_lockIn)
             {
+                Debug.Log("SETUI_HERO LOCK IN? NO...");
                 if(_heroName == string.Empty)
                     _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacter.text = "Picking a Hero...";
                 else
                 {
-                     _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacter.text = "Picking a Hero...("+_heroName+")";
+                    _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacter.text = "Picking a Hero...("+_heroName+")";
                     _player.GetComponent<PlayerObj>().SetHeroName(_heroName);
                 }
             }
             else if(_lockIn)
             {
+                Debug.Log("SETUI_HERO LOCK IN? YES!");
                 _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacter.text = _heroName;
             }
         }
