@@ -11,12 +11,13 @@ using System.Collections;
 
 namespace SheepDoom
 {
-    //to set player transform (in lobby)
+    //to set player ui (in lobby and char select)
     public class PlayerLobbyUI : NetworkBehaviour
     {
         [SerializeField] GameObject playerLobbyObject;
         [SerializeField] GameObject playerCharacterSelectObject;
         [SerializeField] private Text playerReady;
+        [SerializeField] private Text playerCharacter;
         
         #region Properties
 
@@ -36,6 +37,12 @@ namespace SheepDoom
         {
             get{return playerCharacterSelectObject;}
             set{playerCharacterSelectObject = value;}
+        }
+
+        public Text P_playerCharacter
+        {
+            get{return playerCharacter;}
+            set{playerCharacter = value;}
         }
 
         #endregion

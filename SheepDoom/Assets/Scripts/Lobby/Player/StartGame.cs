@@ -29,7 +29,7 @@ namespace SheepDoom
         {
             TargetRemoveParent(connectionToClient);
             SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
-            gameObject.transform.SetParent(null);
+            gameObject.transform.SetParent(null, false);
             SceneManager.MoveGameObjectToScene(gameObject, _scene);
             MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, true, false);
         }
@@ -37,9 +37,10 @@ namespace SheepDoom
         [TargetRpc]
         void TargetRemoveParent(NetworkConnection conn)
         {
-            gameObject.transform.SetParent(null);
+            gameObject.transform.SetParent(null, false);
             SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0)); // move to main menu first, then up to u, can move to a parent under character select scene if u want
         }
+
         #region Start & Stop Callbacks
 
         /// <summary>

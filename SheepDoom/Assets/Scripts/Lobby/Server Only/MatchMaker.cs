@@ -16,7 +16,9 @@ namespace SheepDoom
         private int team1Count;
         private int team2Count;
         private int countReady;
+        private int countLockIn;
         private SyncListGameObject players = new SyncListGameObject();
+        private SyncListGameObject heroes = new SyncListGameObject();
         private SyncList<Scene> matchScenes = new SyncList<Scene>(); // 0 = lobby, 1 = character select, 2 = game
         private SDSceneManager sdSceneManager;
         private LobbyUIManager lobbyUIManager;
@@ -43,6 +45,11 @@ namespace SheepDoom
             return players;
         }
 
+        public SyncListGameObject GetHeroesList()
+        {
+            return heroes;
+        }
+
         public int GetTeam1Count()
         {
             return team1Count;
@@ -56,6 +63,11 @@ namespace SheepDoom
         public int GetReadyCount()
         {
             return countReady;
+        }
+
+        public int GetLockInCount()
+        {
+            return countLockIn;
         }
 
         public SDSceneManager GetSDSceneManager()
@@ -121,9 +133,20 @@ namespace SheepDoom
         {
             countReady++;
         }
+
         public void MinusCountReady()
         {
             countReady--;
+        }
+
+        public void AddCountLockIn()
+        {
+            countLockIn++;
+        }
+
+        public void MinusCountLockIn()
+        {
+            countLockIn--;
         }
 
         public void SetLobbyUIManager(LobbyUIManager lobbyUIManager)

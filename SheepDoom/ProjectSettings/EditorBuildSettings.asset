@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/MapScene Version2.0.unity
     guid: 7901318ad059a974ca67dcefa219fb08
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Game Networking Scene 1.0.unity
     guid: 2de65819957e1854ca4689b0168fe0ab
   - enabled: 0

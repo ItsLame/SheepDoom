@@ -257,7 +257,6 @@ namespace SheepDoom
             else if (_start) // for start
                 // deal with syncvar delay
                 StartCoroutine(WaitForStartStatusUpdate(_player, P_startStatusMsg)); 
-                
         }
 
         [ClientRpc]
@@ -482,6 +481,13 @@ namespace SheepDoom
         public void ForceStart()
         {
             //StartCoroutine(RequestLobbyUpdate(PlayerObj.instance.GetMatchID(), PlayerObj.instance.gameObject, true));
+            CmdForceStart(PlayerObj.instance.gameObject, PlayerObj.instance.GetMatchID());
+        }
+
+        [Command(ignoreAuthority = true)]
+        private void CmdForceStart(GameObject _player, string _matchID)
+        {
+            _player.GetComponent<StartGame>().StartCharSelect(_matchID);
         }
 
         #endregion
