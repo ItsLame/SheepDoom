@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 namespace SheepDoom
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerProjectileSettings : MonoBehaviour
+    public class PlayerProjectileSettings : NetworkBehaviour
     {
         //projectileOwner
+        [SyncVar]
         public GameObject owner;
 
         [Space(15)]
@@ -31,6 +33,7 @@ namespace SheepDoom
         {
             m_Rigidbody = GetComponent<Rigidbody>();
         }
+
         void Start()
         {
             m_Rigidbody.AddForce(transform.forward * m_Speed);
@@ -48,7 +51,7 @@ namespace SheepDoom
                 {
                     //reduce HP of hit target
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
-                    string playerName = col.gameObject.GetComponent<PlayerUI>().getPlayerName().text;
+                    //string playerName = col.gameObject.GetComponent<PlayerUI>().getPlayerName().text;
                     //Debug.Log(playerName + "'s health: " + col.gameObject.GetComponent<PlayerHealth>().getHealth());
 
                     //increase killer's kill count if target is killed
@@ -128,6 +131,13 @@ namespace SheepDoom
                 Object.Destroy(this.gameObject);
             }
             */
+        }
+
+        //command to set owner of projectile
+        [Client]
+        public void CMD_setOwnerProjectile(GameObject player)
+        {
+            owner = player;
         }
 
         void Update()

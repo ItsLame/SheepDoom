@@ -9,7 +9,7 @@ namespace SheepDoom
     public class Shop : NetworkBehaviour
     {
         //linking to player
-        public GameObject Player;
+        public GameObject Player = null;
         public float PlayerGold;
 
         [Space(15)]
@@ -79,7 +79,7 @@ namespace SheepDoom
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.Log(hit.transform.name + " was clicked");
+ //                   Debug.Log(hit.transform.name + " was clicked");
 
                     //if hit something
                     if (hit.collider.gameObject.CompareTag("Shop"))

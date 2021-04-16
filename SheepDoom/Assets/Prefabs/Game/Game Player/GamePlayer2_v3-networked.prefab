@@ -361,8 +361,8 @@ MonoBehaviour:
     type: 3}
   SpawnPoint: {fileID: 3805828759594656768}
   cooldown1: 0
-  cooldown2: 0
-  cooldown3: 0
+  cooldown2: 2
+  cooldown3: 4
   ismeeleeattack: 0
   animator: {fileID: 0}
   attackPoint: {fileID: 0}

@@ -89,7 +89,7 @@ namespace SheepDoom
                 {
                     Debug.Log("Firing Normal Atk");
                     var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
-                    FiredProjectile.GetComponent<PlayerProjectileSettings>().owner = this.gameObject;
+                    FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
                     NetworkServer.Spawn(FiredProjectile);
 
                     //resetcd
@@ -124,7 +124,7 @@ namespace SheepDoom
                     {
                         Debug.Log("Firing Special Atk");
                         var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
-                        FiredProjectile.GetComponent<PlayerProjectileSettings>().owner = this.gameObject;
+                        FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
                         NetworkServer.Spawn(FiredProjectile);
                         cooldown2_inGame = cooldown2;
                     }
@@ -148,7 +148,7 @@ namespace SheepDoom
                     {
                         Debug.Log("Firing Ultimate Atk");
                         var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
-                        FiredProjectile.GetComponent<PlayerProjectileSettings>().owner = this.gameObject;
+                        FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
                         NetworkServer.Spawn(FiredProjectile);
                         cooldown3_inGame = cooldown3;
                     }
