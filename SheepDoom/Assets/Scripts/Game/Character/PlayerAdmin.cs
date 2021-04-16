@@ -84,22 +84,22 @@ namespace SheepDoom
             TowerCapturesText.text = TowerCaptures.ToString();
 
             //assign player to shop
-            float playerTeam = getTeamIndex();
-            if (playerTeam == 1)
-            {
+ //           float playerTeam = getTeamIndex();
+ //           if (playerTeam == 1)
+ //           {
                 Debug.Log("Assigning player to blue shop");
                 GameObject shop = GameObject.Find("BlueShop");
                 shop.gameObject.GetComponent<Shop>().Player = this.gameObject;
                 Debug.Log("Assigned player to blue shop");
-            }
+ //           }
 
-            else
-            {
+ //           else
+//            {
                 Debug.Log("Assigning player to red shop");
-                GameObject shop = GameObject.Find("RedShop");
-                shop.gameObject.GetComponent<Shop>().Player = this.gameObject;
+                GameObject shop2 = GameObject.Find("RedShop");
+                shop2.gameObject.GetComponent<Shop>().Player = this.gameObject;
                 Debug.Log("Assigned player to red shop");
-            }
+ //           }
 
         }
     }
