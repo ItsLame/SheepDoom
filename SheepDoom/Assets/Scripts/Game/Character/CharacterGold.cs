@@ -27,7 +27,7 @@ public class CharacterGold : NetworkBehaviour
         Debug.Log("Gold increased by " + goldValueChange);
         CurrentGold += goldValueChange;
         CurrentGoldUI.text = CurrentGold.ToString();
-//        CurrentGoldInShopUI.text = CurrentGold.ToString();
+        CurrentGoldInShopUI.text = CurrentGold.ToString();
     }
 
 
@@ -35,8 +35,12 @@ public class CharacterGold : NetworkBehaviour
     void Start()
     {
         if (!hasAuthority) return;
+        //get the gold text in game UI
         CurrentGoldUI = GameObject.Find("PlayerGoldText").GetComponent<Text>();
         CurrentGoldUI.text = CurrentGold.ToString();
- //       CurrentGoldInShopUI.text = CurrentGold.ToString();
+
+        //get the gold text in game shop
+        CurrentGoldInShopUI = GameObject.Find("Shop_Gold_Amount").GetComponent<Text>();
+        CurrentGoldInShopUI.text = CurrentGold.ToString();
     }
 }
