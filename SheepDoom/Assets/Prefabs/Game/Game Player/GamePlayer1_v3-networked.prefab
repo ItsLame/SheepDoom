@@ -1106,12 +1106,14 @@ MonoBehaviour:
   hasPurchasedUlti: 0
   Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
     type: 3}
-  Projectile2: {fileID: 0}
-  Projectile3: {fileID: 0}
+  Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
+    type: 3}
+  Projectile3: {fileID: 3543547152907490667, guid: 2ccd3ae1f3b84704f8d3ce10d513d664,
+    type: 3}
   SpawnPoint: {fileID: 5660135970150263288}
   cooldown1: 0
-  cooldown2: 0
-  cooldown3: 0
+  cooldown2: 2
+  cooldown3: 4
   ismeeleeattack: 0
   animator: {fileID: 0}
   attackPoint: {fileID: 0}
@@ -1210,7 +1212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  CurrentGold: 5
+  CurrentGold: 20
   CurrentGoldUI: {fileID: 0}
   CurrentGoldInShopUI: {fileID: 0}
 --- !u!114 &8449280143259454606
