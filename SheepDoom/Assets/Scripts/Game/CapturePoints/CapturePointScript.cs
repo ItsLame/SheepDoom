@@ -19,7 +19,7 @@ namespace SheepDoom
         [Tooltip("How much HP the tower has, edit this")]
         private float TowerHP;
         [SerializeField]
-        [SyncVar]private float TowerInGameHP; //to be used in game, gonna be the one fluctuating basically
+        [SyncVar] private float TowerInGameHP; //to be used in game, gonna be the one fluctuating basically
 
         //rate of capture
         [SerializeField]
@@ -51,6 +51,18 @@ namespace SheepDoom
 
             //no one is capturing it at start so put at 0
             numOfCapturers = 0;
+
+            if (CapturedByBlue)
+            {
+                var captureRenderer = this.GetComponent<Renderer>();
+                captureRenderer.material.SetColor("_Color", Color.blue);
+            }
+
+            else
+            {
+                var captureRenderer = this.GetComponent<Renderer>();
+                captureRenderer.material.SetColor("_Color", Color.red);
+            }
         }
 
         // Update is called once per frame
@@ -64,8 +76,9 @@ namespace SheepDoom
                 {
                     //show which point is captured, change point authority and max out towerHP
                     Debug.Log(this.name + " Captured By Blue Team");
-                    CapturedByBlue = true;
-                    CapturedByRed = false;
+
+                    CapturedByBlueTeam();
+                    CapturedByBlueTeam_Client();
 
                     //reference the score script to increase score function
                     scoreGameObject.GetComponent<GameScore>().blueScoreUp();
@@ -73,7 +86,7 @@ namespace SheepDoom
                     //give score to capturers
                     giveScoreToCapturers = true;
 
-                    modifyinghealth(TowerHP);
+
                     //  TowerInGameHP = TowerHP;
                 }
 
@@ -82,8 +95,9 @@ namespace SheepDoom
                 {
                     //show which point is captured, change point authority and max out towerHP
                     Debug.Log(this.name + " Captured By Blue Team");
-                    CapturedByRed = true;
-                    CapturedByBlue = false;
+
+                    CapturedByRedTeam();
+                    CapturedByRedTeam_Client();
 
                     //reference the score script to increase score function
                     scoreGameObject.GetComponent<GameScore>().redScoreUp();
@@ -94,7 +108,7 @@ namespace SheepDoom
                     modifyinghealth(TowerHP);
                     //  TowerInGameHP = TowerHP;
                 }
-                
+
             }
 
             if (isClient)
@@ -109,29 +123,53 @@ namespace SheepDoom
                 //Debug.Log(this.name + " HP: " + TowerInGameHP);
             }
 
-            //change color when captured by blue
-            if (CapturedByBlue)
-            {
-                var captureRenderer = this.GetComponent<Renderer>();
-                captureRenderer.material.SetColor("_Color", Color.blue);
-            }
-
-            //else its red
-            else
-            {
-                var captureRenderer = this.GetComponent<Renderer>();
-                captureRenderer.material.SetColor("_Color", Color.red);
-            }
-            
         }
 
-       
+
+        public void CapturedByBlueTeam()
+        {
+            CapturedByBlue = true;
+            CapturedByRed = false;
+            var captureRenderer = this.GetComponent<Renderer>();
+            captureRenderer.material.SetColor("_Color", Color.blue);
+            modifyinghealth(TowerHP);
+        }
+
+        public void CapturedByRedTeam()
+        {
+            CapturedByBlue = false;
+            CapturedByRed = true;
+            var captureRenderer = this.GetComponent<Renderer>();
+            captureRenderer.material.SetColor("_Color", Color.red);
+            modifyinghealth(TowerHP);
+        }
+
+        [ClientRpc]
+        public void CapturedByBlueTeam_Client()
+        {
+            CapturedByBlue = true;
+            CapturedByRed = false;
+            var captureRenderer = this.GetComponent<Renderer>();
+            captureRenderer.material.SetColor("_Color", Color.blue);
+            modifyinghealth(TowerHP);
+        }
+
+        [ClientRpc]
+        public void CapturedByRedTeam_Client()
+        {
+            CapturedByBlue = false;
+            CapturedByRed = true;
+            var captureRenderer = this.GetComponent<Renderer>();
+            captureRenderer.material.SetColor("_Color", Color.red);
+            modifyinghealth(TowerHP);
+        }
+
         public void modifyinghealth(float amount)
         {
             TowerInGameHP += amount;
 
-   //         Debug.Log("health: tower in game hp:  " + TowerInGameHP);
-            float currenthealthPct = TowerInGameHP /TowerHP;
+            //         Debug.Log("health: tower in game hp:  " + TowerInGameHP);
+            float currenthealthPct = TowerInGameHP / TowerHP;
             OnHealthPctChangedTower(currenthealthPct);
         }
 
@@ -175,22 +213,15 @@ namespace SheepDoom
                 {
                     if (CapturedByRed)
                     {
-                        //if its red means it was previously blue, so give score to red player
-                        if (tID == 1) return;
-                        Debug.Log("Giving Score to Red Team Players in Range");
-                        increasePlayerCaptureScore(other.gameObject);
+                        GiveScoreToRedPlayers_Target(tID, other.gameObject);
                         giveScoreToCapturers = false;
-                        Debug.Log("End of score giving (red)");
                     }
 
                     //else blue  team captured red point, give score to blue
                     if (CapturedByBlue)
                     {
-                        if (tID == 2) return;
-                        Debug.Log("Giving Score to Blue Team Players in Range");
-                        increasePlayerCaptureScore(other.gameObject);
+                        GiveScoreToBluePlayers_Target(tID, other.gameObject);
                         giveScoreToCapturers = false;
-                        Debug.Log("End of score giving (blue)");
                     }
 
                 }
@@ -213,6 +244,26 @@ namespace SheepDoom
             }
         }
 
+        public void GiveScoreToBluePlayers_Target(float tID, GameObject player)
+        {
+            if (tID == 2) return;
+            Debug.Log("Giving Score to Blue Team Players in Range");
+            increasePlayerCaptureScore(player.gameObject);
+            giveScoreToCapturers = false;
+            Debug.Log("End of score giving (blue)");
+        }
+
+        public void GiveScoreToRedPlayers_Target(float tID, GameObject player)
+        {
+            //if its red means it was previously blue, so give score to red player
+            if (tID == 1) return;
+            Debug.Log("Giving Score to Red Team Players in Range");
+            increasePlayerCaptureScore(player.gameObject);
+            giveScoreToCapturers = false;
+            Debug.Log("End of score giving (red)");
+        }
+
+
         //check for player exit
         private void OnTriggerExit(Collider other)
         {
@@ -234,6 +285,7 @@ namespace SheepDoom
                 }
             }
         }
+
 
         public void increasePlayerCaptureScore(GameObject player)
         {
