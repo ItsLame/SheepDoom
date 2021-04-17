@@ -2,49 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 namespace SheepDoom
 {
-    public class BaseHealthBar : MonoBehaviour
+    public class BaseHealthBar : HealthBar
     {
-        [SerializeField]
-        private Image foregroundimage;
-        [SerializeField]
-        private float updatespeedseconds = 0.5f;
+        [SerializeField] private Image foregroundimage;
+        [SerializeField] private float updatespeedseconds = 0.5f;
 
-        // Start is called before the first frame update
-        private void Awake()
+        protected override void Awake()
         {
-            GetComponentInParent<CaptureBaseScript>().OnHealthPctChangedTower += HandleHealthChangedTower;
-        }
-        private void HandleHealthChangedTower(float pct)
-        {
-            StartCoroutine(ChangedToPctTower(pct));
-        }
-        private IEnumerator ChangedToPctTower(float pct)
-        {
-            float preChangedPct = foregroundimage.fillAmount;
-            float elasped1 = 0f;
-
-            while (elasped1 < updatespeedseconds)
-            {
-                elasped1 += Time.deltaTime;
-                foregroundimage.fillAmount = Mathf.Lerp(preChangedPct, pct, elasped1 / updatespeedseconds);
-                yield return null;
-            }
-            foregroundimage.fillAmount = pct;
+            base.Awake();
+            GetComponentInParent<CaptureBaseScript>().OnHealthPctChangedTower += HandleHealthChanged;
         }
 
-        // Update is called once per frame
-        void LateUpdate()
+        protected override void InitHealthBar()
         {
-            if (Camera.main)
-            {
-                transform.LookAt(Camera.main.transform);
-                transform.Rotate(0, 180, 0);
-            }
+            P_foregroundImage = foregroundimage;
+            P_updateSpeedSeconds = updatespeedseconds;
         }
     }
-
 }
