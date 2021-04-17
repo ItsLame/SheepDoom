@@ -5,42 +5,21 @@ using UnityEngine.UI;
 
 namespace SheepDoom
 {
-    public class BaseCreepHealthBAR : MonoBehaviour
+    public class BaseCreepHealthBAR : HealthBar
     {
-        [SerializeField]
-        private Image foregroundimage;
-        [SerializeField]
-        private float updatespeedseconds = 0.5f;
+        [SerializeField] private Image foregroundimage;
+        [SerializeField] private float updatespeedseconds = 0.5f;
 
-        // Start is called before the first frame update
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             GetComponentInParent<TeamCoalitionLeftMinionBehaviour>().OnHealthPctChanged += HandleHealthChanged;
         }
-        private void HandleHealthChanged(float pct)
-        {
-            StartCoroutine(ChangedToPct(pct));
-        }
-        private IEnumerator ChangedToPct(float pct)
-        {
-            float preChangedPct = foregroundimage.fillAmount;
-            float elasped1 = 0f;
 
-            while (elasped1 < updatespeedseconds)
-            {
-                elasped1 += Time.deltaTime;
-                foregroundimage.fillAmount = Mathf.Lerp(preChangedPct, pct, elasped1 / updatespeedseconds);
-                yield return null;
-            }
-            foregroundimage.fillAmount = pct;
-        }
-
-        // Update is called once per frame
-        void LateUpdate()
+        protected override void InitHealthBar()
         {
-            transform.LookAt(Camera.main.transform);
-            transform.Rotate(0, 180, 0);
-
+            P_foregroundImage = foregroundimage;
+            P_updateSpeedSeconds = updatespeedseconds;
         }
     }
 }
