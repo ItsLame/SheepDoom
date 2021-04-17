@@ -317,6 +317,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1708f8d41cba74940a00e79e72606d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   scoreGameObject: {fileID: 0}
   BaseHP: 100
   BaseInGameHP: 0
@@ -455,4 +457,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foregroundimage: {fileID: 1901046971708211343}
-  updatespeedseconds: 0.2
+  updatespeedseconds: 0.5
