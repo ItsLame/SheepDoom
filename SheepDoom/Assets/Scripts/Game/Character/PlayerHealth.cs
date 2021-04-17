@@ -11,7 +11,8 @@ namespace SheepDoom
         [SerializeField]
         private float maxHealth = 100.0f;
 
-        [SyncVar(hook = nameof(healthUpdate))]
+        //[SyncVar(hook = nameof(healthUpdate))]
+        [SyncVar]
         public float currenthealth;
 
         public event Action<float> OnHealthPctChanged = delegate { };
@@ -30,12 +31,12 @@ namespace SheepDoom
             currenthealth = maxHealth;
         }
 
-        //for syncvar to sync player health
+        /*for syncvar to sync player health
         private void healthUpdate(float oldHealth, float newHealth)
         {
  //           if(hasAuthority)
  //               Debug.Log("Old HP: " + oldHealth + " New HP: " + newHealth);
-        }
+        }*/
 
         public void modifyinghealth(float amount)
         {

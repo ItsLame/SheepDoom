@@ -39,7 +39,7 @@ namespace SheepDoom
         private int numOfCapturers; //logging number to check if tower is under capture or not
 
         //scoring bools
-        private bool giveScoreToCapturers = false;
+        [SyncVar] private bool giveScoreToCapturers = false;
 
         public event Action<float> OnHealthPctChangedTower = delegate { };
 
@@ -56,6 +56,50 @@ namespace SheepDoom
         // Update is called once per frame
         void Update()
         {
+            if (isServer)
+            {
+                //once HP = 0, notify the scoring and convert the tower
+                //from red to blue (captured by blue team)
+                if (TowerInGameHP <= 0 && !CapturedByBlue)
+                {
+                    //show which point is captured, change point authority and max out towerHP
+                    Debug.Log(this.name + " Captured By Blue Team");
+                    CapturedByBlue = true;
+                    CapturedByRed = false;
+
+                    //reference the score script to increase score function
+                    scoreGameObject.GetComponent<GameScore>().blueScoreUp();
+
+                    //give score to capturers
+                    giveScoreToCapturers = true;
+
+                    modifyinghealth(TowerHP);
+                    //  TowerInGameHP = TowerHP;
+                }
+
+                //from blue to red (captured by red team)
+                else if (TowerInGameHP <= 0 && !CapturedByRed)
+                {
+                    //show which point is captured, change point authority and max out towerHP
+                    Debug.Log(this.name + " Captured By Blue Team");
+                    CapturedByRed = true;
+                    CapturedByBlue = false;
+
+                    //reference the score script to increase score function
+                    scoreGameObject.GetComponent<GameScore>().redScoreUp();
+
+                    //give score to capturers
+                    giveScoreToCapturers = true;
+
+                    modifyinghealth(TowerHP);
+                    //  TowerInGameHP = TowerHP;
+                }
+                
+            }
+
+            if (isClient)
+                scoreGameObject.GetComponent<GameScore>().updateScoreDisplay(); // ugly solution
+
             //regen hp if tower is not under capture
             if ((numOfCapturers == 0) && (TowerInGameHP < TowerHP))
             {
@@ -63,47 +107,6 @@ namespace SheepDoom
 
                 //debug showing tower HP
                 //Debug.Log(this.name + " HP: " + TowerInGameHP);
-            }
-
-            //once HP = 0, notify the scoring and convert the tower
-            //from red to blue (captured by blue team)
-            if (TowerInGameHP <= 0 && !CapturedByBlue)
-            {
-                //show which point is captured, change point authority and max out towerHP
-                Debug.Log(this.name + " Captured By Blue Team");
-                CapturedByBlue = true;
-                CapturedByRed = false;
-
-                //reference the score script to increase score function
-                scoreGameObject.GetComponent<GameScore>().blueScoreUp();
-
-                //give score to capturers
-                giveScoreToCapturers = true;
-
-                modifyinghealth(TowerHP);
-                //  TowerInGameHP = TowerHP;
-
-
-            }
-
-            //from blue to red (captured by red team)
-            else if (TowerInGameHP <= 0 && !CapturedByRed)
-            {
-                //show which point is captured, change point authority and max out towerHP
-                Debug.Log(this.name + " Captured By Blue Team");
-                CapturedByRed = true;
-                CapturedByBlue = false;
-
-                //reference the score script to increase score function
-                scoreGameObject.GetComponent<GameScore>().redScoreUp();
-
-                //give score to capturers
-                giveScoreToCapturers = true;
-
-                modifyinghealth(TowerHP);
-                //  TowerInGameHP = TowerHP;
-
-
             }
 
             //change color when captured by blue
@@ -119,9 +122,10 @@ namespace SheepDoom
                 var captureRenderer = this.GetComponent<Renderer>();
                 captureRenderer.material.SetColor("_Color", Color.red);
             }
+            
         }
 
-
+       
         public void modifyinghealth(float amount)
         {
             TowerInGameHP += amount;
@@ -132,6 +136,7 @@ namespace SheepDoom
         }
 
         //check for player enter
+        // runs on both client and server
         private void OnTriggerEnter(Collider other)
         {
             if (other.tag == "Player")
@@ -151,7 +156,6 @@ namespace SheepDoom
                 {
                     numOfCapturers += 1;
                 }
-
             }
         }
 

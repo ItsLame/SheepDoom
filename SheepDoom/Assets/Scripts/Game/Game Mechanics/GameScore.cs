@@ -22,9 +22,11 @@ public class GameScore : NetworkBehaviour
     //hard coded for now
     [Space(20)]
     [SerializeField]
-    [SyncVar(hook = nameof(updateScoreDisplayClient))] private float blueCaptureScore;
+    //[SyncVar(hook = nameof(updateScoreDisplayClient))] private float blueCaptureScore;
+    [SyncVar] private float blueCaptureScore;
     [SerializeField]
-    [SyncVar(hook = nameof(updateScoreDisplayClient))] private float redCaptureScore;
+    //[SyncVar(hook = nameof(updateScoreDisplayClient))] private float redCaptureScore;
+    [SyncVar] private float redCaptureScore;
 
     // Start is called before the first frame update
     void Start()
@@ -33,9 +35,10 @@ public class GameScore : NetworkBehaviour
         blueCaptureScore = 1;
         redCaptureScore = 1;
 
+        // they are already text components...
         //get the attached score counters text component
-        blueCaptureCounter = blueCaptureCounter.GetComponent<Text>();
-        redCaptureCounter = redCaptureCounter.GetComponent<Text>();
+        //blueCaptureCounter = blueCaptureCounter.GetComponent<Text>();
+        //redCaptureCounter = redCaptureCounter.GetComponent<Text>();
 
         //display score
         blueCaptureCounter.text = blueCaptureScore.ToString();
@@ -51,12 +54,12 @@ public class GameScore : NetworkBehaviour
         redCaptureCounter.text = redCaptureScore.ToString();
     }
 
-    [ClientRpc]
+    /*
     public void updateScoreDisplayClient(float oldValue, float newValue)
     {
         blueCaptureCounter.text = blueCaptureScore.ToString();
         redCaptureCounter.text = redCaptureScore.ToString();
-    }
+    }*/
 
     //scoring functions
     public void blueScoreUp()
@@ -77,7 +80,6 @@ public class GameScore : NetworkBehaviour
         redCaptureScore += 1;
         //update display
         updateScoreDisplay();
-
     }
 
     // game winning condition (will be called when base is taken)
