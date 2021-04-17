@@ -125,7 +125,7 @@ namespace SheepDoom
         {
             TowerInGameHP += amount;
 
-            Debug.Log("health: tower in game hp:  " + TowerInGameHP);
+   //         Debug.Log("health: tower in game hp:  " + TowerInGameHP);
             float currenthealthPct = TowerInGameHP /TowerHP;
             OnHealthPctChangedTower(currenthealthPct);
         }

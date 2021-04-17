@@ -133,6 +133,8 @@ namespace SheepDoom
 
                 //set player bool 'haspurchasedspecial' to true
                 Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedSpecial();
+
+                Debug.Log("First Special Purchased");
             }
 
         }
@@ -146,6 +148,9 @@ namespace SheepDoom
                 //deduct gold
                 Player.GetComponent<CharacterGold>().varyGold(-SpecialCost);
 
+                //set alternative special chosen
+                Player.GetComponent<PlayerAttack>().CMD_AlternateSpecial();
+
                 //if choose 2nd, disable 1st
                 SpecialButton1.GetComponent<Button>().interactable = false;
  //               PlayerSpecialButton.GetComponent<Button>().interactable = true;
@@ -153,6 +158,8 @@ namespace SheepDoom
 
                 //set player bool 'haspurchasedspecial' to true
                 Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedSpecial();
+
+                Debug.Log("Second Special Purchased");
             }
         }
 
@@ -170,6 +177,8 @@ namespace SheepDoom
 
                 //set player bool 'haspurchasedulti' to true
                 Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedUlti();
+
+                Debug.Log("First Ulti Purchased");
             }
         }
 
@@ -179,6 +188,9 @@ namespace SheepDoom
             if (!hasPurchasedUlti && (PlayerGold - UltiCost >= 0))
             {
                 Player.GetComponent<CharacterGold>().varyGold(-UltiCost);
+
+                //set alternate ulti true
+                Player.GetComponent<PlayerAttack>().CMD_AlternateUlti(); 
                 //if choose 2nd, disable 1st
                 UltiButton1.GetComponent<Button>().interactable = false;
   //              PlayerUltiButton.GetComponent<Button>().interactable = true;
@@ -186,6 +198,8 @@ namespace SheepDoom
 
                 //set player bool 'haspurchasedulti' to true
                 Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedUlti();
+
+                Debug.Log("Second Special Purchased");
             }
         }
     }

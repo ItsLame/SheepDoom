@@ -9,30 +9,34 @@ namespace SheepDoom
     public class PlayerAttack : NetworkBehaviour
     {
         [Space(15)]
-        //for checking if player purchased special and ulti
+        [Header("for checking if player purchased special and ulti")]
         public bool hasPurchasedSpecial = false;
         public bool hasPurchasedUlti = false;
 
-        /*public GameObject NormalButton;
-        public GameObject SpecialButton;
-        public GameObject UltiButton;*/
+        [Space(15)]
+        [Header("Bools to check which type of skills player chose")]
+        public bool AlternateSpecial = false;
+        public bool AlternateUlti = false;
 
         [Space(15)]
-        //Skill projectiles
+        [Header("Skill projectiles")]
         public GameObject Projectile;
         public GameObject Projectile2;
+        public GameObject Projectile2_v2;
         public GameObject Projectile3;
+        public GameObject Projectile3_v2;
+
+
 
         [Space(15)]
-        //skill launch point
+        [Header("skill launch point")]
         public Transform SpawnPoint;
 
         //skillcd basetrackers
         [SerializeField]
         private float cooldown1, cooldown2, cooldown3;
 
-        //skillcd values to be used n manipulated in game
-
+        [Header("skillcd values to be used n manipulated in game")]
         private float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
         [Space(15)]
         //Melee Bool false
@@ -122,11 +126,27 @@ namespace SheepDoom
                 {
                     if (cooldown2_inGame <= 0)
                     {
-                        Debug.Log("Firing Special Atk");
-                        var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
-                        FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
-                        NetworkServer.Spawn(FiredProjectile);
-                        cooldown2_inGame = cooldown2;
+                        //if 1st special is chosen
+                        if (!AlternateSpecial)
+                        {
+                            Debug.Log("Firing Special Atk");
+                            var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
+                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
+                            NetworkServer.Spawn(FiredProjectile);
+                            cooldown2_inGame = cooldown2;
+                        }
+
+                        //else its the second special
+                        else
+                        {
+                            Debug.Log("Firing Special Atk 2");
+                            var FiredProjectile = Instantiate(Projectile2_v2, SpawnPoint.position, SpawnPoint.rotation);
+                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
+                            NetworkServer.Spawn(FiredProjectile);
+                            cooldown2_inGame = cooldown2;
+                        }
+
+
                     }
                 }
                 else
@@ -146,11 +166,26 @@ namespace SheepDoom
                 {
                     if (cooldown3_inGame <= 0)
                     {
-                        Debug.Log("Firing Ultimate Atk");
-                        var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
-                        FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
-                        NetworkServer.Spawn(FiredProjectile);
-                        cooldown3_inGame = cooldown3;
+                        //if 1st ulti is chosen
+                        if (!AlternateUlti)
+                        {
+                            Debug.Log("Firing Ultimate Atk");
+                            var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
+                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
+                            NetworkServer.Spawn(FiredProjectile);
+                            cooldown3_inGame = cooldown3;
+                        }
+
+                        //else its 2nd ulti
+                        else
+                        {
+                            Debug.Log("Firing Ultimate Atk 2");
+                            var FiredProjectile = Instantiate(Projectile3_v2, SpawnPoint.position, SpawnPoint.rotation);
+                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
+                            NetworkServer.Spawn(FiredProjectile);
+                            cooldown3_inGame = cooldown3;
+                        }
+
                     }
                 }
                 else
@@ -173,6 +208,20 @@ namespace SheepDoom
         public void CMD_playerHasPurchasedUlti()
         {
             hasPurchasedUlti = true;
+        }
+
+        //command to set alternate special to true
+        [Command]
+        public void CMD_AlternateSpecial()
+        {
+            AlternateSpecial = true;
+        }
+
+        //command to set alternate ulti to true
+        [Command]
+        public void CMD_AlternateUlti()
+        {
+            AlternateUlti = true;
         }
 
         // Update is called once per frame

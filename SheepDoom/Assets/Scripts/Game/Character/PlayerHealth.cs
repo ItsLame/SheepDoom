@@ -51,7 +51,6 @@ namespace SheepDoom
             {
                 currenthealth = 0;
 
-
                 //increase death by 1
                 if (deathCounterCalled == false)
                 {
@@ -61,6 +60,7 @@ namespace SheepDoom
 
                 GameOver();
             }   
+
             if (currenthealth > maxHealth)
             {
                 currenthealth = maxHealth;
