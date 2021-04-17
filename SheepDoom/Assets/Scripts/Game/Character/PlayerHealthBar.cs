@@ -11,7 +11,7 @@ namespace SheepDoom
         [SerializeField]
         private Image foregroundimage;
         [SerializeField]
-        private float updatespeedseconds = 0.1f;
+        private float updatespeedseconds = 0.5f;
 
         // Start is called before the first frame update
         private void Awake()
@@ -33,7 +33,6 @@ namespace SheepDoom
                 foregroundimage.fillAmount = Mathf.Lerp(preChangedPct, pct, elasped1 / updatespeedseconds);
                 yield return null;
             }
-
             foregroundimage.fillAmount = pct;
         }
 
