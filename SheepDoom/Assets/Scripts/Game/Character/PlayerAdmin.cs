@@ -15,14 +15,11 @@ namespace SheepDoom
         private float TeamIndex;
 
         [Header("Player scores")]
-        //    [SyncVar]
-        public float PlayerKills;
+        [SyncVar] public float PlayerKills;
         public Text PlayerKillsText;
-        //    [SyncVar]
-        public float PlayerDeaths;
+        [SyncVar] public float PlayerDeaths;
         public Text PlayerDeathsText;
-        //    [SyncVar]
-        public float TowerCaptures;
+        [SyncVar] public float TowerCaptures;
         public Text TowerCapturesText;
 
         //accessor method for team index
@@ -38,7 +35,6 @@ namespace SheepDoom
         }
 
         //increasing methods for kills, deaths
-        [TargetRpc]
         public void increasePlayerKillCount()
         {
             PlayerKills += 1;
@@ -46,7 +42,6 @@ namespace SheepDoom
             PlayerKillsText.text = PlayerKills.ToString();
         }
 
-        [TargetRpc]
         public void increasePlayerDeathCount()
         {
             PlayerDeaths += 1;
@@ -54,12 +49,15 @@ namespace SheepDoom
             PlayerDeathsText.text = PlayerDeaths.ToString();
         }
 
-        [TargetRpc]
         public void increaseCaptureCount()
         {
             TowerCaptures += 1;
             Debug.Log("Captures increased to " + TowerCaptures);
+
+            TowerCapturesText = GameObject.Find("CText").GetComponent<Text>();
+
             TowerCapturesText.text = TowerCaptures.ToString();
+            Debug.Log("End of increaseCaptureCount");
         }
 
         //start
@@ -73,33 +71,28 @@ namespace SheepDoom
 
             //get the UI
             PlayerKillsText = GameObject.Find("KText").GetComponent<Text>();
-            //       Debug.Log("playerkillstext found");
+ //                 Debug.Log("playerkillstext found");
             PlayerDeathsText = GameObject.Find("DText").GetComponent<Text>();
-            //       Debug.Log("playerdeathtext found");
+ //                 Debug.Log("playerdeathtext found");
             TowerCapturesText = GameObject.Find("CText").GetComponent<Text>();
-            //       Debug.Log("towercapturetext found");
+ //                  Debug.Log("towercapturetext found");
 
             PlayerKillsText.text = PlayerKills.ToString();
             PlayerDeathsText.text = PlayerDeaths.ToString();
             TowerCapturesText.text = TowerCaptures.ToString();
 
             //assign player to shop
- //           float playerTeam = getTeamIndex();
- //           if (playerTeam == 1)
- //           {
-                Debug.Log("Assigning player to blue shop");
-                GameObject shop = GameObject.Find("BlueShop");
-                shop.gameObject.GetComponent<Shop>().Player = this.gameObject;
-                Debug.Log("Assigned player to blue shop");
- //           }
+            Debug.Log("Assigning player to blue shop");
+            GameObject shop = GameObject.Find("BlueShop");
+            shop.gameObject.GetComponent<Shop>().Player = this.gameObject;
+            Debug.Log("Assigned player to blue shop");
 
- //           else
-//            {
-                Debug.Log("Assigning player to red shop");
-                GameObject shop2 = GameObject.Find("RedShop");
-                shop2.gameObject.GetComponent<Shop>().Player = this.gameObject;
-                Debug.Log("Assigned player to red shop");
- //           }
+
+            Debug.Log("Assigning player to red shop");
+            GameObject shop2 = GameObject.Find("RedShop");
+            shop2.gameObject.GetComponent<Shop>().Player = this.gameObject;
+            Debug.Log("Assigned player to red shop");
+
 
         }
     }

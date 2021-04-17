@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class GameScore : MonoBehaviour
+public class GameScore : NetworkBehaviour
 {
     //the display text for tower scores
     [Space(20)]
@@ -21,40 +22,62 @@ public class GameScore : MonoBehaviour
     //hard coded for now
     [Space(20)]
     [SerializeField]
-    private float blueCaptureScore;
+    [SyncVar(hook = nameof(updateScoreDisplayClient))] private float blueCaptureScore;
     [SerializeField]
-    private float redCaptureScore;
+    [SyncVar(hook = nameof(updateScoreDisplayClient))] private float redCaptureScore;
 
     // Start is called before the first frame update
     void Start()
     {
+        //initialize score
+        blueCaptureScore = 1;
+        redCaptureScore = 1;
+
         //get the attached score counters text component
         blueCaptureCounter = blueCaptureCounter.GetComponent<Text>();
         redCaptureCounter = redCaptureCounter.GetComponent<Text>();
+
+        //display score
+        blueCaptureCounter.text = blueCaptureScore.ToString();
+        redCaptureCounter.text = redCaptureScore.ToString();
+
     }
 
-    // Update is called once per frame
-    void Update()
+
+    //update score display on all clients
+    public void updateScoreDisplay()
     {
-        //display both of em on screen
         blueCaptureCounter.text = blueCaptureScore.ToString();
-        redCaptureCounter.text =  redCaptureScore.ToString();
+        redCaptureCounter.text = redCaptureScore.ToString();
+    }
+
+    [ClientRpc]
+    public void updateScoreDisplayClient(float oldValue, float newValue)
+    {
+        blueCaptureCounter.text = blueCaptureScore.ToString();
+        redCaptureCounter.text = redCaptureScore.ToString();
     }
 
     //scoring functions
-    //its bad to make this public right? <----------------------------------------------- help
     public void blueScoreUp()
     {
+        Debug.Log("Blue score +1");
         //if blue scores, red will -1
         blueCaptureScore += 1;
         redCaptureScore -= 1;
+        //update display
+        updateScoreDisplay();
     }
 
     public void redScoreUp()
     {
+        Debug.Log("Red score +1");
         //if blue scores, red will -1
         blueCaptureScore -= 1;
         redCaptureScore += 1;
+        //update display
+        updateScoreDisplay();
+
     }
 
     // game winning condition (will be called when base is taken)

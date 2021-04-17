@@ -19,8 +19,7 @@ namespace SheepDoom
         [Tooltip("How much HP the tower has, edit this")]
         private float TowerHP;
         [SerializeField]
-        [SyncVar]
-        private float TowerInGameHP; //to be used in game, gonna be the one fluctuating basically
+        [SyncVar]private float TowerInGameHP; //to be used in game, gonna be the one fluctuating basically
 
         //rate of capture
         [SerializeField]
@@ -33,11 +32,9 @@ namespace SheepDoom
         //captured bools
         [Space(20)]
         [SerializeField]
-        [SyncVar]
-        private bool CapturedByBlue;
+        [SyncVar] private bool CapturedByBlue;
         [SerializeField]
-        [SyncVar]
-        private bool CapturedByRed;
+        [SyncVar] private bool CapturedByRed;
         [SerializeField]
         private int numOfCapturers; //logging number to check if tower is under capture or not
 
@@ -77,14 +74,16 @@ namespace SheepDoom
                 CapturedByBlue = true;
                 CapturedByRed = false;
 
-                modifyinghealth(TowerHP);
-                //  TowerInGameHP = TowerHP;
-
                 //reference the score script to increase score function
                 scoreGameObject.GetComponent<GameScore>().blueScoreUp();
 
                 //give score to capturers
                 giveScoreToCapturers = true;
+
+                modifyinghealth(TowerHP);
+                //  TowerInGameHP = TowerHP;
+
+
             }
 
             //from blue to red (captured by red team)
@@ -95,14 +94,16 @@ namespace SheepDoom
                 CapturedByRed = true;
                 CapturedByBlue = false;
 
-                modifyinghealth(TowerHP);
-                //  TowerInGameHP = TowerHP;
-
                 //reference the score script to increase score function
                 scoreGameObject.GetComponent<GameScore>().redScoreUp();
 
                 //give score to capturers
                 giveScoreToCapturers = true;
+
+                modifyinghealth(TowerHP);
+                //  TowerInGameHP = TowerHP;
+
+
             }
 
             //change color when captured by blue
@@ -175,13 +176,17 @@ namespace SheepDoom
                         Debug.Log("Giving Score to Red Team Players in Range");
                         increasePlayerCaptureScore(other.gameObject);
                         giveScoreToCapturers = false;
+                        Debug.Log("End of score giving (red)");
                     }
 
                     //else blue  team captured red point, give score to blue
-                    else
+                    if (CapturedByBlue)
                     {
+                        if (tID == 2) return;
+                        Debug.Log("Giving Score to Blue Team Players in Range");
                         increasePlayerCaptureScore(other.gameObject);
                         giveScoreToCapturers = false;
+                        Debug.Log("End of score giving (blue)");
                     }
 
                 }
@@ -190,15 +195,6 @@ namespace SheepDoom
                 if (CapturedByRed && (tID == 1) && !isDed)
                 {
                     modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
-                    //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
-
-                    /* increase the player score when tower is captured
-                    if (giveScoreToCapturers == true)
-                    {
-                        Debug.Log("Giving Score to Blue Team Players in Range");
-                        increasePlayerCaptureScore(other.gameObject);
-                        giveScoreToCapturers = false;
-                    } */
 
                 }
 
@@ -206,15 +202,7 @@ namespace SheepDoom
                 if (CapturedByBlue && (tID == 2) && !isDed)
                 {
                     modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
-                    //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
 
-                    /* increase the player score when tower is captured
-                    if (giveScoreToCapturers == true)
-                    {
-                        Debug.Log("Giving Score to Red Team Players in Range");
-                        increasePlayerCaptureScore(other.gameObject);
-                        giveScoreToCapturers = false;
-                    } */
                 }
 
 
@@ -243,7 +231,6 @@ namespace SheepDoom
             }
         }
 
-//        [Command]
         public void increasePlayerCaptureScore(GameObject player)
         {
             player.gameObject.GetComponent<PlayerAdmin>().increaseCaptureCount();
