@@ -29,7 +29,7 @@ public class GameScore : NetworkBehaviour
     [SyncVar] private float redCaptureScore;
 
     // Start is called before the first frame update
-    void Start()
+    /*void Start()
     {
         // changed to initialize on server only, if u put on start method, everytime new player joins, it will reinitialize to 1-1
         //initialize score
@@ -44,7 +44,7 @@ public class GameScore : NetworkBehaviour
         //display score
         blueCaptureCounter.text = blueCaptureScore.ToString();
         redCaptureCounter.text = redCaptureScore.ToString();
-    }
+    }*/
 
     //update score display on all clients
     public void updateScoreDisplay()
@@ -139,10 +139,11 @@ public class GameScore : NetworkBehaviour
     {
         blueCaptureScore = 1;
         redCaptureScore = 1;
+        updateScoreDisplay();
     }
 
     public override void OnStartClient()
     {
-        updateScoreDisplay();
+        updateScoreDisplay(); // when start on client, it will automatically take values from server
     }
 }
