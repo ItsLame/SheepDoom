@@ -58,7 +58,7 @@ namespace SheepDoom
                 captureRenderer.material.SetColor("_Color", Color.blue);
             }
 
-            else
+            else if (CapturedByRed)
             {
                 var captureRenderer = this.GetComponent<Renderer>();
                 captureRenderer.material.SetColor("_Color", Color.red);
@@ -77,16 +77,18 @@ namespace SheepDoom
                     //show which point is captured, change point authority and max out towerHP
                     Debug.Log(this.name + " Captured By Blue Team");
 
-                    CapturedByBlueTeam();
-                    CapturedByBlueTeam_Client();
+                    CapturedServer(CapturedByBlue, CapturedByRed);
+                    // no change in logic, just used a more summarized method
+                    //CapturedByBlueTeam();
+                    //CapturedByBlueTeam_Client();
 
                     //reference the score script to increase score function
-                    scoreGameObject.GetComponent<GameScore>().blueScoreUp();
+                    //scoreGameObject.GetComponent<GameScore>().ScoreUp(CapturedByBlue, CapturedByRed);
 
                     //give score to capturers
                     giveScoreToCapturers = true;
-
-
+                    
+                    RpcCapturedClient();
                     //  TowerInGameHP = TowerHP;
                 }
 
@@ -96,23 +98,29 @@ namespace SheepDoom
                     //show which point is captured, change point authority and max out towerHP
                     Debug.Log(this.name + " Captured By Blue Team");
 
-                    CapturedByRedTeam();
-                    CapturedByRedTeam_Client();
+                    CapturedServer(CapturedByBlue, CapturedByRed);
+                    // no change in logic, just used a more summarized method
+                    //CapturedByRedTeam();
+                    //CapturedByRedTeam_Client();
 
                     //reference the score script to increase score function
-                    scoreGameObject.GetComponent<GameScore>().redScoreUp();
+                    //scoreGameObject.GetComponent<GameScore>().ScoreUp(CapturedByBlue, CapturedByRed);
 
                     //give score to capturers
                     giveScoreToCapturers = true;
-
-                    modifyinghealth(TowerHP);
+                    
+                    RpcCapturedClient();
+                    //modifyinghealth(TowerHP);
                     //  TowerInGameHP = TowerHP;
                 }
 
             }
 
-            if (isClient)
+            /*if (isClient)
+            {
                 scoreGameObject.GetComponent<GameScore>().updateScoreDisplay(); // ugly solution
+            }*/
+                
 
             //regen hp if tower is not under capture
             if ((numOfCapturers == 0) && (TowerInGameHP < TowerHP))
@@ -125,8 +133,26 @@ namespace SheepDoom
 
         }
 
+        // causes a syncvar delay on client
+        public void CapturedServer(bool _byBlue, bool _byRed)
+        {
+            if (!_byBlue && _byRed)
+            {
+                CapturedByBlue = true;
+                CapturedByRed = false;
+                GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            }
+            else if (!_byRed && _byBlue)
+            {
+                CapturedByRed = true;
+                CapturedByBlue = false;
+                GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            }
+            scoreGameObject.GetComponent<GameScore>().ScoreUp(CapturedByBlue, CapturedByRed);
+            modifyinghealth(TowerHP);
+        }
 
-        public void CapturedByBlueTeam()
+        /*public void CapturedByBlueTeam()
         {
             CapturedByBlue = true;
             CapturedByRed = false;
@@ -142,9 +168,33 @@ namespace SheepDoom
             var captureRenderer = this.GetComponent<Renderer>();
             captureRenderer.material.SetColor("_Color", Color.red);
             modifyinghealth(TowerHP);
-        }
+        }*/
 
         [ClientRpc]
+        void RpcCapturedClient()
+        {
+            // deals with syncvar delay
+            StartCoroutine(WaitForUpdate(CapturedByBlue, CapturedByRed));
+        }
+
+        private IEnumerator WaitForUpdate(bool _oldBlue, bool _oldRed)
+        {
+            while (CapturedByBlue == _oldBlue && CapturedByRed == _oldRed)
+                yield return null;
+            if(CapturedByBlue && !CapturedByRed)
+            {
+                var captureRenderer = this.GetComponent<Renderer>();
+                captureRenderer.material.SetColor("_Color", Color.blue);
+            }
+            else if (CapturedByRed && !CapturedByBlue)
+            {
+                var captureRenderer = this.GetComponent<Renderer>();
+                captureRenderer.material.SetColor("_Color", Color.red);
+            }
+            modifyinghealth(TowerHP);
+        }
+
+        /*[ClientRpc]
         public void CapturedByBlueTeam_Client()
         {
             CapturedByBlue = true;
@@ -162,11 +212,11 @@ namespace SheepDoom
             var captureRenderer = this.GetComponent<Renderer>();
             captureRenderer.material.SetColor("_Color", Color.red);
             modifyinghealth(TowerHP);
-        }
+        }*/
 
         public void modifyinghealth(float amount)
         {
-            TowerInGameHP += amount;
+            if(isServer) TowerInGameHP += amount;
 
             //         Debug.Log("health: tower in game hp:  " + TowerInGameHP);
             float currenthealthPct = TowerInGameHP / TowerHP;
@@ -237,7 +287,6 @@ namespace SheepDoom
                 if (CapturedByBlue && (tID == 2) && !isDed)
                 {
                     modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
-
                 }
 
 

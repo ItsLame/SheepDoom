@@ -31,9 +31,10 @@ public class GameScore : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // changed to initialize on server only, if u put on start method, everytime new player joins, it will reinitialize to 1-1
         //initialize score
-        blueCaptureScore = 1;
-        redCaptureScore = 1;
+        //blueCaptureScore = 1;
+        //redCaptureScore = 1;
 
         // they are already text components...
         //get the attached score counters text component
@@ -43,13 +44,13 @@ public class GameScore : NetworkBehaviour
         //display score
         blueCaptureCounter.text = blueCaptureScore.ToString();
         redCaptureCounter.text = redCaptureScore.ToString();
-
     }
-
 
     //update score display on all clients
     public void updateScoreDisplay()
     {
+        Debug.Log("blue capture score: " + blueCaptureScore);
+        Debug.Log("red capture score: " + redCaptureScore);
         blueCaptureCounter.text = blueCaptureScore.ToString();
         redCaptureCounter.text = redCaptureScore.ToString();
     }
@@ -62,7 +63,7 @@ public class GameScore : NetworkBehaviour
     }*/
 
     //scoring functions
-    public void blueScoreUp()
+    /*public void blueScoreUp()
     {
         Debug.Log("Blue score +1");
         //if blue scores, red will -1
@@ -79,6 +80,37 @@ public class GameScore : NetworkBehaviour
         blueCaptureScore -= 1;
         redCaptureScore += 1;
         //update display
+        updateScoreDisplay();
+    }*/
+
+    // causes a syncvar delay cuz this is only run on server
+    public void ScoreUp(bool _byBlue, bool _byRed)
+    {
+        if(_byBlue && !_byRed)
+        {
+            blueCaptureScore += 1;
+            redCaptureScore -= 1;
+        }
+        else if(_byRed && !_byBlue)
+        {
+            redCaptureScore += 1;
+            blueCaptureScore -= 1;
+        }
+        updateScoreDisplay();
+        RpcUpdateClientScoreDisplay();
+    }
+
+    // deals with syncvar delay
+    [ClientRpc]
+    void RpcUpdateClientScoreDisplay()
+    {
+        StartCoroutine(WaitForUpdate(blueCaptureScore, redCaptureScore));
+    }
+
+    private IEnumerator WaitForUpdate(float _oldBlueScore, float _oldRedScore)
+    {
+        while (blueCaptureScore == _oldBlueScore && redCaptureScore == _oldRedScore)
+            yield return null;
         updateScoreDisplay();
     }
 
@@ -101,5 +133,16 @@ public class GameScore : NetworkBehaviour
             completeGameUI2.SetActive(true);
             completeGameUI2.GetComponent<Animator>().SetTrigger("Complete");
         }
+    }
+
+    public override void OnStartServer()
+    {
+        blueCaptureScore = 1;
+        redCaptureScore = 1;
+    }
+
+    public override void OnStartClient()
+    {
+        updateScoreDisplay();
     }
 }
