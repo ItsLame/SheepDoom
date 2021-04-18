@@ -216,7 +216,6 @@ namespace SheepDoom
             }
         }
 
-
         /*public void increasePlayerCaptureScore(GameObject player)
         {
             player.gameObject.GetComponent<PlayerAdmin>().increaseCaptureCount();

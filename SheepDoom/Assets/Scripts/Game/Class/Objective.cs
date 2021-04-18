@@ -15,10 +15,13 @@ namespace SheepDoom
         // inGameHP: to be used in game, gonna be the one fluctuating basically
         // captureRate: rate of capture
         // regenRate: regeneration rate if not under capture
-        private float hp, inGameHP, captureRate, regenRate;
+        private float hp, captureRate, regenRate;
+
+        [SyncVar] private float inGameHP;
 
         //captured bools
-        private bool capturedByBlue, capturedByRed;
+        private bool capturedByBlue;
+        private bool capturedByRed;
 
         //logging number to check if base/tower is under capture or not
         private int numOfCapturers;
