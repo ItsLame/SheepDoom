@@ -99,11 +99,11 @@ namespace SheepDoom
                 ModifyingHealth(0); // 0 because value from server will sync
         }
 
-        [TargetRpc]
+        /*[TargetRpc]
         void TargetUpdateClient(NetworkConnection conn, GameObject _player)
         {
             _player.GetComponent<PlayerAdmin>().increaseCaptureCount();
-        }
+        }*/
 
         private IEnumerator WaitForUpdate(bool _oldBlue, bool _oldRed)
         {
@@ -155,12 +155,13 @@ namespace SheepDoom
                 //increase the player score when tower is captured
                 if (GiveScoreToCapturers)
                 {
-                    if(SDNetworkManager.LocalPlayersNetId.TryGetValue(other.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                    other.GetComponent<PlayerAdmin>().IncreaseCount(true, false, false);
+                    GiveScoreToCapturers = false;
+                    /*if (SDNetworkManager.LocalPlayersNetId.TryGetValue(other.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
                     {
                         TargetUpdateClient(conn, other.gameObject);
-                        GiveScoreToCapturers = false;
                     }
-                    /*if (CapturedByRed)
+                    if (CapturedByRed)
                     {
                         GiveScoreToRedPlayers_Target(tID, other.gameObject);
                         GiveScoreToCapturers = false;

@@ -47,7 +47,7 @@ namespace SheepDoom
         void Update()
         {
             //if dead, respawnTimer counts down
-            if (isDead)
+            if (GetComponent<PlayerHealth>().isPlayerDead())
             {
                 //if dead show dead UI
                 if (isClient && hasAuthority)
@@ -60,11 +60,16 @@ namespace SheepDoom
 
                 if (isServer)
                 {
-                    //deactivate movement
-                    this.gameObject.GetComponent<CharacterMovement>().isDead = true;
-                    this.gameObject.GetComponent<PlayerAttack>().isDead = true;
+                    Rigidbody myRigidBody = GetComponent<Rigidbody>();
+                    Vector3 moveMe = new Vector3(0, 1, 0);
+                    myRigidBody.rotation = Quaternion.LookRotation(moveMe);
                     RpcPlayerDead();
                 }
+                   
+
+                //deactivate movement
+                //GetComponent<PlayerHealth>().isDead = true;
+                //this.gameObject.GetComponent<PlayerAttack>().isDead = true;
             }
         }
 
@@ -112,11 +117,11 @@ namespace SheepDoom
         void CmdPlayerAlive()
         {
             // change components on server, syncvared to client
-            this.gameObject.GetComponent<PlayerHealth>().RefillHealth();
-            this.gameObject.GetComponent<PlayerHealth>().revivePlayer();
-            this.gameObject.GetComponent<CharacterMovement>().isDead = false;
-            this.gameObject.GetComponent<PlayerAttack>().isDead = false;
-            isDead = false;
+            GetComponent<PlayerHealth>().RefillHealth();
+            GetComponent<PlayerHealth>().revivePlayer();
+            //this.gameObject.GetComponent<CharacterMovement>().isDead = false;
+            //this.gameObject.GetComponent<PlayerAttack>().isDead = false;
+            //isDead = false;
             RpcPlayerAlive();
         }
 
@@ -124,7 +129,7 @@ namespace SheepDoom
         void RpcPlayerAlive()
         {
             //move player to respawn position
-            this.gameObject.transform.position = respawnLocation.transform.position;
+            gameObject.transform.position = respawnLocation.transform.position;
             //flip body right up
             Rigidbody myRigidBody = GetComponent<Rigidbody>();
             Vector3 moveMe = new Vector3(0, 0, 0);
@@ -132,15 +137,13 @@ namespace SheepDoom
         }
 
         //reset death timer
-        IEnumerator WaitForDeathStatus()
+        private IEnumerator WaitForDeathStatus()
         {
             // wait for it to be false
-            while (isDead)
+            while (GetComponent<PlayerHealth>().isPlayerDead())
                 yield return null;
             respawnTimerInGame = respawnTimerRef;
         }
-
-
     }
 
 }

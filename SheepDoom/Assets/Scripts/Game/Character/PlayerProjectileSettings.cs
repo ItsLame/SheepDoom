@@ -9,7 +9,7 @@ namespace SheepDoom
     public class PlayerProjectileSettings : NetworkBehaviour
     {
         //projectileOwner
-        [SyncVar]
+        //[SyncVar] cant syncvar an object of type gameobject
         public GameObject owner;
 
         [Space(15)]
@@ -40,7 +40,7 @@ namespace SheepDoom
             Destroy(gameObject, m_Lifespan);
         }
 
-
+        [Server]
         void OnTriggerEnter(Collider col)
         {
             //if hit player
@@ -53,11 +53,12 @@ namespace SheepDoom
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
 
                     //increase killer's kill count if target is killed
-                    if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
+                    if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0 && !col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                     {
+                        col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
                         //dont increase score if hitting dead player
-                        if (col.gameObject.GetComponent<PlayerHealth>().isPlayerDead()) return;
-                        owner.gameObject.GetComponent<PlayerAdmin>().increasePlayerKillCount();
+                        //if (col.gameObject.GetComponent<PlayerHealth>().isPlayerDead()) return;
+                        owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
                     }
 
                     if (destroyOnContact)

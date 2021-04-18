@@ -10,14 +10,14 @@ namespace SheepDoom
     {
         public float speed;
 
-       [Space(15)]
-       [SyncVar] public bool isDead;
+       //[Space(15)]
+       //[SyncVar] public bool isDead;
 
         // Start is called before the first frame update
-        void Awake()
+        /*void Awake()
         {
             isDead = false;
-        }
+        }*/
 
         // Update is called once per frame
         void FixedUpdate()
@@ -28,7 +28,7 @@ namespace SheepDoom
 
         private void Move()
         {
-            if (!isDead)
+            if (!GetComponent<PlayerHealth>().isPlayerDead())
             {
                 Vector3 moveMe = new Vector3(CrossPlatformInputManager.GetAxisRaw("Vertical"), 0.0f,
                                              -CrossPlatformInputManager.GetAxisRaw("Horizontal")) * speed;

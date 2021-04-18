@@ -50,8 +50,8 @@ namespace SheepDoom
         public int meleedamage = 50;
         [Space(15)]
         public LayerMask enemyLayers;
-        [Space(15)]
-        [SyncVar] public bool isDead;
+        //[Space(15)]
+        //[SyncVar] public bool isDead;
 
         // Start is called before the first frame update
         void Start()
@@ -86,7 +86,7 @@ namespace SheepDoom
         void CmdAttackClick()
         {
             //if not dead
-            if (!isDead)
+            if (!GetComponent<PlayerHealth>().isPlayerDead())
             {
                 //if off cd
                 if (cooldown1_inGame <= 0 && ismeeleeattack == false)
@@ -119,7 +119,7 @@ namespace SheepDoom
         [Command]
         void CmdSpecialSkillClick()
         {
-            if (!isDead)
+            if (!GetComponent<PlayerHealth>().isPlayerDead())
             {
                 //only available if special skill is purchased
                 if (hasPurchasedSpecial)
@@ -160,7 +160,7 @@ namespace SheepDoom
         [Command]
         void CmdUltiClick()
         {
-            if (!isDead)
+            if (!GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if (hasPurchasedUlti)
                 {
@@ -171,7 +171,7 @@ namespace SheepDoom
                         {
                             Debug.Log("Firing Ultimate Atk");
                             var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
-                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
+                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(gameObject);
                             NetworkServer.Spawn(FiredProjectile);
                             cooldown3_inGame = cooldown3;
                         }
@@ -181,7 +181,7 @@ namespace SheepDoom
                         {
                             Debug.Log("Firing Ultimate Atk 2");
                             var FiredProjectile = Instantiate(Projectile3_v2, SpawnPoint.position, SpawnPoint.rotation);
-                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
+                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(gameObject);
                             NetworkServer.Spawn(FiredProjectile);
                             cooldown3_inGame = cooldown3;
                         }

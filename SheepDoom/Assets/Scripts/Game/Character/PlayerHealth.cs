@@ -40,7 +40,7 @@ namespace SheepDoom
 
         public void modifyinghealth(float amount)
         {
-            currenthealth += amount;
+            if(isServer) currenthealth += amount;
 
             float currenthealthPct = currenthealth / maxHealth;
             OnHealthPctChanged(currenthealthPct);
@@ -48,18 +48,18 @@ namespace SheepDoom
         // Update is called once per frame
         void Update()
         {
-            if (currenthealth <= 0)
+            if (playerDead)
             {
                 currenthealth = 0;
 
                 //increase death by 1
                 if (deathCounterCalled == false)
                 {
-                    this.gameObject.GetComponent<PlayerAdmin>().increasePlayerDeathCount();
+                    this.gameObject.GetComponent<PlayerAdmin>().IncreaseCount(false, false, true);
                     deathCounterCalled = true;
                 }
 
-                GameOver();
+                //SetPlayerDead();
             }   
 
             if (currenthealth > maxHealth)
@@ -75,10 +75,10 @@ namespace SheepDoom
             modifyinghealth(0);
         }
 
-        void GameOver()
+        public void SetPlayerDead()
         {
             //added respawn
-            this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
+            //this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
             playerDead = true;
 
             //StartCoroutine(TimeBeforeDeath());
