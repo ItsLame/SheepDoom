@@ -56,14 +56,7 @@ namespace SheepDoom
                 timePlayingStr = timePlaying.ToString("mm':'ss");
                 TimerText.text = timePlayingStr;
                 //RpcUpdateClientTimer(timePlayingStr);
-            }
 
-            if (isClient)
-                TimerText.text = timePlayingStr;
-
-
-            if (isServer)
-            {
                 if (SecondsTimer >= 20 && TwentySecMarkPassed == false)
                 //Announce that 10 seconds to start
                 {
@@ -80,18 +73,23 @@ namespace SheepDoom
                     ThirtySecMarkPassed = true;
                     RpcAnnouncers(ThirtySeconds);
                 }
+
                 if (SecondsTimer >= 120 && OnehundredTwentysecondSecMarkPassed == false)
                 {
                     //      BossSpawner.gameObject.SetActive(true);
                     OnehundredTwentysecondSecMarkPassed = true;
                     RpcAnnouncers(TwoMinutes);
                 }
+
                 if (SecondsTimer >= 180 && OnehundredEightysecondSecMarkPassed == false)
                 {
                     OnehundredEightysecondSecMarkPassed = true;
                     RpcAnnouncers(ThreeMinutes);
                 }
             }
+
+            if (isClient)
+                TimerText.text = timePlayingStr;
         }
 
         /* [ClientRpc] currently obsolete but might be needed when running multiple matches
