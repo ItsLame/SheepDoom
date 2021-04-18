@@ -7,50 +7,54 @@ using Mirror;
 
 namespace SheepDoom
 {
-    public class CapturePointScript : NetworkBehaviour
+    public class CapturePointScript : Objective
     {
         //attach the score gameobject to count the score
-        public GameObject scoreGameObject;
+        public GameObject ScoreGameObject;
 
         //tower hp counters
         [Space(20)]
-        [SerializeField]
+        
         //base hp
         [Tooltip("How much HP the tower has, edit this")]
-        private float TowerHP;
-        [SerializeField]
-        [SyncVar] private float TowerInGameHP; //to be used in game, gonna be the one fluctuating basically
+        [SerializeField] private float HP;
+        [SyncVar] [SerializeField] private float InGameHP; //to be used in game, gonna be the one fluctuating basically
 
         //rate of capture
-        [SerializeField]
-        private float TowerCaptureRate;
+        [SerializeField] private float CaptureRate;
 
         //regeneration rate if not under capture
-        [SerializeField]
-        private float TowerRegenRate;
+        [SerializeField] private float RegenRate;
 
         //captured bools
         [Space(20)]
-        [SerializeField]
-        [SyncVar] private bool CapturedByBlue;
-        [SerializeField]
-        [SyncVar] private bool CapturedByRed;
+        [SyncVar] [SerializeField] private bool CapturedByBlue;
+        [SyncVar] [SerializeField] private bool CapturedByRed;
+        [SerializeField] private int NumOfCapturers; //logging number to check if tower is under capture or not
 
-        // Server only
-        [SerializeField]
-        private int numOfCapturers; //logging number to check if tower is under capture or not
         //scoring bools
-        private bool giveScoreToCapturers = false;
+        [SyncVar] private bool GiveScoreToCapturers = false;
 
-        public event Action<float> OnHealthPctChangedTower = delegate { };
+        //public event Action<float> OnHealthPctChangedTower = delegate { };
+        protected override void InitHealth()
+        {
+            //P_captureGameObject = this.gameObject;
+            P_scoreGameObject = ScoreGameObject;
+            P_hp = HP;
+            P_inGameHP = InGameHP;
+            P_captureRate = CaptureRate;
+            P_regenRate = RegenRate;
+            //CheckCaptureBool();
+            P_numOfCapturers = NumOfCapturers;
+        }
 
         // Update is called once per frame
-        void Update()
+        protected override void Update()
         {
             if (isServer)
             {
                 //once HP = 0, notify the scoring and convert the tower
-                if (TowerInGameHP <= 0 && (!CapturedByBlue || !CapturedByRed))
+                if (P_inGameHP <= 0 && (!CapturedByBlue || !CapturedByRed))
                 {
                     //show which point is captured, change point authority and max out towerHP
                     CapturedServer(CapturedByBlue, CapturedByRed);
@@ -58,9 +62,9 @@ namespace SheepDoom
                 }
 
                 //regen hp if tower is not under capture
-                if ((numOfCapturers == 0) && (TowerInGameHP < TowerHP))
+                if ((P_numOfCapturers == 0) && (P_inGameHP < P_hp))
                 {
-                    modifyinghealth(TowerRegenRate * Time.deltaTime);
+                    ModifyingHealth(P_regenRate * Time.deltaTime);
                     RpcUpdateClients(false, true);
                 }  
             }
@@ -80,9 +84,9 @@ namespace SheepDoom
                 CapturedByBlue = false;
             }
             SetTowerColor();
-            giveScoreToCapturers = true;
-            scoreGameObject.GetComponent<GameScore>().ScoreUp(CapturedByBlue, CapturedByRed);
-            modifyinghealth(TowerHP);
+            GiveScoreToCapturers = true;
+            P_scoreGameObject.GetComponent<GameScore>().ScoreUp(CapturedByBlue, CapturedByRed);
+            ModifyingHealth(P_hp);
         }
 
         [ClientRpc]
@@ -92,7 +96,7 @@ namespace SheepDoom
                 // deals with syncvar delay
                 StartCoroutine(WaitForUpdate(CapturedByBlue, CapturedByRed));
             else if(_isChangeHp)
-                modifyinghealth(0); // 0 because value from server will sync
+                ModifyingHealth(0); // 0 because value from server will sync
         }
 
         [TargetRpc]
@@ -106,22 +110,25 @@ namespace SheepDoom
             while (CapturedByBlue == _oldBlue && CapturedByRed == _oldRed)
                 yield return null;
             SetTowerColor();
-            modifyinghealth(0); // 0 because value from server will sync
+            ModifyingHealth(0); // 0 because value from server will sync
         }
 
-        public void modifyinghealth(float amount)
-        {
-            if(isServer) TowerInGameHP += amount;
 
-            // Debug.Log("health: tower in game hp:  " + TowerInGameHP);
-            float currenthealthPct = TowerInGameHP / TowerHP;
+        /*
+        public void ModifyingHealth(float amount)
+        {
+            if(isServer) P_inGameHP += amount;
+
+            // Debug.Log("health: tower in game hp:  " + P_inGameHP);
+            float currenthealthPct = P_inGameHP / P_hp;
             OnHealthPctChangedTower(currenthealthPct);
         }
+        */
 
         //check for player enter
         // runs on server only
         [Server]
-        private void OnTriggerEnter(Collider other)
+        protected override void OnTriggerEnter(Collider other)
         {
             if (other.tag == "Player")
             {
@@ -129,14 +136,14 @@ namespace SheepDoom
                 float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
                 bool isDed = other.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
                 if (((CapturedByRed && tID == 1) || (CapturedByBlue && tID == 2)) && !isDed)
-                    numOfCapturers += 1;
+                    P_numOfCapturers += 1;
             }
         }
 
 
         //for capture hp reduction when staying in area
         [Server]
-        private void OnTriggerStay(Collider other)
+        protected override void OnTriggerStay(Collider other)
         {
             if (other.CompareTag("Player"))
             {
@@ -146,30 +153,30 @@ namespace SheepDoom
                 bool isDed = other.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
 
                 //increase the player score when tower is captured
-                if (giveScoreToCapturers)
+                if (GiveScoreToCapturers)
                 {
                     if(SDNetworkManager.LocalPlayersNetId.TryGetValue(other.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
                     {
                         TargetUpdateClient(conn, other.gameObject);
-                        giveScoreToCapturers = false;
+                        GiveScoreToCapturers = false;
                     }
                     /*if (CapturedByRed)
                     {
                         GiveScoreToRedPlayers_Target(tID, other.gameObject);
-                        giveScoreToCapturers = false;
+                        GiveScoreToCapturers = false;
                     }
 
                     //else blue  team captured red point, give score to blue
                     if (CapturedByBlue)
                     {
                         GiveScoreToBluePlayers_Target(tID, other.gameObject);
-                        giveScoreToCapturers = false;
+                        GiveScoreToCapturers = false;
                     }*/
                 }
 
                 if (((CapturedByRed && tID == 1) || (CapturedByBlue && tID == 2)) && !isDed)
                 {
-                    modifyinghealth(-(TowerCaptureRate * Time.deltaTime));
+                    ModifyingHealth(-(P_captureRate * Time.deltaTime));
                     RpcUpdateClients(false, true);
                 }
             }
@@ -180,7 +187,7 @@ namespace SheepDoom
             if (tID == 2) return;
             Debug.Log("Giving Score to Blue Team Players in Range");
             //increasePlayerCaptureScore(player.gameObject);
-            giveScoreToCapturers = false;
+            GiveScoreToCapturers = false;
             Debug.Log("End of score giving (blue)");
         }
 
@@ -190,14 +197,14 @@ namespace SheepDoom
             if (tID == 1) return;
             Debug.Log("Giving Score to Red Team Players in Range");
             //increasePlayerCaptureScore(player.gameObject);
-            giveScoreToCapturers = false;
+            GiveScoreToCapturers = false;
             Debug.Log("End of score giving (red)");
         }
 
 
         //check for player exit
         [Server]
-        private void OnTriggerExit(Collider other)
+        protected override void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Player"))
             {
@@ -205,7 +212,7 @@ namespace SheepDoom
                 float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
                 bool isDed = other.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
                 if (((CapturedByRed && tID == 1) || (CapturedByBlue && tID == 2)) && !isDed)
-                    numOfCapturers -= 1;
+                    P_numOfCapturers -= 1;
             }
         }
 
@@ -226,8 +233,8 @@ namespace SheepDoom
         public override void OnStartServer()
         {
             SetTowerColor();
-            TowerInGameHP = TowerHP; //set the tower's hp based on the settings
-            numOfCapturers = 0; //no one is capturing it at start so put at 0
+            P_inGameHP = P_hp; //set the tower's hp based on the settings
+            P_numOfCapturers = 0; //no one is capturing it at start so put at 0
         }
 
         public override void OnStartClient()

@@ -65,13 +65,11 @@ namespace SheepDoom
                         Object.Destroy(this.gameObject);
                     }
                 }
-
-
             }
 
             else if (col.gameObject.CompareTag("Tower"))
             {
-                col.transform.parent.gameObject.GetComponent<CapturePointScript>().modifyinghealth(-damage);
+                col.transform.parent.gameObject.GetComponent<CapturePointScript>().ModifyingHealth(-damage);
                 //  Debug.Log("health: tower hit by " + m_Rigidbody);
                 Object.Destroy(this.gameObject);
             }
