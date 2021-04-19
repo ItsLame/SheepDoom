@@ -95,10 +95,10 @@ namespace SheepDoom
 
         private void Start()
         {
-            InitHealth();
+            InitObjective();
         }
 
-        protected abstract void InitHealth();
+        protected abstract void InitObjective();
 
         // would preferably set to 'protected' but PlayerProjectileSettings calls this method
         public void ModifyingHealth(float amount)

@@ -39,7 +39,7 @@ namespace SheepDoom
         protected override bool P_capturedByRed { get => CapturedByRed; set => CapturedByRed = value; }
         //protected override float P_inGameHP { get => InGameHP; set => InGameHP = value; }
 
-        protected override void InitHealth()
+        protected override void InitObjective()
         {
             P_scoreGameObject = ScoreGameObject;
             P_hp = HP;
