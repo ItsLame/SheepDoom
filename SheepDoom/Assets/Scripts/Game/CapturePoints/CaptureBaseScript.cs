@@ -34,20 +34,9 @@ namespace SheepDoom
 
         protected override bool P_capturedByBlue { get => CapturedByBlue; set => CapturedByBlue = value; }
         protected override bool P_capturedByRed { get => CapturedByRed; set => CapturedByRed = value; }
+        //protected override float P_inGameHP { get => InGameHP; set => InGameHP = value; }
 
-        // Start is called before the first frame update
-        protected override void Start()
-        {
-            base.Start();
-
-            //set the Base's hp based on the settings
-            P_inGameHP = P_hp;
-
-            //no one is capturing it at start so put at 0
-            P_numOfCapturers = 0;
-        }
-
-        protected override void InitHealth()
+        protected override void InitObjective()
         {
             P_scoreGameObject = ScoreGameObject;
             P_hp = HP;
@@ -55,64 +44,118 @@ namespace SheepDoom
             P_captureRate = CaptureRate;
             P_regenRate = RegenRate;
             P_numOfCapturers = NumOfCapturers;
+            P_giveScoreToCapturers = false;
+
+            // set the Tower's hp based on the settings
+            P_inGameHP = P_hp;
+            
+            // no one is capturing it at start so put at 0
+            P_numOfCapturers = 0;
+
+            // this is tower's script
+            P_isBase = true;
         }
-
-        // Update is called once per frame
-        protected override void Update()
+        
+        protected override void Victory()
         {
-            // regen hp if tower is not under capture
-            if ((P_numOfCapturers == 0) && (P_inGameHP < P_hp))
-            {
-                //P_inGameHP += BaseRegenRate * Time.deltaTime;
-                ModifyingHealth(P_regenRate * Time.deltaTime);
-                // debug showing base hp
-                //Debug.Log(this.name + " HP: " + P_inGameHP);
-            }
-
-            // blue team victory when base hp 0
-            if (P_inGameHP <= 0 && !P_capturedByBlue)
-            {
+            // blue team victory when base hp 0 (temporary, if <= 10)
+            // if base owner is red team
+            if (P_capturedByRed)
                 //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(1);
-            }
 
-            // red team victory if base hp 0
-            if (P_inGameHP <= 0 && !P_capturedByRed)
-            {
+            // red team victory if base hp 0 (temporary, if <= 10)
+            // if base owner is blue team
+            if (P_capturedByBlue)
                 // reference the score script to END THE GAME IN RED VICTORY   <------------------------------------------------- GAME END CALL
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
-            }
-
-            // set color accordingly
-            SetTowerColor();
-        }
-
-        // for capture hp reduction when staying in area
-        protected override void OnTriggerStay(Collider other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-
-                // if point belongs to red, it can be captured by blue
-                if (P_capturedByRed && (tID == 1))
-                {
-                    ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                    //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
-                }
-
-                // if point belongs to blue, it can be captured by red
-                if (P_capturedByBlue && (tID == 2))
-                {
-                    ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                    //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
-                }
-            }
         }
     }
 }
 
 #region archive
+
+//P_inGameHP = P_hp; // set the tower's hp based on the settings
+//P_numOfCapturers = 0; // no one is capturing it at start so put at 0
+
+/*
+// blue team victory when base hp 0
+if (P_inGameHP <= 0 && !P_capturedByBlue)
+{
+    //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
+    P_scoreGameObject.GetComponent<GameScore>().GameEnd(1);
+}
+
+// red team victory if base hp 0
+if (P_inGameHP <= 0 && !P_capturedByRed)
+{
+    // reference the score script to END THE GAME IN RED VICTORY   <------------------------------------------------- GAME END CALL
+    P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
+}
+*/
+
+// Update is called once per frame
+/*
+protected override void Update()
+{
+    // regen hp if tower is not under capture
+    /*if ((P_numOfCapturers == 0) && (P_inGameHP < P_hp))
+    {
+        //P_inGameHP += BaseRegenRate * Time.deltaTime;
+        ModifyingHealth(P_regenRate * Time.deltaTime);
+        // debug showing base hp
+        //Debug.Log(this.name + " HP: " + P_inGameHP);
+    }
+    */
+
+    /*
+    // blue team victory when base hp 0
+    if (P_inGameHP <= 0 && !P_capturedByBlue)
+    {
+        //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
+        P_scoreGameObject.GetComponent<GameScore>().GameEnd(1);
+    }
+
+    // red team victory if base hp 0
+    if (P_inGameHP <= 0 && !P_capturedByRed)
+    {
+        // reference the score script to END THE GAME IN RED VICTORY   <------------------------------------------------- GAME END CALL
+        P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
+    }
+
+    base.Update();
+
+    
+
+    // set color accordingly
+    //SetTowerColor();
+}
+*/
+
+// for capture hp reduction when staying in area
+
+/*protected override void OnTriggerStay(Collider other)
+{
+    if (other.CompareTag("Player"))
+    {
+        float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+
+        // if point belongs to red, it can be captured by blue
+        if (P_capturedByRed && (tID == 1))
+        {
+            ModifyingHealth(-(P_captureRate * Time.deltaTime));
+            //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
+        }
+
+        // if point belongs to blue, it can be captured by red
+        if (P_capturedByBlue && (tID == 2))
+        {
+            ModifyingHealth(-(P_captureRate * Time.deltaTime));
+            //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
+        }
+    }
+}
+*/
 
 // from updat()
 

@@ -18,7 +18,7 @@ namespace SheepDoom
         //base hp
         [Tooltip("How much HP the tower has, edit this")]
         [SerializeField] private float HP;
-        [SerializeField] private float InGameHP; //to be used in game, gonna be the one fluctuating basically
+        [SyncVar] [SerializeField] private float InGameHP; //to be used in game, gonna be the one fluctuating basically
 
         //rate of capture
         [SerializeField] private float CaptureRate;
@@ -37,152 +37,130 @@ namespace SheepDoom
 
         protected override bool P_capturedByBlue { get => CapturedByBlue; set => CapturedByBlue = value; }
         protected override bool P_capturedByRed { get => CapturedByRed; set => CapturedByRed = value; }
+        //protected override float P_inGameHP { get => InGameHP; set => InGameHP = value; }
 
-        protected override void Start()
+        protected override void InitObjective()
         {
-            base.Start();
+            P_scoreGameObject = ScoreGameObject;
+            P_hp = HP;
+            P_inGameHP = InGameHP;
+            P_captureRate = CaptureRate;
+            P_regenRate = RegenRate;
+            P_numOfCapturers = NumOfCapturers;
+            P_giveScoreToCapturers = GiveScoreToCapturers;
 
             // set the Tower's hp based on the settings
             P_inGameHP = P_hp;
             
             // no one is capturing it at start so put at 0
             P_numOfCapturers = 0;
+
+            // this is tower's script
+            P_isBase = false;
         }
 
-        protected override void InitHealth()
+        protected override void OnStay(Collider other, float tID)
         {
-            P_scoreGameObject = ScoreGameObject;
-            P_hp = HP;
-            P_inGameHP = InGameHP;
-            P_inGameHP = P_hp;
-            P_captureRate = CaptureRate;
-            P_regenRate = RegenRate;
-            P_numOfCapturers = NumOfCapturers;
-        }
-
-        // Update is called once per frame
-        protected override void Update()
-        {
-            if (isServer)
+            // increase the player score when tower is captured
+            if (P_giveScoreToCapturers)
             {
-                // once HP = 0, notify the scoring and convert the tower
-                if (P_inGameHP <= 0 && (!P_capturedByBlue || !P_capturedByRed))
+                if ((P_capturedByBlue && tID == 1) || (P_capturedByRed && tID == 2))
                 {
-                    //show which point is captured, change point authority and max out towerHP
-                    CapturedServer(P_capturedByBlue, P_capturedByRed);
-                    RpcUpdateClients(true, false);
-                }
-
-                // regen hp if tower is not under capture
-                if ((P_numOfCapturers == 0) && (P_inGameHP < P_hp))
-                {
-                    ModifyingHealth(P_regenRate * Time.deltaTime);
-                    RpcUpdateClients(false, true);
-                }  
-            }
-        }
-
-        // causes a syncvar delay on client
-        private void CapturedServer(bool _byBlue, bool _byRed)
-        {
-            if (!_byBlue && _byRed)
-            {
-                P_capturedByBlue = true;
-                P_capturedByRed = false;
-            }
-            else if (!_byRed && _byBlue)
-            {
-                P_capturedByRed = true;
-                P_capturedByBlue = false;
-            }
-            SetTowerColor();
-            GiveScoreToCapturers = true;
-            P_scoreGameObject.GetComponent<GameScore>().ScoreUp(P_capturedByBlue, P_capturedByRed);
-            ModifyingHealth(P_hp);
-        }
-
-        [ClientRpc]
-        private void RpcUpdateClients(bool _isCapture, bool _isChangeHp)
-        {
-            if(_isCapture)
-                // deals with syncvar delay
-                StartCoroutine(WaitForUpdate(P_capturedByBlue, P_capturedByRed));
-            else if(_isChangeHp)
-                ModifyingHealth(0); // 0 because value from server will sync
-        }
-
-        private IEnumerator WaitForUpdate(bool _oldBlue, bool _oldRed)
-        {
-            while (P_capturedByBlue == _oldBlue && P_capturedByRed == _oldRed)
-                yield return null;
-            SetTowerColor();
-            ModifyingHealth(0); // 0 because value from server will sync
-        }
-
-        // check for player enter
-        // runs on server only
-        //[Server]
-        protected override void OnTriggerEnter(Collider other)
-        {
-            if(isServer)
-                base.OnTriggerEnter(other);
-        }
-
-        // for capture hp reduction when staying in area
-        //[Server]
-        protected override void OnTriggerStay(Collider other)
-        {
-            if(isServer)
-            {
-                if (other.CompareTag("Player"))
-                {
-                    // get player teamID
-                    float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-                    // get info of is player dead or alive
-                    bool isDed = other.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
-
-                    // increase the player score when tower is captured
-                    if (GiveScoreToCapturers)
-                    {
-                        if ((CapturedByBlue && tID == 1) || (CapturedByRed && tID == 2))
-                        {
-                            other.GetComponent<PlayerAdmin>().IncreaseCount(true, false, false);
-                            GiveScoreToCapturers = false;
-                        }
-                    }
-
-                    if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
-                    {
-                        ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                        RpcUpdateClients(false, true);
-                    }
+                    other.GetComponent<PlayerAdmin>().IncreaseCount(true, false, false);
+                    P_giveScoreToCapturers = false;
                 }
             }
-        }
-
-        // check for player exit
-        //[Server]
-        protected override void OnTriggerExit(Collider other)
-        {
-            if(isServer)
-                base.OnTriggerEnter(other);
-        }
-
-        public override void OnStartServer()
-        {
-            SetTowerColor();
-            //P_inGameHP = P_hp; // set the tower's hp based on the settings
-            //P_numOfCapturers = 0; // no one is capturing it at start so put at 0
-        }
-
-        public override void OnStartClient()
-        {
-            SetTowerColor();
         }
     }
 }
 
 #region archive
+
+//P_inGameHP = P_hp; // set the tower's hp based on the settings
+//P_numOfCapturers = 0; // no one is capturing it at start so put at 0
+
+// Update is called once per frame
+/*
+protected override void Update()
+{
+    if (isServer)
+    {
+        // once HP = 0, notify the scoring and convert the tower
+        if (P_inGameHP <= 0 && (!P_capturedByBlue || !P_capturedByRed))
+        {
+            //show which point is captured, change point authority and max out towerHP
+            CapturedServer(P_capturedByBlue, P_capturedByRed);
+            RpcUpdateClients(true, false);
+        }
+
+        // regen hp if tower is not under capture
+        if ((P_numOfCapturers == 0) && (P_inGameHP < P_hp))
+        {
+            ModifyingHealth(P_regenRate * Time.deltaTime);
+            RpcUpdateClients(false, true);
+        }  
+    }
+}
+*/
+
+// causes a syncvar delay on client
+/*
+private void CapturedServer(bool _byBlue, bool _byRed)
+{
+    if (!_byBlue && _byRed)
+    {
+        P_capturedByBlue = true;
+        P_capturedByRed = false;
+    }
+    else if (!_byRed && _byBlue)
+    {
+        P_capturedByRed = true;
+        P_capturedByBlue = false;
+    }
+    SetTowerColor();
+    GiveScoreToCapturers = true;
+    P_scoreGameObject.GetComponent<GameScore>().ScoreUp(P_capturedByBlue, P_capturedByRed);
+    ModifyingHealth(P_hp);
+}
+*/
+
+/*
+[ClientRpc]
+private void RpcUpdateClients(bool _isCapture, bool _isChangeHp)
+{
+    if(_isCapture)
+        // deals with syncvar delay
+        StartCoroutine(WaitForUpdate(P_capturedByBlue, P_capturedByRed));
+    else if(_isChangeHp)
+        ModifyingHealth(0); // 0 because value from server will sync
+}
+
+private IEnumerator WaitForUpdate(bool _oldBlue, bool _oldRed)
+{
+    while (P_capturedByBlue == _oldBlue && P_capturedByRed == _oldRed)
+        yield return null;
+    SetTowerColor();
+    ModifyingHealth(0); // 0 because value from server will sync
+}*/
+
+// check for player enter
+// runs on server only
+//[Server]
+/*
+protected override void OnTriggerEnter(Collider other)
+{
+    if(isServer)
+        base.OnTriggerEnter(other);
+}*/
+
+// for capture hp reduction when staying in area
+//[Server]
+/*
+protected override void OnTriggerStay(Collider other)
+{
+    
+}
+*/
 
 /*
 public void GiveScoreToBluePlayers_Target(float tID, GameObject player)
