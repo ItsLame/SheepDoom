@@ -54,6 +54,7 @@ namespace SheepDoom
             P_scoreGameObject = ScoreGameObject;
             P_hp = HP;
             P_inGameHP = InGameHP;
+            P_inGameHP = P_hp;
             P_captureRate = CaptureRate;
             P_regenRate = RegenRate;
             P_numOfCapturers = NumOfCapturers;
@@ -143,8 +144,11 @@ namespace SheepDoom
                     // increase the player score when tower is captured
                     if (GiveScoreToCapturers)
                     {
-                        other.GetComponent<PlayerAdmin>().IncreaseCount(true, false, false);
-                        GiveScoreToCapturers = false;
+                        if ((CapturedByBlue && tID == 1) || (CapturedByRed && tID == 2))
+                        {
+                            other.GetComponent<PlayerAdmin>().IncreaseCount(true, false, false);
+                            GiveScoreToCapturers = false;
+                        }
                     }
 
                     if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
