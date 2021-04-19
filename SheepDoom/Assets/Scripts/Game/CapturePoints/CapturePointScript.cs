@@ -33,7 +33,8 @@ namespace SheepDoom
         [SerializeField] private int NumOfCapturers; //logging number to check if tower is under capture or not
 
         //scoring bools
-        [SyncVar] private bool GiveScoreToCapturers = false;
+        [SerializeField]
+        private bool GiveScoreToCapturers = false;
 
         //public event Action<float> OnHealthPctChangedTower = delegate { };
         protected override void InitHealth()
@@ -42,6 +43,7 @@ namespace SheepDoom
             P_scoreGameObject = ScoreGameObject;
             P_hp = HP;
             P_inGameHP = InGameHP;
+            P_inGameHP = P_hp;
             P_captureRate = CaptureRate;
             P_regenRate = RegenRate;
             //CheckCaptureBool();
@@ -155,25 +157,20 @@ namespace SheepDoom
                 //increase the player score when tower is captured
                 if (GiveScoreToCapturers)
                 {
-                    other.GetComponent<PlayerAdmin>().IncreaseCount(true, false, false);
-                    GiveScoreToCapturers = false;
-                    /*if (SDNetworkManager.LocalPlayersNetId.TryGetValue(other.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                    Debug.Log("Giving score to capturers");
+
+                    if (CapturedByRed && tID == 2 || CapturedByBlue && tID == 1)
                     {
-                        TargetUpdateClient(conn, other.gameObject);
-                    }
-                    if (CapturedByRed)
-                    {
-                        GiveScoreToRedPlayers_Target(tID, other.gameObject);
+                        other.GetComponent<PlayerAdmin>().IncreaseCount(true, false, false);
                         GiveScoreToCapturers = false;
                     }
 
-                    //else blue  team captured red point, give score to blue
-                    if (CapturedByBlue)
-                    {
-                        GiveScoreToBluePlayers_Target(tID, other.gameObject);
-                        GiveScoreToCapturers = false;
-                    }*/
+                /*if (SDNetworkManager.LocalPlayersNetId.TryGetValue(other.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                {
+                    TargetUpdateClient(conn, other.gameObject);
                 }
+*/
+            }
 
                 if (((CapturedByRed && tID == 1) || (CapturedByBlue && tID == 2)) && !isDed)
                 {
@@ -235,6 +232,7 @@ namespace SheepDoom
             SetTowerColor();
             P_inGameHP = P_hp; //set the tower's hp based on the settings
             P_numOfCapturers = 0; //no one is capturing it at start so put at 0
+            GiveScoreToCapturers = false;
         }
 
         public override void OnStartClient()
