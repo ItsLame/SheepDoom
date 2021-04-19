@@ -143,7 +143,7 @@ namespace SheepDoom
             }
 
             if(P_isBase)
-                Debug.Log("base ingamehp? "+P_inGameHP);
+                Debug.Log(this.name + " base ingamehp? "+P_inGameHP);
 
             if(P_isBase && P_inGameHP <= 10)
                 Victory();
