@@ -132,9 +132,22 @@ MonoBehaviour:
   y_rotaspeed: 0
   z_rotaspeed: -2.5
   damage: 40
-  m_Speed: 4000
-  m_Lifespan: 10
   destroyOnContact: 0
+  m_Speed: 0.01
+  m_Lifespan: 10
+  isAccelerating: 1
+  isDeccelerating: 0
+  accelerationRate: 0.2
+  deccelerationRate: 0
+  accelMultiplierOn: 1
+  accelMultiplier: 2.24
+  hasSpeedLimit: 1
+  speedLimit: 300
+  SlowDebuff: 0
+  slowRate: 0
+  slowDebuffDuration: 0
+  StopDebuff: 0
+  stopDebuffDuration: 0
 --- !u!114 &1933974116085354088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,7 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: f1eaf3061d966ec4499d5258118c148e
   hasSpawned: 0
 --- !u!114 &5608938039272465082
 MonoBehaviour:

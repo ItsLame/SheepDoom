@@ -18,13 +18,37 @@ namespace SheepDoom
         public float y_rotaspeed;
         public float z_rotaspeed;
 
+        [Header("Damage Properties")]
         [Space(15)]
         public int damage;
+        public bool destroyOnContact; //if projectile ill stop on first contact
+        private Rigidbody m_Rigidbody;
+
+
+        [Header("Bullet Properties")]
+        [Space(15)]
         public float m_Speed = 10f;   // default speed of projectile
         public float m_Lifespan = 3f; // Lifespan per second
-        public bool destroyOnContact; //if projectile ill stop on first contact
+        [Space(10)]
+        public bool isAccelerating = false;
+        public bool isDeccelerating = false;
+        public float accelerationRate;
+        public float deccelerationRate;
+        [Space(10)]
+        public bool accelMultiplierOn;
+        public float accelMultiplier;
+        [Space(10)]
+        public bool hasSpeedLimit;
+        public float speedLimit;
 
-        private Rigidbody m_Rigidbody;
+        [Space(15)]
+        public bool SlowDebuff = false;
+        public float slowRate;
+        public float slowDebuffDuration;
+
+        [Space(15)]
+        public bool StopDebuff = false;
+        public float stopDebuffDuration;
 
         //bool for calling kill counter increase once
         bool killCounterIncreaseCalled = false;
@@ -36,7 +60,6 @@ namespace SheepDoom
 
         void Start()
         {
-            m_Rigidbody.AddForce(transform.forward * m_Speed);
             Destroy(gameObject, m_Lifespan);
         }
 
@@ -53,7 +76,7 @@ namespace SheepDoom
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
 
                     //increase killer's kill count if target is killed
-                    if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0 )
+                    if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
                     {
                         col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
                         owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
@@ -73,6 +96,7 @@ namespace SheepDoom
                 Object.Destroy(this.gameObject);
             }
 
+            //used to test gold for now
             else if (col.gameObject.CompareTag("NeutralMinion"))
             {
                 /*
@@ -118,14 +142,7 @@ namespace SheepDoom
                 }
 
             }
-            /*
-            else if (col.tag == "Base")
-            {
-                col.transform.parent.gameObject.GetComponent<CaptureBaseScript>().modifyinghealth(-damage);
-                Debug.Log("health: base hit by " + m_Rigidbody);
-                Object.Destroy(this.gameObject);
-            }
-            */
+
         }
 
         //command to set owner of projectile
@@ -136,7 +153,43 @@ namespace SheepDoom
 
         void Update()
         {
+            //rotation movement
             transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
+
+            //basic forward movement
+            transform.Translate(Vector3.forward * m_Speed * Time.deltaTime);
+
+            //adjust acceleration rate per frame
+            if (isAccelerating)
+            {
+                //stop accelerating once hit speed limit
+                if (hasSpeedLimit && (m_Speed <= speedLimit))
+                {
+                    m_Speed += accelerationRate;
+                }
+
+                else
+                {
+                    m_Speed += accelerationRate;
+                }
+
+            }
+
+            //stop deccelerating once hit speed limit
+            if (isDeccelerating && (m_Speed >= speedLimit))
+            {
+                m_Speed -= accelerationRate;
+
+            }
+
+            //adjusting acceleration ratess 
+            if (accelMultiplierOn)
+            {
+                if (m_Speed <= speedLimit) return;
+                accelerationRate *= accelMultiplier;
+            }
+
+
         }
     }
 }

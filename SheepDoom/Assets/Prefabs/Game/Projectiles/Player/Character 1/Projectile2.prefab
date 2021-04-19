@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 7103345307366881107}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 9.4591, y: 9.4591, z: 9.4591}
+  m_LocalScale: {x: 21.70012, y: 21.70012, z: 21.70012}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -131,10 +131,23 @@ MonoBehaviour:
   x_rotaspeed: 0
   y_rotaspeed: 0
   z_rotaspeed: 0
-  damage: 20
-  m_Speed: 5000
-  m_Lifespan: 2
+  damage: 10
   destroyOnContact: 1
+  m_Speed: 300
+  m_Lifespan: 3
+  isAccelerating: 0
+  isDeccelerating: 1
+  accelerationRate: 1
+  deccelerationRate: 50
+  accelMultiplierOn: 1
+  accelMultiplier: 1.03
+  hasSpeedLimit: 1
+  speedLimit: 50
+  SlowDebuff: 0
+  slowRate: 0
+  slowDebuffDuration: 0
+  StopDebuff: 0
+  stopDebuffDuration: 0
 --- !u!114 &4309939885416895172
 MonoBehaviour:
   m_ObjectHideFlags: 0
