@@ -140,7 +140,7 @@ MonoBehaviour:
   accelerationRate: 1
   deccelerationRate: 50
   accelMultiplierOn: 1
-  accelMultiplier: 1.03
+  accelMultiplier: 1.11
   hasSpeedLimit: 1
   speedLimit: 50
   SlowDebuff: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: 63ad7e8d351cb30449195c4c6a160a2b
   hasSpawned: 0
 --- !u!114 &1063934563344406379
 MonoBehaviour:
