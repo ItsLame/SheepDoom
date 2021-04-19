@@ -46,18 +46,16 @@ namespace SheepDoom
             //if hit player
             if (col.gameObject.CompareTag("Player"))
             {
-                //dont hurt the owner of the projectile
-                if (col.gameObject != owner)
+                //dont hurt the owner of the projectile, dont increase score if hitting dead player
+                if (col.gameObject != owner && !col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     //reduce HP of hit target
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
 
                     //increase killer's kill count if target is killed
-                    if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0 && !col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
+                    if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0 )
                     {
                         col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
-                        //dont increase score if hitting dead player
-                        //if (col.gameObject.GetComponent<PlayerHealth>().isPlayerDead()) return;
                         owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
                     }
 
