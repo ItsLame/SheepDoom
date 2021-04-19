@@ -132,17 +132,12 @@ namespace SheepDoom
             PlayerDeathsText.text = PlayerDeaths.ToString();
             TowerCapturesText.text = TowerCaptures.ToString();
 
-            if(TeamIndex == 1)
-            {
-                GameObject shop = GameObject.Find("BlueShop");
-                shop.gameObject.GetComponent<Shop>().Player = this.gameObject;
-            }
-            else if(TeamIndex == 2)
+            //assign player to both shops
+            GameObject shop = GameObject.Find("BlueShop");
+            shop.gameObject.GetComponent<Shop>().Player = this.gameObject;
+            GameObject shop2 = GameObject.Find("RedShop");
+            shop2.gameObject.GetComponent<Shop>().Player = this.gameObject;
 
-            {
-                GameObject shop2 = GameObject.Find("RedShop");
-                shop2.gameObject.GetComponent<Shop>().Player = this.gameObject;
-            }
         }
 
         public override void OnStartServer()
