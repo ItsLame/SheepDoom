@@ -32,7 +32,7 @@ public class NeutralCreepScript : MonoBehaviour
     //how much gold its worth
     public float goldValue;
 
-    public event Action<float> OnHealthPctChanged = delegate { };
+//    public event Action<float> OnHealthPctChanged = delegate { };
 
     //function to change the attacked bool
     public void isUnderAttack(/*GameObject playerWhoAttacked*/)
@@ -46,8 +46,8 @@ public class NeutralCreepScript : MonoBehaviour
     {
         NeutralHPInGame += damageAmount;
 
-        float currenthealthPct = (float)NeutralHPInGame / (float)NeutralHP;
-        OnHealthPctChanged(currenthealthPct);
+     //   float currenthealthPct = (float)NeutralHPInGame / (float)NeutralHP;
+   //     OnHealthPctChanged(currenthealthPct);
     }
 
     //leash function, called by the attached zone's collider exit 
@@ -55,15 +55,15 @@ public class NeutralCreepScript : MonoBehaviour
     {
 
         //snap back for now
-        this.gameObject.transform.position = StartingLocation.transform.position;
+   //     this.gameObject.transform.position = StartingLocation.transform.position;
         //reset aggro
         isAttacked = false;
         //debug
         Debug.Log(gameObject.name + " stopped chasing " + Attacker.name);
         //ResetHP
         NeutralHPInGame = NeutralHP;
-        float currenthealthPct = (float)NeutralHPInGame / (float)NeutralHP;
-        OnHealthPctChanged(currenthealthPct);
+     //   float currenthealthPct = (float)NeutralHPInGame / (float)NeutralHP;
+    //    OnHealthPctChanged(currenthealthPct);
 
 
     }
@@ -81,8 +81,8 @@ public class NeutralCreepScript : MonoBehaviour
         if (NeutralHPInGame <= 0)
         {
             //inform the spawner that it died
-            StartingLocation.GetComponent<NeutralCreepSpawner>().neutralIsKilled();
-            Attacker.GetComponent<CharacterGold>().varyGold(goldValue);
+ //           StartingLocation.GetComponent<NeutralCreepSpawner>().neutralIsKilled();
+          //  Attacker.GetComponent<CharacterGold>().varyGold(goldValue);
             Destroy(this.gameObject);
         }
 

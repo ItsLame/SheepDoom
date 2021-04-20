@@ -61,6 +61,7 @@ namespace SheepDoom
         void Start()
         {
             Destroy(gameObject, m_Lifespan);
+         //   Debug.Log("Owner: " + owner);
         }
 
         [Server]
@@ -74,6 +75,18 @@ namespace SheepDoom
                 {
                     //reduce HP of hit target
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
+
+                    //debuff player depending on bullet properties in inspector
+                    if (SlowDebuff)
+                    {
+                        col.gameObject.GetComponent<CharacterMovement>().debuffCharacter("slow", slowDebuffDuration, slowRate);
+                    }
+
+                    if (StopDebuff)
+                    {
+                        col.gameObject.GetComponent<CharacterMovement>().debuffCharacter("stop", stopDebuffDuration, 0);
+                    }
+
 
                     //increase killer's kill count if target is killed
                     if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
@@ -92,21 +105,22 @@ namespace SheepDoom
             else if (col.gameObject.CompareTag("Tower"))
             {
            //     col.transform.parent.gameObject.GetComponent<CapturePointScript>().ModifyingHealth(-damage);
-                //  Debug.Log("health: tower hit by " + m_Rigidbody);
            //     Object.Destroy(this.gameObject);
             }
+
 
             //used to test gold for now
             else if (col.gameObject.CompareTag("NeutralMinion"))
             {
-                /*
+                
                 //take damage
                 col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
                 col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
                 //inform that its under atk
                 col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
-                */
-
+                
+                
+//                Debug.Log(owner + " hitting neutral minion");
                 owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
 
                 if (destroyOnContact)
