@@ -41,7 +41,7 @@ namespace SheepDoom
 
         private void Start()
         {
-            ShopMenuUI = GameObject.Find("ShopUI");
+            //ShopMenuUI = GameObject.Find("ShopUI");
         }
 
         //for pressing the shop with raycast
