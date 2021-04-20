@@ -81,11 +81,14 @@ namespace SheepDoom
                 {
  //                   Debug.Log(hit.transform.name + " was clicked");
 
-                    //if hit something
-                    if (hit.collider.gameObject.CompareTag("Shop"))
+                    if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
                     {
-                        Debug.Log("Shop Pressed, running OpenShopUI()");
-                        OpenShopUI();
+                        //if hit something
+                        if (hit.collider.gameObject.CompareTag("Shop"))
+                        {
+                            Debug.Log("Shop Pressed, running OpenShopUI()");
+                            OpenShopUI();
+                        }
                     }
                 }
             }
