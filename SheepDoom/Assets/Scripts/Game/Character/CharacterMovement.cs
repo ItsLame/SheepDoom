@@ -11,17 +11,26 @@ namespace SheepDoom
         //original speed
         public float baseSpeed;
         //speed to be used in game
+        [SyncVar(hook = nameof(SyncPlayerSpeed))]
         public float speed;
 
-        public bool isDebuffed;
-        public float debuffDuration;
-        public float debuffStrength;
+
+        [SyncVar] public bool isDebuffed;
+        [SyncVar] public float debuffDuration;
+        [SyncVar] public float debuffStrength;
 
         private void Start()
         {
             speed = baseSpeed;
         }
 
+        public void SyncPlayerSpeed(float oldValue, float newValue)
+        {
+    //        if (hasAuthority)
+    //        {
+
+    //        }
+        }
 
         //for player debuffs handling
         public void debuffCharacter(string type, float duration, float strength)
@@ -51,21 +60,34 @@ namespace SheepDoom
         {
             if (!hasAuthority) return;
 
+            Move();
+        }
+
+        private void Update()
+        {
+            if (!hasAuthority) return;
+
             if (isDebuffed)
             {
-                //reduce timer per second
-                debuffDuration -= Time.deltaTime;
-
-                //remove debuff when duration is up
-                if (debuffDuration <= 0)
-                {
-                    isDebuffed = false;
-                    debuffStrength = 1;
-                    speed = baseSpeed;
-                }
+                DebuffTimerCountdown();
             }
+        }
 
-            Move();
+        [Command]
+        public void DebuffTimerCountdown()
+        {
+            //reduce timer per second
+            debuffDuration -= Time.deltaTime;
+            Debug.Log("Debuff Duration: " + debuffDuration);
+
+            //remove debuff when duration is up
+            if (debuffDuration <= 0)
+            {
+                debuffStrength = 1;
+                speed = baseSpeed;
+                Debug.Log("Debuff Over:" + debuffStrength + ", " + speed);
+                isDebuffed = false;
+            }
         }
 
         private void Move()
