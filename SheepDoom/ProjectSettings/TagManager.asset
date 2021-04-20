@@ -16,6 +16,7 @@ TagManager:
   - MegaBoss
   - Team1
   - lobbyPlayer
+  - Other
   layers:
   - Default
   - TransparentFX

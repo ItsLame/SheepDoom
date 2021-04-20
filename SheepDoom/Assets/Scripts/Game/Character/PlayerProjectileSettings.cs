@@ -157,6 +157,15 @@ namespace SheepDoom
 
             }
 
+            else if (col.gameObject.CompareTag("Other"))
+            {
+                if (destroyOnContact)
+                {
+                    Object.Destroy(this.gameObject);
+
+                }
+            }
+
         }
 
         //command to set owner of projectile
