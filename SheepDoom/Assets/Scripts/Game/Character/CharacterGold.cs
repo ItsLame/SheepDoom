@@ -7,12 +7,22 @@ using Mirror;
 public class CharacterGold : NetworkBehaviour
 {
     //float to hold player's current gold
-    [SyncVar]
+    [SyncVar(hook = nameof(SyncPlayerGold))]
     public float CurrentGold;
 
     //UI showing gold amount
     public Text CurrentGoldUI;
     public Text CurrentGoldInShopUI;
+
+    //to sync player gold ui
+    public void SyncPlayerGold(float oldValue, float newValue)
+    {
+        if (hasAuthority)
+        {
+            CurrentGoldUI.text = CurrentGold.ToString();
+            CurrentGoldInShopUI.text = CurrentGold.ToString();
+        }
+    }
 
     //gold call function
     public float GetCurrentGold()
@@ -23,10 +33,10 @@ public class CharacterGold : NetworkBehaviour
     //gold number manipulation function
     public void varyGold(float goldValueChange)
     {
+        Debug.Log("Current Gold: " + CurrentGold);
         Debug.Log("Gold increased by " + goldValueChange);
         CurrentGold += goldValueChange;
-        CurrentGoldUI.text = CurrentGold.ToString();
-        CurrentGoldInShopUI.text = CurrentGold.ToString();
+        Debug.Log("Current Gold after: " + CurrentGold);
     }
 
 

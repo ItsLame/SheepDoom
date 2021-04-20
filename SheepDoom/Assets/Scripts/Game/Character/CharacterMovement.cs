@@ -8,21 +8,63 @@ namespace SheepDoom
 {   
     public class CharacterMovement : NetworkBehaviour
     {
+        //original speed
+        public float baseSpeed;
+        //speed to be used in game
         public float speed;
 
-       //[Space(15)]
-       //[SyncVar] public bool isDead;
+        public bool isDebuffed;
+        public float debuffDuration;
+        public float debuffStrength;
 
-        // Start is called before the first frame update
-        /*void Awake()
+        private void Start()
         {
-            isDead = false;
-        }*/
+            speed = baseSpeed;
+        }
+
+
+        //for player debuffs handling
+        public void debuffCharacter(string type, float duration, float strength)
+        {
+            isDebuffed = true;
+
+            if (type == "slow")
+            {
+                Debug.Log("Inflicting slow debuff");
+                debuffDuration = duration;
+                debuffStrength = strength;
+                speed *= debuffStrength;
+            }
+
+            else if (type == "stop")
+            {
+                Debug.Log("Inflicting stop debuff");
+                debuffDuration = duration;
+                speed = 0;
+            }
+
+        }
+
 
         // Update is called once per frame
         void FixedUpdate()
         {
             if (!hasAuthority) return;
+
+            if (isDebuffed)
+            {
+                //reduce timer per second
+                debuffDuration -= Time.deltaTime;
+
+                //remove debuff when duration is up
+                if (debuffDuration <= 0)
+                {
+                    isDebuffed = false;
+                    debuffStrength = 1;
+                    speed = baseSpeed;
+                }
+            }
+
             Move();
         }
 
@@ -38,6 +80,7 @@ namespace SheepDoom
 
                 this.transform.position += moveMe;
             }
+
         }
     }
 }

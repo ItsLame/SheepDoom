@@ -273,8 +273,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  speed: 2.5
-  isDead: 0
+  baseSpeed: 2.5
+  speed: 0
 --- !u!114 &5599442812974198205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,7 +377,6 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 0
-  isDead: 0
 --- !u!114 &6279603492664990916
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,13 +13,13 @@ namespace SheepDoom
         protected override void Awake()
         {
             base.Awake();
-            GetComponentInParent<NeutralCreepScript>().OnHealthPctChanged += HandleHealthChanged;
+ //           GetComponentInParent<NeutralCreepScript>().OnHealthPctChanged += HandleHealthChanged;
         }
 
         protected override void InitHealthBar()
         {
-            P_foregroundImage = foregroundimage;
-            P_updateSpeedSeconds = updatespeedseconds;
+   //         P_foregroundImage = foregroundimage;
+   //         P_updateSpeedSeconds = updatespeedseconds;
         }
     }
 }
