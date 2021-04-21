@@ -4,39 +4,48 @@ using UnityEngine;
 
 namespace SheepDoom
 {
+    // let spawned objects (e.g. player objects) find game object inside scene
+
     public class FindMe : MonoBehaviour
     {
         public static FindMe instance;
 
-        [Header("Player Controls")]
-        [SerializeField] private GameObject Joystick;
+        #region Variables
+
+        [Header("--- Player Controls ---")]
+        [Space(5)]
         [SerializeField] private GameObject AtkBtn;
         [SerializeField] private GameObject SpecialBtn;
         [SerializeField] private GameObject UltimateBtn;
         
-        [Header("Player UI")]
+        [Header("--- Player UI ---")]
+        [Space(5)]
         [SerializeField] private GameObject DeathOverlay;
         [SerializeField] private GameObject DeadText;
         [SerializeField] private GameObject RespawningIn;
         [SerializeField] private GameObject RespawnTimer;
         
-        [Header("Game UI")]
+        [Header("--- Game UI ---")]
+        [Space(5)]
         [SerializeField] private GameObject ShopUI;
-        [SerializeField] private GameObject AnnouncerText;
-        [SerializeField] private GameObject GameEventText;
+        [SerializeField] private GameObject GameEvent;
         [SerializeField] private GameObject PlayerGold;
         [SerializeField] private GameObject ShopGold;
         
-        [Header("Game Item")]
+        [Header("--- Game Item ---")]
+        [Space(5)]
         [SerializeField] private GameObject BlueShop;
         [SerializeField] private GameObject RedShop;
         
-        [Header("KDC")]
+        [Header("--- Kill, Death, Capture ---")]
+        [Space(5)]
         [SerializeField] private GameObject K;
         [SerializeField] private GameObject D;
         [SerializeField] private GameObject C;
 
         public bool isInit { get; private set;}
+
+        #endregion
         
         #region Properties
         
@@ -45,41 +54,65 @@ namespace SheepDoom
             get{return AtkBtn;}
             set{AtkBtn = value;}
         }
+
         public GameObject P_SpecialBtn
         {
             get{return SpecialBtn;}
             set{SpecialBtn = value;}
         }
+
         public GameObject P_UltimateBtn
         {
             get{return UltimateBtn;}
             set{UltimateBtn = value;}
         }
+
         public GameObject P_DeathOverlay
         {
             get{return DeathOverlay;}
             set{DeathOverlay = value;}
         }
+
+        public GameObject P_DeadText
+        {
+            get{return DeadText;}
+            set{DeadText = value;}
+        }
+        
+        public GameObject P_RespawningIn
+        {
+            get{return RespawningIn;}
+            set{RespawningIn = value;}
+        }
+
+        public GameObject P_RespawnTimer
+        {
+            get{return RespawnTimer;}
+            set{RespawnTimer = value;}
+        }
+
         public GameObject P_ShopUI
         {
             get{return ShopUI;}
             set{ShopUI = value;}
         }
 
-        public GameObject P_K
+        public GameObject P_GameEvent
         {
-            get{return K;}
-            set{K = value;}
+            get{return GameEvent;}
+            set{GameEvent = value;}
         }
-        public GameObject P_D
+
+        public GameObject P_PlayerGold
         {
-            get{return D;}
-            set{D = value;}
+            get{return PlayerGold;}
+            set{PlayerGold = value;}
         }
-        public GameObject P_C
+
+        public GameObject P_ShopGold
         {
-            get{return C;}
-            set{C = value;}
+            get{return ShopGold;}
+            set{ShopGold = value;}
         }
 
         public GameObject P_BlueShop
@@ -94,43 +127,22 @@ namespace SheepDoom
             set{RedShop = value;}
         }
 
-        public GameObject P_DeadText
+        public GameObject P_K
         {
-            get{return DeadText;}
-            set{DeadText = value;}
-        }
-        public GameObject P_RespawningIn
-        {
-            get{return RespawningIn;}
-            set{RespawningIn = value;}
-        }
-        public GameObject P_RespawnTimer
-        {
-            get{return RespawnTimer;}
-            set{RespawnTimer = value;}
+            get{return K;}
+            set{K = value;}
         }
 
-        public GameObject P_AnnouncerText
+        public GameObject P_D
         {
-            get{return AnnouncerText;}
-            set{AnnouncerText = value;}
+            get{return D;}
+            set{D = value;}
         }
 
-        public GameObject P_GameEventText
+        public GameObject P_C
         {
-            get{return GameEventText;}
-            set{GameEventText = value;}
-        }
-
-        public GameObject P_PlayerGold
-        {
-            get{return PlayerGold;}
-            set{PlayerGold = value;}
-        }
-        public GameObject P_ShopGold
-        {
-            get{return ShopGold;}
-            set{ShopGold = value;}
+            get{return C;}
+            set{C = value;}
         }
 
         #endregion

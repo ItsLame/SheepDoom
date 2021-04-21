@@ -18,7 +18,7 @@ namespace SheepDoom
         void Start()
         {
             //GameObject gameEventText = GameObject.Find("GameEventText");
-            GameObject gameEventText = FindMe.instance.P_GameEventText;
+            GameObject gameEventText = FindMe.instance.P_GameEvent;
             AnnouncerText = gameEventText.GetComponent<Text>();
         }
 
