@@ -9,6 +9,16 @@ namespace SheepDoom
     public class Peach : Hero
     {
         [SerializeField] private Image heroImage;
+        public Peach(Peach comp, bool _isTaken, Image heroImg)
+        {
+            // for object
+            heroImage = heroImg;
+            InitHeroInfo();
+            // for game object
+            comp.InitHeroInfo();
+            comp.SetTaken(_isTaken);
+            comp.OnClickHero();
+        }
 
         [Client]
         protected override void InitHeroInfo()

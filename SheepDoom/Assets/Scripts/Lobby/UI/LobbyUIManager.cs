@@ -153,11 +153,9 @@ namespace SheepDoom
                 }
                 else if (_start)
                 {
-                    RequestCheckStart(conn, _matchID, _player, _start);
-                    TargetUpdateOwner(conn, _player, false, false, _start); // only need to show host player start status text
+                    RequestCheckStart(_matchID, _player);
+                    TargetUpdateOwner(conn, _player, _swap, _ready, _start); // only need to show host player start status text
                 }
-                /*if (_startMatch == true)
-                    MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartCharacterSelectScene();*/
             }
             else
             {
@@ -203,7 +201,7 @@ namespace SheepDoom
         }
 
         [Server]
-        private void RequestCheckStart(NetworkConnection conn, string _matchID, GameObject _player, bool _start)
+        private void RequestCheckStart(string _matchID, GameObject _player)
         {
             if(MatchMaker.instance.GetMatches()[_matchID].GetTeam1Count() == MatchMaker.instance.GetMatches()[_matchID].GetTeam2Count()) // equal number of players on both sides
             {
@@ -289,17 +287,12 @@ namespace SheepDoom
             while (_player.GetComponent<PlayerObj>().GetTeamIndex() == oldTeamIndex)
                 yield return null;
             if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-            {
                 _player.transform.SetParent(P_team1GameObject.transform, false);
-                if(isOwner)
-                    SetUI_SwapButton(_player.GetComponent<PlayerObj>().GetTeamIndex()); // only need to set button on owner, other clients cant see ur button
-            }
             else if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-            {
                 _player.transform.SetParent(P_team2GameObject.transform, false);
-                if(isOwner)
-                    SetUI_SwapButton(_player.GetComponent<PlayerObj>().GetTeamIndex()); // only need to set button on owner, other clients cant see ur button
-            }
+
+            if(isOwner)
+                SetUI_SwapButton(_player.GetComponent<PlayerObj>().GetTeamIndex()); // only need to set button on owner, other clients cant see ur button
         }
 
         private IEnumerator WaitForReadyUpdate(GameObject _player, bool oldReadyState, bool isOwner)
@@ -335,8 +328,6 @@ namespace SheepDoom
 
         public void GoTeam1()
         {
-            /*if(isClient)
-                StartCoroutine(SetUI_TeamSwap(1, PlayerObj.instance.gameObject));*/
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
                 CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, true, false, false);
@@ -344,8 +335,6 @@ namespace SheepDoom
 
         public void GoTeam2()
         {
-            /*if(isClient)
-                StartCoroutine(SetUI_TeamSwap(2, PlayerObj.instance.gameObject));*/
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
                 CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, true, false, false);
@@ -359,15 +348,12 @@ namespace SheepDoom
             GameObject _player = PlayerObj.instance.gameObject;
             if(_player.GetComponent<NetworkIdentity>().hasAuthority && _player.GetComponent<PlayerObj>().GetIsHost())
                 CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false, false, true);
-            //StartCoroutine(RequestCheckStart(_player));
         }
         #endregion
 
         #region Ready
         public void GoReady()
         {
-            /*if(isClient)
-                ChangeReady(PlayerObj.instance.gameObject);*/
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
                 CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false, true, false);
@@ -389,10 +375,6 @@ namespace SheepDoom
                 {
                     P_matchIDText.GetComponent<Text>().text = _matchID;
                     Debug.Log("Player object's matchID: " + _player.GetComponent<PlayerObj>().GetMatchID() + " = " + "lobbyUI's matchID: " + _matchID);
-
-                    /*StartCoroutine(SetUI_StartReadyButton(PlayerObj.instance.gameObject));
-                    StartCoroutine(SetUI_SwapButton(PlayerObj.instance.gameObject));
-                    StartCoroutine(RequestLobbyUpdate(_matchID, PlayerObj.instance.gameObject, false));*/
                     CmdRequestLobbyUpdate(_matchID, _player, false, false, false);
                 }
                 else

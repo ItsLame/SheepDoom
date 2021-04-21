@@ -18,8 +18,6 @@ namespace SheepDoom
         [Scene] public string gameScene;
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
-        /*private bool lobbySceneLoaded = false;
-        private bool characterSelectSceneLoaded = false;*/
         private bool scenesLoaded = false;
         private bool gameSceneLoaded = false;
 
@@ -37,23 +35,11 @@ namespace SheepDoom
             set {lobbyScene = value;}
         }
 
-        /*public bool P_lobbySceneLoaded
-        {
-            get {return lobbySceneLoaded;}
-            set {lobbySceneLoaded = value;}
-        }*/
-
         public string P_characterSelectScene
         {
             get {return characterSelectScene;}
             set {characterSelectScene = value;}
         }
-
-        /*public bool P_characterSelectSceneLoaded
-        {
-            get {return characterSelectSceneLoaded;}
-            set {characterSelectSceneLoaded = value;}
-        }*/
 
         public bool P_scenesLoaded
         {
@@ -77,8 +63,6 @@ namespace SheepDoom
         [Server]
         public void StartScenes(NetworkConnection conn)
         {
-            //StartCoroutine(LoadScene(P_lobbyScene, P_lobbySceneLoaded, conn));
-            //TargetClientLoadScene(conn, P_lobbyScene, P_lobbySceneLoaded);
             StartCoroutine(LoadScene(P_lobbyScene, P_characterSelectScene, conn));
         }
 
@@ -94,85 +78,13 @@ namespace SheepDoom
             StartCoroutine(UnloadScene(conn, _matchID, _unloadLobby, _unloadCharSelect));
         }
 
-        /*public void StartCharacterSelectScene()
-        {
-            if(isServer)
-            {
-                StartCoroutine(LoadScene(P_characterSelectScene, P_characterSelectSceneLoaded));
-                RpcClientLoadScene(P_characterSelectScene, P_characterSelectSceneLoaded);
-            }
-        }
-
-        public void StartGameScene()
-        {
-            if(isServer)
-            {
-                StartCoroutine(LoadScene(P_gameScene, P_gameSceneLoaded));
-                RpcClientLoadScene(P_gameScene, P_gameSceneLoaded);
-            }
-        }
-
-        [TargetRpc]
-        private void TargetClientLoadScene(NetworkConnection conn, string _scene, bool _sceneLoaded)
-        {
-            StartCoroutine(LoadScene(_scene, _sceneLoaded));
-        }
-
-        [ClientRpc]
-        private void RpcClientLoadScene(string _scene, bool _sceneLoaded)
-        {
-            StartCoroutine(LoadScene(_scene, _sceneLoaded));
-        }*/
-
         [Server]
-        public void JoinLobby(NetworkConnection conn, string _matchID)
+        public void JoinLobby(NetworkConnection conn, string _matchID) // for non-hosts
         {
             MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().ServerStartSetting(_matchID);
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[1].name, true); // load char select
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[0].name, true); // load lobby
         }
-
-        /*private IEnumerator LoadScene(string _scene, bool _sceneLoaded, NetworkConnection conn = null)
-        {
-            if(isServer && !_sceneLoaded)
-            {
-                // load lobby scenes
-                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_scene, LoadSceneMode.Additive);
-
-                //asyncLoad.allowSceneActivation = false;
-
-               /* while (asyncLoad.progress < 0.9f)
-                {
-                    Debug.Log("LOADING: "+asyncLoad.progress);    
-                    yield return new WaitForSecondsRealtime(0.5f);
-                }
-                while (!asyncLoad.isDone)
-                    yield return null;
-                
-                //asyncLoad.allowSceneActivation = true;
-                Scene newLobbyScene = SceneManager.GetSceneAt(MatchMaker.instance.GetMatches().Count);
-
-                MatchMaker.instance.GetMatches()[P_matchID].SetLobbyScene(newLobbyScene);
-
-                SceneMessage msg = new SceneMessage
-                {
-                    sceneName = MatchMaker.instance.GetMatches()[P_matchID].GetLoadedLobbyScene().name,
-                    sceneOperation = SceneOperation.LoadAdditive
-                };
-                conn.Send(msg);
-
-                SceneManager.MoveGameObjectToScene(gameObject, newLobbyScene);
-
-                _sceneLoaded = true;
-
-                if(_scene == lobbyScene)
-                    P_lobbySceneLoaded = _sceneLoaded;
-                else if(_scene == P_characterSelectScene)
-                    P_characterSelectSceneLoaded = _sceneLoaded;
-                else if(_scene == gameScene)
-                    P_gameSceneLoaded = _sceneLoaded;
-            }
-        }*/
 
         private IEnumerator LoadScene(string _lobbyScene, string _charSelectScene, NetworkConnection conn)
         {
@@ -198,7 +110,7 @@ namespace SheepDoom
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newLobbyScene);
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newCharSelectScene);
 
-                // send scene load message to clients, latest loaded scene will be the active scene on client
+                // send scene load message to clients, latest loaded scene will be the active scene on client for hosts
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[1].name, true); // load char select
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0].name, true); // load lobby
 

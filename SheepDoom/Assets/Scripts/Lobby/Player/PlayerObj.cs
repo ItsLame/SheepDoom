@@ -159,21 +159,20 @@ namespace SheepDoom
         /// </summary>
         public override void OnStopServer()
         {
-            if (MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Contains(gameObject))
-                MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Remove(gameObject);
-
-            if(GetTeamIndex() == 1)
+            if (GetTeamIndex() == 1)
             {
                 MatchMaker.instance.GetMatches()[GetMatchID()].MinusTeam1Count();
                 SetPlayerSortIndex(0);
                 SetTeamIndex(0);
-            } 
-            else if(GetTeamIndex() == 2)
+            }
+            else if (GetTeamIndex() == 2)
             {
                 MatchMaker.instance.GetMatches()[GetMatchID()].MinusTeam2Count();
                 SetPlayerSortIndex(0);
                 SetTeamIndex(0);
             }
+            if (MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Contains(gameObject))
+                MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Remove(gameObject);
         }
 
         /// <summary>

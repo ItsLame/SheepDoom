@@ -10,23 +10,23 @@ namespace SheepDoom
         private string heroName;
         private string heroDesc;
         private Sprite heroIcon;
-        private bool isTaken;
+        private bool isTaken; // default is false i guess?
 
         #region Properties
 
-        protected string P_heroName
+        public string P_heroName
         {
             get{return heroName;}
             set{heroName = value;}
         }
 
-        protected string P_heroDesc
+        public string P_heroDesc
         {
             get{return heroDesc;}
             set{heroDesc = value;}
         }
 
-        protected Sprite P_heroIcon
+        public Sprite P_heroIcon
         {
             get{return heroIcon;}
             set{heroIcon = value;}
@@ -37,7 +37,6 @@ namespace SheepDoom
             get{return isTaken;}
             set{isTaken = value;}
         }
-
         #endregion
 
         private void Start()
@@ -52,18 +51,25 @@ namespace SheepDoom
         public virtual void OnClickHero()
         {
             // set hero info locally
-            CharacterSelectUIManager.instance.P_heroInfoImg.sprite = P_heroIcon;
-            CharacterSelectUIManager.instance.P_heroInfoText.text = P_heroName + "\n-----\n" + P_heroDesc;
-
-            if(P_isTaken == false)
+            if (!P_isTaken)
+            {
+                Debug.Log("Lock in ran in not taken");
+                CharacterSelectUIManager.instance.P_heroInfoImg.sprite = P_heroIcon;
+                CharacterSelectUIManager.instance.P_heroInfoText.text = P_heroName + "\n-----\n" + P_heroDesc;
                 // set lock in button to interactable after clicking on hero
                 CharacterSelectUIManager.instance.P_lockInButton.GetComponent<Button>().interactable = true;
+                // update view for other clients (of player's hero text under player's name)
+                CharacterSelectUIManager.instance.ClientRequestUpdate(P_heroName, false);
+            }
             else
+            {
+                Debug.Log("Lock in ran in taken");
                 // set lock in button to not interactable if another client has locked in to the hero
                 CharacterSelectUIManager.instance.P_lockInButton.GetComponent<Button>().interactable = false;
+            }
+                
 
-            // update view for other clients (of player's hero text under player's name)
-            CharacterSelectUIManager.instance.ClientRequestUpdate(P_heroName, false);
+           
         }
     }
 }

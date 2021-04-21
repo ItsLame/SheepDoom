@@ -163,20 +163,6 @@ namespace SheepDoom
         {
             matchScenes.Add(scene);
         }
-        /*public void SetLobbyScene(Scene scene)
-        {
-            loadedLobbyScene = scene;
-        }
-
-        public void SetCharSelectScene(Scene scene)
-        {
-            loadedCharSelectScene = scene;
-        }
-
-        public void SetGameScene(Scene scene)
-        {
-            loadedGameScene = scene;
-        }*/
 
         #endregion
 
