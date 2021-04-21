@@ -80,7 +80,7 @@ namespace SheepDoom
             //added respawn
             //this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
             playerDead = true;
-
+            this.gameObject.GetComponent<GameEvent>().gotKilled = this.gameObject.GetComponent<PlayerObj>().GetPlayerName();
             //StartCoroutine(TimeBeforeDeath());
             // Debug.Log("health: ded");
         }

@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 6869177918369833713}
   - component: {fileID: 3201915219564466321}
   - component: {fileID: 3913887420858538012}
+  - component: {fileID: 522307010120700973}
   - component: {fileID: 1088759763548799350}
   - component: {fileID: 2592283840863600004}
   - component: {fileID: 7037161822337196194}
@@ -472,6 +473,23 @@ MonoBehaviour:
   CurrentGold: 30
   CurrentGoldUI: {fileID: 0}
   CurrentGoldInShopUI: {fileID: 0}
+--- !u!114 &522307010120700973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540617473773694058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2409ef1b5ec1d9c42ab0855102c37f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  AnnouncerText: {fileID: 0}
+  whoKilled: 
+  gotKilled: 
 --- !u!114 &1088759763548799350
 MonoBehaviour:
   m_ObjectHideFlags: 0
