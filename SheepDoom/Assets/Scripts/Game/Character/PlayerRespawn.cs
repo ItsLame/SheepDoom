@@ -36,10 +36,18 @@ namespace SheepDoom
             respawnTimerInGame = respawnTimerRef;
 
             //get UI objects
-            deathOverlay = GameObject.Find("DeathOverlay");
-            deadTextObject = GameObject.Find("DeathOverlay/deadText");
-            respawninginObject = GameObject.Find("DeathOverlay/respawningIn");
-            PlayerRespawnTimerObject = GameObject.Find("DeathOverlay/PlayerRespawnTimer");
+            //deathOverlay = GameObject.Find("DeathOverlay");
+            //deadTextObject = GameObject.Find("DeathOverlay/deadText");
+            //respawninginObject = GameObject.Find("DeathOverlay/respawningIn");
+            //PlayerRespawnTimerObject = GameObject.Find("DeathOverlay/PlayerRespawnTimer");
+
+            if(isClient)
+            {
+                deathOverlay = FindMe.instance.P_DeathOverlay;
+                deadTextObject = FindMe.instance.P_DeadText;
+                respawninginObject = FindMe.instance.P_RespawningIn;
+                PlayerRespawnTimerObject = FindMe.instance.P_RespawnTimer;
+            }
         }
 
 

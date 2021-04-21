@@ -22,12 +22,16 @@ namespace SheepDoom
             assignButtons(this.gameObject);
         }
 
-
+        [Client]
         public void assignButtons(GameObject player)
         {
-            _NormalButton = GameObject.FindGameObjectWithTag("Attack").GetComponent<Button>();
-            _SpecialButton = GameObject.FindGameObjectWithTag("Skill").GetComponent<Button>();
-            _UltiButton = GameObject.FindGameObjectWithTag("Ulti").GetComponent<Button>();
+            //_NormalButton = GameObject.FindGameObjectWithTag("Attack").GetComponent<Button>();
+            //_SpecialButton = GameObject.FindGameObjectWithTag("Skill").GetComponent<Button>();
+            //_UltiButton = GameObject.FindGameObjectWithTag("Ulti").GetComponent<Button>();
+
+            _NormalButton = FindMe.instance.P_AtkBtn.GetComponent<Button>();
+            _SpecialButton = FindMe.instance.P_SpecialBtn.GetComponent<Button>();
+            _UltiButton = FindMe.instance.P_UltimateBtn.GetComponent<Button>();
 
             //get the action
             UnityAction normalAttack = new UnityAction(player.GetComponent<PlayerAttack>().AttackClick);

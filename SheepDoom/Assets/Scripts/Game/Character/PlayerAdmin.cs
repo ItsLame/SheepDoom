@@ -125,19 +125,23 @@ namespace SheepDoom
         {
             if (!hasAuthority) return;
 
-            PlayerKillsText = GameObject.Find("KText").GetComponent<Text>();
-            PlayerDeathsText = GameObject.Find("DText").GetComponent<Text>();
-            TowerCapturesText = GameObject.Find("CText").GetComponent<Text>();
+            //PlayerKillsText = GameObject.Find("KText").GetComponent<Text>();
+            //PlayerDeathsText = GameObject.Find("DText").GetComponent<Text>();
+            //TowerCapturesText = GameObject.Find("CText").GetComponent<Text>();
+            PlayerKillsText = FindMe.instance.P_K.GetComponent<Text>();
+            PlayerDeathsText = FindMe.instance.P_D.GetComponent<Text>();
+            TowerCapturesText = FindMe.instance.P_C.GetComponent<Text>();
             PlayerKillsText.text = PlayerKills.ToString();
             PlayerDeathsText.text = PlayerDeaths.ToString();
             TowerCapturesText.text = TowerCaptures.ToString();
 
             //assign player to both shops
-            GameObject shop = GameObject.Find("BlueShop");
+            //GameObject shop = GameObject.Find("BlueShop");
+            GameObject shop = FindMe.instance.P_BlueShop;
             shop.gameObject.GetComponent<Shop>().Player = this.gameObject;
-            GameObject shop2 = GameObject.Find("RedShop");
+            //GameObject shop2 = GameObject.Find("RedShop");
+            GameObject shop2 = FindMe.instance.P_RedShop;
             shop2.gameObject.GetComponent<Shop>().Player = this.gameObject;
-
         }
 
         public override void OnStartServer()
