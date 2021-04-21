@@ -9,8 +9,6 @@ namespace SheepDoom
 {
     public class GameEvent : NetworkBehaviour
     {
-        //[Space(15)]
-        //public GameObject gameEventText;
         public Text AnnouncerText;
 
         [SyncVar] public string whoKilled;
@@ -32,9 +30,6 @@ namespace SheepDoom
                 {
                     RpcAnnouncers(whoKilled + " has slain " + gotKilled);
                 }
-
-                //if (isClient)
-                //countdownTimer = 0.0f;
             }
         }
 
