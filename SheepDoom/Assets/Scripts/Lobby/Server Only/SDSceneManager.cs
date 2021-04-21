@@ -16,13 +16,18 @@ namespace SheepDoom
         [Scene] public string lobbyScene;
         [Scene] public string characterSelectScene;
         [Scene] public string gameScene;
+
+        // used to initialize in match
+        private Scene newLobbyScene;
+        private Scene newCharSelectScene;
+        private Scene newGameScene;
+
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
         private bool scenesLoaded = false;
         private bool gameSceneLoaded = false;
 
         #region Properties
-
         public string P_matchID
         {
             get {return matchID;}
@@ -90,27 +95,50 @@ namespace SheepDoom
         {
             if (!scenesLoaded)
             {
+                // local variables to track how many scenes have been unloaded on server
+                int lobbyUnloadedCount = 0;
+                int charSelectUnloadedCount = 0;
+
                 // latest loaded scene on client will be the active scene i think
                 // load lobby scene
                 AsyncOperation asyncLoadLobby = SceneManager.LoadSceneAsync(_lobbyScene, LoadSceneMode.Additive);
                 while (!asyncLoadLobby.isDone)
                     yield return null;
-                
+
                 // load character select scene
                 AsyncOperation asyncLoadCharSelect = SceneManager.LoadSceneAsync(_charSelectScene, LoadSceneMode.Additive);
                 while (!asyncLoadCharSelect.isDone)
                     yield return null;
 
-                // will need to change formula once game scene is added, currently is only *2 multiplier to accomodate for lobby and character select scene
-                Scene newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - 1);
-                Scene newCharSelectScene = SceneManager.GetSceneAt(MatchMaker.instance.GetMatches().Count * 2);
-                //Scene newGameScene = SceneManager.GetSceneAt(MatchMaker.instance.GetMatches().Count * 3);
+                // beware.. very complicated
+                foreach (KeyValuePair<string, Match> entry in MatchMaker.instance.GetMatches())
+                {
+                    GameObject sdSceneManagerLocation = entry.Value.GetSDSceneManager().gameObject;
+                    if (entry.Value.GetScenes().Contains(sdSceneManagerLocation.scene)) 
+                    {
+                        if(entry.Value.GetScenes().Count == 2 && entry.Value.GetScenes()[1] == sdSceneManagerLocation.scene)
+                            lobbyUnloadedCount++;
+                        else if(entry.Value.GetScenes().Count == 3 && entry.Value.GetScenes()[2] == sdSceneManagerLocation.scene)
+                        {
+                            lobbyUnloadedCount++;
+                            charSelectUnloadedCount++;
+                        }
+                    }
+                }
 
-                // set scenes in matches
+                newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - (lobbyUnloadedCount + charSelectUnloadedCount) - 1);
+                newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - (lobbyUnloadedCount + charSelectUnloadedCount));
+                // newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - (lobbyUnloadedCount + charSelectUnloadedCount) - 2);
+                // newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - (lobbyUnloadedCount + charSelectUnloadedCount) - 1);
+                // newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - (lobbyUnloadedCount + charSelectUnloadedCount));
+
+                // set scene in matches
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newLobbyScene);
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newCharSelectScene);
+                //MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
 
                 // send scene load message to clients, latest loaded scene will be the active scene on client for hosts
+                //ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2].name, true);
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[1].name, true); // load char select
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0].name, true); // load lobby
 

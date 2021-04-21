@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
@@ -19,11 +20,17 @@ namespace SheepDoom
         [Header("Character Select UI Manager Setup")]
         [SerializeField] private GameObject team1GameObject;
         [SerializeField] private GameObject team2GameObject;
+        [SerializeField] private Text timerText;
+        private TimeSpan timePlaying;
+        private float secondsTimer = 30;
+        private bool playersInScene = false;
+
         [Header("Inputs For Client")]
         [SerializeField] private Image heroInfoImg;
         [SerializeField] private Text heroInfoText;
         [SerializeField] private GameObject lockInButton;
         [SerializeField] private GameObject statusPanel;
+
         [Header("Characters")]
         [SerializeField] private GameObject mario;
         [SerializeField] private GameObject luigi;
@@ -33,6 +40,8 @@ namespace SheepDoom
         //room matchID
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
+        [SyncVar] private string timePlayingStr = "30";
+
 
         #region Properties
 
@@ -79,17 +88,35 @@ namespace SheepDoom
         }
 
         #endregion
-
+        [Server]
+        public void StartCharSelect(string _matchID)
+        {
+            ServerStartSetting(_matchID);
+            playersInScene = true;
+        }
         private void Start()
         {
-            if(isServer)
-                ServerStartSetting(SDSceneManager.instance.P_matchID);
+            timerText.text = "30";
             if(isClient)
                 ClientStartSetting();
         }
 
+        void Update()
+        {
+            if (isServer && playersInScene)
+            {
+                secondsTimer -= Time.deltaTime;
+                timePlaying = TimeSpan.FromSeconds(secondsTimer);
+                timePlayingStr = timePlaying.ToString("%s");
+                timerText.text = timePlayingStr;
+            }
+
+            if (isClient)
+                timerText.text = timePlayingStr;
+        }
+
         #region Server Functions
-        
+
         private void ServerStartSetting(string _matchID)
         {
             P_matchID = _matchID;
@@ -282,21 +309,21 @@ namespace SheepDoom
         private void SetUI_Hero(GameObject _player, string _heroName, bool _lockIn)
         {
             // will need to add another bool when hero lock-in is implemented
-            if(!_lockIn)
+            if (!_lockIn)
             {
                 Debug.Log("SETUI_HERO LOCK IN? NO...");
-                if(_heroName == string.Empty)
+                if (_heroName == string.Empty)
                     _player.GetComponent<PlayerLobbyUI>().P_playerCharacter.text = "Picking a Hero...";
                 else
                 {
-                    _player.GetComponent<PlayerLobbyUI>().P_playerCharacter.text = "Picking a Hero...("+_heroName+")";
+                    _player.GetComponent<PlayerLobbyUI>().P_playerCharacter.text = "Picking a Hero...(" + _heroName + ")";
                     _player.GetComponent<PlayerObj>().SetHeroName(_heroName);
                 }
             }
-            else if(_lockIn)
+            else if (_lockIn)
             {
                 Debug.Log("SETUI_HERO LOCK IN? YES! " + _heroName);
-                _player.GetComponent<PlayerLobbyUI>().P_playerCharacter.text = _heroName; // not working for some reason
+                _player.GetComponent<PlayerLobbyUI>().P_playerCharacter.text = _heroName;
             }
         }
 

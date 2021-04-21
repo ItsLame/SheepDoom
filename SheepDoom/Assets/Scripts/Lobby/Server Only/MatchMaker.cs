@@ -284,6 +284,7 @@ namespace SheepDoom
                 matches[_matchID].GetSDSceneManager().MoveToCharSelect(matches[_matchID].GetScenes()[1]);
                 foreach(GameObject player in matches[_matchID].GetPlayerObjList())
                     player.GetComponent<StartGame>().MoveToCharSelect(matches[_matchID].GetScenes()[1], _matchID);
+                matches[_matchID].GetCharacterSelectUIManager().StartCharSelect(_matchID);
             }
         }
 
