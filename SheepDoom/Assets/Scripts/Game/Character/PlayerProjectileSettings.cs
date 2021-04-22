@@ -115,10 +115,10 @@ namespace SheepDoom
             {
                 
                 //take damage
-                col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
-                col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
+ //               col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
+ //               col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
                 //inform that its under atk
-                col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
+ //               col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
                 
                 
 //                Debug.Log(owner + " hitting neutral minion");

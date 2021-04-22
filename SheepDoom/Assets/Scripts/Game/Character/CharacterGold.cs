@@ -21,6 +21,7 @@ namespace SheepDoom
         {
             if (hasAuthority)
             {
+                Debug.Log("Syncing Player Golds");
                 CurrentGoldUI.text = CurrentGold.ToString();
                 CurrentGoldInShopUI.text = CurrentGold.ToString();
             }
@@ -33,6 +34,7 @@ namespace SheepDoom
         }
 
         //gold number manipulation function
+        [Command]
         public void varyGold(float goldValueChange)
         {
             Debug.Log("Current Gold: " + CurrentGold);
