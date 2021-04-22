@@ -134,7 +134,6 @@ namespace SheepDoom
             else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 9)
             {
                 col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
-                col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().Murderer = owner;
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
                 if (destroyOnContact)
@@ -147,7 +146,6 @@ namespace SheepDoom
             else if (col.gameObject.CompareTag("MegaBoss"))
             {
                 col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
-                col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().Murderer = owner;
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
                 if (destroyOnContact)

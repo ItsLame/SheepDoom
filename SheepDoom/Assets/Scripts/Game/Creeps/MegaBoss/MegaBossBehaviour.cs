@@ -64,8 +64,6 @@ namespace SheepDoom
 
         [Space(15)]
         public GameObject targetObject;
-        public GameObject Murderer;
-        private Transform targetTransf;
         private bool isLockedOn = false;
         // public bool isplayer = false;
 
@@ -80,7 +78,6 @@ namespace SheepDoom
         {
 
             targetObject = null;
-            targetTransf = null;
             isLockedOn = false;
             charAnim = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
@@ -99,7 +96,6 @@ namespace SheepDoom
                 if (!isLockedOn)
                 {
                     targetObject = other.gameObject;
-                    targetTransf = targetObject.transform;
                     isLockedOn = true;
                 }
 
@@ -109,7 +105,6 @@ namespace SheepDoom
                 if (!isLockedOn)
                 {
                     targetObject = other.gameObject;
-                    targetTransf = targetObject.transform;
                     isLockedOn = true;
                 }
 
@@ -119,7 +114,6 @@ namespace SheepDoom
                 if (!isLockedOn)
                 {
                     targetObject = other.gameObject;
-                    targetTransf = targetObject.transform;
                     isLockedOn = true;
                 }
             }
@@ -128,7 +122,6 @@ namespace SheepDoom
                 if (!isLockedOn)
                 {
                     targetObject = other.gameObject;
-                    targetTransf = targetObject.transform;
                     isLockedOn = true;
                 }
             }
@@ -141,7 +134,6 @@ namespace SheepDoom
             {
                 // Debug.Log("Player " + other.gameObject.name + " has left minion zone");
                 targetObject = null;
-                targetTransf = null;
             }
         }
 
@@ -158,7 +150,6 @@ namespace SheepDoom
             {
                 agent.autoBraking = false;
                 targetObject = null;
-                targetTransf = null;
                 isLockedOn = false;
                 StartMovingToWayPoint();
                 return;
@@ -190,36 +181,10 @@ namespace SheepDoom
             {
                 // Debug.Log(this.gameObject.name + "has died");
 
-                //if a murderer is detected
-                if (Murderer != null)
-                {
-                    Murderer.GetComponent<CharacterGold>().varyGold(goldValue);
-                    Destroyy();
-                }
-
-                //if targetobject still around
-                if (targetObject == true)
-                {
-                    //if murderer not found, take the target that is locked on
-                    if (!Murderer)
-                    {
-                        if (targetObject.CompareTag("Player"))
-                        {
-                            Murderer = targetObject;
-                            Murderer.GetComponent<CharacterGold>().varyGold(goldValue);
-                        }
-                        Destroyy();
-                    }
-                }
 
                 Destroyy();
 
-                /*
-                else
-                {
-                    currenthealth = 0;
-                    Destroyy();
-                }*/
+
 
             }
 
@@ -227,9 +192,9 @@ namespace SheepDoom
 
         void ChasePlayer()
         {
-            if (targetTransf != null || targetObject != null)
+            if (targetObject != null)
             {
-                agent.SetDestination(targetTransf.position);
+                agent.SetDestination(targetObject.transform.position);
             }
 
 
@@ -239,12 +204,12 @@ namespace SheepDoom
             //Make sure enemy doesn't move
             agent.SetDestination(transform.position);
 
-            transform.LookAt(targetTransf);
+            transform.LookAt(targetObject.transform);
 
             if (!alreadyattacked)
             {
                 //Meele attack for dog
-                transform.LookAt(targetTransf);
+                transform.LookAt(targetObject.transform);
                 animator.SetTrigger("Attack");
                 animator.SetTrigger("AttackToIdle");
                 Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
@@ -265,11 +230,11 @@ namespace SheepDoom
             //Make sure enemy doesn't move
             agent.SetDestination(transform.position);
 
-            transform.LookAt(targetTransf);
+            transform.LookAt(targetObject.transform);
 
             if (!alreadyattacked)
             {
-                transform.LookAt(targetTransf);
+                transform.LookAt(targetObject.transform);
                 //Attack
                 Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
 
