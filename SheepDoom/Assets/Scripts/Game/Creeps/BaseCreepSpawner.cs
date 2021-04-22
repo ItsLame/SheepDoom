@@ -1,18 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 namespace SheepDoom
-{ 
-    public class BaseCreepSpawner : MonoBehaviour
+{
+    public class BaseCreepSpawner : NetworkBehaviour
     {
         private float nextspawntime;
 
         [SerializeField]
-        private GameObject Minionmelee;
+        private GameObject Minion;
         [SerializeField]
         private float spawndelay = 10;
-        private int noofenemies;
 
         private void Update()
         {
@@ -21,11 +21,13 @@ namespace SheepDoom
                 spawn();
             }
         }
-
+        [Server]
         private void spawn()
         {
             nextspawntime = Time.time + spawndelay;
-            Instantiate(Minionmelee, transform.position, transform.rotation);
+            GameObject creep = (GameObject)Instantiate(Minion, transform.position, transform.rotation);
+
+            NetworkServer.Spawn(creep);
         }
 
         private bool ShouldSpawn()

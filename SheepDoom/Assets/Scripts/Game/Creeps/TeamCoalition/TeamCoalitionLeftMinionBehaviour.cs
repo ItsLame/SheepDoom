@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using Mirror;
 
 namespace SheepDoom
 {
-    public class TeamCoalitionLeftMinionBehaviour : MonoBehaviour
+    public class TeamCoalitionLeftMinionBehaviour : NetworkBehaviour
     {
         [Space(15)]
         // Waypoint System
@@ -16,7 +17,7 @@ namespace SheepDoom
         private Vector3 target;
         private Vector3 direction;
         [Space(15)]
-        private Transform playerTransf;
+
         private NavMeshAgent agent;
         [Space(15)]
         public bool ismeleeattack = false;
@@ -33,7 +34,7 @@ namespace SheepDoom
         public float timeBetweenAttacks;
         bool alreadyattacked;
 
-        //states
+        //states 
         public float sightRange, attackRange;
         public bool playerInSightRange, playerInAttackRange;
 
@@ -56,55 +57,66 @@ namespace SheepDoom
         [Space(15)]
         //Health
         [SerializeField]
+        [SyncVar]
         private int maxHealth = 50;
+        [SyncVar]
         private int currenthealth;
         public float goldValue;
 
         [Space(15)]
-        GameObject player;
-        public bool isplayer = false;
-
+        public GameObject targetObject;
+        public GameObject Murderer;
+        private Transform targetTransf;
+        private bool isLockedOn = false;
+        // public bool isplayer = false;
         public event Action<float> OnHealthPctChanged = delegate { };
 
         void Start()
         {
-            player = null;
-            playerTransf = null;
+
+            targetObject = null;
+            targetTransf = null;
+            isLockedOn = false;
             charAnim = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
 
             currenthealth = maxHealth;
             currentPoint = StartIndex;
             StartMovingToWayPoint();
-            agent.autoBraking = false;
+            agent.autoBraking = true;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.layer == 9)
+            if (other.gameObject.tag == "TeamConsortiumRangeCreep")
             {
-                //   playerInView = true;
-                player = other.gameObject;
-                playerTransf = player.transform;
+                if (!isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    targetTransf = targetObject.transform;
+                    isLockedOn = true;
+                }
             }
             else if (other.gameObject.layer == 9 && other.gameObject.CompareTag("Player"))
             {
-                player = other.gameObject;
-                playerTransf = player.transform;
-                isplayer = true;
+                if (!isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    targetTransf = targetObject.transform;
+                    isLockedOn = true;
+                }
             }
         }
 
-        /*
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Player " + other.gameObject.name + " has left minion zone");
-                player = null;
-                playerTransf = null;
+                // Debug.Log("Player " + other.gameObject.name + " has left minion zone");
+                targetObject = null;
+                targetTransf = null;
             }
-        } */
+        }
 
         void Update()
         {
@@ -118,19 +130,23 @@ namespace SheepDoom
 
             if (target == null)
             {
-                player = null;
-                playerTransf = null;
+                targetObject = null;
+                targetTransf = null;
+                isLockedOn = false;
                 StartMovingToWayPoint();
                 return;
             }
 
             if (!playerInSightRange && !playerInAttackRange)
             {
+                agent.autoBraking = false;
                 StartMovingToWayPoint();
+                isLockedOn = false;
             }
 
             if (playerInSightRange && !playerInAttackRange)
             {
+                agent.autoBraking = false;
                 ChasePlayer();
             }
 
@@ -140,33 +156,54 @@ namespace SheepDoom
             }
             if (playerInAttackRange && playerInSightRange && ismeleeattack == true)
             {
-
                 MeleeAttackPlayer();
             }
 
             if (currenthealth <= 0)
             {
-                if (isplayer == true)
+                // Debug.Log(this.gameObject.name + "has died");
+                /*
+                //if a murderer is detected 
+                if (Murderer != null)
                 {
-                    //currenthealth = 0;
-                    player.GetComponent<CharacterGold>().varyGold(goldValue);
+                    Murderer.GetComponent<CharacterGold>().varyGold(goldValue);
                     Destroyy();
-
                 }
 
+                //if targetobject still around
+                if (targetObject == true)
+                {
+                    //if murderer not found, take the target that is locked on
+                    if (!Murderer)
+                    {
+                        if (targetObject.CompareTag("Player"))
+                        {
+                            Murderer = targetObject;
+                            Murderer.GetComponent<CharacterGold>().varyGold(goldValue);
+                        }
+                        Destroyy();
+                    }
+                } */
+
                 Destroyy();
+
+                /*
+                else
+                {
+                    currenthealth = 0;
+                    Destroyy();
+                }*/
+
             }
 
         }
-
         void ChasePlayer()
         {
 
-            if (playerTransf != null)
+            if (targetTransf != null || targetObject != null)
             {
-                agent.SetDestination(playerTransf.position);
+                agent.SetDestination(targetTransf.position);
             }
-
 
         }
         void MeleeAttackPlayer()
@@ -174,12 +211,12 @@ namespace SheepDoom
             //Make sure enemy doesn't move
             agent.SetDestination(transform.position);
 
-            transform.LookAt(playerTransf);
+            transform.LookAt(targetTransf);
 
             if (!alreadyattacked)
             {
                 //Meele attack for dog
-                transform.LookAt(playerTransf);
+                transform.LookAt(targetTransf);
                 animator.SetTrigger("Attack");
                 animator.SetTrigger("AttackToIdle");
                 Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
@@ -199,12 +236,12 @@ namespace SheepDoom
         {
             //Make sure enemy doesn't move
             agent.SetDestination(transform.position);
-
-            transform.LookAt(playerTransf);
+            agent.autoBraking = true;
+            transform.LookAt(targetTransf);
 
             if (!alreadyattacked)
             {
-                transform.LookAt(playerTransf);
+                transform.LookAt(targetTransf);
                 //Attack
                 Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
 
@@ -215,12 +252,10 @@ namespace SheepDoom
                 Invoke("ResetAttack", timeBetweenAttacks);
             }
         }
-
         void ResetAttack()
         {
             alreadyattacked = false;
         }
-
         void StartMovingToWayPoint()
         {
             if (currentPoint < waypoints.Length)
@@ -246,10 +281,9 @@ namespace SheepDoom
             float currenthealthPct = (float)currenthealth / (float)maxHealth;
             OnHealthPctChanged(currenthealthPct);
         }
-
         private void Destroyy()
         {
-            Destroy(this.gameObject);
+            NetworkServer.Destroy(this.gameObject);
         }
 
         private void OnDrawGizmosSelected()
@@ -260,5 +294,4 @@ namespace SheepDoom
             Gizmos.DrawWireSphere(transform.position, sightRange);
         }
     }
-
 }

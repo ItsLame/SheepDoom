@@ -17,6 +17,8 @@ TagManager:
   - Team1
   - lobbyPlayer
   - Other
+  - TeamConsortiumRangeCreep
+  - TeamCoalitionRangeCreep
   layers:
   - Default
   - TransparentFX

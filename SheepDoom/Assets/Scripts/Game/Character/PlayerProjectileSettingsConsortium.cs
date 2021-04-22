@@ -6,7 +6,7 @@ using Mirror;
 namespace SheepDoom
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerProjectileSettings : NetworkBehaviour
+    public class PlayerProjectileSettingsConsortium : NetworkBehaviour
     {
         //projectileOwner
         //[SyncVar] cant syncvar an object of type gameobject
@@ -131,12 +131,8 @@ namespace SheepDoom
 
             }
 
-            else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 8)
+            else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 9)
             {
-                
-                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
-                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().Murderer = owner;
-
                 col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
                 col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().Murderer = owner;
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);

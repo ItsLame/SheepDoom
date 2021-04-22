@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using Mirror;
 
 namespace SheepDoom
 {
-    public class TeamConsortiumLeftMinionBehaviour : MonoBehaviour
+    public class TeamConsortiumLeftMinionBehaviour : NetworkBehaviour
     {
         [Space(15)]
         // Waypoint System
         public Transform[] waypoints;
         public int StartIndex = 0;
         private int currentPoint = 0;
-        private Vector3 target;
-        private Vector3 direction;
+        [SyncVar] private Vector3 target;
+        [SyncVar] private Vector3 direction;
         [Space(15)]
 
         private NavMeshAgent agent;
@@ -56,18 +57,19 @@ namespace SheepDoom
         [Space(15)]
         //Health
         [SerializeField]
+        [SyncVar]
         private int maxHealth = 50;
+        [SyncVar]
         private int currenthealth;
+        [SyncVar]
         public float goldValue;
 
         [Space(15)]
-        public GameObject targetObject;
-        public GameObject Murderer;
-        private Transform targetTransf;
-        private bool isLockedOn = false;
+        [SyncVar] public GameObject targetObject;
+        [SyncVar] public GameObject Murderer;
+        [SyncVar] private Transform targetTransf;
+        [SyncVar] private bool isLockedOn = false;
         // public bool isplayer = false;
-
-
         public event Action<float> OnHealthPctChanged = delegate { };
 
         void Start()
@@ -87,7 +89,8 @@ namespace SheepDoom
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.layer == 8)
+
+            if (other.CompareTag("Player") && other.gameObject.layer == 8)
             {
                 if (!isLockedOn)
                 {
@@ -95,19 +98,18 @@ namespace SheepDoom
                     targetTransf = targetObject.transform;
                     isLockedOn = true;
                 }
-
             }
 
-            /*
-            else if (other.gameObject.layer == 8 && other.gameObject.CompareTag("Player"))
+            if (other.gameObject.tag == "TeamCoalitionRangeCreep")
             {
-                Debug.Log("Player Spotted By " + this.gameObject.name);
-                player = other.gameObject;
-                playerTransf = player.transform;
-                isplayer = true;
-            } */
+                if (!isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    targetTransf = targetObject.transform;
+                    isLockedOn = true;
+                }
+            }
         }
-
 
         private void OnTriggerExit(Collider other)
         {
@@ -140,12 +142,14 @@ namespace SheepDoom
 
             if (!playerInSightRange && !playerInAttackRange)
             {
+                agent.autoBraking = false;
                 StartMovingToWayPoint();
                 isLockedOn = false;
             }
 
             if (playerInSightRange && !playerInAttackRange)
             {
+                agent.autoBraking = false;
                 ChasePlayer();
             }
 
@@ -161,7 +165,7 @@ namespace SheepDoom
             if (currenthealth <= 0)
             {
                 // Debug.Log(this.gameObject.name + "has died");
-
+                /*
                 //if a murderer is detected 
                 if (Murderer != null)
                 {
@@ -182,7 +186,7 @@ namespace SheepDoom
                         }
                         Destroyy();
                     }
-                }
+                } */
 
                 Destroyy();
 
@@ -196,7 +200,6 @@ namespace SheepDoom
             }
 
         }
-
         void ChasePlayer()
         {
 
@@ -236,7 +239,7 @@ namespace SheepDoom
         {
             //Make sure enemy doesn't move
             agent.SetDestination(transform.position);
-
+            agent.autoBraking = true;
             transform.LookAt(targetTransf);
 
             if (!alreadyattacked)
@@ -252,12 +255,10 @@ namespace SheepDoom
                 Invoke("ResetAttack", timeBetweenAttacks);
             }
         }
-
         void ResetAttack()
         {
             alreadyattacked = false;
         }
-
         void StartMovingToWayPoint()
         {
             if (currentPoint < waypoints.Length)
@@ -283,10 +284,9 @@ namespace SheepDoom
             float currenthealthPct = (float)currenthealth / (float)maxHealth;
             OnHealthPctChanged(currenthealthPct);
         }
-
         private void Destroyy()
         {
-            Destroy(this.gameObject);
+            NetworkServer.Destroy(this.gameObject);
         }
 
         private void OnDrawGizmosSelected()

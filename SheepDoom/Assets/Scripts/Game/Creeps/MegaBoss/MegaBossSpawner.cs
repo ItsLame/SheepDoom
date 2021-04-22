@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class MegaBossSpawner : MonoBehaviour
+public class MegaBossSpawner : NetworkBehaviour
 {
     private float nextspawntime;
 
@@ -11,6 +12,12 @@ public class MegaBossSpawner : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(TimeUntilSpawn());
+
+    }
+    IEnumerator TimeUntilSpawn()
+    {
+        yield return new WaitForSeconds(20);
         Instantiate(Minionmelee, transform.position, transform.rotation);
     }
 

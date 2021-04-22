@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using Mirror;
 
 namespace SheepDoom
 {
 
-    public class MegaBossBehaviour : MonoBehaviour
+    public class MegaBossBehaviour : NetworkBehaviour
     {
         [Space(15)]
         // Waypoint System
@@ -103,15 +104,34 @@ namespace SheepDoom
                 }
 
             }
-
-            /*
-            else if (other.gameObject.layer == 8 && other.gameObject.CompareTag("Player"))
+            else if (other.gameObject.layer == 9 && other.CompareTag("Player"))
             {
-                Debug.Log("Player Spotted By " + this.gameObject.name);
-                player = other.gameObject;
-                playerTransf = player.transform;
-                isplayer = true;
-            } */
+                if (!isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    targetTransf = targetObject.transform;
+                    isLockedOn = true;
+                }
+
+            }
+            else if (other.gameObject.tag == "TeamCoalitionRangeCreep")
+            {
+                if (!isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    targetTransf = targetObject.transform;
+                    isLockedOn = true;
+                }
+            }
+            else if (other.gameObject.tag == "TeamConsortiumRangeCreep")
+            {
+                if (!isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    targetTransf = targetObject.transform;
+                    isLockedOn = true;
+                }
+            }
         }
 
 
@@ -136,6 +156,7 @@ namespace SheepDoom
 
             if (target == null)
             {
+                agent.autoBraking = false;
                 targetObject = null;
                 targetTransf = null;
                 isLockedOn = false;
@@ -152,6 +173,7 @@ namespace SheepDoom
 
             if (playerInSightRange && !playerInAttackRange)
             {
+                agent.autoBraking = false;
                 ChasePlayer();
             }
 
@@ -316,7 +338,7 @@ namespace SheepDoom
         }
         IEnumerator TimeUntilAggressivemode()
         {
-            yield return new WaitForSeconds(60);
+            yield return new WaitForSeconds(20);
             passivestate = false;
             agent.autoBraking = false;
         }
