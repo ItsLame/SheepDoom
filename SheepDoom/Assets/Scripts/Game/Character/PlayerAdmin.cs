@@ -142,6 +142,8 @@ namespace SheepDoom
             //GameObject shop2 = GameObject.Find("RedShop");
             GameObject shop2 = FindMe.instance.P_RedShop;
             shop2.gameObject.GetComponent<Shop>().Player = this.gameObject;
+
+
         }
 
         public override void OnStartServer()

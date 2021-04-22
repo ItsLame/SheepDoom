@@ -14,6 +14,11 @@ public class ShopLookAt : MonoBehaviour
         {
             transform.LookAt(playerWhoIsLookedAt.transform);
         }
+
+        else
+        {
+            playerInView = false;
+        }
     }
 
     private void OnTriggerEnter(Collider other)

@@ -34,7 +34,7 @@ namespace SheepDoom
         }
 
         //gold number manipulation function
-        [Command]
+//        [Command]
         public void varyGold(float goldValueChange)
         {
             Debug.Log("Current Gold: " + CurrentGold);

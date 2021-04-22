@@ -18,7 +18,7 @@ namespace SheepDoom
         private Vector3 direction;
         [Space(15)]
 
-        private NavMeshAgent agent;
+        public NavMeshAgent agent;
         [Space(15)]
         public bool ismeleeattack = false;
         Animator charAnim;
@@ -31,8 +31,8 @@ namespace SheepDoom
         public float CreepMoveSpeed = 2.0f;
 
         //Attacking
-        public float timeBetweenAttacks;
-        bool alreadyattacked;
+        [SyncVar] public float timeBetweenAttacks;
+        [SyncVar] bool alreadyattacked;
 
         //states 
         public float sightRange, attackRange;
@@ -58,22 +58,22 @@ namespace SheepDoom
         //Health
         [SerializeField]
         [SyncVar]
-        private int maxHealth = 50;
-        [SyncVar]
-        private int currenthealth;
+        public float maxHealth;
+        
+        [SyncVar] public float currenthealth;
         public float goldValue;
 
         [Space(15)]
         public GameObject targetObject;
         public GameObject Murderer;
         private Transform targetTransf;
-        private bool isLockedOn = false;
+        [SyncVar] private bool isLockedOn = false;
         // public bool isplayer = false;
+
         public event Action<float> OnHealthPctChanged = delegate { };
 
         void Start()
         {
-
             targetObject = null;
             targetTransf = null;
             isLockedOn = false;
@@ -97,7 +97,8 @@ namespace SheepDoom
                     isLockedOn = true;
                 }
             }
-            else if (other.gameObject.layer == 9 && other.gameObject.CompareTag("Player"))
+
+            else if (other.gameObject.layer == 9 && other.gameObject.CompareTag("Player") && !other.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if (!isLockedOn)
                 {
@@ -110,17 +111,24 @@ namespace SheepDoom
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("Player") && other.gameObject.layer == 9)
             {
-                // Debug.Log("Player " + other.gameObject.name + " has left minion zone");
-                targetObject = null;
-                targetTransf = null;
+                goBackToTravelling();
             }
+        }
+
+        //go back to patrol when player is dead
+        public void goBackToTravelling()
+        {
+            isLockedOn = false;
+            targetObject = null;
+            targetTransf = null;
+            agent.autoBraking = false;
+            StartMovingToWayPoint();
         }
 
         void Update()
         {
-
             // dist = Vector3.Distance(playerTransf.position, transform.position);
             //Check if Player in sightrange
             playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
@@ -137,11 +145,9 @@ namespace SheepDoom
                 return;
             }
 
-            if (!playerInSightRange && !playerInAttackRange)
+            if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
             {
-                agent.autoBraking = false;
-                StartMovingToWayPoint();
-                isLockedOn = false;
+                goBackToTravelling();
             }
 
             if (playerInSightRange && !playerInAttackRange)
@@ -162,44 +168,14 @@ namespace SheepDoom
             if (currenthealth <= 0)
             {
                 // Debug.Log(this.gameObject.name + "has died");
-                /*
-                //if a murderer is detected 
-                if (Murderer != null)
-                {
-                    Murderer.GetComponent<CharacterGold>().varyGold(goldValue);
-                    Destroyy();
-                }
-
-                //if targetobject still around
-                if (targetObject == true)
-                {
-                    //if murderer not found, take the target that is locked on
-                    if (!Murderer)
-                    {
-                        if (targetObject.CompareTag("Player"))
-                        {
-                            Murderer = targetObject;
-                            Murderer.GetComponent<CharacterGold>().varyGold(goldValue);
-                        }
-                        Destroyy();
-                    }
-                } */
 
                 Destroyy();
-
-                /*
-                else
-                {
-                    currenthealth = 0;
-                    Destroyy();
-                }*/
 
             }
 
         }
         void ChasePlayer()
         {
-
             if (targetTransf != null || targetObject != null)
             {
                 agent.SetDestination(targetTransf.position);
@@ -243,19 +219,27 @@ namespace SheepDoom
             {
                 transform.LookAt(targetTransf);
                 //Attack
-                Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+                FireProjectile();
 
-                rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-                //    rb.AddForce(transform.up * 8, ForceMode.Impulse);
-
-                alreadyattacked = true;
                 Invoke("ResetAttack", timeBetweenAttacks);
             }
         }
+
+        [Server]
+        public void FireProjectile()
+        {
+            GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
+            FiredProjectile.gameObject.GetComponent<TeamCoalitionCreepProjectilesettings>().setOwner(this.gameObject);
+            NetworkServer.Spawn(FiredProjectile);
+            alreadyattacked = true;
+        }
+
+        [Server]
         void ResetAttack()
         {
             alreadyattacked = false;
         }
+
         void StartMovingToWayPoint()
         {
             if (currentPoint < waypoints.Length)
@@ -274,13 +258,32 @@ namespace SheepDoom
             agent.speed = CreepMoveSpeed;
 
         }
-        public void TakeDamage(int damage)
+        public void TakeDamage(float damage)
         {
-            currenthealth += damage;
-
-            float currenthealthPct = (float)currenthealth / (float)maxHealth;
-            OnHealthPctChanged(currenthealthPct);
+            if (isServer)
+            {
+                currenthealth += damage;
+  //              RpcUpdateMinionHp();
+                float currenthealthPct = (float)currenthealth / (float)maxHealth;
+                OnHealthPctChanged(currenthealthPct);
+            }
         }
+
+        /*
+        [ClientRpc]
+        void RpcUpdateMinionHp()
+        {
+            StartCoroutine(WaitForUpdate(currenthealth));
+        }
+
+        private IEnumerator WaitForUpdate(float _oldcurrenthealth)
+        {
+            while (currenthealth == _oldcurrenthealth)
+            {
+                yield return null;
+            }
+        }*/
+
         private void Destroyy()
         {
             NetworkServer.Destroy(this.gameObject);
@@ -292,6 +295,11 @@ namespace SheepDoom
             Gizmos.DrawWireSphere(transform.position, attackRange);
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, sightRange);
+        }
+
+        public float getHealth()
+        {
+            return currenthealth;
         }
     }
 }

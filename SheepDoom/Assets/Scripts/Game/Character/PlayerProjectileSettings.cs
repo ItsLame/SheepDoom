@@ -131,14 +131,33 @@ namespace SheepDoom
 
             }
 
-            else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 8)
+            else if (col.gameObject.CompareTag("BaseMinion"))
             {
-                
-                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
-                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().Murderer = owner;
+                if (col.gameObject.layer == 8)
+                {
+                    GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
+                    target.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
+                    if (target.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().getHealth() <= 0)
+                    {
+                        owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                    }
+                }
 
-                col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
-                col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().Murderer = owner;
+                if (col.gameObject.layer == 9)
+                {
+                    GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
+                    target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
+                    if (target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().getHealth() <= 0)
+                    {
+                        owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                    }
+                }
+
+                //                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
+                //                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().Murderer = owner;
+
+                //                col.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
+                //                col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().Murderer = owner;
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
                 if (destroyOnContact)
@@ -148,6 +167,7 @@ namespace SheepDoom
                 }
 
             }
+
             else if (col.gameObject.CompareTag("MegaBoss"))
             {
                 col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
