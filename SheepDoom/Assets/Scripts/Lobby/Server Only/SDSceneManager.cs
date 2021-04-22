@@ -110,27 +110,11 @@ namespace SheepDoom
                 while (!asyncLoadCharSelect.isDone)
                     yield return null;
 
-                // beware.. very complicated
-                foreach (KeyValuePair<string, Match> entry in MatchMaker.instance.GetMatches())
-                {
-                    GameObject sdSceneManagerLocation = entry.Value.GetSDSceneManager().gameObject;
-                    if (entry.Value.GetScenes().Contains(sdSceneManagerLocation.scene)) 
-                    {
-                        if(entry.Value.GetScenes().Count == 2 && entry.Value.GetScenes()[1] == sdSceneManagerLocation.scene)
-                            lobbyUnloadedCount++;
-                        else if(entry.Value.GetScenes().Count == 3 && entry.Value.GetScenes()[2] == sdSceneManagerLocation.scene)
-                        {
-                            lobbyUnloadedCount++;
-                            charSelectUnloadedCount++;
-                        }
-                    }
-                }
-
-                newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - (lobbyUnloadedCount + charSelectUnloadedCount) - 1);
-                newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - (lobbyUnloadedCount + charSelectUnloadedCount));
-                // newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - (lobbyUnloadedCount + charSelectUnloadedCount) - 2);
-                // newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - (lobbyUnloadedCount + charSelectUnloadedCount) - 1);
-                // newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - (lobbyUnloadedCount + charSelectUnloadedCount));
+                newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - MatchMaker.instance.GetScenesUnloadedCount() - 1);
+                newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - MatchMaker.instance.GetScenesUnloadedCount());
+                // newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 2);
+                // newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 1);
+                // newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount());
 
                 // set scene in matches
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newLobbyScene);

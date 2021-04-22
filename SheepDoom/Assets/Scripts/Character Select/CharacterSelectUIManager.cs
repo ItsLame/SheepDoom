@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        private float secondsTimer = 30;
+        private float secondsTimer = 60;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
@@ -40,7 +40,7 @@ namespace SheepDoom
         //room matchID
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
-        [SyncVar] private string timePlayingStr = "30";
+        [SyncVar] private string timePlayingStr = "60";
 
 
         #region Properties
@@ -96,7 +96,6 @@ namespace SheepDoom
         }
         private void Start()
         {
-            timerText.text = "30";
             if(isClient)
                 ClientStartSetting();
         }

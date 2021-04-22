@@ -186,9 +186,35 @@ namespace SheepDoom
             instance = this;
         }
 
+        private int ScenesUnloadedCount()
+        {
+            int lobbyUnloadedCount = 0;
+            int charSelectUnloadedCount = 0;
+            foreach(KeyValuePair<string, Match> entry in matches)
+            {
+                GameObject sdSceneManagerLocation = entry.Value.GetSDSceneManager().gameObject;
+                if (entry.Value.GetScenes().Contains(sdSceneManagerLocation.scene))
+                {
+                    if (entry.Value.GetScenes().Count == 2 && entry.Value.GetScenes()[1] == sdSceneManagerLocation.scene)
+                        lobbyUnloadedCount++;
+                    else if (entry.Value.GetScenes().Count == 3 && entry.Value.GetScenes()[2] == sdSceneManagerLocation.scene)
+                    {
+                        lobbyUnloadedCount++;
+                        charSelectUnloadedCount++;
+                    }
+                }
+            }
+            return lobbyUnloadedCount + charSelectUnloadedCount;
+        }
+
         public SyncDictionary<string, Match> GetMatches()
         {
             return matches;
+        }
+
+        public int GetScenesUnloadedCount()
+        {
+            return ScenesUnloadedCount();
         }
 
         //generate random match ID
