@@ -60,7 +60,7 @@ namespace SheepDoom
         [SyncVar]
         public float maxHealth;
         
-        [SyncVar] public float currenthealth;
+        [SyncVar(hook = nameof(SyncHealth))] public float currenthealth;
         public float goldValue;
 
         [Space(15)]
@@ -69,6 +69,11 @@ namespace SheepDoom
         // public bool isplayer = false;
 
         public event Action<float> OnHealthPctChanged = delegate { };
+
+        public void SyncHealth(float oldvalue, float newvalue)
+        {
+            Debug.Log("Minion HP: " + oldvalue + " to " + newvalue);
+        }
 
         void Start()
         {
@@ -203,6 +208,12 @@ namespace SheepDoom
 
         void RangedAttackPlayer()
         {
+            if (!targetObject)
+            {
+                goBackToTravelling();
+            }
+
+            else 
             //Make sure enemy doesn't move
             agent.SetDestination(transform.position);
             agent.autoBraking = true;

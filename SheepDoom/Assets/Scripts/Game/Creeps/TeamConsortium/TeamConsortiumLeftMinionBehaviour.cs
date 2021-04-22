@@ -207,19 +207,28 @@ namespace SheepDoom
 
         void RangedAttackPlayer()
         {
-            //Make sure enemy doesn't move
-            agent.SetDestination(transform.position);
-            agent.autoBraking = true;
-            transform.LookAt(targetObject.transform);
-
-            if (!alreadyattacked)
+            if (!targetObject)
             {
-                transform.LookAt(targetObject.transform);
-                //Attack
-                FireProjectile();
-
-                Invoke("ResetAttack", timeBetweenAttacks);
+                goBackToTravelling();
             }
+
+            else
+            {
+                //Make sure enemy doesn't move
+                agent.SetDestination(transform.position);
+                agent.autoBraking = true;
+                transform.LookAt(targetObject.transform);
+
+                if (!alreadyattacked)
+                {
+                    transform.LookAt(targetObject.transform);
+                    //Attack
+                    FireProjectile();
+
+                    Invoke("ResetAttack", timeBetweenAttacks);
+                }
+            }
+
         }
 
         [Server]
