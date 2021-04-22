@@ -57,9 +57,9 @@ namespace SheepDoom
         void Start()
         {
             if (!hasAuthority) return;
-            cooldown1_inGame = cooldown1;
-            cooldown2_inGame = cooldown2;
-            cooldown3_inGame = cooldown3;
+            cooldown1_inGame = 0;
+            cooldown2_inGame = 0;
+            cooldown3_inGame = 0;
 
         }
 

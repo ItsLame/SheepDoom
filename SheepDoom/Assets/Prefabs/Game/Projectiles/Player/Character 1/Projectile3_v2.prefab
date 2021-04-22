@@ -134,13 +134,13 @@ MonoBehaviour:
   damage: 40
   destroyOnContact: 0
   m_Speed: 0.01
-  m_Lifespan: 10
+  m_Lifespan: 7
   isAccelerating: 1
   isDeccelerating: 0
-  accelerationRate: 0.2
+  accelerationRate: 0.3
   deccelerationRate: 0
   accelMultiplierOn: 1
-  accelMultiplier: 2.24
+  accelMultiplier: 2.5
   hasSpeedLimit: 1
   speedLimit: 300
   SlowDebuff: 0
