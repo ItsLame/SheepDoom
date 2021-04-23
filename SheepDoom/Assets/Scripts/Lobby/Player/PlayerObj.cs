@@ -17,10 +17,9 @@ namespace SheepDoom
         [SerializeField]
         [SyncVar] private string matchID;
         [SyncVar] private int teamIndex = 0;
-        [SyncVar] private int playerSortIndex = 0;
-        [SyncVar] private bool updateCount = false;
         [SyncVar] private bool isHost = false;
         [SyncVar] private bool isReady = false;
+        [SyncVar] private bool isLockedIn = false;
         [SyncVar] private string heroName;
 
         #region Get
@@ -39,11 +38,6 @@ namespace SheepDoom
             return teamIndex;
         }
 
-        public int GetPlayerSortIndex()
-        {
-            return playerSortIndex;
-        }
-
         public bool GetIsHost()
         {
             return isHost;
@@ -54,14 +48,14 @@ namespace SheepDoom
             return isReady;
         }
 
-        public bool GetUpdateCount()
-        {
-            return updateCount;
-        }
-
         public string GetHeroName()
         {
             return heroName;
+        }
+
+        public bool GetIsLockedIn()
+        {
+            return isLockedIn;
         }
 
         #endregion
@@ -90,11 +84,6 @@ namespace SheepDoom
             teamIndex = _teamIndex;
         }
 
-        public void SetPlayerSortIndex(int _playerSortIndex)
-        {
-            playerSortIndex = _playerSortIndex;
-        }
-
         public void SetIsHost(bool _isHost)
         {
             isHost = _isHost;
@@ -108,6 +97,11 @@ namespace SheepDoom
         public void SetHeroName(string _heroName)
         {
             heroName = _heroName;
+        }
+
+        public void SetIsLockedIn(bool _isLockedIn)
+        {
+            isLockedIn = _isLockedIn;
         }
 
         #endregion
@@ -162,13 +156,11 @@ namespace SheepDoom
             if (GetTeamIndex() == 1)
             {
                 MatchMaker.instance.GetMatches()[GetMatchID()].MinusTeam1Count();
-                SetPlayerSortIndex(0);
                 SetTeamIndex(0);
             }
             else if (GetTeamIndex() == 2)
             {
                 MatchMaker.instance.GetMatches()[GetMatchID()].MinusTeam2Count();
-                SetPlayerSortIndex(0);
                 SetTeamIndex(0);
             }
             if (MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Contains(gameObject))

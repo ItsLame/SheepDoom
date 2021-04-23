@@ -37,6 +37,9 @@ namespace SheepDoom
         [SerializeField] private GameObject bowser;
         [SerializeField] private GameObject peach;
         [SerializeField] private GameObject yoshi;
+        private SyncList<string> team1PickedHeroes = new SyncList<string>();
+        private SyncList<string> team2PickedHeroes = new SyncList<string>();
+        private SyncList<GameObject> notLockedInPlayers = new SyncList<GameObject>();
         //room matchID
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
@@ -104,10 +107,17 @@ namespace SheepDoom
         {
             if (isServer && playersInScene)
             {
-                secondsTimer -= Time.deltaTime;
-                timePlaying = TimeSpan.FromSeconds(secondsTimer);
-                timePlayingStr = timePlaying.ToString("%s");
-                timerText.text = timePlayingStr;
+                if(secondsTimer > 0)
+                {
+                    secondsTimer -= Time.deltaTime;
+                    timePlaying = TimeSpan.FromSeconds(secondsTimer);
+                    timePlayingStr = timePlaying.ToString("%s");
+                    timerText.text = timePlayingStr;
+                }
+                else
+                {
+                    // random lockin for players who havent locked in, then start game
+                }
             }
 
             if (isClient)
@@ -123,7 +133,7 @@ namespace SheepDoom
         }
 
         [Command(ignoreAuthority = true)]
-        private void CmdRequestCharSelectUpdate(GameObject _player, string _heroName, int _teamIndex, bool _init, bool _lockIn)
+        private void CmdRequestCharSelectUpdate(GameObject _player, string _heroName, int _teamIndex, bool _init, bool _lockIn, bool _isGameStart)
         {
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
             {
@@ -141,8 +151,9 @@ namespace SheepDoom
                     bool _isOwner = false;
 
                     MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();   // lock in true, count lock in ++
-
-                    foreach(var player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
+                    _player.GetComponent<PlayerObj>().SetIsLockedIn(true);
+                    SetUI_Hero(_player, _heroName, _lockIn);
+                    foreach (var player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
                     {
                         if(player.GetComponent<PlayerObj>().GetTeamIndex() == _teamIndex)
                         {
@@ -168,6 +179,36 @@ namespace SheepDoom
             }
         }
 
+        [Server] // based on timer
+        private void RequestGameStart()
+        {
+            if(MatchMaker.instance.GetMatches()[P_matchID].GetLockInCount() != MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count) // check whether all locked in
+            {
+                foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
+                {
+                    if (_player.GetComponent<PlayerObj>().GetIsLockedIn())
+                    {
+                        string _heroName = _player.GetComponent<PlayerObj>().GetHeroName();
+                        if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                            team1PickedHeroes.Add(_heroName);
+                        else if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                            team2PickedHeroes.Add(_heroName);
+                    }
+                    else if(!_player.GetComponent<PlayerObj>().GetIsLockedIn())
+                        notLockedInPlayers.Add(_player);
+                }
+
+                // in for loop with notlockedinplayers.count
+                // do
+                //random a number 1-5
+                // if 1 = mario, 2 = bowser, 3 = luigi, 4 = peach, 5 = yoshi
+                // 
+                // while hero in pickedheroes
+            }
+            //else
+                // start game smoothly
+        }
+
         #endregion
 
         #region Client Functions
@@ -179,7 +220,7 @@ namespace SheepDoom
             lockInButton.GetComponent<Button>().interactable = false;   // false since haven't setup hero UI yet (prevent null lock in)
 
             if(_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestCharSelectUpdate(_player, string.Empty, _teamIndex, true, false);  // 4th parameter set to true to set initial settings
+                CmdRequestCharSelectUpdate(_player, string.Empty, _teamIndex, true, false, false);  // 4th parameter set to true to set initial settings
         }
 
         [Client]
@@ -189,7 +230,7 @@ namespace SheepDoom
             int _teamIndex = _player.GetComponent<PlayerObj>().GetTeamIndex();
 
             if(_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestCharSelectUpdate(_player, _heroName, _teamIndex, false, _lockIn); // 5th parameter set to true to start lock in request
+                CmdRequestCharSelectUpdate(_player, _heroName, _teamIndex, false, _lockIn, false); // 5th parameter set to true to start lock in request
         }
 
         public void LockInHero()
@@ -248,7 +289,6 @@ namespace SheepDoom
                         hero = new Yoshi(yoshi.GetComponent<Yoshi>(), _lockIn, hero.GetComponent<Image>());
                         break;
                 }
-                
                 //Debug.Log("TARGET UPDATE ISOWNER? " + _isOwner);
                 //Debug.Log("TARGET UPDATE PLAYER: " + _player.GetComponent<PlayerObj>().GetPlayerName() + " of team " +_player.GetComponent<PlayerObj>().GetTeamIndex());
 
@@ -322,6 +362,7 @@ namespace SheepDoom
             else if (_lockIn)
             {
                 Debug.Log("SETUI_HERO LOCK IN? YES! " + _heroName);
+                _player.GetComponent<PlayerObj>().SetHeroName(_heroName);
                 _player.GetComponent<PlayerLobbyUI>().P_playerCharacter.text = _heroName;
             }
         }

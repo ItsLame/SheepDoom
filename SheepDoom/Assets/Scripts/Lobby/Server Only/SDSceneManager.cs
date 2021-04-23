@@ -95,10 +95,6 @@ namespace SheepDoom
         {
             if (!scenesLoaded)
             {
-                // local variables to track how many scenes have been unloaded on server
-                int lobbyUnloadedCount = 0;
-                int charSelectUnloadedCount = 0;
-
                 // latest loaded scene on client will be the active scene i think
                 // load lobby scene
                 AsyncOperation asyncLoadLobby = SceneManager.LoadSceneAsync(_lobbyScene, LoadSceneMode.Additive);

@@ -257,10 +257,7 @@ namespace SheepDoom
                 matches.Add(_matchID, newMatch);
                 newMatch.GetSDSceneManager().StartScenes(conn);
                 newMatch.GetSDSceneManager().P_matchID = _matchID;
-
-                _player.GetComponent<PlayerObj>().SetTeamIndex(1);          // syncvared
-                _player.GetComponent<PlayerObj>().SetPlayerSortIndex(1);    // syncvared
-
+                _player.GetComponent<PlayerObj>().SetTeamIndex(1); // syncvared
                 return true;
             }
             else
@@ -279,16 +276,12 @@ namespace SheepDoom
                 if(matches[_matchID].GetTeam1Count() < 3)
                 {
                     matches[_matchID].AddTeam1Count();
-
                     _player.GetComponent<PlayerObj>().SetTeamIndex(1);
-                    _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[_matchID].GetTeam1Count());
                 }
                 else if(matches[_matchID].GetTeam2Count() < 3)
                 {
                     matches[_matchID].AddTeam2Count();
-
                     _player.GetComponent<PlayerObj>().SetTeamIndex(2);
-                    _player.GetComponent<PlayerObj>().SetPlayerSortIndex(matches[_matchID].GetTeam2Count());
                 }
 
                 Debug.Log("JOINED! TEAM1COUNT: " + matches[_matchID].GetTeam1Count());
