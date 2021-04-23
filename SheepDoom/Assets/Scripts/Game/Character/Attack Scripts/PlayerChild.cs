@@ -10,7 +10,7 @@ namespace SheepDoom
         //how long the child will be active for
         public float duration;
         public float durationInGame;
-        public bool isDisabled;
+        public bool isDisabled = false;
 
         // Start is called before the first frame update
         void Start()

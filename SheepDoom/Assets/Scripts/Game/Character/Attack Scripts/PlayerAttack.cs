@@ -130,13 +130,13 @@ namespace SheepDoom
  
                     if (meleeCombo == 1)
                     {
-                        TargetMeleeAttack(connectionToClient, "right");
+                        TargetMeleeAttack(/*connectionToClient,*/ "right");
                         meleeCombo = 2;
                     }
 
                     else if (meleeCombo == 2)
                     {
-                        TargetMeleeAttack(connectionToClient, "left");
+                        TargetMeleeAttack(/*connectionToClient,*/ "left");
                         meleeCombo = 1;
                     }
 
@@ -147,19 +147,13 @@ namespace SheepDoom
 
         }
 
-        [TargetRpc]
-        void TargetMeleeAttack(NetworkConnection conn, string _meleeAtkDirection)
+ //       [TargetRpc]
+        void TargetMeleeAttack(/*NetworkConnection conn,*/ string _meleeAtkDirection)
         {
             MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, _meleeAtkDirection);
         }
 
-        [TargetRpc]
-        void TargetActivateChild1(NetworkConnection conn)
-        {
-            SkillChild.GetComponent<MeshRenderer>().enabled = true;
-            SkillChild.GetComponent<BoxCollider>().enabled = true;
-            SkillChild.GetComponent<PlayerChild>().refreshDuration();
-        }
+
 
         //if special skill is pressed
         [Command]
@@ -187,7 +181,8 @@ namespace SheepDoom
 
                             else if (isSpecial1Child)
                             {
-                                TargetActivateChild1(connectionToClient);
+                                TargetActivateChild1_Clients();
+                                TargetActivateChild1_Server();
                                 cooldown2_inGame = cooldown2;
                             }
 
@@ -346,6 +341,23 @@ namespace SheepDoom
             {
                 cooldown3_inGame -= Time.deltaTime;
             }
+        }
+
+        [ClientRpc]
+        void TargetActivateChild1_Clients()
+        {
+            SkillChild.GetComponent<MeshRenderer>().enabled = true;
+            SkillChild.GetComponent<BoxCollider>().enabled = true;
+            SkillChild.GetComponent<PlayerChild>().refreshDuration();
+
+        }
+
+        void TargetActivateChild1_Server()
+        {
+            SkillChild.GetComponent<MeshRenderer>().enabled = true;
+            SkillChild.GetComponent<BoxCollider>().enabled = true;
+            SkillChild.GetComponent<PlayerChild>().refreshDuration();
+
         }
     }
 }
