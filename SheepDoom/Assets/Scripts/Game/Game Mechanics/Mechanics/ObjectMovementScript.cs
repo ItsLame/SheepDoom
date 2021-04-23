@@ -27,9 +27,9 @@ namespace SheepDoom
         public bool isGoingBack = false;
 
         [Header("Timing Properties")]
-        public float currentTimer;
-        public bool isMoving = false;
-        public bool stop = false;
+        [SyncVar] public float currentTimer;
+        [SyncVar] public bool isMoving = false;
+        [SyncVar] public bool stop = false;
 
         // Start is called before the first frame update
         void Start()
@@ -38,153 +38,6 @@ namespace SheepDoom
 
         }
 
-
-
-        // NOT WORKING NOT WORKING NOT WORKING to call the movements n execute them step by step
-        // DIRECTIONS: up, down, left, right, straight, back
-        // TIME means how long u want it to go
-        // numberOfMovements = how many repetitions
-        public void SetMovement(float numberOfMovements, string firstMovement, string secondMovement, string thirdMovement, float firstTime, float secondTime, float thirdTime)
-        {
-            float movementsLeft = numberOfMovements;
-
-            while (movementsLeft != 0)
-            {
-                currentTimer = firstTime;
-                isMoving = true;
-
-                //first movement
-                if (currentTimer >= 0)
-                {
-                    switch (firstMovement)
-                    {
-
-                        case "up":
-                            isGoingUp = true;
-                            break;
-
-                        case "down":
-                            isGoingDown = true;
-                            break;
-
-                        case "left":
-                            isGoingLeft = true;
-                            break;
-
-                        case "right":
-                            isGoingRight = true;
-                            break;
-
-                        case "straight":
-                            isGoingStraight = true;
-                            break;
-
-                        case "back":
-                            isGoingBack = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                currentTimer = secondTime;
-
-                if (currentTimer >= 0)
-                {
-                    switch (secondMovement)
-                    {
-                        case "up":
-                            isGoingUp = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "down":
-                            isGoingDown = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "left":
-                            isGoingLeft = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "right":
-                            isGoingRight = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "straight":
-                            isGoingStraight = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "back":
-                            isGoingBack = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                currentTimer = thirdTime;
-
-                if (currentTimer >= 0)
-                {
-                    switch (thirdMovement)
-                    {
-                        case "up":
-                            isGoingUp = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "down":
-                            isGoingDown = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "left":
-                            isGoingLeft = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "right":
-                            isGoingRight = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "straight":
-                            isGoingStraight = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        case "back":
-                            isGoingBack = true;
-                            currentTimer = firstTime;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-
-                movementsLeft -= 1;
-            }
-
-            stop = true;
-
-            //reset position
-            //           this.gameObject.transform.position = originalTransform.position;
-
-            //turn off object renderer
-  //                     this.gameObject.GetComponent<MeshRenderer>().enabled = false;
-
-            //turn off hitbox script
-    //          this.gameObject.GetComponent<OnTouchHealth>().enabled = false;
-        }
 
         //for singular movement
         public void move(float time, string direction)
@@ -415,4 +268,152 @@ public bool isGoingStraight;
 public float goStraightTimer;
 
 public bool isGoingBack;
-public float goBackTimer;*/
+public float goBackTimer;
+
+ 
+        // NOT WORKING NOT WORKING NOT WORKING to call the movements n execute them step by step
+        // DIRECTIONS: up, down, left, right, straight, back
+        // TIME means how long u want it to go
+        // numberOfMovements = how many repetitions
+        public void SetMovement(float numberOfMovements, string firstMovement, string secondMovement, string thirdMovement, float firstTime, float secondTime, float thirdTime)
+        {
+            float movementsLeft = numberOfMovements;
+
+            while (movementsLeft != 0)
+            {
+                currentTimer = firstTime;
+                isMoving = true;
+
+                //first movement
+                if (currentTimer >= 0)
+                {
+                    switch (firstMovement)
+                    {
+
+                        case "up":
+                            isGoingUp = true;
+                            break;
+
+                        case "down":
+                            isGoingDown = true;
+                            break;
+
+                        case "left":
+                            isGoingLeft = true;
+                            break;
+
+                        case "right":
+                            isGoingRight = true;
+                            break;
+
+                        case "straight":
+                            isGoingStraight = true;
+                            break;
+
+                        case "back":
+                            isGoingBack = true;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                currentTimer = secondTime;
+
+                if (currentTimer >= 0)
+                {
+                    switch (secondMovement)
+                    {
+                        case "up":
+                            isGoingUp = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "down":
+                            isGoingDown = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "left":
+                            isGoingLeft = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "right":
+                            isGoingRight = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "straight":
+                            isGoingStraight = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "back":
+                            isGoingBack = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                currentTimer = thirdTime;
+
+                if (currentTimer >= 0)
+                {
+                    switch (thirdMovement)
+                    {
+                        case "up":
+                            isGoingUp = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "down":
+                            isGoingDown = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "left":
+                            isGoingLeft = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "right":
+                            isGoingRight = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "straight":
+                            isGoingStraight = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        case "back":
+                            isGoingBack = true;
+                            currentTimer = firstTime;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+
+                movementsLeft -= 1;
+            }
+
+            stop = true;
+
+            //reset position
+            //           this.gameObject.transform.position = originalTransform.position;
+
+            //turn off object renderer
+  //                     this.gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+            //turn off hitbox script
+    //          this.gameObject.GetComponent<OnTouchHealth>().enabled = false;
+        }
+ */

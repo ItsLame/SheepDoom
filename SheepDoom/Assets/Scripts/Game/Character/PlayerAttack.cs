@@ -105,15 +105,11 @@ namespace SheepDoom
                 else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
                 {
                     Debug.Log("Melee Normal Atk");
-                    //turn on object renderer
-                    //                   MeleeAttackObject.gameObject.GetComponent<MeshRenderer>().enabled = true;
 
                     //turn on hitbox script
                     MeleeAttackObject.gameObject.GetComponent<OnTouchHealth>().hitboxActive = true;
 
-                    //move it
-                    MeleeAttackObject.GetComponent<ObjectMovementScript>().moveSpd = 120;
-
+ 
                     if (meleeCombo == 1)
                     {
                         MeleeAttackObject.GetComponent<ObjectMovementScript>().move(0.2f, "right");
@@ -128,9 +124,6 @@ namespace SheepDoom
 
                     //resetcd
                     cooldown1_inGame = cooldown1;
-
- //                                      MeleeAttackObject.gameObject.GetComponent<OnTouchHealth>().enabled = false;
-                    //                   MeleeAttackObject.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 }
             }
 
