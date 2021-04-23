@@ -14,7 +14,7 @@ namespace SheepDoom
         public float moveSpd;
         public bool destroyOnContact;
 
-        public bool isGoingUp = false; 
+        public bool isGoingUp = false;
 
         public bool isGoingDown = false;
 
@@ -39,8 +39,8 @@ namespace SheepDoom
         }
 
 
-        /*
-        // to call the movements n execute them step by step
+
+        // NOT WORKING NOT WORKING NOT WORKING to call the movements n execute them step by step
         // DIRECTIONS: up, down, left, right, straight, back
         // TIME means how long u want it to go
         // numberOfMovements = how many repetitions
@@ -50,43 +50,48 @@ namespace SheepDoom
 
             while (movementsLeft != 0)
             {
-                switch (firstMovement)
+                currentTimer = firstTime;
+                isMoving = true;
+
+                //first movement
+                if (currentTimer >= 0)
                 {
-                    case "up":
-                        isGoingUp = true;
-                        currentTimer = firstTime;
-                        break;
+                    switch (firstMovement)
+                    {
 
-                    case "down":
-                        isGoingDown = true;
-                        currentTimer = firstTime;
-                        break;
+                        case "up":
+                            isGoingUp = true;
+                            break;
 
-                    case "left":
-                        isGoingLeft = true;
-                        currentTimer = firstTime;
-                        break;
+                        case "down":
+                            isGoingDown = true;
+                            break;
 
-                    case "right":
-                        isGoingRight = true;
-                        currentTimer = firstTime;
-                        break;
+                        case "left":
+                            isGoingLeft = true;
+                            break;
 
-                    case "straight":
-                        isGoingStraight = true;
-                        currentTimer = firstTime;
-                        break;
+                        case "right":
+                            isGoingRight = true;
+                            break;
 
-                    case "back":
-                        isGoingBack = true;
-                        currentTimer = firstTime;
-                        break;
+                        case "straight":
+                            isGoingStraight = true;
+                            break;
 
-                    default:
-                        break;
+                        case "back":
+                            isGoingBack = true;
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
 
-                if (secondMovement != null)
+                currentTimer = secondTime;
+
+                if (currentTimer >= 0)
+                {
                     switch (secondMovement)
                     {
                         case "up":
@@ -122,8 +127,12 @@ namespace SheepDoom
                         default:
                             break;
                     }
+                }
 
-                if (thirdMovement != null)
+                currentTimer = thirdTime;
+
+                if (currentTimer >= 0)
+                {
                     switch (thirdMovement)
                     {
                         case "up":
@@ -159,19 +168,23 @@ namespace SheepDoom
                         default:
                             break;
                     }
+                }
+
 
                 movementsLeft -= 1;
             }
+
+            stop = true;
 
             //reset position
             //           this.gameObject.transform.position = originalTransform.position;
 
             //turn off object renderer
-            //           this.gameObject.GetComponent<MeshRenderer>().enabled = false;
+  //                     this.gameObject.GetComponent<MeshRenderer>().enabled = false;
 
             //turn off hitbox script
-            //           this.gameObject.GetComponent<OnTouchHealth>().enabled = false;
-        } */
+    //          this.gameObject.GetComponent<OnTouchHealth>().enabled = false;
+        }
 
         //for singular movement
         public void move(float time, string direction)
@@ -214,8 +227,18 @@ namespace SheepDoom
         public void stopMoving()
         {
             isMoving = false;
-            Debug.Log("Melee Stop");
             stop = false;
+
+            //set all movement to false;
+            isGoingUp = false;
+            isGoingDown = false;
+            isGoingLeft = false;
+            isGoingRight = false;
+            isGoingStraight = false;
+            isGoingBack = false;
+
+            this.gameObject.GetComponent<OnTouchHealth>().hitboxActive = false;
+
         }
 
         // Update is called once per frame
@@ -225,7 +248,6 @@ namespace SheepDoom
             if (isMoving && currentTimer >= 0)
             {
                 currentTimer -= Time.deltaTime;
-                Debug.Log(currentTimer);
             }
 
             //change bool to call stop once when time is up
@@ -240,77 +262,60 @@ namespace SheepDoom
                 stopMoving();
             }
 
-            /*
+
             //movement choices
             if (isGoingUp)
             {
-                while (isMoving)
+                if (isMoving)
                 {
-                    currentTimer -= Time.deltaTime;
                     transform.Translate(Vector3.up * moveSpd * Time.deltaTime);
                 }
-
-                isGoingUp = false;
             }
 
             if (isGoingDown)
             {
-                while (isMoving)
+                if (isMoving)
                 {
-                    currentTimer -= Time.deltaTime;
                     transform.Translate(Vector3.down * moveSpd * Time.deltaTime);
                 }
 
-                isGoingDown = false;
             }
 
             if (isGoingLeft)
             {
-                while (isMoving)
+                if (isMoving)
                 {
-                    Debug.Log("currentTimer = " + currentTimer);
-                    currentTimer -= Time.deltaTime;
                     transform.Translate(Vector3.left * moveSpd * Time.deltaTime);
                 }
 
-                isGoingLeft = false;
             }
 
-            */
+
 
             if (isGoingRight)
             {
-                while (isMoving)
+                if (isMoving)
                 {
-                    Debug.Log("currentTimer = " + currentTimer);
                     transform.Translate(Vector3.right * moveSpd * Time.deltaTime);
                 }
-
-                isGoingRight = false;
             }
 
-            /*
+
             if (isGoingStraight)
             {
-                while (isMoving)
+                if (isMoving)
                 {
-                    currentTimer -= Time.deltaTime;
                     transform.Translate(Vector3.forward * moveSpd * Time.deltaTime);
                 }
-
-                isGoingStraight = false;
             }
 
             if (isGoingBack)
             {
-                while (isMoving)
+                if (isMoving)
                 {
-                    currentTimer -= Time.deltaTime;
                     transform.Translate(-Vector3.forward * moveSpd * Time.deltaTime);
                 }
-
-                isGoingBack = false;
-            }*/
+            }
         }
     }
 }

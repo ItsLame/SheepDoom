@@ -27,6 +27,7 @@ namespace SheepDoom
         public GameObject Projectile3;
         public GameObject Projectile3_v2;
 
+        public float meleeCombo = 1;
 
         [Header("Skill launch point")]
         [Space(15)]
@@ -104,18 +105,32 @@ namespace SheepDoom
                 else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
                 {
                     Debug.Log("Melee Normal Atk");
-                    MeleeAttackObject.GetComponent<ObjectMovementScript>().move(1, "right");
                     //turn on object renderer
                     //                   MeleeAttackObject.gameObject.GetComponent<MeshRenderer>().enabled = true;
 
                     //turn on hitbox script
-                    //                  MeleeAttackObject.gameObject.GetComponent<OnTouchHealth>().enabled = true;
+                    MeleeAttackObject.gameObject.GetComponent<OnTouchHealth>().hitboxActive = true;
 
-                    //give movement commands
-//                    MeleeAttackObject.GetComponent<ObjectMovementScript>().isMoving = true;
- //                   MeleeAttackObject.GetComponent<ObjectMovementScript>().isGoingRight = true;
- //                   MeleeAttackObject.GetComponent<ObjectMovementScript>().currentTimer = 2;
-                    //                    MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMovement(1, "right", "left", null, 10, 10, 0);
+                    //move it
+                    MeleeAttackObject.GetComponent<ObjectMovementScript>().moveSpd = 120;
+
+                    if (meleeCombo == 1)
+                    {
+                        MeleeAttackObject.GetComponent<ObjectMovementScript>().move(0.2f, "right");
+                        meleeCombo = 2;
+                    }
+
+                    else if (meleeCombo == 2)
+                    {
+                        MeleeAttackObject.GetComponent<ObjectMovementScript>().move(0.2f, "left");
+                        meleeCombo = 1;
+                    }
+
+                    //resetcd
+                    cooldown1_inGame = cooldown1;
+
+ //                                      MeleeAttackObject.gameObject.GetComponent<OnTouchHealth>().enabled = false;
+                    //                   MeleeAttackObject.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 }
             }
 
