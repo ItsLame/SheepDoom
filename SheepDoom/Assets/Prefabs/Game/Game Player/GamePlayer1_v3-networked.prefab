@@ -1042,8 +1042,21 @@ MonoBehaviour:
   hasPurchasedUlti: 0
   AlternateSpecial: 0
   AlternateUlti: 0
+  isSpecial1Projectile: 1
+  isSpecial2Projectile: 1
+  isUlti1Projectile: 1
+  isUlti2Projectile: 1
+  isSpecial1Child: 0
+  isSpecial2Child: 0
+  isUlti1Child: 0
+  isUlti2Child: 0
+  isSpecial1Buff: 0
+  isSpecial2Buff: 0
+  isUlti1Buff: 0
+  isUlti2Buff: 0
   Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
     type: 3}
+  MeleeAttackObject: {fileID: 0}
   Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
     type: 3}
   Projectile2_v2: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
@@ -1057,13 +1070,9 @@ MonoBehaviour:
   cooldown2: 3
   cooldown3: 10
   ismeeleeattack: 0
+  meleeAttackDuration1: 0
+  meleeCombo: 1
   animator: {fileID: 0}
-  attackPoint: {fileID: 0}
-  attackRange: 0.5
-  meleedamage: 50
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &5660135970397916280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1254,6 +1263,9 @@ MonoBehaviour:
   AnnouncerText: {fileID: 0}
   whoKilled: 
   gotKilled: 
+  isNeutral: 0
+  isBoss: 0
+  isMinion: 0
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0

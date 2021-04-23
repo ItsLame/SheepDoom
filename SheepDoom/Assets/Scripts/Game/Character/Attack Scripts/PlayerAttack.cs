@@ -8,7 +8,7 @@ namespace SheepDoom
 {
     public class PlayerAttack : NetworkBehaviour
     {
-        [Header("for checking if player purchased special and ulti")]
+        [Header("For checking if player purchased special and ulti")]
         [Space(15)]
         public bool hasPurchasedSpecial = false;
         public bool hasPurchasedUlti = false;
@@ -17,6 +17,24 @@ namespace SheepDoom
         [Space(15)]
         public bool AlternateSpecial = false;
         public bool AlternateUlti = false;
+
+        [Header("If player skills are firing projectiles")]
+        public bool isSpecial1Projectile;
+        public bool isSpecial2Projectile;
+        public bool isUlti1Projectile;
+        public bool isUlti2Projectile;
+
+        [Header("If player skills is activating child instead")]
+        public bool isSpecial1Child;
+        public bool isSpecial2Child;
+        public bool isUlti1Child;
+        public bool isUlti2Child;
+
+        [Header("If player skills are self buffs instead")]
+        public bool isSpecial1Buff;
+        public bool isSpecial2Buff;
+        public bool isUlti1Buff;
+        public bool isUlti2Buff;
 
         [Header("Skill projectiles")]
         [Space(15)]
@@ -27,11 +45,15 @@ namespace SheepDoom
         public GameObject Projectile3;
         public GameObject Projectile3_v2;
 
-        public float meleeCombo = 1;
+        [Header("Children to be activated")]
+        [Space(15)]
+        public GameObject SkillChild;
+        public GameObject Skillchild_v2;
+        public GameObject UltiChild;
+        public GameObject UltiChild_v2;
 
         [Header("Skill launch point")]
         [Space(15)]
-
         public Transform SpawnPoint;
 
         //skillcd basetrackers
@@ -40,20 +62,16 @@ namespace SheepDoom
 
         [Header("skillcd values to be used n manipulated in game")]
         private float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
+
+        [Header("Melee attack variables")]
         [Space(15)]
-        //Melee Bool false
         public bool ismeeleeattack = false;
+        public float meleeAttackDuration1;
+        public float meleeCombo = 1;
         [Space(15)]
         //Melee
         public Animator animator;
-        [Space(15)]
-        public Transform attackPoint;
-        public float attackRange = 0.5f;
-        public int meleedamage = 50;
-        [Space(15)]
-        public LayerMask enemyLayers;
-        //[Space(15)]
-        //[SyncVar] public bool isDead;
+
 
         // Start is called before the first frame update
         void Start()
@@ -112,13 +130,13 @@ namespace SheepDoom
  
                     if (meleeCombo == 1)
                     {
-                        MeleeAttackObject.GetComponent<ObjectMovementScript>().move(0.2f, "right");
+                        TargetMeleeAttack(connectionToClient, "right");
                         meleeCombo = 2;
                     }
 
                     else if (meleeCombo == 2)
                     {
-                        MeleeAttackObject.GetComponent<ObjectMovementScript>().move(0.2f, "left");
+                        TargetMeleeAttack(connectionToClient, "left");
                         meleeCombo = 1;
                     }
 
@@ -127,6 +145,20 @@ namespace SheepDoom
                 }
             }
 
+        }
+
+        [TargetRpc]
+        void TargetMeleeAttack(NetworkConnection conn, string _meleeAtkDirection)
+        {
+            MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, _meleeAtkDirection);
+        }
+
+        [TargetRpc]
+        void TargetActivateChild1(NetworkConnection conn)
+        {
+            SkillChild.GetComponent<MeshRenderer>().enabled = true;
+            SkillChild.GetComponent<BoxCollider>().enabled = true;
+            SkillChild.GetComponent<PlayerChild>().refreshDuration();
         }
 
         //if special skill is pressed
@@ -143,21 +175,51 @@ namespace SheepDoom
                         //if 1st special is chosen
                         if (!AlternateSpecial)
                         {
-                            Debug.Log("Firing Special Atk");
-                            var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
-                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
-                            NetworkServer.Spawn(FiredProjectile);
-                            cooldown2_inGame = cooldown2;
+                            //special1 projectile settings
+                            if (isSpecial1Projectile)
+                            {
+                                Debug.Log("Firing Special Atk");
+                                var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
+                                FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
+                                NetworkServer.Spawn(FiredProjectile);
+                                cooldown2_inGame = cooldown2;
+                            }
+
+                            else if (isSpecial1Child)
+                            {
+                                TargetActivateChild1(connectionToClient);
+                                cooldown2_inGame = cooldown2;
+                            }
+
+                            else if (isSpecial1Buff)
+                            {
+
+                            }
+
                         }
 
                         //else its the second special
                         else
                         {
-                            Debug.Log("Firing Special Atk 2");
-                            var FiredProjectile = Instantiate(Projectile2_v2, SpawnPoint.position, SpawnPoint.rotation);
-                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
-                            NetworkServer.Spawn(FiredProjectile);
-                            cooldown2_inGame = cooldown2;
+                            //special2 projectile settings
+                            if (isSpecial2Projectile)
+                            {
+                                Debug.Log("Firing Special Atk 2");
+                                var FiredProjectile = Instantiate(Projectile2_v2, SpawnPoint.position, SpawnPoint.rotation);
+                                FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(this.gameObject);
+                                NetworkServer.Spawn(FiredProjectile);
+                                cooldown2_inGame = cooldown2;
+                            }
+
+                            else if (isSpecial2Child)
+                            {
+
+                            }
+
+                            else if (isSpecial2Buff)
+                            {
+
+                            }
                         }
 
 
@@ -183,21 +245,49 @@ namespace SheepDoom
                         //if 1st ulti is chosen
                         if (!AlternateUlti)
                         {
-                            Debug.Log("Firing Ultimate Atk");
-                            var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
-                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(gameObject);
-                            NetworkServer.Spawn(FiredProjectile);
-                            cooldown3_inGame = cooldown3;
+                            if (isUlti1Projectile)
+                            {
+                                Debug.Log("Firing Ultimate Atk");
+                                var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
+                                FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(gameObject);
+                                NetworkServer.Spawn(FiredProjectile);
+                                cooldown3_inGame = cooldown3;
+                            }
+
+                            else if (isUlti1Child)
+                            {
+
+                            }
+
+                            else if (isUlti1Buff)
+                            {
+
+                            }
+
                         }
 
                         //else its 2nd ulti
                         else
                         {
-                            Debug.Log("Firing Ultimate Atk 2");
-                            var FiredProjectile = Instantiate(Projectile3_v2, SpawnPoint.position, SpawnPoint.rotation);
-                            FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(gameObject);
-                            NetworkServer.Spawn(FiredProjectile);
-                            cooldown3_inGame = cooldown3;
+                            if (isUlti2Projectile)
+                            {
+                                Debug.Log("Firing Ultimate Atk 2");
+                                var FiredProjectile = Instantiate(Projectile3_v2, SpawnPoint.position, SpawnPoint.rotation);
+                                FiredProjectile.GetComponent<PlayerProjectileSettings>().CMD_setOwnerProjectile(gameObject);
+                                NetworkServer.Spawn(FiredProjectile);
+                                cooldown3_inGame = cooldown3;
+                            }
+
+                            else if (isUlti2Child)
+                            {
+
+                            }
+
+                            else if (isUlti2Buff)
+                            {
+
+                            }
+
                         }
 
                     }

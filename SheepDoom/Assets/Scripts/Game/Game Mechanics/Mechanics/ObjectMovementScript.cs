@@ -27,9 +27,9 @@ namespace SheepDoom
         public bool isGoingBack = false;
 
         [Header("Timing Properties")]
-        [SyncVar] public float currentTimer;
-        [SyncVar] public bool isMoving = false;
-        [SyncVar] public bool stop = false;
+        public float currentTimer;
+        public bool isMoving = false;
+        public bool stop = false;
 
         // Start is called before the first frame update
         void Start()

@@ -59,6 +59,11 @@ namespace SheepDoom
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
                 Destroy(this.gameObject);
             }
+
+            else if (col.gameObject.CompareTag("Other"))
+            {
+                Destroy(this.gameObject);
+            }
         }
 
 

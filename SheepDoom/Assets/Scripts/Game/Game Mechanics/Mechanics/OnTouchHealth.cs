@@ -28,14 +28,17 @@ namespace SheepDoom
             {
                 if (willContactPlayer)
                 {
+                    //if hit other player
                     if (col.gameObject.CompareTag("Player"))
                     {
                         Debug.Log("Player Hit");
+                        //change the hit player's HP
                         col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-healthChangeAmount);
 
-                        //increase killer's kill count if target is killed
+                        //kill target if target hp <= 0
                         if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
                         {
+                            //set hit target to dead
                             col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
 
                             //get the brick's parent (the attacker)
@@ -43,6 +46,7 @@ namespace SheepDoom
                             //increase the attacker's score
                             target.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
 
+                            //give announcer info
                             col.gameObject.GetComponent<GameEvent>().whoKilled = target.gameObject.GetComponent<PlayerObj>().GetPlayerName();
                         }
                         if (destroyOnContact)
