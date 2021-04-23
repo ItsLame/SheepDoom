@@ -40,7 +40,9 @@ namespace SheepDoom
 
         public void modifyinghealth(float amount)
         {
+//            Debug.Log("Player Health reducing from " + currenthealth + " with " + amount);
             if(isServer) currenthealth += amount;
+ //           Debug.Log("To " + currenthealth);
 
             float currenthealthPct = currenthealth / maxHealth;
             OnHealthPctChanged(currenthealthPct);
