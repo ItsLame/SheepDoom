@@ -8,28 +8,29 @@ namespace SheepDoom
 {
     public class PlayerAttack : NetworkBehaviour
     {
-        [Space(15)]
         [Header("for checking if player purchased special and ulti")]
+        [Space(15)]
         public bool hasPurchasedSpecial = false;
         public bool hasPurchasedUlti = false;
 
-        [Space(15)]
         [Header("Bools to check which type of skills player chose")]
+        [Space(15)]
         public bool AlternateSpecial = false;
         public bool AlternateUlti = false;
 
-        [Space(15)]
         [Header("Skill projectiles")]
+        [Space(15)]
         public GameObject Projectile;
+        public GameObject MeleeAttackObject;
         public GameObject Projectile2;
         public GameObject Projectile2_v2;
         public GameObject Projectile3;
         public GameObject Projectile3_v2;
 
 
-
+        [Header("Skill launch point")]
         [Space(15)]
-        [Header("skill launch point")]
+
         public Transform SpawnPoint;
 
         //skillcd basetrackers
@@ -99,17 +100,22 @@ namespace SheepDoom
                     //resetcd
                     cooldown1_inGame = cooldown1;
                 }
+
                 else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
                 {
-                    // animator.SetTrigger("Attack");
-                    // animator.SetTrigger("AttackToIdle");
-                    Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+                    Debug.Log("Melee Normal Atk");
+                    MeleeAttackObject.GetComponent<ObjectMovementScript>().move(1, "right");
+                    //turn on object renderer
+                    //                   MeleeAttackObject.gameObject.GetComponent<MeshRenderer>().enabled = true;
 
-                    foreach (Collider enemy in hitenmies)
-                    {
-                        enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
+                    //turn on hitbox script
+                    //                  MeleeAttackObject.gameObject.GetComponent<OnTouchHealth>().enabled = true;
 
-                    }
+                    //give movement commands
+//                    MeleeAttackObject.GetComponent<ObjectMovementScript>().isMoving = true;
+ //                   MeleeAttackObject.GetComponent<ObjectMovementScript>().isGoingRight = true;
+ //                   MeleeAttackObject.GetComponent<ObjectMovementScript>().currentTimer = 2;
+                    //                    MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMovement(1, "right", "left", null, 10, 10, 0);
                 }
             }
 

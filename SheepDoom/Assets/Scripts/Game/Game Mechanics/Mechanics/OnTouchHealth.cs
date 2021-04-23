@@ -30,6 +30,11 @@ namespace SheepDoom
             }
 
         }
+
+        private void Start()
+        {
+            
+        }
     }
 }
 

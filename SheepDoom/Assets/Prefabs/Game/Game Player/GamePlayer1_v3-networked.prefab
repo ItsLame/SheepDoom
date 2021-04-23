@@ -891,12 +891,12 @@ GameObject:
   - component: {fileID: 7849262506739605477}
   - component: {fileID: 5347440393087361214}
   - component: {fileID: 5660135970397916287}
+  - component: {fileID: 3665192994374769649}
   - component: {fileID: 5660135970397916280}
   - component: {fileID: 4028721829292908613}
   - component: {fileID: 3294719002493811009}
   - component: {fileID: 7229376032539379508}
   - component: {fileID: 4896812141411699882}
-  - component: {fileID: 3665192994374769649}
   - component: {fileID: 3276492568727392572}
   - component: {fileID: -771400089307640272}
   - component: {fileID: 2668921912398802697}
@@ -1024,6 +1024,46 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.143536, y: 1.893136, z: 0.5}
   m_Center: {x: 0.04803894, y: 0.053431988, z: 0}
+--- !u!114 &3665192994374769649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf7336327a1c244ca493c0327e8bfab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  hasPurchasedSpecial: 0
+  hasPurchasedUlti: 0
+  AlternateSpecial: 0
+  AlternateUlti: 0
+  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
+    type: 3}
+  Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
+    type: 3}
+  Projectile2_v2: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
+    type: 3}
+  Projectile3: {fileID: 3543547152907490667, guid: 2ccd3ae1f3b84704f8d3ce10d513d664,
+    type: 3}
+  Projectile3_v2: {fileID: 3543547152907490667, guid: f1eaf3061d966ec4499d5258118c148e,
+    type: 3}
+  SpawnPoint: {fileID: 5660135970150263288}
+  cooldown1: 0
+  cooldown2: 3
+  cooldown3: 10
+  ismeeleeattack: 0
+  animator: {fileID: 0}
+  attackPoint: {fileID: 0}
+  attackRange: 0.5
+  meleedamage: 50
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &5660135970397916280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1105,46 +1145,6 @@ MonoBehaviour:
   _NormalButton: {fileID: 0}
   _SpecialButton: {fileID: 0}
   _UltiButton: {fileID: 0}
---- !u!114 &3665192994374769649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8015437381331526034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccf7336327a1c244ca493c0327e8bfab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  hasPurchasedSpecial: 0
-  hasPurchasedUlti: 0
-  AlternateSpecial: 0
-  AlternateUlti: 0
-  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
-    type: 3}
-  Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
-    type: 3}
-  Projectile2_v2: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
-    type: 3}
-  Projectile3: {fileID: 3543547152907490667, guid: 2ccd3ae1f3b84704f8d3ce10d513d664,
-    type: 3}
-  Projectile3_v2: {fileID: 3543547152907490667, guid: f1eaf3061d966ec4499d5258118c148e,
-    type: 3}
-  SpawnPoint: {fileID: 5660135970150263288}
-  cooldown1: 0
-  cooldown2: 3
-  cooldown3: 10
-  ismeeleeattack: 0
-  animator: {fileID: 0}
-  attackPoint: {fileID: 0}
-  attackRange: 0.5
-  meleedamage: 50
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &3276492568727392572
 MonoBehaviour:
   m_ObjectHideFlags: 0
