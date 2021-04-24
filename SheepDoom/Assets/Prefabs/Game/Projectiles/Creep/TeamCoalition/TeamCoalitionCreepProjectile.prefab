@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8605625729056738044}
   - component: {fileID: 428959255386563177}
   - component: {fileID: 5895912213178398750}
+  - component: {fileID: -1228753069106926929}
   m_Layer: 0
   m_Name: TeamCoalitionCreepProjectile
   m_TagString: Untagged
@@ -106,7 +107,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1684223936274731579}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b21bfb7d614b1fb42a391585024db514, type: 3}
+  m_Script: {fileID: 11500000, guid: 9484f3d6324e4c741baa1bb75de9b30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
@@ -115,6 +116,7 @@ MonoBehaviour:
   damage: 10
   m_Speed: 30
   m_Lifespan: 3
+  m_Rigidbody: {fileID: 8605625729056738044}
 --- !u!54 &8605625729056738044
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -165,3 +167,18 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &-1228753069106926929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684223936274731579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0

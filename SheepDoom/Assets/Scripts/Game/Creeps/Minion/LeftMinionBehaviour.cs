@@ -1,0 +1,307 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+using System;
+using Mirror;
+
+namespace SheepDoom
+{
+    public class LeftMinionBehaviour : NetworkBehaviour
+    {
+        [Space(15)]
+        // Waypoint System
+        public Transform[] waypoints;
+        public int StartIndex = 0;
+        private int currentPoint = 0;
+        private Vector3 target;
+        private Vector3 direction;
+        [Space(15)]
+
+        public NavMeshAgent agent;
+        [Space(15)]
+        public bool ismeleeattack = false;
+        Animator charAnim;
+
+        //Aggro
+        private float speed = 15.0f;
+        private Vector3 wayPointPos;
+        // public float howclose;
+        // private float dist;
+        public float CreepMoveSpeed = 2.0f;
+
+        //Attacking
+        public float timeBetweenAttacks;
+        private bool alreadyattacked;
+
+        //states 
+        public float sightRange, attackRange;
+        public bool playerInSightRange, playerInAttackRange;
+
+        public bool TeamCoalition;
+
+        //layermask
+        public LayerMask whatisplayer;
+        [Space(15)]
+        //Ranged Projectile
+        public GameObject projectile;
+        [Space(15)]
+
+        //animator
+        public Animator animator;
+        [Space(15)]
+        //melee attackpoint
+        public Transform attackPoint;
+        public LayerMask enemyLayers;
+        public int meleedamage = 50;
+        [Space(15)]
+        //Health
+        [SerializeField]
+        private float maxHealth;
+        [SyncVar(hook = nameof(HealthBarUpdate))] private float currenthealth;
+        public float goldValue;
+
+        [Space(15)]
+        private GameObject targetObject = null;
+        private bool isLockedOn = false;
+        // public bool isplayer = false;
+
+        public event Action<float> OnHealthPctChanged = delegate { };
+
+        void HealthBarUpdate(float oldValue, float newValue)
+        {
+            float currenthealthPct = newValue / maxHealth;
+            OnHealthPctChanged(currenthealthPct);
+        }
+
+        void Start()
+        {
+            charAnim = GetComponent<Animator>();
+        }
+
+        public override void OnStartServer()
+        {
+            currenthealth = maxHealth;
+            currentPoint = StartIndex;
+            StartMovingToWayPoint();
+            agent.autoBraking = false;
+        }
+
+        [Server]
+        private void OnTriggerEnter(Collider other)
+        {
+            if(gameObject.CompareTag("TeamCoalitionRangeCreep"))
+            {
+                if(other.CompareTag("TeamConsortiumRangeCreep") && !isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    isLockedOn = true;
+                }
+                else if (other.gameObject.layer == 9 && other.gameObject.CompareTag("Player") && !other.gameObject.GetComponent<PlayerHealth>().isPlayerDead() && !isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    isLockedOn = true;
+                }
+            }
+            else if(gameObject.CompareTag("TeamConsortiumRangeCreep"))
+            {
+                if(other.CompareTag("TeamCoalitionRangeCreep") && !isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    isLockedOn = true;
+                }
+                else if (other.CompareTag("Player") && other.gameObject.layer == 8 && !other.GetComponent<PlayerHealth>().isPlayerDead() && !isLockedOn)
+                {
+                    targetObject = other.gameObject;
+                    isLockedOn = true;
+                }
+            }
+        }
+
+        [Server]
+        private void OnTriggerExit(Collider other)
+        {
+            if(gameObject.CompareTag("TeamCoalitionRangeCreep"))
+            {
+                if (other.CompareTag("Player") && other.gameObject.layer == 9)
+                    goBackToTravelling();
+            }
+            else if(gameObject.CompareTag("TeamConsortiumRangeCreep"))
+            {
+                if (other.CompareTag("Player") && other.gameObject.layer == 8)
+                    goBackToTravelling();
+            }
+        }
+
+        void Update()
+        {
+            if (isServer)
+            {
+                // dist = Vector3.Distance(playerTransf.position, transform.position);
+                //Check if Player in sightrange
+                playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
+
+                //Check if Player in attackrange
+                playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatisplayer);
+
+                /*if (target == null)
+                {
+                    targetObject = null;
+                    isLockedOn = false;
+                    StartMovingToWayPoint();
+                    return;
+                }*/
+
+                if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
+                    goBackToTravelling();
+
+                if (playerInSightRange && !playerInAttackRange && isLockedOn)                    
+                    ChasePlayer();
+
+                if (playerInAttackRange && playerInSightRange && !ismeleeattack)
+                    RangedAttackPlayer();
+
+                if (playerInAttackRange && playerInSightRange && ismeleeattack)
+                    MeleeAttackPlayer();
+
+                if (currenthealth <= 0)
+                    Destroyy();
+            }
+        }
+
+        [Server]
+        void ChasePlayer()
+        {
+            if (targetObject != null)
+            {
+                agent.autoBraking = false;
+                agent.SetDestination(targetObject.transform.position);
+            }
+        }
+
+        //go back to patrol when player is dead
+        [Server]
+        public void goBackToTravelling()
+        {
+            isLockedOn = false;
+            targetObject = null;
+            agent.autoBraking = false;
+            StartMovingToWayPoint();
+        }
+
+        void MeleeAttackPlayer()
+        {
+            //Make sure enemy doesn't move
+            agent.SetDestination(transform.position);
+
+            transform.LookAt(targetObject.transform);
+
+            if (!alreadyattacked)
+            {
+                //Meele attack for dog
+                transform.LookAt(targetObject.transform);
+                animator.SetTrigger("Attack");
+                animator.SetTrigger("AttackToIdle");
+                Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+
+                foreach (Collider enemy in hitenmies)
+                    enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
+
+                Debug.Log("MeleeAttack!");
+                alreadyattacked = true;
+                Invoke("ResetAttack", timeBetweenAttacks);
+            }
+        }
+
+        [Server]
+        private void RangedAttackPlayer()
+        {
+            if (!targetObject)
+                goBackToTravelling();
+            else //Make sure enemy doesn't move
+            {
+                agent.SetDestination(transform.position);
+                agent.autoBraking = true;
+                transform.LookAt(targetObject.transform);
+
+                if (!alreadyattacked)
+                {
+                    transform.LookAt(targetObject.transform);
+                    FireProjectile();//Attack
+                    Invoke("ResetAttack", timeBetweenAttacks);
+                }
+            }
+        }
+
+        [Server]
+        private void FireProjectile()
+        {
+            if(gameObject.CompareTag("TeamCoalitionRangeCreep"))
+            {
+                GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
+                FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
+                NetworkServer.Spawn(FiredProjectile);
+                alreadyattacked = true;
+            }
+            else if(gameObject.CompareTag("TeamConsortiumRangeCreep"))
+            {
+                GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
+                FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
+                NetworkServer.Spawn(FiredProjectile);
+                alreadyattacked = true;
+            }
+        }
+
+        [Server]
+        private void ResetAttack()
+        {
+            alreadyattacked = false;
+        }
+
+        [Server]
+        void StartMovingToWayPoint()
+        {
+            if (currentPoint < waypoints.Length)
+            {
+                target = waypoints[currentPoint].position;
+                direction = target - transform.position;
+                if (direction.magnitude < 5)
+                    currentPoint++;
+            }
+            else if (currentPoint == waypoints.Length)
+            {
+                agent.autoBraking = true;
+            }
+            transform.LookAt(target);
+            agent.SetDestination(target);
+            agent.speed = CreepMoveSpeed;
+        }
+
+        [Server]
+        public void TakeDamage(float damage)
+        {
+            currenthealth += damage;
+//              RpcUpdateMinionHp();
+            float currenthealthPct = currenthealth / maxHealth;
+            OnHealthPctChanged(currenthealthPct);
+        }
+
+        private void Destroyy()
+        {
+            NetworkServer.Destroy(this.gameObject);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, sightRange);
+        }
+
+        public float getHealth()
+        {
+            return currenthealth;
+        }
+    }
+}

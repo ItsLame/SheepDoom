@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 5568960019415368111}
   - component: {fileID: -6711539645681096518}
   - component: {fileID: -5237622665496464381}
+  - component: {fileID: -445091161151389061}
   m_Layer: 0
   m_Name: TeamCoalitionRangeCreep
   m_TagString: TeamCoalitionRangeCreep
@@ -357,7 +358,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7481533939122191818}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f46a23c4438848d4786a0d0d722e6687, type: 3}
+  m_Script: {fileID: 11500000, guid: 1910a3c72479ec3449dc351c795eb1ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
@@ -369,7 +370,7 @@ MonoBehaviour:
   - {fileID: 5160372420522706715, guid: bc9d6e08ba9a768459a44424227b0db2, type: 3}
   - {fileID: 2434905913773175889, guid: 8936355b985643d48bc4a2724c889852, type: 3}
   StartIndex: 0
-  agent: {fileID: 0}
+  agent: {fileID: 7481533939122191808}
   ismeleeattack: 0
   CreepMoveSpeed: 20
   timeBetweenAttacks: 2
@@ -377,7 +378,7 @@ MonoBehaviour:
   attackRange: 40
   playerInSightRange: 0
   playerInAttackRange: 0
-  TeamCoalition: 1
+  TeamCoalition: 0
   whatisplayer:
     serializedVersion: 2
     m_Bits: 512
@@ -390,10 +391,7 @@ MonoBehaviour:
     m_Bits: 512
   meleedamage: 50
   maxHealth: 50
-  currenthealth: 0
   goldValue: 2
-  targetObject: {fileID: 0}
-  Murderer: {fileID: 0}
 --- !u!195 &7481533939122191808
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -466,6 +464,21 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &-445091161151389061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7481533939122191818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
 --- !u!1 &8339675222085536139
 GameObject:
   m_ObjectHideFlags: 0

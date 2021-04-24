@@ -32,13 +32,13 @@ namespace SheepDoom
             }
             else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 8)
             {
-                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
+                col.transform.parent.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                 Object.Destroy(this.gameObject);
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody); 
             }
             else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 9)
             {
-                col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
+                col.transform.parent.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                 Object.Destroy(this.gameObject);
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody); 
             }

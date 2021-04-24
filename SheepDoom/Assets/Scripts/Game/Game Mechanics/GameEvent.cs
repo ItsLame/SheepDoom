@@ -28,9 +28,7 @@ namespace SheepDoom
             if (GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if (isServer)
-                {
                     RpcAnnouncers(whoKilled + " has slain " + gotKilled);
-                }
             }
         }
 
