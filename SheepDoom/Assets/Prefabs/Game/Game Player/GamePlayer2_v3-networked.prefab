@@ -422,8 +422,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
-  currenthealth: 0
-  isFullHealth: 0
 --- !u!114 &6869177918369833713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,7 +440,6 @@ MonoBehaviour:
     type: 3}
   respawnTimerRef: 5
   respawnTimerInGame: 0
-  isDead: 0
   deathOverlay: {fileID: 7072208613197537347, guid: af933045f5f2ec54f89114511f0edef0,
     type: 3}
   deadTextObject: {fileID: 0}
@@ -1283,11 +1280,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  healthChangeAmount: 30
+  healthChangeAmount: -30
   destroyOnContact: 0
   willContactPlayer: 1
   willContactMinion: 1
   hitboxActive: 0
+  hasParent: 1
+  parent: {fileID: 1540617473773694058}
+  parentTeamID: 0
 --- !u!114 &5517714342370570122
 MonoBehaviour:
   m_ObjectHideFlags: 0

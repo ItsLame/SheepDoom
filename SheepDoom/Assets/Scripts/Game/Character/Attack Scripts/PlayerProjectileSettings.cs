@@ -11,6 +11,7 @@ namespace SheepDoom
         //projectileOwner
         //[SyncVar] cant syncvar an object of type gameobject
         public GameObject owner;
+        public float ownerTeamID;
 
         [Space(15)]
         //rotation controls
@@ -60,8 +61,9 @@ namespace SheepDoom
 
         void Start()
         {
+            ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
             Destroy(gameObject, m_Lifespan);
-         //   Debug.Log("Owner: " + owner);
+            //   Debug.Log("Owner: " + owner);
         }
 
         [Server]
@@ -105,23 +107,23 @@ namespace SheepDoom
 
             else if (col.gameObject.CompareTag("Tower"))
             {
-           //     col.transform.parent.gameObject.GetComponent<CapturePointScript>().ModifyingHealth(-damage);
-           //     Object.Destroy(this.gameObject);
+                //     col.transform.parent.gameObject.GetComponent<CapturePointScript>().ModifyingHealth(-damage);
+                //     Object.Destroy(this.gameObject);
             }
 
 
             //used to test gold for now
             else if (col.gameObject.CompareTag("NeutralMinion"))
             {
-                
+
                 //take damage
- //               col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
- //               col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
+                //               col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
+                //               col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
                 //inform that its under atk
- //               col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
-                
-                
-//                Debug.Log(owner + " hitting neutral minion");
+                //               col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
+
+
+                //                Debug.Log(owner + " hitting neutral minion");
                 owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
 
                 if (destroyOnContact)
@@ -133,25 +135,50 @@ namespace SheepDoom
 
             else if (col.gameObject.CompareTag("BaseMinion"))
             {
-                if (col.gameObject.layer == 8)
+                if (ownerTeamID == 2)
                 {
-                    GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                    target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
-                    if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                    if (col.gameObject.layer == 8)
                     {
-                        owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                        GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
+                        target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
+                        if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                        {
+                            owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                        }
+
+                        if (destroyOnContact)
+                        {
+                            Object.Destroy(this.gameObject);
+
+                        }
                     }
                 }
 
-                if (col.gameObject.layer == 9)
+                else if (ownerTeamID == 1)
                 {
-                    GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                    target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
-                    if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                    if (col.gameObject.layer == 9)
+
                     {
-                        owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                        GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
+                        target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
+                        if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                        {
+                            owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                        }
+
+                        if (destroyOnContact)
+                        {
+                            Object.Destroy(this.gameObject);
+
+                        }
                     }
+
                 }
+            }
+            /*
+            if (col.gameObject.layer == 9)
+            {
+
 
                 //                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
                 //                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().Murderer = owner;
@@ -166,7 +193,7 @@ namespace SheepDoom
 
                 }
 
-            }
+            }*/
 
             else if (col.gameObject.CompareTag("MegaBoss"))
             {

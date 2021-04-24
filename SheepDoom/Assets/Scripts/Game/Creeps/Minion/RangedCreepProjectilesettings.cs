@@ -73,6 +73,11 @@ namespace SheepDoom
                         col.transform.parent.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         Destroyy();
                     }
+
+                    else if (col.CompareTag("Other"))
+                    {
+                        Destroyy();
+                    }
                 }
             }
         }

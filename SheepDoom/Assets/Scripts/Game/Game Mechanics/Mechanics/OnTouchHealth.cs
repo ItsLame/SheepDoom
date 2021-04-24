@@ -20,6 +20,11 @@ namespace SheepDoom
         [Header("When to interact with bool")]
         public bool hitboxActive;
 
+        [Header("If is child, parent's details here")]
+        public bool hasParent;
+        public GameObject parent;
+        public float parentTeamID;
+
         //when collide with player
         [Server]
         private void OnTriggerEnter(Collider col)
@@ -33,7 +38,7 @@ namespace SheepDoom
                     {
                         Debug.Log("Player Hit");
                         //change the hit player's HP
-                        col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-healthChangeAmount);
+                        col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
 
                         //kill target if target hp <= 0
                         if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
@@ -62,30 +67,38 @@ namespace SheepDoom
                     if (col.gameObject.CompareTag("BaseMinion"))
                     {
                         Debug.Log("Base Minion Hit");
-                        if (col.gameObject.layer == 8)
+                        
+                        if (parentTeamID == 2)
                         {
-                            Debug.Log("Coalation Minion Hit");
-                            GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                            target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-healthChangeAmount);
-
-                            if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                            if (col.gameObject.layer == 8)
                             {
-                                GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
-                                parent.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                                Debug.Log("Coalation Minion Hit");
+                                GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
+                                target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount);
+
+                                if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                                {
+                                    GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
+                                    parent.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                                }
                             }
                         }
 
-                        if (col.gameObject.layer == 9)
+                        else if (parentTeamID == 1)
                         {
-                            Debug.Log("Consortium Minion Hit");
-                            GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                            target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-healthChangeAmount);
-                            if (target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().getHealth() <= 0)
+                            if (col.gameObject.layer == 9)
                             {
-                                GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
-                                parent.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                                Debug.Log("Consortium Minion Hit");
+                                GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
+                                target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(healthChangeAmount);
+                                if (target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().getHealth() <= 0)
+                                {
+                                    GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
+                                    parent.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                                }
                             }
                         }
+
                     }
                 }
 
@@ -116,7 +129,10 @@ namespace SheepDoom
         }
         private void Start()
         {
-
+            if (hasParent)
+            {
+                parentTeamID = parent.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+            }
         }
     }
 }
