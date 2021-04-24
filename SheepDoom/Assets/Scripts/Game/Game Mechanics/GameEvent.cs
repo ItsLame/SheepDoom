@@ -14,10 +14,6 @@ namespace SheepDoom
         [SyncVar] public string whoKilled;
         [SyncVar] public string gotKilled;
 
-        [SyncVar] public bool isNeutral = false;
-        [SyncVar] public bool isBoss = false;
-        [SyncVar] public bool isMinion = false;
-
         // Start is called before the first frame update
         void Start()
         {
@@ -32,24 +28,7 @@ namespace SheepDoom
             if (GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if (isServer)
-                {
-                    if (isNeutral)
-                    {
-                        RpcAnnouncers(gotKilled + " has been slain by a neutral");
-                    }
-                    else if(isBoss)
-                    {
-                        RpcAnnouncers(gotKilled + " has been slain by a boss");
-                    }
-                    else if (isMinion)
-                    {
-                        RpcAnnouncers(gotKilled + " has been slain by a minion");
-                    }
-                    else
-                    {
-                        RpcAnnouncers(whoKilled + " has slain " + gotKilled);
-                    }
-                }
+                    RpcAnnouncers(whoKilled + " has slain " + gotKilled);
             }
         }
 
