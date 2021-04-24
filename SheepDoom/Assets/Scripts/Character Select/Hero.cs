@@ -50,13 +50,14 @@ namespace SheepDoom
 
         public virtual void OnClickHero()
         {
+            // change hero info view (right side)
+            CharacterSelectUIManager.instance.P_heroInfoImg.sprite = P_heroIcon;
+            CharacterSelectUIManager.instance.P_heroInfoText.text = P_heroName + "\n-----\n" + P_heroDesc;
+
             // set hero info locally
             if (!P_isTaken)
             {
                 Debug.Log("Lock in ran in not taken");
-                Debug.Log("(FREE) HERO NAME: " + P_heroName);
-                CharacterSelectUIManager.instance.P_heroInfoImg.sprite = P_heroIcon;
-                CharacterSelectUIManager.instance.P_heroInfoText.text = P_heroName + "\n-----\n" + P_heroDesc;
                 // set lock in button to interactable after clicking on hero
                 CharacterSelectUIManager.instance.P_lockInButton.GetComponent<Button>().interactable = true;
                 // update view for other clients (of player's hero text under player's name)
@@ -65,7 +66,6 @@ namespace SheepDoom
             else
             {
                 Debug.Log("Lock in ran in taken");
-                Debug.Log("(TAKE) HERO NAME: " + P_heroName);
                 // set lock in button to not interactable if another client has locked in to the hero
                 CharacterSelectUIManager.instance.P_lockInButton.GetComponent<Button>().interactable = false;
             }

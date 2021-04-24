@@ -20,7 +20,7 @@ namespace SheepDoom
         [SyncVar] private bool isHost = false;
         [SyncVar] private bool isReady = false;
         [SyncVar] private bool isLockedIn = false;
-        [SyncVar] private string heroName;
+        [SyncVar] public string heroName;
 
         #region Get
         public string GetPlayerName()

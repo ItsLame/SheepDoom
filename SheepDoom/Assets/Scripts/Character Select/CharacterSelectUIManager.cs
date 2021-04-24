@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        private float secondsTimer = 60;
+        private float secondsTimer = 10;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
@@ -37,9 +37,10 @@ namespace SheepDoom
         [SerializeField] private GameObject peach;
         [SerializeField] private GameObject yoshi;
         [SerializeField] private GameObject bowser;
-        private SyncList<string> team1PickedHeroes = new SyncList<string>();
-        private SyncList<string> team2PickedHeroes = new SyncList<string>();
-        private SyncList<GameObject> notLockedInPlayers = new SyncList<GameObject>();
+        private string[] heroesArr = {"Mario", "Luigi", "Peach", "Yoshi", "Bowser"};
+        public SyncList<string> team1PickedHeroes = new SyncList<string>();
+        public SyncList<string> team2PickedHeroes = new SyncList<string>();
+        //public SyncList<GameObject> notLockedInPlayers = new SyncList<GameObject>();
         //room matchID
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
@@ -116,6 +117,7 @@ namespace SheepDoom
                 }
                 else
                 {
+                    RequestGameStart();
                     // random lockin for players who havent locked in, then start game
                 }
             }
@@ -186,6 +188,10 @@ namespace SheepDoom
             {
                 foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
                 {
+                    // check again after each loop
+                    if(MatchMaker.instance.GetMatches()[P_matchID].GetLockInCount() == MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count)
+                        break;
+
                     if (_player.GetComponent<PlayerObj>().GetIsLockedIn())
                     {
                         string _heroName = _player.GetComponent<PlayerObj>().GetHeroName();
@@ -195,7 +201,7 @@ namespace SheepDoom
                             team2PickedHeroes.Add(_heroName);
                     }
                     else if(!_player.GetComponent<PlayerObj>().GetIsLockedIn())
-                        notLockedInPlayers.Add(_player);
+                        AutoLockIn(_player);
                 }
 
                 // in for loop with notlockedinplayers.count
@@ -207,6 +213,38 @@ namespace SheepDoom
             }
             //else
                 // start game smoothly
+        }
+
+        private void AutoLockIn(GameObject _player)
+        {
+            System.Random rand = new System.Random();
+            int i = 0;
+
+            i = rand.Next(0, 5);
+
+            if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+            {
+                while(team1PickedHeroes.Contains(heroesArr[i]))
+                    i = rand.Next(0, 5);
+
+                team1PickedHeroes.Add(heroesArr[i]);
+            }
+            else if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+            {
+                while(team2PickedHeroes.Contains(heroesArr[i]))
+                    i = rand.Next(0, 5);
+
+                team2PickedHeroes.Add(heroesArr[i]);
+            }
+
+            _player.GetComponent<PlayerObj>().SetHeroName(heroesArr[i]);
+            _player.GetComponent<PlayerObj>().SetIsLockedIn(true);
+            MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();
+
+            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                TargetUpdateOwner(conn, _player, heroesArr[i], true, false, true);
+            
+            RpcUpdateOthers(_player, heroesArr[i], _player.GetComponent<PlayerObj>().GetTeamIndex(), false, true);
         }
 
         #endregion
@@ -295,6 +333,8 @@ namespace SheepDoom
                         hero = bowser;
                         break;
                 }
+                hero.SendMessage("SetTaken", _lockIn);
+                hero.SendMessage("OnClickHero");
                 //Debug.Log("TARGET UPDATE ISOWNER? " + _isOwner);
                 //Debug.Log("TARGET UPDATE PLAYER: " + _player.GetComponent<PlayerObj>().GetPlayerName() + " of team " +_player.GetComponent<PlayerObj>().GetTeamIndex());
 
