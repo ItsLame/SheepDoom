@@ -66,9 +66,9 @@ namespace SheepDoom
                         {
                             Debug.Log("Coalation Minion Hit");
                             GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                            target.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-healthChangeAmount);
+                            target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-healthChangeAmount);
 
-                            if (target.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().getHealth() <= 0)
+                            if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                             {
                                 GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
                                 parent.gameObject.GetComponent<CharacterGold>().varyGold(5);
