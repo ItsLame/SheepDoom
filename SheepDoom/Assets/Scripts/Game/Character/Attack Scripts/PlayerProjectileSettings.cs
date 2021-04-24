@@ -81,12 +81,12 @@ namespace SheepDoom
                     //debuff player depending on bullet properties in inspector
                     if (SlowDebuff)
                     {
-                        col.gameObject.GetComponent<CharacterMovement>().debuffCharacter("slow", slowDebuffDuration, slowRate);
+                        col.gameObject.GetComponent<CharacterMovement>().changeSpeed("slow", slowDebuffDuration, slowRate);
                     }
 
                     if (StopDebuff)
                     {
-                        col.gameObject.GetComponent<CharacterMovement>().debuffCharacter("stop", stopDebuffDuration, 0);
+                        col.gameObject.GetComponent<CharacterMovement>().changeSpeed("stop", stopDebuffDuration, 0);
                     }
 
 

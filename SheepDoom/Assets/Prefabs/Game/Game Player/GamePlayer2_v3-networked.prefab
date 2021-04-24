@@ -329,9 +329,9 @@ MonoBehaviour:
   syncInterval: 0.1
   baseSpeed: 2.5
   speed: 0
-  isDebuffed: 0
-  debuffDuration: 0
-  debuffStrength: 0
+  isSpeedAltered: 0
+  speedAlterDuration: 0
+  speedAlterStrength: 0
 --- !u!114 &5599442812974198205
 MonoBehaviour:
   m_ObjectHideFlags: 0

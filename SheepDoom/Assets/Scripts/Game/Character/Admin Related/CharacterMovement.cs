@@ -15,9 +15,9 @@ namespace SheepDoom
         public float speed;
 
 
-        [SyncVar] public bool isDebuffed;
-        [SyncVar] public float debuffDuration;
-        [SyncVar] public float debuffStrength;
+        [SyncVar] public bool isSpeedAltered;
+        [SyncVar] public float speedAlterDuration;
+        [SyncVar] public float speedAlterStrength;
 
         private void Start()
         {
@@ -33,22 +33,22 @@ namespace SheepDoom
         }
 
         //for player debuffs handling
-        public void debuffCharacter(string type, float duration, float strength)
+        public void changeSpeed(string type, float duration, float strength)
         {
-            isDebuffed = true;
+            isSpeedAltered = true;
 
             if (type == "slow")
             {
                 Debug.Log("Inflicting slow debuff");
-                debuffDuration = duration;
-                debuffStrength = strength;
-                speed *= debuffStrength;
+                speedAlterDuration = duration;
+                speedAlterStrength = strength;
+                speed *= speedAlterStrength;
             }
 
             else if (type == "stop")
             {
                 Debug.Log("Inflicting stop debuff");
-                debuffDuration = duration;
+                speedAlterDuration = duration;
                 speed = 0;
             }
 
@@ -67,7 +67,7 @@ namespace SheepDoom
         {
             if (!hasAuthority) return;
 
-            if (isDebuffed)
+            if (isSpeedAltered)
             {
                 DebuffTimerCountdown();
             }
@@ -77,16 +77,16 @@ namespace SheepDoom
         public void DebuffTimerCountdown()
         {
             //reduce timer per second
-            debuffDuration -= Time.deltaTime;
-            Debug.Log("Debuff Duration: " + debuffDuration);
+            speedAlterDuration -= Time.deltaTime;
+            Debug.Log("Speed Alter Duration: " + speedAlterDuration);
 
             //remove debuff when duration is up
-            if (debuffDuration <= 0)
+            if (speedAlterDuration <= 0)
             {
-                debuffStrength = 1;
+                speedAlterStrength = 1;
                 speed = baseSpeed;
-                Debug.Log("Debuff Over:" + debuffStrength + ", " + speed);
-                isDebuffed = false;
+                Debug.Log("Debuff Over:" + speedAlterStrength + ", " + speed);
+                isSpeedAltered = false;
             }
         }
 

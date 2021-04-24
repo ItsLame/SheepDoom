@@ -28,11 +28,16 @@ namespace SheepDoom
         [Server]
         void OnTriggerEnter(Collider col)
         {
-            if(owner != null)
+            if (col.CompareTag("Other"))
+            {
+                Destroyy();
+            }
+
+            if (owner != null)
             {
                 if (owner.CompareTag("TeamCoalitionRangeCreep"))
                 {
-                    if(col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
+                    if (col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
                     {
                         if (col.gameObject.layer == 9) // consortium
                         {
@@ -40,7 +45,7 @@ namespace SheepDoom
                             Destroyy();
                         }
 
-                        if(col.GetComponent<PlayerHealth>().getHealth() <= 0)
+                        if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
                         {
                             col.GetComponent<PlayerHealth>().SetPlayerDead();
                             owner.GetComponent<LeftMinionBehaviour>().goBackToTravelling();
@@ -52,7 +57,7 @@ namespace SheepDoom
                         Destroyy();
                     }
                 }
-                else if(owner.CompareTag("TeamConsortiumRangeCreep"))
+                else if (owner.CompareTag("TeamConsortiumRangeCreep"))
                 {
                     if (col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
                     {
@@ -74,11 +79,9 @@ namespace SheepDoom
                         Destroyy();
                     }
 
-                    else if (col.CompareTag("Other"))
-                    {
-                        Destroyy();
-                    }
                 }
+
+
             }
         }
 
