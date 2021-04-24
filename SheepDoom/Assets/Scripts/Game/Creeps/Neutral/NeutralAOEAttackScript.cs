@@ -48,6 +48,7 @@ namespace SheepDoom
                 if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
                 {
                     col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
+                    col.gameObject.GetComponent<GameEvent>().isNeutral = true;
                 }
 
                 if (destroyOnContact)
