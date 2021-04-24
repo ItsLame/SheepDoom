@@ -46,6 +46,8 @@ namespace SheepDoom
         [SyncVar] private string matchID = string.Empty;
         [SyncVar] private string timePlayingStr = "60";
 
+        // so that don't share the same random result (but share the same system.random)
+        private static readonly System.Random rand = new System.Random();
 
         #region Properties
 
@@ -217,10 +219,9 @@ namespace SheepDoom
 
         private void AutoLockIn(GameObject _player)
         {
-            System.Random rand = new System.Random();
-            int i = 0;
+            //System.Random rand = new System.Random();
 
-            i = rand.Next(0, 5);
+            int i = rand.Next(0, 5);
 
             if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
             {
@@ -236,15 +237,15 @@ namespace SheepDoom
 
                 team2PickedHeroes.Add(heroesArr[i]);
             }
-
+            
             _player.GetComponent<PlayerObj>().SetHeroName(heroesArr[i]);
             _player.GetComponent<PlayerObj>().SetIsLockedIn(true);
             MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();
 
             if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
-                TargetUpdateOwner(conn, _player, heroesArr[i], true, false, true);
+                TargetUpdateOwner(conn, _player, _player.GetComponent<PlayerObj>().GetHeroName(), true, false, true);
             
-            RpcUpdateOthers(_player, heroesArr[i], _player.GetComponent<PlayerObj>().GetTeamIndex(), false, true);
+            RpcUpdateOthers(_player, _player.GetComponent<PlayerObj>().GetHeroName(), _player.GetComponent<PlayerObj>().GetTeamIndex(), false, true);
         }
 
         #endregion
