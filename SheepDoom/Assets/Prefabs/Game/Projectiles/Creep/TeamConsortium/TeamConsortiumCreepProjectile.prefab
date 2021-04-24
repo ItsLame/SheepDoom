@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 25574858892114136}
   - component: {fileID: 7306697570054750148}
   - component: {fileID: 7980184683035807111}
-  - component: {fileID: -3004293677962208037}
   - component: {fileID: 617768940007668849}
   - component: {fileID: -5464149660847732807}
   - component: {fileID: 600843355084880221}
+  - component: {fileID: 2981385119451128838}
+  - component: {fileID: 4605040296959159850}
   m_Layer: 0
   m_Name: TeamConsortiumCreepProjectile
   m_TagString: Untagged
@@ -97,24 +98,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-3004293677962208037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3321324340310797477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83221340a73480c4caa6018bd3be2eaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  owner: {fileID: 0}
-  damage: 10
-  m_Speed: 30
-  m_Lifespan: 3
 --- !u!54 &617768940007668849
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -165,3 +148,37 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &2981385119451128838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3321324340310797477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
+--- !u!114 &4605040296959159850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3321324340310797477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9484f3d6324e4c741baa1bb75de9b30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  owner: {fileID: 0}
+  damage: 10
+  m_Speed: 30
+  m_Lifespan: 3
+  m_Rigidbody: {fileID: 617768940007668849}

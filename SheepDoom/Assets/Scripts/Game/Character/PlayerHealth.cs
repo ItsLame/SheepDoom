@@ -11,13 +11,12 @@ namespace SheepDoom
         [SerializeField]
         private float maxHealth = 100.0f;
 
-        //[SyncVar(hook = nameof(healthUpdate))]
-        [SyncVar]
-        public float currenthealth;
+        [SyncVar(hook = nameof(HealthBarUpdate))]
+        private float currenthealth;
 
         public event Action<float> OnHealthPctChanged = delegate { };
 
-        public bool isFullHealth;
+        private bool isFullHealth = true;
 
         //for calling death function
         bool deathCounterCalled = false;
@@ -31,16 +30,10 @@ namespace SheepDoom
             currenthealth = maxHealth;
         }
 
-        /*for syncvar to sync player health
-        private void healthUpdate(float oldHealth, float newHealth)
-        {
- //           if(hasAuthority)
- //               Debug.Log("Old HP: " + oldHealth + " New HP: " + newHealth);
-        }*/
-
+        [Server]
         public void modifyinghealth(float amount)
         {
-            if(isServer) currenthealth += amount;
+            currenthealth += amount;
 
             float currenthealthPct = currenthealth / maxHealth;
             OnHealthPctChanged(currenthealthPct);
@@ -48,41 +41,41 @@ namespace SheepDoom
         // Update is called once per frame
         void Update()
         {
-            if (playerDead)
+            if(isServer)
             {
-                currenthealth = 0;
-
-                //increase death by 1
-                if (deathCounterCalled == false)
+                if (playerDead)
                 {
-                    this.gameObject.GetComponent<PlayerAdmin>().IncreaseCount(false, false, true);
-                    deathCounterCalled = true;
+                    currenthealth = 0;
+
+                    //increase death by 1
+                    if (!deathCounterCalled)
+                    {
+                        GetComponent<PlayerAdmin>().IncreaseCount(false, false, true);
+                        deathCounterCalled = true;
+                    }
                 }
 
-                //SetPlayerDead();
-            }   
+                if (currenthealth >= maxHealth)
+                {
+                    currenthealth = maxHealth;
+                    isFullHealth = true;
+                }
 
-            if (currenthealth > maxHealth)
-            {
-                currenthealth = maxHealth;
-                isFullHealth = true;
+                if (currenthealth < maxHealth)
+                    isFullHealth = false;
             }
+        }
 
-            if (currenthealth < maxHealth)
-            {
-                isFullHealth = false;
-            }
-            modifyinghealth(0);
+        void HealthBarUpdate(float oldValue, float newValue)
+        {
+            float currenthealthPct = newValue / maxHealth;
+            OnHealthPctChanged(currenthealthPct);
         }
 
         public void SetPlayerDead()
         {
-            //added respawn
-            //this.gameObject.GetComponent<PlayerRespawn>().isDead = true;
             playerDead = true;
-            this.gameObject.GetComponent<GameEvent>().gotKilled = this.gameObject.GetComponent<PlayerObj>().GetPlayerName();
-            //StartCoroutine(TimeBeforeDeath());
-            // Debug.Log("health: ded");
+            GetComponent<GameEvent>().gotKilled = GetComponent<PlayerObj>().GetPlayerName();
         }
 
         IEnumerator TimeBeforeDeath()
@@ -101,6 +94,11 @@ namespace SheepDoom
         public float getHealth()
         {
             return currenthealth;
+        }
+
+        public bool GetHealthStatus()
+        {
+            return isFullHealth;
         }
 
         //to set playerdead to false when player is respawned

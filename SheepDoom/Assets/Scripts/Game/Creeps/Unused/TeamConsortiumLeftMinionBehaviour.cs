@@ -57,24 +57,29 @@ namespace SheepDoom
         [Space(15)]
         //Health
         [SerializeField]
-        [SyncVar]
         private float maxHealth;
-        [SyncVar] public float currenthealth;
+        [SyncVar] private float currenthealth;
         public float goldValue;
 
         [Space(15)]
-        public GameObject targetObject;
+        private GameObject targetObject = null;
         [SyncVar] private bool isLockedOn = false;
         // public bool isplayer = false;
         public event Action<float> OnHealthPctChanged = delegate { };
 
         void Start()
         {
-            targetObject = null;
-            isLockedOn = false;
             charAnim = GetComponent<Animator>();
-            agent = GetComponent<NavMeshAgent>();
+            //agent = GetComponent<NavMeshAgent>();
 
+            //currenthealth = maxHealth;
+            //currentPoint = StartIndex;
+            //StartMovingToWayPoint();
+            //agent.autoBraking = false;
+        }
+
+        public override void OnStartServer()
+        {
             currenthealth = maxHealth;
             currentPoint = StartIndex;
             StartMovingToWayPoint();
@@ -91,8 +96,7 @@ namespace SheepDoom
                     isLockedOn = true;
                 }
             }
-
-            else if (other.CompareTag("Player") && other.gameObject.layer == 8 && !other.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
+            else if (other.CompareTag("Player") && other.gameObject.layer == 8 && !other.GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if (!isLockedOn)
                 {
@@ -125,58 +129,48 @@ namespace SheepDoom
         void Update()
         {
 
-            // dist = Vector3.Distance(playerTransf.position, transform.position);
-            //Check if Player in sightrange
-            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
-
-            //Check if Player in attackrange
-            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatisplayer);
-
-            if (target == null)
+            if (isServer)
             {
-                targetObject = null;
-                isLockedOn = false;
-                StartMovingToWayPoint();
-                return;
-            }
+                // dist = Vector3.Distance(playerTransf.position, transform.position);
+                //Check if Player in sightrange
+                playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
 
-            if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
-            {
-                goBackToTravelling();
-            }
+                //Check if Player in attackrange
+                playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatisplayer);
 
-            if (playerInSightRange && !playerInAttackRange)
-            {
-                agent.autoBraking = false;
-                ChasePlayer();
-            }
+                /*if (target == null)
+                {
+                    targetObject = null;
+                    isLockedOn = false;
+                    StartMovingToWayPoint();
+                    return;
+                }*/
 
-            if (playerInAttackRange && playerInSightRange && ismeleeattack == false)
-            {
-                RangedAttackPlayer();
-            }
-            if (playerInAttackRange && playerInSightRange && ismeleeattack == true)
-            {
-                MeleeAttackPlayer();
-            }
+                if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
+                    goBackToTravelling();
 
-            if (currenthealth <= 0)
-            {
+                if (playerInSightRange && !playerInAttackRange && isLockedOn)
+                {
+                    agent.autoBraking = false;
+                    ChasePlayer();
+                }
 
-                Destroyy();
-                      
+                if (playerInAttackRange && playerInSightRange && ismeleeattack == false)
+                    RangedAttackPlayer();
 
+                if (playerInAttackRange && playerInSightRange && ismeleeattack == true)
+                    MeleeAttackPlayer();
 
+                if (currenthealth <= 0)
+                    Destroyy();
             }
 
         }
+
         void ChasePlayer()
         {
             if (targetObject != null)
-            {
                 agent.SetDestination(targetObject.transform.position);
-            }
-
         }
 
         void MeleeAttackPlayer()
@@ -262,7 +256,6 @@ namespace SheepDoom
             transform.LookAt(target);
             agent.SetDestination(target);
             agent.speed = CreepMoveSpeed;
-
         }
 
         public void TakeDamage(float damage)

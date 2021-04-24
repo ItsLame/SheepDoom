@@ -16,7 +16,6 @@ namespace SheepDoom
         [SerializeField]
         private float respawnTimerInGame;
         private float respawnDisplayNumber;
-        [SyncVar] public bool isDead = false;
 
         [Space(15)]
         //the time we will use
@@ -28,28 +27,6 @@ namespace SheepDoom
         public GameObject deadTextObject;
         public GameObject respawninginObject;
         public GameObject PlayerRespawnTimerObject;
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            //setting default respawn time, will be manipulated in future
-            respawnTimerInGame = respawnTimerRef;
-
-            //get UI objects
-            //deathOverlay = GameObject.Find("DeathOverlay");
-            //deadTextObject = GameObject.Find("DeathOverlay/deadText");
-            //respawninginObject = GameObject.Find("DeathOverlay/respawningIn");
-            //PlayerRespawnTimerObject = GameObject.Find("DeathOverlay/PlayerRespawnTimer");
-
-            if(isClient)
-            {
-                deathOverlay = FindMe.instance.P_DeathOverlay;
-                deadTextObject = FindMe.instance.P_DeadText;
-                respawninginObject = FindMe.instance.P_RespawningIn;
-                PlayerRespawnTimerObject = FindMe.instance.P_RespawnTimer;
-            }
-        }
-
 
         // Update is called once per frame
         void Update()
@@ -73,11 +50,6 @@ namespace SheepDoom
                     myRigidBody.rotation = Quaternion.LookRotation(moveMe);
                     RpcPlayerDead();
                 }
-                   
-
-                //deactivate movement
-                //GetComponent<PlayerHealth>().isDead = true;
-                //this.gameObject.GetComponent<PlayerAttack>().isDead = true;
             }
         }
 
@@ -151,6 +123,16 @@ namespace SheepDoom
             while (GetComponent<PlayerHealth>().isPlayerDead())
                 yield return null;
             respawnTimerInGame = respawnTimerRef;
+        }
+
+        public override void OnStartClient()
+        {
+            if (!hasAuthority) return;
+            respawnTimerInGame = respawnTimerRef;
+            deathOverlay = FindMe.instance.P_DeathOverlay;
+            deadTextObject = FindMe.instance.P_DeadText;
+            respawninginObject = FindMe.instance.P_RespawningIn;
+            PlayerRespawnTimerObject = FindMe.instance.P_RespawnTimer;
         }
     }
 
