@@ -317,11 +317,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4286456150406609328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6d3b00740177a74d873e485502c5602, type: 3}
+  m_Script: {fileID: 11500000, guid: fcff89a1e268fea4a8a2b61b1bcba8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   foregroundimage: {fileID: 2933648434215932818}
-  updatespeedseconds: 0.2
+  updatespeedseconds: 0.5
 --- !u!1 &8278160488922250821
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,12 +334,11 @@ GameObject:
   - component: {fileID: 4845920925660771603}
   - component: {fileID: 5033433189816787489}
   - component: {fileID: 2119394237772557191}
+  - component: {fileID: 2232297401316802236}
   - component: {fileID: 1726418527979177131}
   - component: {fileID: 6800082829237668903}
   - component: {fileID: -8878632984452253741}
   - component: {fileID: 2604463573454587433}
-  - component: {fileID: -4652393214133118069}
-  - component: {fileID: 5892546946559195054}
   m_Layer: 0
   m_Name: TeamConsortiumRangedCreep
   m_TagString: TeamConsortiumRangeCreep
@@ -423,6 +422,52 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 16
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2232297401316802236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8278160488922250821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882160927b766014eaa70b7e41c853d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  waypoints:
+  - {fileID: 6380027430905768233, guid: 4c805ffbead11554cacdab9263b10ba5, type: 3}
+  - {fileID: 5549893852873303204, guid: b173a28a8c67f174b8dd222b26bcd255, type: 3}
+  - {fileID: 7283343412728255357, guid: 05213f320d051d041901407362fed445, type: 3}
+  - {fileID: 1760434348444512350, guid: a3b9bf2904aca6b4e9a2b6a3889648a9, type: 3}
+  - {fileID: 3779921140442066167, guid: d29ec9c1fc929674cbac590299de1c89, type: 3}
+  StartIndex: 0
+  agent: {fileID: 0}
+  ismeleeattack: 0
+  CreepMoveSpeed: 20
+  timeBetweenAttacks: 2
+  sightRange: 60
+  attackRange: 40
+  playerInSightRange: 0
+  playerInAttackRange: 0
+  TeamCoalition: 0
+  whatisplayer:
+    serializedVersion: 2
+    m_Bits: 256
+  projectile: {fileID: 3321324340310797477, guid: e237935973540a54f86fcb325efbe1eb,
+    type: 3}
+  animator: {fileID: 0}
+  attackPoint: {fileID: 0}
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  meleedamage: 50
+  maxHealth: 50
+  currenthealth: 0
+  goldValue: 2
+  targetObject: {fileID: 0}
+  Murderer: {fileID: 0}
 --- !u!195 &1726418527979177131
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -495,61 +540,3 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
---- !u!114 &-4652393214133118069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8278160488922250821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  forceHidden: 0
---- !u!114 &5892546946559195054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8278160488922250821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1910a3c72479ec3449dc351c795eb1ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  waypoints:
-  - {fileID: 6380027430905768233, guid: 4c805ffbead11554cacdab9263b10ba5, type: 3}
-  - {fileID: 5549893852873303204, guid: b173a28a8c67f174b8dd222b26bcd255, type: 3}
-  - {fileID: 7283343412728255357, guid: 05213f320d051d041901407362fed445, type: 3}
-  - {fileID: 1760434348444512350, guid: a3b9bf2904aca6b4e9a2b6a3889648a9, type: 3}
-  - {fileID: 3779921140442066167, guid: d29ec9c1fc929674cbac590299de1c89, type: 3}
-  StartIndex: 0
-  agent: {fileID: 1726418527979177131}
-  ismeleeattack: 0
-  CreepMoveSpeed: 20
-  timeBetweenAttacks: 2
-  sightRange: 60
-  attackRange: 40
-  playerInSightRange: 0
-  playerInAttackRange: 0
-  TeamCoalition: 0
-  whatisplayer:
-    serializedVersion: 2
-    m_Bits: 256
-  projectile: {fileID: 3321324340310797477, guid: e237935973540a54f86fcb325efbe1eb,
-    type: 3}
-  animator: {fileID: 0}
-  attackPoint: {fileID: 0}
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  meleedamage: 50
-  maxHealth: 50
-  goldValue: 2

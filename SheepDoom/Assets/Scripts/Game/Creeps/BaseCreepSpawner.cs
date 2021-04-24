@@ -7,28 +7,26 @@ namespace SheepDoom
 {
     public class BaseCreepSpawner : NetworkBehaviour
     {
-        private float nextspawntime = 30;
+        private float nextspawntime;
 
         [SerializeField]
         private GameObject Minion;
         [SerializeField]
-        private float spawndelay;
+        private float spawndelay = 10;
 
         private void Update()
         {
-            if(isServer)
+            if (ShouldSpawn())
             {
-                if (ShouldSpawn())
-                    spawn();
+                spawn();
             }
-            
         }
-
         [Server]
         private void spawn()
         {
             nextspawntime = Time.time + spawndelay;
-            GameObject creep = Instantiate(Minion, transform.position, transform.rotation);
+            GameObject creep = (GameObject)Instantiate(Minion, transform.position, transform.rotation);
+
             NetworkServer.Spawn(creep);
         }
 

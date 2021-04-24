@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/*namespace SheepDoom
+namespace SheepDoom
 {
     public class BaseConsortiumHPBar : HealthBar
     {
@@ -13,12 +13,7 @@ using UnityEngine.UI;
         protected override void Awake()
         {
             base.Awake();
-            GetComponentInParent<LeftMinionBehaviour>().OnHealthPctChanged += HandleHealthChanged;
-        }
-
-        void OnDestroy()
-        {
-            GetComponentInParent<LeftMinionBehaviour>().OnHealthPctChanged -= HandleHealthChanged;
+            GetComponentInParent<TeamConsortiumLeftMinionBehaviour>().OnHealthPctChanged += HandleHealthChanged;
         }
 
         protected override void InitHealthBar()
@@ -26,5 +21,5 @@ using UnityEngine.UI;
             P_foregroundImage = foregroundimage;
             P_updateSpeedSeconds = updatespeedseconds;
         }
-    }  
-}*/
+    }
+}

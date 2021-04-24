@@ -5,7 +5,7 @@ using Mirror;
 
 namespace SheepDoom
 {
-    public class TeamConsortiumprojectilesettings : NetworkBehaviour
+    public class TeamCoalitionCreepProjectilesettings : NetworkBehaviour
     {
         public GameObject owner;
         public int damage;
@@ -27,13 +27,14 @@ namespace SheepDoom
 
         public void setOwner(GameObject firer)
         {
+            if (!hasAuthority) return;
             owner = firer;
         }
 
         [Server]
         void OnTriggerEnter(Collider col)
         {
-            if (col.gameObject.layer == 8 && col.gameObject.CompareTag("Player"))
+            if (col.gameObject.layer == 9 && col.gameObject.CompareTag("Player"))
             {
                 //dont hit dead ppl
                 if (col.gameObject.GetComponent<PlayerHealth>().isPlayerDead()) return;
@@ -47,17 +48,16 @@ namespace SheepDoom
                     col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
 
                     //set minion target to null
-                    owner.gameObject.GetComponent<LeftMinionBehaviour>().goBackToTravelling();
+                    owner.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().goBackToTravelling();
                 }
-
 
             }
 
-            else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 8)
+            else if (col.gameObject.CompareTag("BaseMinion") && col.gameObject.layer == 9)
             {
-                col.transform.parent.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
+                col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
+                //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
                 Destroy(this.gameObject);
-                //  Debug.Log("health: baseMinion hit by " + m_Rigidbody); 
             }
         }
 

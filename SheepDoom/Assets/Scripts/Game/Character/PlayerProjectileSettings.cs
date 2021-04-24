@@ -136,8 +136,8 @@ namespace SheepDoom
                 if (col.gameObject.layer == 8)
                 {
                     GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                    target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
-                    if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                    target.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
+                    if (target.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().getHealth() <= 0)
                     {
                         owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
                     }
@@ -146,8 +146,8 @@ namespace SheepDoom
                 if (col.gameObject.layer == 9)
                 {
                     GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                    target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
-                    if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                    target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
+                    if (target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().getHealth() <= 0)
                     {
                         owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
                     }
