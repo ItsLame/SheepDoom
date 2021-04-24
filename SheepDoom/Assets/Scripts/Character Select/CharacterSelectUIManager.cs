@@ -34,9 +34,9 @@ namespace SheepDoom
         [Header("Characters")]
         [SerializeField] private GameObject mario;
         [SerializeField] private GameObject luigi;
-        [SerializeField] private GameObject bowser;
         [SerializeField] private GameObject peach;
         [SerializeField] private GameObject yoshi;
+        [SerializeField] private GameObject bowser;
         private SyncList<string> team1PickedHeroes = new SyncList<string>();
         private SyncList<string> team2PickedHeroes = new SyncList<string>();
         private SyncList<GameObject> notLockedInPlayers = new SyncList<GameObject>();
@@ -202,7 +202,7 @@ namespace SheepDoom
                 // do
                 //random a number 1-5
                 // if 1 = mario, 2 = bowser, 3 = luigi, 4 = peach, 5 = yoshi
-                // 
+                //
                 // while hero in pickedheroes
             }
             //else
@@ -243,7 +243,6 @@ namespace SheepDoom
 
                 ClientRequestUpdate(_heroName, true);
             }
-           
         }
 
         [ClientRpc]
@@ -254,7 +253,7 @@ namespace SheepDoom
                 SetUI_Player(_player);
                 SetUI_Team(_player, _teamIndex);
             }
-            
+
             //Debug.Log("Player: "+_player.GetComponent<PlayerObj>().GetPlayerName()+"\tSet HeroName: "+_heroName+"\nInit Status: "+_init+"\tLock In Status: "+_lockIn);
 
             SetUI_Hero(_player, _heroName, _lockIn);
@@ -270,23 +269,30 @@ namespace SheepDoom
                 // when other players (from same team) attempt to pick the hero, lock in button will be disabled
                 //GameObject.Find(_heroName).SendMessage("SetTaken", _lockIn);
                 //GameObject.Find(_heroName).SendMessage("OnClickHero");
-                Hero hero = null;
+
+                //Hero hero = null;
+                GameObject hero = null;
                 switch (_heroName)
                 {
                     case "Mario":
-                        hero = new Mario(mario.GetComponent<Mario>(), _lockIn, mario.GetComponent<Image>());
-                        break;
-                    case "Bowser":
-                        hero = new Bowser(bowser.GetComponent<Bowser>(), _lockIn, bowser.GetComponent<Image>());
+                        //hero = new Mario(mario.GetComponent<Mario>(), _lockIn, mario.GetComponent<Image>());
+                        hero = mario;
                         break;
                     case "Luigi":
-                        hero = new Luigi(luigi.GetComponent<Luigi>(), _lockIn, luigi.GetComponent<Image>());
+                        //hero = new Luigi(luigi.GetComponent<Luigi>(), _lockIn, luigi.GetComponent<Image>());
+                        hero = luigi;
                         break;
                     case "Peach":
-                        hero = new Peach(peach.GetComponent<Peach>(), _lockIn, peach.GetComponent<Image>());
+                        //hero = new Peach(peach.GetComponent<Peach>(), _lockIn, peach.GetComponent<Image>());
+                        hero = peach;
                         break;
                     case "Yoshi":
-                        hero = new Yoshi(yoshi.GetComponent<Yoshi>(), _lockIn, hero.GetComponent<Image>());
+                        //hero = new Yoshi(yoshi.GetComponent<Yoshi>(), _lockIn, yoshi.GetComponent<Image>());
+                        hero = yoshi;
+                        break;
+                    case "Bowser":
+                        //hero = new Bowser(bowser.GetComponent<Bowser>(), _lockIn, bowser.GetComponent<Image>());
+                        hero = bowser;
                         break;
                 }
                 //Debug.Log("TARGET UPDATE ISOWNER? " + _isOwner);
@@ -294,8 +300,8 @@ namespace SheepDoom
 
                 if (_isOwner)
                 {
-                    P_heroInfoImg.sprite = hero.P_heroIcon;
-                    P_heroInfoText.text = hero.P_heroName + "\n-----\n" + hero.P_heroDesc;
+                    //P_heroInfoImg.sprite = hero.P_heroIcon;
+                    //P_heroInfoText.text = hero.P_heroName + "\n-----\n" + hero.P_heroDesc;
 
                     // activates status panel to local player to prevent them from clicking other heroes
                     P_statusPanel.SetActive(_lockIn);
@@ -399,7 +405,7 @@ namespace SheepDoom
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
         public override void OnStartServer()
-        {   
+        {
             instance = this;
             MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].SetCharacterSelectUIManager(instance);
         }
@@ -509,7 +515,7 @@ namespace SheepDoom
 
                 _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.transform, false);
             }
-                
+
             else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
             {
                 MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.SetActive(false);

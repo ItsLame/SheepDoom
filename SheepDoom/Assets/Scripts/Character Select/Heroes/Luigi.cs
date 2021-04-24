@@ -9,6 +9,8 @@ namespace SheepDoom
     public class Luigi : Hero
     {
         [SerializeField] private Image heroImage;
+
+        /*
         public Luigi(Luigi comp, bool _isTaken, Image heroImg)
         {
             // for object
@@ -19,6 +21,8 @@ namespace SheepDoom
             comp.SetTaken(_isTaken);
             comp.OnClickHero();
         }
+        */
+
         [Client]
         protected override void InitHeroInfo()
         {

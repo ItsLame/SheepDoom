@@ -9,6 +9,8 @@ namespace SheepDoom
     public class Peach : Hero
     {
         [SerializeField] private Image heroImage;
+
+        /*
         public Peach(Peach comp, bool _isTaken, Image heroImg)
         {
             // for object
@@ -19,6 +21,7 @@ namespace SheepDoom
             comp.SetTaken(_isTaken);
             comp.OnClickHero();
         }
+        */
 
         [Client]
         protected override void InitHeroInfo()
