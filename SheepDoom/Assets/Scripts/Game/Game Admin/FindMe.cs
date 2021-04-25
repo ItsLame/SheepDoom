@@ -42,6 +42,10 @@ namespace SheepDoom
         [SerializeField] private GameObject K;
         [SerializeField] private GameObject D;
         [SerializeField] private GameObject C;
+        [SerializeField] private GameObject ScoreboardBlue;
+        [SerializeField] private GameObject ScoreboardRed;
+        [SerializeField] private GameObject BlueWinLose;
+        [SerializeField] private GameObject RedWinLose;
 
         public bool isInit { get; private set;}
 
@@ -143,6 +147,30 @@ namespace SheepDoom
         {
             get{return C;}
             set{C = value;}
+        }
+
+        public GameObject P_ScoreboardBlue
+        {
+            get { return ScoreboardBlue; }
+            set { ScoreboardBlue = value; }
+        }
+
+        public GameObject P_ScoreboardRed
+        {
+            get { return ScoreboardRed; }
+            set { ScoreboardRed = value; }
+        }
+
+        public GameObject P_BlueWinLose
+        {
+            get { return BlueWinLose; }
+            set { BlueWinLose = value; }
+        }
+
+        public GameObject P_RedWinLose
+        {
+            get { return RedWinLose; }
+            set { RedWinLose = value; }
         }
 
         #endregion
