@@ -15,11 +15,19 @@ namespace SheepDoom
         private void OnTriggerStay(Collider other)
         {
             //Debug.Log("inside healing pad");
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("Player") && !other.gameObject.GetComponent<PlayerHealth>().GetHealthStatus())
             {
-                //if not full health
-                if (!other.gameObject.GetComponent<PlayerHealth>().GetHealthStatus())
-                    other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(HealRate);
+                if(gameObject.CompareTag("TeamCoaHealPad"))
+                {
+                    //if not full health
+                    if (other.gameObject.layer == 8)
+                        other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(HealRate);
+                }
+                else if(gameObject.CompareTag("TeamConHealPad"))
+                {
+                    if (other.gameObject.layer == 9)
+                        other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(HealRate);
+                }  
             }
         }
     }
