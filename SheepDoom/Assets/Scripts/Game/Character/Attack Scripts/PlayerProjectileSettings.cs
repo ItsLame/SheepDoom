@@ -9,9 +9,8 @@ namespace SheepDoom
     public class PlayerProjectileSettings : NetworkBehaviour
     {
         //projectileOwner
-        //[SyncVar] cant syncvar an object of type gameobject
         public GameObject owner;
-        public float ownerTeamID;
+        [SyncVar]public float ownerTeamID;
 
         [Space(15)]
         //rotation controls
@@ -30,6 +29,7 @@ namespace SheepDoom
         [Space(15)]
         public float m_Speed = 10f;   // default speed of projectile
         public float m_Lifespan = 3f; // Lifespan per second
+        private float m_StartTime = 0f;
         [Space(10)]
         public bool isAccelerating = false;
         public bool isDeccelerating = false;
@@ -59,11 +59,9 @@ namespace SheepDoom
             m_Rigidbody = GetComponent<Rigidbody>();
         }
 
-        void Start()
+        public override void OnStartServer()
         {
             ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-            Destroy(gameObject, m_Lifespan);
-            //   Debug.Log("Owner: " + owner);
         }
 
         [Server]
@@ -99,9 +97,7 @@ namespace SheepDoom
                     }
 
                     if (destroyOnContact)
-                    {
-                        Object.Destroy(this.gameObject);
-                    }
+                        Destroyy();
                 }
             }
 
@@ -127,9 +123,7 @@ namespace SheepDoom
                 owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
 
                 if (destroyOnContact)
-                {
-                    Object.Destroy(this.gameObject);
-                }
+                    Destroyy();
 
             }
 
@@ -147,10 +141,7 @@ namespace SheepDoom
                         }
 
                         if (destroyOnContact)
-                        {
-                            Object.Destroy(this.gameObject);
-
-                        }
+                            Destroyy();
                     }
                 }
 
@@ -167,10 +158,7 @@ namespace SheepDoom
                         }
 
                         if (destroyOnContact)
-                        {
-                            Object.Destroy(this.gameObject);
-
-                        }
+                            Destroyy();
                     }
 
                 }
@@ -201,69 +189,73 @@ namespace SheepDoom
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
                 if (destroyOnContact)
-                {
-                    Object.Destroy(this.gameObject);
-
-                }
-
+                    Destroyy();
             }
 
             else if (col.gameObject.CompareTag("Other"))
             {
                 if (destroyOnContact)
-                {
-                    Object.Destroy(this.gameObject);
-
-                }
+                    Destroyy();
             }
 
         }
 
-        //command to set owner of projectile
-        public void CMD_setOwnerProjectile(GameObject player)
+        [Server]
+        private void Destroyy()
+        {
+            NetworkServer.Destroy(gameObject);
+        }
+
+        [Server]
+        public void SetOwnerProjectile(GameObject player)
         {
             owner = player;
         }
 
         void Update()
         {
-            //rotation movement
-            transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
-
-            //basic forward movement
-            transform.Translate(Vector3.forward * m_Speed * Time.deltaTime);
-
-            //adjust acceleration rate per frame
-            if (isAccelerating)
+            if(isServer)
             {
-                //stop accelerating once hit speed limit
-                if (hasSpeedLimit && (m_Speed <= speedLimit))
+                //rotation movement
+                transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
+
+                //basic forward movement
+                transform.Translate(Vector3.forward * m_Speed * Time.deltaTime);
+
+                //adjust acceleration rate per frame
+                if (isAccelerating)
                 {
-                    m_Speed += accelerationRate;
+                    //stop accelerating once hit speed limit
+                    if (hasSpeedLimit && (m_Speed <= speedLimit))
+                    {
+                        m_Speed += accelerationRate;
+                    }
+
+                    else
+                    {
+                        m_Speed += accelerationRate;
+                    }
+
                 }
 
-                else
+                //stop deccelerating once hit speed limit
+                if (isDeccelerating && (m_Speed >= speedLimit))
                 {
-                    m_Speed += accelerationRate;
+                    m_Speed -= accelerationRate;
+
                 }
 
+                //adjusting acceleration ratess 
+                if (accelMultiplierOn)
+                {
+                    if (m_Speed <= speedLimit) return;
+                    accelerationRate *= accelMultiplier;
+                }
+
+                m_StartTime += Time.deltaTime;
+                if (m_StartTime >= m_Lifespan)
+                    Destroyy();
             }
-
-            //stop deccelerating once hit speed limit
-            if (isDeccelerating && (m_Speed >= speedLimit))
-            {
-                m_Speed -= accelerationRate;
-
-            }
-
-            //adjusting acceleration ratess 
-            if (accelMultiplierOn)
-            {
-                if (m_Speed <= speedLimit) return;
-                accelerationRate *= accelMultiplier;
-            }
-
-
         }
     }
 }

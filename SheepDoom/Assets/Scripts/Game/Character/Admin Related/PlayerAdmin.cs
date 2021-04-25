@@ -12,7 +12,7 @@ namespace SheepDoom
 
         [Header("Team affiliation (1 for Blue, 2 for Red")]
         [SerializeField]
-        private float TeamIndex;
+        [SyncVar] private float TeamIndex;
 
         [Header("Player scores")]
         [SyncVar(hook = nameof(SyncPlayerKill))] public float PlayerKills;
