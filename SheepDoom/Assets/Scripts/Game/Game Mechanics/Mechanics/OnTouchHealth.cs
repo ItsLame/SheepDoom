@@ -80,7 +80,7 @@ namespace SheepDoom
                                 if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                                 {
                                     GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
-                                    parent.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                                    parent.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
                                 }
                             }
                         }
@@ -95,7 +95,7 @@ namespace SheepDoom
                                 if (target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().getHealth() <= 0)
                                 {
                                     GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
-                                    parent.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                                    parent.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
                                 }
                             }
                         }
@@ -113,7 +113,7 @@ namespace SheepDoom
                 if (col.gameObject.CompareTag("NeutralMinion"))
                 {
                     GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
-                    parent.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                    parent.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
 
                     if (destroyOnContact)
                     {

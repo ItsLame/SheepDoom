@@ -124,7 +124,7 @@ namespace SheepDoom
 
 
                 //                Debug.Log(owner + " hitting neutral minion");
-                owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
 
                 if (destroyOnContact)
                 {
@@ -143,7 +143,7 @@ namespace SheepDoom
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                         {
-                            owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                            owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
                         }
 
                         if (destroyOnContact)
@@ -163,7 +163,7 @@ namespace SheepDoom
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                         {
-                            owner.gameObject.GetComponent<CharacterGold>().varyGold(5);
+                            owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
                         }
 
                         if (destroyOnContact)
