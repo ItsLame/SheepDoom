@@ -9,19 +9,21 @@ namespace SheepDoom
     public class CharacterGold : NetworkBehaviour
     {
         //float to hold player's current gold
+        [SerializeField]
         [SyncVar(hook = nameof(SyncPlayerGold))]
-        public float CurrentGold;
+        private float CurrentGold;
 
         //UI showing gold amount
-        public Text CurrentGoldUI;
-        public Text CurrentGoldInShopUI;
+        [SerializeField]
+        private Text CurrentGoldUI;
+        [SerializeField]
+        private Text CurrentGoldInShopUI;
 
         //to sync player gold ui
         public void SyncPlayerGold(float oldValue, float newValue)
         {
             if (hasAuthority)
             {
-                Debug.Log("Syncing Player Golds");
                 CurrentGoldUI.text = CurrentGold.ToString();
                 CurrentGoldInShopUI.text = CurrentGold.ToString();
             }
@@ -35,7 +37,7 @@ namespace SheepDoom
 
         //gold number manipulation function
         [Command]
-        public void varyGold(float goldValueChange)
+        public void CmdVaryGold(float goldValueChange)
         {
             Debug.Log("Current Gold: " + CurrentGold);
             Debug.Log("Gold increased by " + goldValueChange);
@@ -43,12 +45,9 @@ namespace SheepDoom
             Debug.Log("Current Gold after: " + CurrentGold);
         }
 
-
-        // Update is called once per frame
-        void Start()
+        public override void OnStartClient()
         {
             if (!hasAuthority) return;
-            //get the gold text in game UI
             CurrentGoldUI = FindMe.instance.P_PlayerGold.GetComponent<Text>();
             CurrentGoldUI.text = CurrentGold.ToString();
 
