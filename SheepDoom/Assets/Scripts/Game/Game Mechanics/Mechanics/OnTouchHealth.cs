@@ -31,6 +31,7 @@ namespace SheepDoom
         {
             if (hitboxActive)
             {
+   //             Debug.Log("Contacted With " + col.gameObject.name);
                 if (willContactPlayer)
                 {
                     //if hit other player
@@ -99,6 +100,12 @@ namespace SheepDoom
                             }
                         }
 
+
+                        if (destroyOnContact)
+                        {
+                            Object.Destroy(this.gameObject);
+                        }
+
                     }
                 }
 
@@ -112,13 +119,6 @@ namespace SheepDoom
                     {
                         Object.Destroy(this.gameObject);
                     }
-
-                }
-
-
-                if (destroyOnContact)
-                {
-                    Object.Destroy(this.gameObject);
 
                 }
             }

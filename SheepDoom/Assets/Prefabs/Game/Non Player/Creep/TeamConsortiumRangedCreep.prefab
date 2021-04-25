@@ -434,12 +434,12 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 1
   m_Speed: 60
-  m_Acceleration: 8
-  avoidancePriority: 50
+  m_Acceleration: 300
+  avoidancePriority: 20
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0.5
@@ -525,18 +525,16 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   waypoints:
-  - {fileID: 6380027430905768233, guid: 4c805ffbead11554cacdab9263b10ba5, type: 3}
-  - {fileID: 5549893852873303204, guid: b173a28a8c67f174b8dd222b26bcd255, type: 3}
-  - {fileID: 7283343412728255357, guid: 05213f320d051d041901407362fed445, type: 3}
-  - {fileID: 1760434348444512350, guid: a3b9bf2904aca6b4e9a2b6a3889648a9, type: 3}
-  - {fileID: 3779921140442066167, guid: d29ec9c1fc929674cbac590299de1c89, type: 3}
+  - {fileID: 5025137307999347345, guid: 7e130f37463faac4bb5df4d2aed9a3a5, type: 3}
+  - {fileID: 1601260377792171736, guid: 22e7630655743a1489cde7c1dc505075, type: 3}
+  - {fileID: 3993287873418924031, guid: de11748f58b201c439e808eb73908285, type: 3}
   StartIndex: 0
   agent: {fileID: 1726418527979177131}
   ismeleeattack: 0
-  CreepMoveSpeed: 20
+  CreepMoveSpeed: 30
   timeBetweenAttacks: 2
-  sightRange: 32
-  attackRange: 20
+  sightRange: 40
+  attackRange: 30
   playerInSightRange: 0
   playerInAttackRange: 0
   TeamCoalition: 0

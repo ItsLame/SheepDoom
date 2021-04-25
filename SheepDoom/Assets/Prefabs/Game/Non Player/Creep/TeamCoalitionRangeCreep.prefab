@@ -260,8 +260,8 @@ GameObject:
   - component: {fileID: 7481533939122191822}
   - component: {fileID: 7481533939122191823}
   - component: {fileID: 7481533939122191820}
-  - component: {fileID: 7973315916154628382}
   - component: {fileID: 7481533939122191808}
+  - component: {fileID: 7973315916154628382}
   - component: {fileID: 5568960019415368111}
   - component: {fileID: -6711539645681096518}
   - component: {fileID: -5237622665496464381}
@@ -349,6 +349,28 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 16
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!195 &7481533939122191808
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7481533939122191818}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1
+  m_Speed: 120
+  m_Acceleration: 300
+  avoidancePriority: 20
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 0
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &7973315916154628382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,18 +386,16 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   waypoints:
-  - {fileID: 6221853615271584699, guid: ff74477e8a2e5194a9f95a4c9b1a2641, type: 3}
-  - {fileID: 8749327746384431372, guid: ee6d0b4ab1abce64986f4fb45ab89c0c, type: 3}
-  - {fileID: 1192581282298759745, guid: 95290a1dd7c85714ab935134b2cc7ace, type: 3}
-  - {fileID: 5160372420522706715, guid: bc9d6e08ba9a768459a44424227b0db2, type: 3}
-  - {fileID: 2434905913773175889, guid: 8936355b985643d48bc4a2724c889852, type: 3}
+  - {fileID: 3993287873418924031, guid: de11748f58b201c439e808eb73908285, type: 3}
+  - {fileID: 1601260377792171736, guid: 22e7630655743a1489cde7c1dc505075, type: 3}
+  - {fileID: 5025137307999347345, guid: 7e130f37463faac4bb5df4d2aed9a3a5, type: 3}
   StartIndex: 0
   agent: {fileID: 7481533939122191808}
   ismeleeattack: 0
-  CreepMoveSpeed: 20
+  CreepMoveSpeed: 30
   timeBetweenAttacks: 2
-  sightRange: 32
-  attackRange: 20
+  sightRange: 40
+  attackRange: 30
   playerInSightRange: 0
   playerInAttackRange: 0
   TeamCoalition: 0
@@ -392,28 +412,6 @@ MonoBehaviour:
   meleedamage: 50
   maxHealth: 50
   goldValue: 2
---- !u!195 &7481533939122191808
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7481533939122191818}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 1
-  m_Speed: 60
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!54 &5568960019415368111
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -275,13 +275,11 @@ namespace SheepDoom
             {
                 target = waypoints[currentPoint].position;
                 direction = target - transform.position;
-                if (direction.magnitude < 5)
+                if (direction.magnitude < 10)
                     currentPoint++;
             }
-            else if (currentPoint == waypoints.Length)
-            {
-                agent.autoBraking = true;
-            }
+            
+
             transform.LookAt(target);
             agent.SetDestination(target);
             agent.speed = CreepMoveSpeed;
