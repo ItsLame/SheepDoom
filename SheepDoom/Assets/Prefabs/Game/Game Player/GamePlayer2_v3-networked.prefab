@@ -293,7 +293,7 @@ MonoBehaviour:
   isSpecial1Buff: 0
   isSpecial2Buff: 1
   isUlti1Buff: 0
-  isUlti2Buff: 0
+  isUlti2Buff: 1
   Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
     type: 3}
   MeleeAttackObject: {fileID: 4008510119826717395}
@@ -307,10 +307,13 @@ MonoBehaviour:
   UltiChild_v2: {fileID: 0}
   SpawnPoint: {fileID: 3805828759594656768}
   cooldown1: 0.75
-  cooldown2: 4
+  cooldown2: 6
   cooldown3: 4
+  cooldown1Multiplier: 0.5
+  cooldown1MultiplerTimer: 3
   ismeeleeattack: 1
   meleeAttackDuration1: 0.2
+  meleeAttackSpeedMultiplier: 2
   meleeCombo: 1
   animator: {fileID: 0}
 --- !u!114 &3805828758684287360
@@ -1302,7 +1305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  moveSpd: 120
+  moveSpd: 0
   destroyOnContact: 0
   isGoingUp: 0
   isGoingDown: 0
