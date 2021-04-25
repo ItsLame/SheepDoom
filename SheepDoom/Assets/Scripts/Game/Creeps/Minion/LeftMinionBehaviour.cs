@@ -24,11 +24,12 @@ namespace SheepDoom
         Animator charAnim;
 
         //Aggro
-        private float speed = 15.0f;
+        //private float speed = 15.0f;
         private Vector3 wayPointPos;
         // public float howclose;
         // private float dist;
-        public float CreepMoveSpeed = 2.0f;
+        [SerializeField]
+        private float CreepMoveSpeed;
 
         //Attacking
         public float timeBetweenAttacks;
@@ -90,27 +91,27 @@ namespace SheepDoom
         [Server]
         private void OnTriggerEnter(Collider other)
         {
-            if(gameObject.CompareTag("TeamCoalitionRangeCreep"))
+            if(gameObject.CompareTag("TeamCoalitionRangeCreep") && !isLockedOn)
             {
-                if(other.CompareTag("TeamConsortiumRangeCreep") && !isLockedOn)
+                if (other.CompareTag("TeamConsortiumRangeCreep"))
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;
                 }
-                else if (other.gameObject.layer == 9 && other.gameObject.CompareTag("Player") && !other.gameObject.GetComponent<PlayerHealth>().isPlayerDead() && !isLockedOn)
+                else if (other.CompareTag("Player") && other.gameObject.layer == 9 && !other.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;
                 }
             }
-            else if(gameObject.CompareTag("TeamConsortiumRangeCreep"))
+            else if(gameObject.CompareTag("TeamConsortiumRangeCreep") && !isLockedOn)
             {
-                if(other.CompareTag("TeamCoalitionRangeCreep") && !isLockedOn)
+                if(other.CompareTag("TeamCoalitionRangeCreep"))
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;
                 }
-                else if (other.CompareTag("Player") && other.gameObject.layer == 8 && !other.GetComponent<PlayerHealth>().isPlayerDead() && !isLockedOn)
+                else if (other.CompareTag("Player") && other.gameObject.layer == 8 && !other.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;
@@ -144,18 +145,18 @@ namespace SheepDoom
                 //Check if Player in attackrange
                 playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatisplayer);
 
-                /*if (target == null)
+                if (target == null)
                 {
                     targetObject = null;
                     isLockedOn = false;
                     StartMovingToWayPoint();
                     return;
-                }*/
+                }
 
                 if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
                     goBackToTravelling();
 
-                if (playerInSightRange && !playerInAttackRange && isLockedOn)                    
+                if (playerInSightRange && !playerInAttackRange)// && isLockedOn)  // impossible scenario                  
                     ChasePlayer();
 
                 if (playerInAttackRange && playerInSightRange && !ismeleeattack)
