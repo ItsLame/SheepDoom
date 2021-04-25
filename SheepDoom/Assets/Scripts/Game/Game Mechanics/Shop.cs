@@ -12,8 +12,10 @@ namespace SheepDoom
         public float PlayerGold;
 
         [Space(15)]
-        public float SpecialCost;
-        public float UltiCost;
+        [SerializeField]
+        private float SpecialCost;
+        [SerializeField]
+        private float UltiCost;
 
         [Space(15)]
         //shop's UI
@@ -37,11 +39,6 @@ namespace SheepDoom
         //control checks for if player purchased special / ulti
         public bool hasPurchasedSpecial = false;
         public bool hasPurchasedUlti = false;
-
-        private void Start()
-        {
-            //ShopMenuUI = GameObject.Find("ShopUI");
-        }
 
         //for pressing the shop with raycast
         private void Update()
@@ -98,7 +95,6 @@ namespace SheepDoom
                 }
             }
 #endif
-
         }
 
         public void SetPlayer(GameObject _player)
@@ -136,7 +132,7 @@ namespace SheepDoom
             if (!hasPurchasedSpecial && (PlayerGold - SpecialCost >= 0))
             {
                 //deduct gold
-                Player.GetComponent<CharacterGold>().varyGold(-SpecialCost);
+                Player.GetComponent<CharacterGold>().CmdVaryGold(-SpecialCost);
 
                 //if choose 1st, disable 2nd
                 SpecialButton2.GetComponent<Button>().interactable = false;
@@ -159,7 +155,7 @@ namespace SheepDoom
             if (!hasPurchasedSpecial && (PlayerGold - SpecialCost >= 0))
             {
                 //deduct gold
-                Player.GetComponent<CharacterGold>().varyGold(-SpecialCost);
+                Player.GetComponent<CharacterGold>().CmdVaryGold(-SpecialCost);
 
                 //set alternative special chosen
                 Player.GetComponent<PlayerAttack>().CMD_AlternateSpecial();
@@ -181,7 +177,7 @@ namespace SheepDoom
             //can purchase only if havent purchased
             if (!hasPurchasedUlti && (PlayerGold - UltiCost >= 0))
             {
-                Player.GetComponent<CharacterGold>().varyGold(-UltiCost);
+                Player.GetComponent<CharacterGold>().CmdVaryGold(-UltiCost);
 
                 //if choose 1st, disable 2nd
                 UltiButton2.GetComponent<Button>().interactable = false;
@@ -200,7 +196,7 @@ namespace SheepDoom
             //can purchase only if havent purchased
             if (!hasPurchasedUlti && (PlayerGold - UltiCost >= 0))
             {
-                Player.GetComponent<CharacterGold>().varyGold(-UltiCost);
+                Player.GetComponent<CharacterGold>().CmdVaryGold(-UltiCost);
 
                 //set alternate ulti true
                 Player.GetComponent<PlayerAttack>().CMD_AlternateUlti(); 
