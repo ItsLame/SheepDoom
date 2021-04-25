@@ -48,6 +48,7 @@ namespace SheepDoom
                         if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
                         {
                             col.GetComponent<PlayerHealth>().SetPlayerDead();
+                            col.gameObject.GetComponent<GameEvent>().isMinion = true;
                             owner.GetComponent<LeftMinionBehaviour>().goBackToTravelling();
                         }
                     }
@@ -70,6 +71,7 @@ namespace SheepDoom
                         if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
                         {
                             col.GetComponent<PlayerHealth>().SetPlayerDead();
+                            col.gameObject.GetComponent<GameEvent>().isMinion = true;
                             owner.GetComponent<LeftMinionBehaviour>().goBackToTravelling();
                         }
                     }
