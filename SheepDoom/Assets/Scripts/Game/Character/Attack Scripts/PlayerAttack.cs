@@ -62,7 +62,7 @@ namespace SheepDoom
 
         //cooldown 1 cd multiplier
         public float cooldown1Multiplier;
-        private float cooldown1MultiplerTimer;
+        public float cooldown1MultiplerTimer;
         public float cooldown1MultiplierTimerInGame;
         public bool cooldown1MultiplierActive;
         private bool resetNormalAtk = false;
@@ -249,7 +249,7 @@ namespace SheepDoom
                                 Debug.Log("Atk Spd Buff activated");
                                 cooldown1MultiplierTimerInGame = cooldown1MultiplerTimer;
                                 cooldown1MultiplierActive = true;
-                                cooldown1 *= cooldown1Multiplier;
+                                cooldown1 = (cooldown1 * cooldown1Multiplier) + 0.05f;
                                 cooldown2_inGame = cooldown2;
                             }
                         }
@@ -412,7 +412,7 @@ namespace SheepDoom
         public void normalAtkNormalize()
         {
             cooldown1MultiplierActive = false;
-            cooldown1 /= cooldown1Multiplier;
+            cooldown1 = (cooldown1 - 0.05f) / cooldown1Multiplier;
             Debug.Log("Atk Spd Buff ended");
         }
 

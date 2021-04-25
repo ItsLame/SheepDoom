@@ -223,7 +223,7 @@ namespace SheepDoom
             {
                 agent.SetDestination(transform.position);
                 agent.autoBraking = true;
-                transform.LookAt(targetObject.transform);
+  //              transform.LookAt(targetObject.transform);
 
                 if (!alreadyattacked)
                 {

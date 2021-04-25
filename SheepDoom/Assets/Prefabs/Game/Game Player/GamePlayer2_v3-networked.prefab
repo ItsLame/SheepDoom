@@ -307,10 +307,15 @@ MonoBehaviour:
   UltiChild_v2: {fileID: 0}
   SpawnPoint: {fileID: 3805828759594656768}
   cooldown1: 0.75
-  cooldown2: 6
+  cooldown2: 10
   cooldown3: 4
   cooldown1Multiplier: 0.5
-  cooldown1MultiplerTimer: 3
+  cooldown1MultiplerTimer: 5
+  cooldown1MultiplierTimerInGame: 0
+  cooldown1MultiplierActive: 0
+  cooldown1_inGame: 0
+  cooldown2_inGame: 0
+  cooldown3_inGame: 0
   ismeeleeattack: 1
   meleeAttackDuration1: 0.2
   meleeAttackSpeedMultiplier: 2
