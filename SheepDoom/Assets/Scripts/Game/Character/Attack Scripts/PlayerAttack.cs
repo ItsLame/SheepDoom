@@ -60,13 +60,22 @@ namespace SheepDoom
         [SerializeField]
         private float cooldown1, cooldown2, cooldown3;
 
+        //cooldown 1 cd multiplier
+        public float cooldown1Multiplier;
+        public float cooldown1MultiplerTimer;
+        public float cooldown1MultiplierTimerInGame;
+        public bool cooldown1MultiplierActive;
+        private bool resetNormalAtk = false;
+
         [Header("skillcd values to be used n manipulated in game")]
-        private float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
+        public float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
+        private bool cooldown1Happening;
 
         [Header("Melee attack variables")]
         [Space(15)]
         public bool ismeeleeattack = false;
         public float meleeAttackDuration1;
+        public float meleeAttackSpeedMultiplier;
         public float meleeCombo = 1;
         [Space(15)]
         //Melee
@@ -81,6 +90,9 @@ namespace SheepDoom
             cooldown2_inGame = 0;
             cooldown3_inGame = 0;
 
+            cooldown1MultiplierActive = false;
+//            meleeAttackSpeedMultiplier = 1;
+            cooldown1MultiplierTimerInGame = cooldown1MultiplerTimer;
         }
 
         public void AttackClick()
@@ -117,7 +129,7 @@ namespace SheepDoom
                     NetworkServer.Spawn(FiredProjectile);
 
                     //resetcd
-                    cooldown1_inGame = cooldown1;
+                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
                 }
 
                 else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
@@ -127,7 +139,17 @@ namespace SheepDoom
                     //turn on hitbox script
                     MeleeAttackObject.gameObject.GetComponent<OnTouchHealth>().hitboxActive = true;
 
- 
+                    if (!cooldown1MultiplierActive)
+                    {
+                        MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().moveSpd = 120;
+                    }
+
+                    if (cooldown1MultiplierActive)
+                    {
+                        MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().moveSpd = 120 * meleeAttackSpeedMultiplier;
+                    }
+
+
                     if (meleeCombo == 1)
                     {
                         TargetMeleeAttack(/*connectionToClient,*/ "right");
@@ -147,10 +169,18 @@ namespace SheepDoom
 
         }
 
- //       [TargetRpc]
+        //       [TargetRpc]
         void TargetMeleeAttack(/*NetworkConnection conn,*/ string _meleeAtkDirection)
         {
-            MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, _meleeAtkDirection);
+            if (!cooldown1MultiplierActive)
+            {
+                MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, _meleeAtkDirection);
+            }
+
+            if (cooldown1MultiplierActive)
+            {
+                MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1 / meleeAttackSpeedMultiplier , _meleeAtkDirection);
+            }
         }
 
 
@@ -189,6 +219,7 @@ namespace SheepDoom
                             else if (isSpecial1Buff)
                             {
 
+
                             }
 
                         }
@@ -213,7 +244,13 @@ namespace SheepDoom
 
                             else if (isSpecial2Buff)
                             {
-
+                                //dont cast buff before atk animation finish
+                                if (cooldown1Happening) return;
+                                Debug.Log("Atk Spd Buff activated");
+                                cooldown1MultiplierTimerInGame = cooldown1MultiplerTimer;
+                                cooldown1MultiplierActive = true;
+                                cooldown1 = (cooldown1 * cooldown1Multiplier) + 0.05f;
+                                cooldown2_inGame = cooldown2;
                             }
                         }
 
@@ -280,7 +317,10 @@ namespace SheepDoom
 
                             else if (isUlti2Buff)
                             {
-
+                                Debug.Log("MoveSpd Buff activated");
+                                //speed up char movespd by 1.5x for 5s
+                                this.gameObject.GetComponent<CharacterMovement>().changeSpeed("speedUp", 5, 1.5f);
+                                cooldown3_inGame = cooldown3;
                             }
 
                         }
@@ -329,7 +369,13 @@ namespace SheepDoom
             //if not 0, reduce cd per second
             if (cooldown1_inGame >= 0)
             {
+                cooldown1Happening = true;
                 cooldown1_inGame -= Time.deltaTime;
+            }
+
+            else if (cooldown1_inGame <= 0)
+            {
+                cooldown1Happening = false;
             }
 
             if (cooldown2_inGame >= 0)
@@ -341,6 +387,33 @@ namespace SheepDoom
             {
                 cooldown3_inGame -= Time.deltaTime;
             }
+
+            // --------------------------------------------------------------------//
+
+            if (cooldown1MultiplierActive)
+            {
+                cooldown1MultiplierTimerInGame -= Time.deltaTime;
+            }
+
+            //remove atkspd buff once times up
+            if (cooldown1MultiplierTimerInGame <= 0 && cooldown1MultiplierActive)
+            {
+                resetNormalAtk = true;
+            }
+
+            if (resetNormalAtk == true)
+            {
+                normalAtkNormalize();
+                resetNormalAtk = false;
+            }
+
+        }
+
+        public void normalAtkNormalize()
+        {
+            cooldown1MultiplierActive = false;
+            cooldown1 = (cooldown1 - 0.05f) / cooldown1Multiplier;
+            Debug.Log("Atk Spd Buff ended");
         }
 
         [ClientRpc]

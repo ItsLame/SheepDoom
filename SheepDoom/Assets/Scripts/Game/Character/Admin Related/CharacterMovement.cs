@@ -52,6 +52,14 @@ namespace SheepDoom
                 speed = 0;
             }
 
+            if (type == "speedUp")
+            {
+                Debug.Log("Speeding up..");
+                speedAlterDuration = duration;
+                speedAlterStrength = strength;
+                speed *= speedAlterStrength;
+            }
+
         }
 
 
@@ -85,7 +93,7 @@ namespace SheepDoom
             {
                 speedAlterStrength = 1;
                 speed = baseSpeed;
-                Debug.Log("Debuff Over:" + speedAlterStrength + ", " + speed);
+                Debug.Log("Speed Over:" + speedAlterStrength + ", " + speed);
                 isSpeedAltered = false;
             }
         }

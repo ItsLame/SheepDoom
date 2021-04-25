@@ -535,8 +535,8 @@ MonoBehaviour:
   ismeleeattack: 0
   CreepMoveSpeed: 20
   timeBetweenAttacks: 2
-  sightRange: 60
-  attackRange: 40
+  sightRange: 32
+  attackRange: 20
   playerInSightRange: 0
   playerInAttackRange: 0
   TeamCoalition: 0
