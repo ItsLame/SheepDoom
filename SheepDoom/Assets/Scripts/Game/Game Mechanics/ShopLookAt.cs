@@ -11,14 +11,7 @@ public class ShopLookAt : MonoBehaviour
     private void Update()
     {
         if (playerInView)
-        {
             transform.LookAt(playerWhoIsLookedAt.transform);
-        }
-
-        else
-        {
-            playerInView = false;
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,7 +22,6 @@ public class ShopLookAt : MonoBehaviour
             playerWhoIsLookedAt = other.gameObject;
         }
     }
-
 
     private void OnTriggerExit(Collider other)
     {

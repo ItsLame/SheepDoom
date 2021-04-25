@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 namespace SheepDoom
 {
-    public class Shop : NetworkBehaviour
+    public class Shop : MonoBehaviour
     {
         //linking to player
-        public GameObject Player = null;
+        private GameObject Player;
         public float PlayerGold;
 
         [Space(15)]
@@ -56,13 +55,16 @@ namespace SheepDoom
                 //store the info of hit object
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit) && !Player)
                 {
                     //if hit something
-                    if (hit.collider.gameObject.CompareTag("Shop"))
+                    if (hit.collider.CompareTag("Shop"))
                     {
-                        Debug.Log("Shop Pressed!");
-                        OpenShopUI();
+                        if (hit.collider.gameObject.layer == 8 && Player.layer == 8)
+                            OpenShopUI();
+                        else if (hit.collider.gameObject.layer == 9 && Player.layer == 9)
+                            OpenShopUI();
+                        //Debug.Log("Shop Pressed!");
                     }
                 }
             }
@@ -77,23 +79,31 @@ namespace SheepDoom
                 //get a raycast to where you are touching
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit) && Player != null)
                 {
  //                   Debug.Log(hit.transform.name + " was clicked");
 
                     if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
                     {
                         //if hit something
-                        if (hit.collider.gameObject.CompareTag("Shop"))
+                        if (hit.collider.CompareTag("Shop"))
                         {
-                            Debug.Log("Shop Pressed, running OpenShopUI()");
-                            OpenShopUI();
+                            if (hit.collider.gameObject.layer == 8 && Player.layer == 8)
+                                OpenShopUI();
+                            else if (hit.collider.gameObject.layer == 9 && Player.layer == 9)
+                                OpenShopUI();
+                            //Debug.Log("Shop Pressed!");
                         }
                     }
                 }
             }
 #endif
 
+        }
+
+        public void SetPlayer(GameObject _player)
+        {
+            Player = _player;
         }
 
         //opening shop

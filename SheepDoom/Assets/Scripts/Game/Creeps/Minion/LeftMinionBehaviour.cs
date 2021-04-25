@@ -120,7 +120,7 @@ namespace SheepDoom
         }
 
         [Server]
-        private void OnTriggerExit(Collider other)
+        private void OnTriggerExit(Collider other) // exit happened before playerinsight range happened
         {
             if(gameObject.CompareTag("TeamCoalitionRangeCreep"))
             {
@@ -145,18 +145,26 @@ namespace SheepDoom
                 //Check if Player in attackrange
                 playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatisplayer);
 
-                if (target == null)
+                /*if (target == null)
                 {
                     targetObject = null;
                     isLockedOn = false;
                     StartMovingToWayPoint();
                     return;
+                }*/
+
+                if(targetObject == null)
+                {
+                    isLockedOn = false;
+                    goBackToTravelling();
+                    return;
                 }
 
-                if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
-                    goBackToTravelling();
+                /*if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
+                    goBackToTravelling();*/
+                    
 
-                if (playerInSightRange && !playerInAttackRange)// && isLockedOn)  // impossible scenario                  
+                if (playerInSightRange && !playerInAttackRange && isLockedOn)                
                     ChasePlayer();
 
                 if (playerInAttackRange && playerInSightRange && !ismeleeattack)
@@ -217,10 +225,11 @@ namespace SheepDoom
         [Server]
         private void RangedAttackPlayer()
         {
-            if (!targetObject)
+            if (targetObject == null)
                 goBackToTravelling();
             else //Make sure enemy doesn't move
             {
+                Debug.Log("Attacking enemy");
                 agent.SetDestination(transform.position);
                 agent.autoBraking = true;
                 transform.LookAt(targetObject.transform);
@@ -260,7 +269,7 @@ namespace SheepDoom
         }
 
         [Server]
-        void StartMovingToWayPoint()
+        void StartMovingToWayPoint() // nothing updating this
         {
             if (currentPoint < waypoints.Length)
             {
