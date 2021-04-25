@@ -214,7 +214,7 @@ namespace SheepDoom
 
         void Update()
         {
-            if(isServer)
+            if(isClient && hasAuthority)
             {
                 //rotation movement
                 transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
@@ -251,7 +251,10 @@ namespace SheepDoom
                     if (m_Speed <= speedLimit) return;
                     accelerationRate *= accelMultiplier;
                 }
+            }
 
+            if(isServer)
+            {
                 m_StartTime += Time.deltaTime;
                 if (m_StartTime >= m_Lifespan)
                     Destroyy();

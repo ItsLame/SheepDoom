@@ -126,7 +126,7 @@ namespace SheepDoom
                     Debug.Log("Firing Normal Atk");
                     var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
                     FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
-                    NetworkServer.Spawn(FiredProjectile);
+                    NetworkServer.Spawn(FiredProjectile, connectionToClient);
 
                     //resetcd
                     cooldown1_inGame = cooldown1 * cooldown1Multiplier;
@@ -205,7 +205,7 @@ namespace SheepDoom
                                 Debug.Log("Firing Special Atk");
                                 var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
                                 FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
-                                NetworkServer.Spawn(FiredProjectile);
+                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
                                 cooldown2_inGame = cooldown2;
                             }
 
@@ -233,7 +233,7 @@ namespace SheepDoom
                                 Debug.Log("Firing Special Atk 2");
                                 var FiredProjectile = Instantiate(Projectile2_v2, SpawnPoint.position, SpawnPoint.rotation);
                                 FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
-                                NetworkServer.Spawn(FiredProjectile);
+                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
                                 cooldown2_inGame = cooldown2;
                             }
 
@@ -282,7 +282,7 @@ namespace SheepDoom
                                 Debug.Log("Firing Ultimate Atk");
                                 var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
                                 FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
-                                NetworkServer.Spawn(FiredProjectile);
+                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
                                 cooldown3_inGame = cooldown3;
                             }
 
@@ -306,7 +306,7 @@ namespace SheepDoom
                                 Debug.Log("Firing Ultimate Atk 2");
                                 var FiredProjectile = Instantiate(Projectile3_v2, SpawnPoint.position, SpawnPoint.rotation);
                                 FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
-                                NetworkServer.Spawn(FiredProjectile);
+                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
                                 cooldown3_inGame = cooldown3;
                             }
 
