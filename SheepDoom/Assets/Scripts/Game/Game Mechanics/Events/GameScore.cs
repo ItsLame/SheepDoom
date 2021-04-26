@@ -33,15 +33,7 @@ namespace SheepDoom
         public Text redDisplay;
         public Text blueScoreText;
         public Text redScoreText;
-        public GameObject[] players;
-        public string[] playerNames = new string[6];
-        public int[] playerTeams = new int[6];
-        public Text BluePlayerNameText1;
-        public Text BluePlayerNameText2;
-        public Text BluePlayerNameText3;
-        public Text RedPlayerNameText1;
-        public Text RedPlayerNameText2;
-        public Text RedPlayerNameText3;
+        
 
         // Start is called before the first frame update
         /*void Start()
@@ -150,82 +142,6 @@ namespace SheepDoom
             GameObject redScore = FindMe.instance.P_ScoreboardRed;
             redScoreText = redScore.GetComponent<Text>();
             redScoreText.text = redCaptureScore.ToString();
-
-            //Get all players' name and team id
-            if (players.Length == 0)
-            {
-                Debug.Log("Scoreboard: FindGameObjectsWithTag");
-                players = GameObject.FindGameObjectsWithTag("Player");
-            }
-
-            foreach (GameObject player in players)
-            {
-                Debug.Log("Scoreboard: players.Length:" + players.Length);
-                for (int i = 0; i < players.Length; i++)
-                {
-                    string name = player.GetComponent<PlayerObj>().GetPlayerName();
-                    string[] playerNames = new string[] { name };
-                    Debug.Log("Scoreboard: playerName: " + playerNames[i]);
-                    int team = (int)player.GetComponent<PlayerAdmin>().getTeamIndex();
-                    int[] playerTeams = new int[] { team };
-                    Debug.Log("Scoreboard: playerTeam: " + playerTeams[i]);
-
-                    if (playerTeams[i] == 1) //Blue Team
-                    {
-                        //Pull UI
-                        GameObject BluePlayerName1 = FindMe.instance.P_BluePlayerName1;
-                        BluePlayerNameText1 = BluePlayerName1.GetComponent<Text>();
-
-                        GameObject BluePlayerName2 = FindMe.instance.P_BluePlayerName2;
-                        BluePlayerNameText2 = BluePlayerName2.GetComponent<Text>();
-
-                        GameObject BluePlayerName3 = FindMe.instance.P_BluePlayerName2;
-                        BluePlayerNameText3 = BluePlayerName3.GetComponent<Text>();
-
-                        Debug.Log("Scoreboard: End of FindMe for PlayerNames");
-                        //Put name into UI 
-                        if (BluePlayerNameText1.text != null)
-                        {
-                            BluePlayerNameText1.text = playerNames[i];
-                        }
-                        else if (BluePlayerNameText2.text != null)
-                        {
-                            BluePlayerNameText2.text = playerNames[i];
-                        }
-                        else if (BluePlayerNameText3.text != null)
-                        {
-                            BluePlayerNameText3.text = playerNames[i];
-                        }
-                    }
-                    else if (playerTeams[i] == 2) //Red Team
-                    {
-                        //Pull UI
-                        GameObject RedPlayerName1 = FindMe.instance.P_RedPlayerName1;
-                        RedPlayerNameText1 = RedPlayerName1.GetComponent<Text>();
-
-                        GameObject RedPlayerName2 = FindMe.instance.P_RedPlayerName2;
-                        RedPlayerNameText2 = RedPlayerName2.GetComponent<Text>();
-
-                        GameObject RedPlayerName3 = FindMe.instance.P_RedPlayerName3;
-                        RedPlayerNameText3 = RedPlayerName3.GetComponent<Text>();
-
-                        //Put name into UI 
-                        if (RedPlayerNameText1.text != null)
-                        {
-                            RedPlayerNameText1.text = playerNames[i];
-                        }
-                        else if (RedPlayerNameText2.text != null)
-                        {
-                            RedPlayerNameText2.text = playerNames[i];
-                        }
-                        else if (RedPlayerNameText3.text != null)
-                        {
-                            RedPlayerNameText3.text = playerNames[i];
-                        }
-                    }
-                }
-            }
-
 
             //if blue team wins
             if (TeamID == 1)
