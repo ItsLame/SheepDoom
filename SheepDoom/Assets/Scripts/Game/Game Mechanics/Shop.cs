@@ -86,10 +86,13 @@ namespace SheepDoom
                         //if hit something
                         if (hit.collider.CompareTag("Shop"))
                         {
-                            if (hit.collider.gameObject.layer == 8 && Player.layer == 8)
+                            if (hit.collider.gameObject.layer == Player.layer)
+                                OpenShopUI();
+                            /*if (hit.collider.gameObject.layer == 8 && Player.layer == 8)
                                 OpenShopUI();
                             else if (hit.collider.gameObject.layer == 9 && Player.layer == 9)
                                 OpenShopUI();
+                            */
                             //Debug.Log("Shop Pressed!");
                         }
                     }
