@@ -46,6 +46,18 @@ namespace SheepDoom
         [SerializeField] private GameObject ScoreboardRed;
         [SerializeField] private GameObject BlueWinLose;
         [SerializeField] private GameObject RedWinLose;
+        [SerializeField] private GameObject BluePlayer1Image;
+        [SerializeField] private GameObject BluePlayer1Name;
+        [SerializeField] private GameObject BluePlayer2Image;
+        [SerializeField] private GameObject BluePlayer2Name;
+        [SerializeField] private GameObject BluePlayer3Image;
+        [SerializeField] private GameObject BluePlayer3Name;
+        [SerializeField] private GameObject RedPlayer1Image;
+        [SerializeField] private GameObject RedPlayer1Name;
+        [SerializeField] private GameObject RedPlayer2Image;
+        [SerializeField] private GameObject RedPlayer2Name;
+        [SerializeField] private GameObject RedPlayer3Image;
+        [SerializeField] private GameObject RedPlayer3Name;
 
         public bool isInit { get; private set;}
 
@@ -172,6 +184,79 @@ namespace SheepDoom
             get { return RedWinLose; }
             set { RedWinLose = value; }
         }
+
+        public GameObject P_BluePlayerImage1
+        {
+            get { return BluePlayer1Image; }
+            set { BluePlayer1Image = value; }
+        }
+
+        public GameObject P_BluePlayerName1
+        {
+            get { return BluePlayer1Name; }
+            set { BluePlayer1Name = value; }
+        }
+
+        public GameObject P_BluePlayerImage2
+        {
+            get { return BluePlayer2Image; }
+            set { BluePlayer2Image = value; }
+        }
+
+        public GameObject P_BluePlayerName2
+        {
+            get { return BluePlayer2Name; }
+            set { BluePlayer2Name = value; }
+        }
+
+        public GameObject P_BluePlayerImage3
+        {
+            get { return BluePlayer3Image; }
+            set { BluePlayer3Image = value; }
+        }
+
+        public GameObject P_BluePlayerName3
+        {
+            get { return BluePlayer3Name; }
+            set { BluePlayer3Name = value; }
+        }
+
+        public GameObject P_RedPlayerImage1
+        {
+            get { return RedPlayer1Image; }
+            set { RedPlayer1Image = value; }
+        }
+
+        public GameObject P_RedPlayerName1
+        {
+            get { return RedPlayer1Name; }
+            set { RedPlayer1Name = value; }
+        }
+
+        public GameObject P_RedPlayerImage2
+        {
+            get { return RedPlayer2Image; }
+            set { RedPlayer2Image = value; }
+        }
+
+        public GameObject P_RedPlayerName2
+        {
+            get { return RedPlayer2Name; }
+            set { RedPlayer2Name = value; }
+        }
+
+        public GameObject P_RedPlayerImage3
+        {
+            get { return RedPlayer3Image; }
+            set { RedPlayer3Image = value; }
+        }
+
+        public GameObject P_RedPlayerName3
+        {
+            get { return RedPlayer3Name; }
+            set { RedPlayer3Name = value; }
+        }
+
 
         #endregion
 
