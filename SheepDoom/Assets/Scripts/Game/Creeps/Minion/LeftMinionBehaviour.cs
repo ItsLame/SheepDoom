@@ -229,7 +229,7 @@ namespace SheepDoom
                 goBackToTravelling();
             else //Make sure enemy doesn't move
             {
-                Debug.Log("Attacking enemy");
+ //               Debug.Log("Attacking enemy");
                 agent.SetDestination(transform.position);
                 agent.autoBraking = true;
   //              transform.LookAt(targetObject.transform);

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 namespace SheepDoom
 {
-    public class Shop : MonoBehaviour
+    public class Shop : NetworkBehaviour
     {
         //linking to player
-        private GameObject Player;
+        public GameObject Player;
         public float PlayerGold;
 
         [Space(15)]
@@ -94,6 +95,12 @@ namespace SheepDoom
                     }
                 }
             }
+
+            //spacebar to open shop for debugging
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                OpenShopUI();
+            }
 #endif
         }
 
@@ -105,9 +112,12 @@ namespace SheepDoom
         //opening shop
         public void OpenShopUI()
         {
-            Debug.Log("Opening Shop UI");
+            Debug.Log("Player Gold: " + PlayerGold);
             //get player's current gold
             PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
+
+            Debug.Log("Opening Shop UI");
+            Debug.Log("Player Gold: " + PlayerGold);
 
             //disable the controlling UI
             GameUI.GetComponent<Canvas>().enabled = false;
@@ -128,7 +138,21 @@ namespace SheepDoom
         //first special selection button
         public void SelectFirstSpecial()
         {
+            Debug.Log("First Special In Shop Selected");
             //can purchase only if havent purchased and u have enough gold
+
+            if (!hasPurchasedSpecial)
+            {
+                Debug.Log("Havent purchased special");
+            }
+
+            if (PlayerGold - SpecialCost >= 0)
+            {
+                Debug.Log("Gold is enough");
+            }
+
+            else { Debug.Log("Not enough Player Gold: " + PlayerGold + ", Special Cost: " + SpecialCost); }
+
             if (!hasPurchasedSpecial && (PlayerGold - SpecialCost >= 0))
             {
                 //deduct gold
@@ -145,6 +169,14 @@ namespace SheepDoom
 
                 Debug.Log("First Special Purchased");
             }
+
+            else
+            {
+                Debug.Log("unable to buy first special");
+            }
+
+            //update player gold
+            PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
 
         }
 
@@ -169,6 +201,9 @@ namespace SheepDoom
                 Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedSpecial();
 
                 Debug.Log("Second Special Purchased");
+
+                //update player gold
+                PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
             }
         }
 
@@ -188,6 +223,8 @@ namespace SheepDoom
                 Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedUlti();
 
                 Debug.Log("First Ulti Purchased");
+                //update player gold
+                PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
             }
         }
 
@@ -208,7 +245,10 @@ namespace SheepDoom
                 //set player bool 'haspurchasedulti' to true
                 Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedUlti();
 
-                Debug.Log("Second Special Purchased");
+                Debug.Log("Second Ulti Purchased");
+
+                //update player gold
+                PlayerGold = Player.GetComponent<CharacterGold>().GetCurrentGold();
             }
         }
     }
