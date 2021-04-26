@@ -6,7 +6,8 @@ namespace SheepDoom
 {
     public class GetParents : MonoBehaviour
     {
-        public GameObject parent;
+        [SerializeField]
+        private GameObject parent;
 
         public GameObject getParent()
         {

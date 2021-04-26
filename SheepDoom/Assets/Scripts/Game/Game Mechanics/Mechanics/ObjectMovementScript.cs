@@ -11,35 +11,32 @@ namespace SheepDoom
         //       public Transform originalTransform;
 
         [Header("Movement Properties")]
-        public float moveSpd;
-        public bool destroyOnContact;
+        [SerializeField]
+        private float moveSpd;
+        [SerializeField]
+        private bool destroyOnContact, isGoingUp, isGoingDown, isGoingLeft, isGoingRight, isGoingStraight, isGoingBack;
 
-        public bool isGoingUp = false;
-
-        public bool isGoingDown = false;
-
-        public bool isGoingLeft = false;
-
-        public bool isGoingRight = false;
-
-        public bool isGoingStraight = false;
-
-        public bool isGoingBack = false;
 
         [Header("Timing Properties")]
-        public float currentTimer;
-        public bool isMoving = false;
-        public bool stop = false;
+        [SerializeField]
+        private float currentTimer;
+        [SerializeField]
+        private bool isMoving, stop;
 
-        // Start is called before the first frame update
-        void Start()
+        public override void OnStartClient()
         {
-            isMoving = false;
-
+            if (GetComponent<GetParents>().getParent().GetComponent<NetworkIdentity>().hasAuthority)
+                isMoving = false;
         }
 
+        [Client]
+        public void SetMoveSpeed(float _moveSpd)
+        {
+            moveSpd = _moveSpd;
+        }
 
         //for singular movement
+        [Client]
         public void move(float time, string direction)
         {
             isMoving = true;
@@ -77,6 +74,7 @@ namespace SheepDoom
             }
         }
 
+        [Client]
         public void stopMoving()
         {
             isMoving = false;
@@ -89,85 +87,53 @@ namespace SheepDoom
             isGoingRight = false;
             isGoingStraight = false;
             isGoingBack = false;
-
-            this.gameObject.GetComponent<OnTouchHealth>().hitboxActive = false;
-
+            gameObject.GetComponentInParent<PlayerAttack>().ServerSetHitBox(false);
+            GetComponent<GetParents>().getParent().GetComponent<PlayerAttack>().ServerSetHitBox(false);
+            //this.gameObject.GetComponent<OnTouchHealth>().SetHitBox(false);
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (isServer || !GetComponent<GetParents>().getParent().GetComponent<NetworkIdentity>().hasAuthority) return;
             //calculate timer
-            if (isMoving && currentTimer >= 0)
-            {
-                currentTimer -= Time.deltaTime;
-            }
+            /*if (isMoving && currentTimer >= 0)
+                currentTimer -= Time.deltaTime;*/
 
             //change bool to call stop once when time is up
-            if (isMoving && currentTimer <= 0)
-            {
-                stop = true;
-            }
+            /*if (isMoving && currentTimer <= 0)
+                stop = true;*/
 
             //stop moving when time is up
             if (stop)
-            {
                 stopMoving();
-            }
-
 
             //movement choices
-            if (isGoingUp)
+            if(isMoving)
             {
-                if (isMoving)
-                {
+                if(currentTimer >= 0)
+                    currentTimer -= Time.deltaTime;
+
+                if (currentTimer <= 0)
+                    stop = true;
+
+                if (isGoingUp)
                     transform.Translate(Vector3.up * moveSpd * Time.deltaTime);
-                }
-            }
 
-            if (isGoingDown)
-            {
-                if (isMoving)
-                {
-                    transform.Translate(Vector3.down * moveSpd * Time.deltaTime);
-                }
+                if (isGoingDown)
+                     transform.Translate(Vector3.down * moveSpd * Time.deltaTime);
 
-            }
-
-            if (isGoingLeft)
-            {
-                if (isMoving)
-                {
+                if (isGoingLeft)
                     transform.Translate(Vector3.left * moveSpd * Time.deltaTime);
-                }
 
-            }
-
-
-
-            if (isGoingRight)
-            {
-                if (isMoving)
-                {
+                if (isGoingRight)
                     transform.Translate(Vector3.right * moveSpd * Time.deltaTime);
-                }
-            }
 
-
-            if (isGoingStraight)
-            {
-                if (isMoving)
-                {
+                if (isGoingStraight)
                     transform.Translate(Vector3.forward * moveSpd * Time.deltaTime);
-                }
-            }
 
-            if (isGoingBack)
-            {
-                if (isMoving)
-                {
+                if (isGoingBack)
                     transform.Translate(-Vector3.forward * moveSpd * Time.deltaTime);
-                }
             }
         }
     }

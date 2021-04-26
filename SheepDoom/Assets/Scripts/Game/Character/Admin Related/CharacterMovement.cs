@@ -11,78 +11,82 @@ namespace SheepDoom
         //original speed
         public float baseSpeed;
         //speed to be used in game
-        [SyncVar(hook = nameof(SyncPlayerSpeed))]
+        //[SyncVar(hook = nameof(SyncPlayerSpeed))]
         public float speed;
 
+        public bool isSpeedAltered;
+        public float speedAlterDuration;
+        public float speedAlterStrength;
 
-        [SyncVar] public bool isSpeedAltered;
-        [SyncVar] public float speedAlterDuration;
-        [SyncVar] public float speedAlterStrength;
-
-        private void Start()
+        public override void OnStartClient()
         {
+            if (!hasAuthority) return;
             speed = baseSpeed;
         }
 
-        public void SyncPlayerSpeed(float oldValue, float newValue)
-        {
-    //        if (hasAuthority)
-    //        {
-
-    //        }
-        }
-
-        //for player debuffs handling
+        [Server]
         public void changeSpeed(string type, float duration, float strength)
         {
-            isSpeedAltered = true;
+            TargetChangeSpeed(type, duration, strength);
+        }
 
+        
+        //for player debuffs handling
+        [TargetRpc] // calculate effects on movement on client, then client-auth sync movement into server
+        void TargetChangeSpeed(string type, float duration, float strength)
+        {
+            isSpeedAltered = true;
+            speedAlterDuration = duration;
             if (type == "slow")
             {
                 Debug.Log("Inflicting slow debuff");
-                speedAlterDuration = duration;
                 speedAlterStrength = strength;
                 speed *= speedAlterStrength;
             }
-
             else if (type == "stop")
             {
                 Debug.Log("Inflicting stop debuff");
-                speedAlterDuration = duration;
                 speed = 0;
             }
-
-            if (type == "speedUp")
+            else if (type == "speedUp")
             {
                 Debug.Log("Speeding up..");
-                speedAlterDuration = duration;
                 speedAlterStrength = strength;
                 speed *= speedAlterStrength;
             }
-
         }
 
 
         // Update is called once per frame
-        void FixedUpdate()
+        /*void FixedUpdate()
         {
             if (!hasAuthority) return;
 
             Move();
-        }
+        }*/
 
-        private void Update()
+        /*void Update()
         {
             if (!hasAuthority) return;
 
+            Move();
+
             if (isSpeedAltered)
-            {
                 DebuffTimerCountdown();
-            }
+        }*/
+
+        void FixedUpdate()
+        {
+            if(!hasAuthority) return;
+
+            Move();
+
+            if (isSpeedAltered)
+                DebuffTimerCountdown();
         }
 
-        [Command]
-        public void DebuffTimerCountdown()
+        [Client]
+        private void DebuffTimerCountdown()
         {
             //reduce timer per second
             speedAlterDuration -= Time.deltaTime;
@@ -110,7 +114,6 @@ namespace SheepDoom
 
                 this.transform.position += moveMe;
             }
-
         }
     }
 }

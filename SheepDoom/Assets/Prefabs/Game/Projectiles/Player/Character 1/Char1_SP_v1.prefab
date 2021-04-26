@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4309939885416895172}
   - component: {fileID: 1063934563344406379}
   m_Layer: 0
-  m_Name: Projectile2
+  m_Name: Char1_SP_v1
   m_TagString: Skill
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,6 +134,7 @@ MonoBehaviour:
   z_rotaspeed: 0
   damage: 10
   destroyOnContact: 1
+  m_Rigidbody: {fileID: -8817962291198315760}
   m_Speed: 280
   m_Lifespan: 3
   isAccelerating: 0

@@ -22,6 +22,7 @@ namespace SheepDoom
         [Space(15)]
         public int damage;
         public bool destroyOnContact; //if projectile ill stop on first contact
+        [SerializeField]
         private Rigidbody m_Rigidbody;
 
 
@@ -54,11 +55,6 @@ namespace SheepDoom
         //bool for calling kill counter increase once
         bool killCounterIncreaseCalled = false;
 
-        void Awake()
-        {
-            m_Rigidbody = GetComponent<Rigidbody>();
-        }
-
         public override void OnStartServer()
         {
             ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
@@ -75,18 +71,12 @@ namespace SheepDoom
                 {
                     //reduce HP of hit target
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
-
                     //debuff player depending on bullet properties in inspector
                     if (SlowDebuff)
-                    {
                         col.gameObject.GetComponent<CharacterMovement>().changeSpeed("slow", slowDebuffDuration, slowRate);
-                    }
 
                     if (StopDebuff)
-                    {
                         col.gameObject.GetComponent<CharacterMovement>().changeSpeed("stop", stopDebuffDuration, 0);
-                    }
-
 
                     //increase killer's kill count if target is killed
                     if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
@@ -100,18 +90,14 @@ namespace SheepDoom
                         Destroyy();
                 }
             }
-
             else if (col.gameObject.CompareTag("Tower"))
             {
                 //     col.transform.parent.gameObject.GetComponent<CapturePointScript>().ModifyingHealth(-damage);
                 //     Object.Destroy(this.gameObject);
             }
-
-
             //used to test gold for now
             else if (col.gameObject.CompareTag("NeutralMinion"))
             {
-
                 //take damage
                 //               col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
                 //               col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
@@ -124,9 +110,7 @@ namespace SheepDoom
 
                 if (destroyOnContact)
                     Destroyy();
-
             }
-
             else if (col.gameObject.CompareTag("BaseMinion"))
             {
                 if (ownerTeamID == 2)
@@ -136,15 +120,12 @@ namespace SheepDoom
                         GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
-                        {
                             owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
-                        }
 
                         if (destroyOnContact)
                             Destroyy();
                     }
                 }
-
                 else if (ownerTeamID == 1)
                 {
                     if (col.gameObject.layer == 9)
@@ -153,15 +134,25 @@ namespace SheepDoom
                         GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
-                        {
                             owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
-                        }
 
                         if (destroyOnContact)
                             Destroyy();
                     }
-
                 }
+            }
+            else if (col.gameObject.CompareTag("MegaBoss"))
+            {
+                col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
+                //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
+
+                if (destroyOnContact)
+                    Destroyy();
+            }
+            else if (col.gameObject.CompareTag("Other"))
+            {
+                if (destroyOnContact)
+                    Destroyy();
             }
             /*
             if (col.gameObject.layer == 9)
@@ -182,22 +173,6 @@ namespace SheepDoom
                 }
 
             }*/
-
-            else if (col.gameObject.CompareTag("MegaBoss"))
-            {
-                col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
-                //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
-
-                if (destroyOnContact)
-                    Destroyy();
-            }
-
-            else if (col.gameObject.CompareTag("Other"))
-            {
-                if (destroyOnContact)
-                    Destroyy();
-            }
-
         }
 
         [Server]
@@ -227,23 +202,14 @@ namespace SheepDoom
                 {
                     //stop accelerating once hit speed limit
                     if (hasSpeedLimit && (m_Speed <= speedLimit))
-                    {
                         m_Speed += accelerationRate;
-                    }
-
                     else
-                    {
                         m_Speed += accelerationRate;
-                    }
-
                 }
 
                 //stop deccelerating once hit speed limit
                 if (isDeccelerating && (m_Speed >= speedLimit))
-                {
                     m_Speed -= accelerationRate;
-
-                }
 
                 //adjusting acceleration ratess 
                 if (accelMultiplierOn)

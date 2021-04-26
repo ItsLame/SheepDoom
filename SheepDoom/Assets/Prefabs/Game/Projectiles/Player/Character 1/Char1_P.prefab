@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1154819171685241453}
   - component: {fileID: 6318584878260124242}
   m_Layer: 0
-  m_Name: Projectile1
+  m_Name: Char1_P
   m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,6 +134,7 @@ MonoBehaviour:
   z_rotaspeed: 0
   damage: 10
   destroyOnContact: 1
+  m_Rigidbody: {fileID: 214666321797050571}
   m_Speed: 100
   m_Lifespan: 0.8
   isAccelerating: 0

@@ -61,44 +61,91 @@ namespace SheepDoom
         private float cooldown1, cooldown2, cooldown3;
 
         //cooldown 1 cd multiplier
-        public float cooldown1Multiplier;
-        public float cooldown1MultiplerTimer;
-        public float cooldown1MultiplierTimerInGame;
-        public bool cooldown1MultiplierActive;
+        [SerializeField]
+        private float cooldown1Multiplier, cooldown1MultiplerTimer, cooldown1MultiplierTimerInGame; 
+        private bool cooldown1MultiplierActive;
         private bool resetNormalAtk = false;
 
         [Header("skillcd values to be used n manipulated in game")]
-        public float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
+        [SerializeField]
+        private float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
         private bool cooldown1Happening;
 
         [Header("Melee attack variables")]
         [Space(15)]
-        public bool ismeeleeattack = false;
-        public float meleeAttackDuration1;
-        public float meleeAttackSpeedMultiplier;
-        public float meleeCombo = 1;
+        [SerializeField]
+        private bool ismeeleeattack;
+        [SerializeField]
+        private float meleeAttackDuration1, meleeAttackSpeedMultiplier;
+        private float meleeCombo;
         [Space(15)]
         //Melee
         public Animator animator;
 
-
-        // Start is called before the first frame update
-        void Start()
+        public override void OnStartClient()
         {
             if (!hasAuthority) return;
             cooldown1_inGame = 0;
             cooldown2_inGame = 0;
             cooldown3_inGame = 0;
 
+            if(ismeeleeattack && MeleeAttackObject != null)
+                meleeCombo = 1;
+
             cooldown1MultiplierActive = false;
-//            meleeAttackSpeedMultiplier = 1;
             cooldown1MultiplierTimerInGame = cooldown1MultiplerTimer;
+            //            meleeAttackSpeedMultiplier = 1;
         }
 
         public void AttackClick()
         {
             if (!hasAuthority) return;
-            CmdAttackClick();
+
+            if(cooldown1_inGame <= 0)
+            {
+                CmdAttackClick(ismeeleeattack);
+
+                if (!ismeeleeattack)
+                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
+                else if (ismeeleeattack && MeleeAttackObject != null)
+                {
+                    Debug.Log("AA");
+                    if(meleeCombo == 1)
+                    {
+                        Debug.Log("BB");
+                        if (!cooldown1MultiplierActive)
+                        {
+                            Debug.Log("CC");
+                            MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
+                            MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, "right");
+                        }
+                        else if(cooldown1MultiplierActive)
+                        {
+                            MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
+                            MeleeAttackObject.GetComponent<ObjectMovementScript>().move((meleeAttackDuration1/meleeAttackSpeedMultiplier), "right");
+                        }
+
+                        meleeCombo = 2;
+                    }
+                    else if(meleeCombo == 2)
+                    {
+                        if (!cooldown1MultiplierActive)
+                        {
+                            MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
+                            MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, "left");
+                        }
+                        else if (cooldown1MultiplierActive)
+                        {
+                            MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
+                            MeleeAttackObject.GetComponent<ObjectMovementScript>().move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "left");
+                        }
+
+                        meleeCombo = 1;
+                    }
+                   
+                    cooldown1_inGame = cooldown1;
+                }  
+            }
         }
 
         public void SpecialSkillClick()
@@ -113,64 +160,8 @@ namespace SheepDoom
             CmdUltiClick();
         }
 
-        [Command]
-        //if atk button is pressed
-        void CmdAttackClick()
-        {
-            //if not dead
-            if (!GetComponent<PlayerHealth>().isPlayerDead())
-            {
-                //if off cd
-                if (cooldown1_inGame <= 0 && ismeeleeattack == false)
-                {
-                    Debug.Log("Firing Normal Atk");
-                    var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
-                    FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
-                    NetworkServer.Spawn(FiredProjectile, connectionToClient);
-
-                    //resetcd
-                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
-                }
-
-                else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
-                {
-                    Debug.Log("Melee Normal Atk");
-
-                    //turn on hitbox script
-                    MeleeAttackObject.gameObject.GetComponent<OnTouchHealth>().hitboxActive = true;
-
-                    if (!cooldown1MultiplierActive)
-                    {
-                        MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().moveSpd = 120;
-                    }
-
-                    if (cooldown1MultiplierActive)
-                    {
-                        MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().moveSpd = 120 * meleeAttackSpeedMultiplier;
-                    }
-
-
-                    if (meleeCombo == 1)
-                    {
-                        TargetMeleeAttack(/*connectionToClient,*/ "right");
-                        meleeCombo = 2;
-                    }
-
-                    else if (meleeCombo == 2)
-                    {
-                        TargetMeleeAttack(/*connectionToClient,*/ "left");
-                        meleeCombo = 1;
-                    }
-
-                    //resetcd
-                    cooldown1_inGame = cooldown1;
-                }
-            }
-
-        }
-
-        //       [TargetRpc]
-        void TargetMeleeAttack(/*NetworkConnection conn,*/ string _meleeAtkDirection)
+        /*[TargetRpc]
+        void TargetMeleeAttack(NetworkConnection conn, string _meleeAtkDirection)
         {
             if (!cooldown1MultiplierActive)
             {
@@ -179,11 +170,86 @@ namespace SheepDoom
 
             if (cooldown1MultiplierActive)
             {
-                MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1 / meleeAttackSpeedMultiplier , _meleeAtkDirection);
+                MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1 / meleeAttackSpeedMultiplier, _meleeAtkDirection);
+            }
+        }*/
+
+        [Command]
+        //if atk button is pressed
+        void CmdAttackClick(bool attackType)
+        {
+            //if not dead
+            if (!GetComponent<PlayerHealth>().isPlayerDead())
+            {
+                if(!attackType) // ranged projectile
+                {
+                    GameObject FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
+                    FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+                    NetworkServer.Spawn(FiredProjectile, connectionToClient);
+                    //TargetAttackManipulate(connectionToClient, true, false, (cooldown1 * cooldown1Multiplier));
+                }
+                else if(attackType && MeleeAttackObject != null) // melee attack
+                    MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(true);
+                //if off cd
+                /*if (cooldown1_inGame <= 0 && ismeeleeattack == false)
+                {
+                    Debug.Log("Firing Normal Atk");
+                    var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
+                    FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
+                    NetworkServer.Spawn(FiredProjectile, connectionToClient);
+
+                    //resetcd
+                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
+                }*/
+
+               /* else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
+                {
+                    Debug.Log("Melee Normal Atk");
+
+                    //turn on hitbox script
+                    MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(true);
+
+                    if (!cooldown1MultiplierActive)
+                    {
+                        MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
+                    }
+
+                    if (cooldown1MultiplierActive)
+                    {
+                        MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
+                    }
+
+
+                    if (meleeCombo == 1)
+                    {
+                        //TargetMeleeAttack(/*connectionToClient, "right");
+                        meleeCombo = 2;
+                    }
+
+                    else if (meleeCombo == 2)
+                    {
+                        //TargetMeleeAttack(/*connectionToClient, "left");
+                        meleeCombo = 1;
+                    }
+
+                    //resetcd
+                    cooldown1_inGame = cooldown1;
+                }*/
             }
         }
 
+        [Client] // call from client to tell server
+        public void ServerSetHitBox(bool _hitBox)
+        {
+            if (!hasAuthority) return;
+            CmdSetHitBox(_hitBox);
+        }
 
+        [Command]
+        void CmdSetHitBox(bool _hitBox)
+        {
+            MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(_hitBox);
+        }
 
         //if special skill is pressed
         [Command]

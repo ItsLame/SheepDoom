@@ -8,7 +8,8 @@ namespace SheepDoom
     public class OnTouchHealth : NetworkBehaviour
     {
         [Header("Amount of health to change on contact")]
-        public float healthChangeAmount;
+        [SerializeField]
+        private float healthChangeAmount;
 
         [Header("If object will be destroyed on contact")]
         public bool destroyOnContact;
@@ -18,12 +19,20 @@ namespace SheepDoom
         public bool willContactMinion;
 
         [Header("When to interact with bool")]
-        public bool hitboxActive;
+        [SerializeField]
+        private bool hitboxActive;
 
         [Header("If is child, parent's details here")]
-        public bool hasParent;
+        [SerializeField]
+        private bool hasParent;
         public GameObject parent;
-        public float parentTeamID;
+        [SerializeField]
+        [SyncVar] private float parentTeamID;
+
+        public void SetHitBox(bool _status)
+        {
+            hitboxActive = _status;
+        }
 
         //when collide with player
         [Server]
@@ -35,17 +44,17 @@ namespace SheepDoom
                 if (willContactPlayer)
                 {
                     //if hit other player
-                    if (col.gameObject.CompareTag("Player"))
+                    if (col.CompareTag("Player"))
                     {
                         Debug.Log("Player Hit");
                         //change the hit player's HP
-                        col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
+                        col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
 
                         //kill target if target hp <= 0
-                        if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
+                        if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
                         {
                             //set hit target to dead
-                            col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
+                            col.GetComponent<PlayerHealth>().SetPlayerDead();
 
                             //get the brick's parent (the attacker)
                             GameObject target = this.gameObject.GetComponent<GetParents>().getParent();
@@ -53,13 +62,11 @@ namespace SheepDoom
                             target.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
 
                             //give announcer info
-                            col.gameObject.GetComponent<GameEvent>().whoKilled = target.gameObject.GetComponent<PlayerObj>().GetPlayerName();
-                        }
-                        if (destroyOnContact)
-                        {
-                            Destroy(gameObject);
+                            col.GetComponent<GameEvent>().whoKilled = target.GetComponent<PlayerObj>().GetPlayerName();
                         }
 
+                        if (destroyOnContact)
+                            Destroyy();
                     }
                 }
 
@@ -75,37 +82,32 @@ namespace SheepDoom
                             {
                                 Debug.Log("Coalation Minion Hit");
                                 GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                                target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount);
+                                target.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount);
 
-                                if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
+                                if (target.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                                 {
                                     GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
-                                    parent.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
+                                    parent.GetComponent<CharacterGold>().CmdVaryGold(5);
                                 }
                             }
                         }
-
                         else if (parentTeamID == 1)
                         {
                             if (col.gameObject.layer == 9)
                             {
                                 Debug.Log("Consortium Minion Hit");
                                 GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                                target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(healthChangeAmount);
-                                if (target.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().getHealth() <= 0)
+                                target.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount);
+                                if (target.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                                 {
                                     GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
-                                    parent.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
+                                    parent.GetComponent<CharacterGold>().CmdVaryGold(5);
                                 }
                             }
                         }
 
-
                         if (destroyOnContact)
-                        {
-                            Object.Destroy(this.gameObject);
-                        }
-
+                            Destroyy();
                     }
                 }
 
@@ -116,23 +118,21 @@ namespace SheepDoom
                     parent.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
 
                     if (destroyOnContact)
-                    {
-                        Object.Destroy(this.gameObject);
-                    }
-
+                        Destroyy();
                 }
             }
-
-
-
-
         }
-        private void Start()
+
+        [Server]
+        private void Destroyy()
         {
-            if (hasParent)
-            {
-                parentTeamID = parent.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-            }
+            NetworkServer.Destroy(gameObject);
+        }
+
+        public override void OnStartServer()
+        {
+            if(hasParent)
+                parentTeamID = parent.GetComponent<PlayerAdmin>().getTeamIndex();
         }
     }
 }
