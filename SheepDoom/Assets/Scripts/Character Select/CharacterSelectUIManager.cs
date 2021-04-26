@@ -94,6 +94,7 @@ namespace SheepDoom
         }
 
         #endregion
+        
         [Server]
         public void StartCharSelect(string _matchID)
         {
@@ -219,8 +220,6 @@ namespace SheepDoom
 
         private void AutoLockIn(GameObject _player)
         {
-            //System.Random rand = new System.Random();
-
             int i = rand.Next(0, 5);
 
             if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
@@ -420,21 +419,14 @@ namespace SheepDoom
 
         public void ForceStart()
         {
-            //StartCoroutine(RequestCharacterSelectUpdate(PlayerObj.instance.GetMatchID(), PlayerObj.instance.gameObject, true));
+            CmdForceStart(PlayerObj.instance.gameObject, PlayerObj.instance.GetMatchID());
         }
 
-        /*
-        private IEnumerator UnloadLobbyScene()
+        [Command(ignoreAuthority = true)]
+        private void CmdForceStart(GameObject _player, string _matchID)
         {
-            if(isServer)
-                SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
-            if(isClient)
-            {
-                yield return new WaitForSecondsRealtime(0.5f);
-                SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
-            }
+            _player.GetComponent<StartGame>().StartNewScene(_matchID, false, true);
         }
-        */
 
         #endregion
 
@@ -496,6 +488,19 @@ namespace SheepDoom
 }
 
 #region archive
+
+/*
+private IEnumerator UnloadLobbyScene()
+{
+    if(isServer)
+        SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
+    if(isClient)
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
+    }
+}
+*/
 
 /*private IEnumerator RequestCharacterSelectUpdate(string _matchID, GameObject _player, bool _startGame)
 {

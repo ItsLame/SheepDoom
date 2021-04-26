@@ -190,6 +190,7 @@ namespace SheepDoom
         {
             int lobbyUnloadedCount = 0;
             int charSelectUnloadedCount = 0;
+
             foreach(KeyValuePair<string, Match> entry in matches)
             {
                 GameObject sdSceneManagerLocation = entry.Value.GetSDSceneManager().gameObject;
@@ -204,6 +205,7 @@ namespace SheepDoom
                     }
                 }
             }
+            
             return lobbyUnloadedCount + charSelectUnloadedCount;
         }
 
@@ -296,14 +298,24 @@ namespace SheepDoom
             }
         }
 
-        public void StartCharSelect(string _matchID)
+        public void StartNewScene(string _matchID, bool _charSelect, bool _game)
         {
-            if (matches.ContainsKey(_matchID))
+            if(matches.ContainsKey(_matchID))
             {
-                matches[_matchID].GetSDSceneManager().MoveToCharSelect(matches[_matchID].GetScenes()[1]);
-                foreach(GameObject player in matches[_matchID].GetPlayerObjList())
-                    player.GetComponent<StartGame>().MoveToCharSelect(matches[_matchID].GetScenes()[1], _matchID);
-                matches[_matchID].GetCharacterSelectUIManager().StartCharSelect(_matchID);
+                if(_charSelect)
+                {
+                    matches[_matchID].GetSDSceneManager().MoveToCharSelect(matches[_matchID].GetScenes()[1]);
+                    foreach(GameObject player in matches[_matchID].GetPlayerObjList())
+                        player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[1], _matchID, true, false);
+                    matches[_matchID].GetCharacterSelectUIManager().StartCharSelect(_matchID);
+                }
+                else if(_game)
+                {
+                    matches[_matchID].GetSDSceneManager().MoveToCharSelect(matches[_matchID].GetScenes()[2]);
+                    foreach(GameObject player in matches[_matchID].GetPlayerObjList())
+                        player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[2], _matchID, false, true);
+                    // <<insert here>> start function of game scene (if there's any)
+                }
             }
         }
 

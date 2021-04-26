@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 namespace SheepDoom
@@ -16,22 +17,72 @@ namespace SheepDoom
         }
 
         [Server]
-        public void StartCharSelect(string _matchID)
+        public void StartNewScene(string _matchID, bool _charSelect, bool _game)
         {
             if (pO.GetMatchID() == _matchID) // check matchID
-                MatchMaker.instance.StartCharSelect(_matchID);
+            {
+                if(_charSelect)
+                    MatchMaker.instance.StartNewScene(_matchID, true, false);
+                else if(_game)
+                {
+                    // start game scene for server & host (host is force start clicker for now)
+                    MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().StartScenes(connectionToClient);
+                    // if server n host done, let other players load game scene n unload char select
+                    StartCoroutine(WaitForServer(_matchID));
+                    // check game scene load status n move objects after
+                    StartCoroutine(WaitForGameScene(_matchID));
+                }
+            }
             else
                 Debug.Log("Match ID: " + _matchID + " does not exist");
         }
+        
+        private IEnumerator WaitForServer(string _matchID)
+        {
+            while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_gameSceneLoaded)
+                yield return null;
+
+             // start game scene for all remaining players
+            foreach (var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
+            {
+                if(SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                {
+                    if(conn != connectionToClient)
+                        TargetLoadGameScene(conn);
+                }
+            }
+        }
+
+        [TargetRpc]
+        private void TargetLoadGameScene(NetworkConnection conn)
+        {
+            // load locally
+                // tried without targetrpc and server ends up having multiple copies of the game scene even though players
+                // are all in the same game scene (the copies are empty)
+            SDSceneManager.instance.LoadGameScene(conn);
+        }
+
+        private IEnumerator WaitForGameScene(string _matchID)
+        {
+            while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_gameSceneLoaded)
+                yield return null;
+
+            // proceed when loaded
+            MatchMaker.instance.StartNewScene(_matchID, false, true);
+        }
 
         [Server]
-        public void MoveToCharSelect(Scene _scene, string _matchID)
+        public void MoveToNewScene(Scene _scene, string _matchID, bool _charSelect, bool _game)
         {
             TargetRemoveParent(connectionToClient);
             SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
             gameObject.transform.SetParent(null, false);
             SceneManager.MoveGameObjectToScene(gameObject, _scene);
-            MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, true, false);
+            
+            if(_charSelect)
+                MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, true, false);
+            else if(_game)
+                MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, false, true);
         }
 
         [TargetRpc]

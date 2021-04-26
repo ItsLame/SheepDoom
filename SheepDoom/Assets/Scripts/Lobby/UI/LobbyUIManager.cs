@@ -208,7 +208,7 @@ namespace SheepDoom
                 if (MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == MatchMaker.instance.GetMatches()[_matchID].GetReadyCount()) // all ready
                 {
                     MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_startStatusMsg = "Game starting..";
-                    _player.GetComponent<StartGame>().StartCharSelect(_matchID);
+                    _player.GetComponent<StartGame>().StartNewScene(_matchID, true, false);
                 }
                 else
                     MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_startStatusMsg = "Some players not ready!";
@@ -462,14 +462,13 @@ namespace SheepDoom
 
         public void ForceStart()
         {
-            //StartCoroutine(RequestLobbyUpdate(PlayerObj.instance.GetMatchID(), PlayerObj.instance.gameObject, true));
             CmdForceStart(PlayerObj.instance.gameObject, PlayerObj.instance.GetMatchID());
         }
 
         [Command(ignoreAuthority = true)]
         private void CmdForceStart(GameObject _player, string _matchID)
         {
-            _player.GetComponent<StartGame>().StartCharSelect(_matchID);
+            _player.GetComponent<StartGame>().StartNewScene(_matchID, true, false);
         }
 
         #endregion
