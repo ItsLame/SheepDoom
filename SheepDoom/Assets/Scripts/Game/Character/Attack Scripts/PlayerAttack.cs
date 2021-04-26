@@ -109,13 +109,10 @@ namespace SheepDoom
                     cooldown1_inGame = cooldown1 * cooldown1Multiplier;
                 else if (ismeeleeattack && MeleeAttackObject != null)
                 {
-                    Debug.Log("AA");
                     if(meleeCombo == 1)
                     {
-                        Debug.Log("BB");
                         if (!cooldown1MultiplierActive)
                         {
-                            Debug.Log("CC");
                             MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
                             MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, "right");
                         }
