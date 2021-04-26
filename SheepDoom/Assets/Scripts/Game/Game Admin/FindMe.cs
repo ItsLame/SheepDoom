@@ -36,13 +36,7 @@ namespace SheepDoom
         [Space(5)]
         [SerializeField] private GameObject BlueShop;
         [SerializeField] private GameObject RedShop;
-
-        [Space(5)]
-        [SerializeField] private GameObject ShopSpecial1;
-        [SerializeField] private GameObject ShopSpecial2;
-        [SerializeField] private GameObject ShopUlti1;
-        [SerializeField] private GameObject ShopUlti2;
-
+        
         [Header("--- Kill, Death, Capture ---")]
         [Space(5)]
         [SerializeField] private GameObject K;
@@ -71,31 +65,6 @@ namespace SheepDoom
         
         #region Properties
         
-        public GameObject P_ShopSpecial1
-        {
-            get { return ShopSpecial1; }
-            set { ShopSpecial1 = value;}
-        }
-
-        public GameObject P_ShopSpecial2
-        {
-            get { return ShopSpecial2; }
-            set { ShopSpecial2 = value; }
-        }
-
-        public GameObject P_ShopUlti1
-        {
-            get { return ShopUlti1; }
-            set { ShopUlti1 = value; }
-        }
-
-        public GameObject P_ShopUlti2
-        {
-            get { return ShopUlti2; }
-            set { ShopUlti2 = value; }
-        }
-
-
         public GameObject P_AtkBtn
         {
             get{return AtkBtn;}
