@@ -28,7 +28,8 @@ namespace SheepDoom
 
         public Text getPlayerName()
         {
-            return playerName;
+            return null;
+            //return playerName;
         }
     }
 }
