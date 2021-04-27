@@ -903,6 +903,7 @@ GameObject:
   - component: {fileID: 2668921912398802697}
   - component: {fileID: 5250038974471889277}
   - component: {fileID: 3780656211629919999}
+  - component: {fileID: 1017492842763491974}
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
   - component: {fileID: 2014472282729360730}
@@ -1065,9 +1066,6 @@ MonoBehaviour:
   hasPurchasedUlti: 0
   AlternateSpecial: 0
   AlternateUlti: 0
-  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
-    type: 3}
-  MeleeAttackObject: {fileID: 0}
   Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
     type: 3}
   Projectile2_v2: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
@@ -1086,9 +1084,6 @@ MonoBehaviour:
   cooldown3: 10
   cooldown1Multiplier: 0
   cooldown1MultiplerTimer: 0
-  ismeeleeattack: 0
-  meleeAttackDuration1: 0
-  meleeAttackSpeedMultiplier: 0
   animator: {fileID: 0}
 --- !u!114 &5660135970397916280
 MonoBehaviour:
@@ -1263,6 +1258,27 @@ MonoBehaviour:
   isNeutral: 0
   isBoss: 0
   isMinion: 0
+--- !u!114 &1017492842763491974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 862bdb6503a37384eb2ff743897a4005, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  normalAtkProjectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
+    type: 3}
+  normalSpecial: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
+    type: 3}
+  altSpecial: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
+    type: 3}
+  spawnPoint: {fileID: 5660135970150263288}
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0

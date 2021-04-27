@@ -123,10 +123,10 @@ MonoBehaviour:
   isMovingLeft: 0
   isMovingRight: 0
   damage: 0
-  destroyOnContact: 1
+  destroyOnContact: 0
   m_Rigidbody: {fileID: -8817962291198315760}
   m_Speed: 30
-  m_Lifespan: 999
+  m_Lifespan: 5
   isAccelerating: 0
   isDeccelerating: 0
   accelerationRate: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: 00d9bcd2adf695c4f8b6bf49988c366a
   hasSpawned: 0
 --- !u!65 &2287852981883151537
 BoxCollider:
