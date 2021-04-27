@@ -435,22 +435,10 @@ namespace SheepDoom
                 cooldown1Happening = true;
                 cooldown1_inGame -= Time.deltaTime;
             }
-
             else if (cooldown1_inGame <= 0)
             {
                 cooldown1Happening = false;
             }
-
-            if (cooldown2_inGame >= 0)
-            {
-                cooldown2_inGame -= Time.deltaTime;
-            }
-
-            if (cooldown3_inGame >= 0)
-            {
-                cooldown3_inGame -= Time.deltaTime;
-            }
-
             // --------------------------------------------------------------------//
 
             if (cooldown1MultiplierActive)
@@ -468,6 +456,16 @@ namespace SheepDoom
             {
                 normalAtkNormalize();
                 resetNormalAtk = false;
+            }
+
+            if (cooldown2_inGame >= 0)
+            {
+                cooldown2_inGame -= Time.deltaTime;
+            }
+
+            if (cooldown3_inGame >= 0)
+            {
+                cooldown3_inGame -= Time.deltaTime;
             }
 
         }
