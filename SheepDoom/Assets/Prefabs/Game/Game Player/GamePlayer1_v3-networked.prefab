@@ -891,6 +891,7 @@ GameObject:
   - component: {fileID: 7849262506739605477}
   - component: {fileID: 5347440393087361214}
   - component: {fileID: 5660135970397916287}
+  - component: {fileID: -3012153508353548951}
   - component: {fileID: 3665192994374769649}
   - component: {fileID: 5660135970397916280}
   - component: {fileID: 4028721829292908613}
@@ -900,7 +901,6 @@ GameObject:
   - component: {fileID: 3276492568727392572}
   - component: {fileID: -771400089307640272}
   - component: {fileID: 2668921912398802697}
-  - component: {fileID: -3012153508353548951}
   - component: {fileID: 5250038974471889277}
   - component: {fileID: 3780656211629919999}
   - component: {fileID: 8449280143259454606}
@@ -1024,6 +1024,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.143536, y: 1.893136, z: 0.5}
   m_Center: {x: 0.04803894, y: 0.053431988, z: 0}
+--- !u!114 &-3012153508353548951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b65cce4e7dd66148a452f4aaf296870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  charID: 1
+  TeamIndex: 1
+  PlayerKills: 0
+  PlayerKillsText: {fileID: 0}
+  PlayerDeaths: 0
+  PlayerDeathsText: {fileID: 0}
+  TowerCaptures: 0
+  TowerCapturesText: {fileID: 0}
 --- !u!114 &3665192994374769649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1038,6 +1060,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  charID: 1
   hasPurchasedSpecial: 0
   hasPurchasedUlti: 0
   AlternateSpecial: 0
@@ -1065,13 +1088,23 @@ MonoBehaviour:
     type: 3}
   Projectile3_v2: {fileID: 3543547152907490667, guid: f1eaf3061d966ec4499d5258118c148e,
     type: 3}
+  SkillChild: {fileID: 0}
+  Skillchild_v2: {fileID: 0}
+  UltiChild: {fileID: 0}
+  UltiChild_v2: {fileID: 0}
   SpawnPoint: {fileID: 5660135970150263288}
   cooldown1: 0
   cooldown2: 3
   cooldown3: 10
+  cooldown1Multiplier: 0
+  cooldown1MultiplerTimer: 0
+  cooldown1MultiplierTimerInGame: 0
+  cooldown1_inGame: 0
+  cooldown2_inGame: 0
+  cooldown3_inGame: 0
   ismeeleeattack: 0
   meleeAttackDuration1: 0
-  meleeCombo: 1
+  meleeAttackSpeedMultiplier: 0
   animator: {fileID: 0}
 --- !u!114 &5660135970397916280
 MonoBehaviour:
@@ -1089,9 +1122,9 @@ MonoBehaviour:
   syncInterval: 0.1
   baseSpeed: 2.5
   speed: 0
-  isDebuffed: 0
-  debuffDuration: 0
-  debuffStrength: 0
+  isSpeedAltered: 0
+  speedAlterDuration: 0
+  speedAlterStrength: 0
 --- !u!114 &4028721829292908613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1182,8 +1215,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
-  currenthealth: 0
-  isFullHealth: 0
 --- !u!114 &2668921912398802697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1202,33 +1233,11 @@ MonoBehaviour:
     type: 3}
   respawnTimerRef: 5
   respawnTimerInGame: 0
-  isDead: 0
   deathOverlay: {fileID: 7072208613197537347, guid: af933045f5f2ec54f89114511f0edef0,
     type: 3}
   deadTextObject: {fileID: 0}
   respawninginObject: {fileID: 0}
   PlayerRespawnTimerObject: {fileID: 0}
---- !u!114 &-3012153508353548951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8015437381331526034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b65cce4e7dd66148a452f4aaf296870, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  TeamIndex: 1
-  PlayerKills: 0
-  PlayerKillsText: {fileID: 0}
-  PlayerDeaths: 0
-  PlayerDeathsText: {fileID: 0}
-  TowerCaptures: 0
-  TowerCapturesText: {fileID: 0}
 --- !u!114 &5250038974471889277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1280,7 +1289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: 9137392e5df5a964689d24c6355ba9bc
   hasSpawned: 0
 --- !u!114 &6459418408009445500
 MonoBehaviour:

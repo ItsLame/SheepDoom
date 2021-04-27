@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 1635928248295412253}
   - component: {fileID: 3488106142274514246}
   - component: {fileID: 3805828758684287367}
+  - component: {fileID: 3201915219564466321}
   - component: {fileID: 5224372523614344713}
   - component: {fileID: 3805828758684287360}
   - component: {fileID: 5599442812974198205}
@@ -136,7 +137,6 @@ GameObject:
   - component: {fileID: 6279603492664990916}
   - component: {fileID: 1087264228214064072}
   - component: {fileID: 6869177918369833713}
-  - component: {fileID: 3201915219564466321}
   - component: {fileID: 3913887420858538012}
   - component: {fileID: 522307010120700973}
   - component: {fileID: 1088759763548799350}
@@ -264,6 +264,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.143536, y: 1.893136, z: 0.5}
   m_Center: {x: 0.04803894, y: 0.053431988, z: 0}
+--- !u!114 &3201915219564466321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540617473773694058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b65cce4e7dd66148a452f4aaf296870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  charID: 2
+  TeamIndex: 2
+  PlayerKills: 0
+  PlayerKillsText: {fileID: 0}
+  PlayerDeaths: 0
+  PlayerDeathsText: {fileID: 0}
+  TowerCaptures: 0
+  TowerCapturesText: {fileID: 0}
 --- !u!114 &5224372523614344713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  charID: 2
   hasPurchasedSpecial: 0
   hasPurchasedUlti: 0
   AlternateSpecial: 0
@@ -451,27 +474,6 @@ MonoBehaviour:
   deadTextObject: {fileID: 0}
   respawninginObject: {fileID: 0}
   PlayerRespawnTimerObject: {fileID: 0}
---- !u!114 &3201915219564466321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1540617473773694058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b65cce4e7dd66148a452f4aaf296870, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  TeamIndex: 2
-  PlayerKills: 0
-  PlayerKillsText: {fileID: 0}
-  PlayerDeaths: 0
-  PlayerDeathsText: {fileID: 0}
-  TowerCaptures: 0
-  TowerCapturesText: {fileID: 0}
 --- !u!114 &3913887420858538012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,7 +525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: b9f33189f64b5e04f87fa4467deaf77a
   hasSpawned: 0
 --- !u!114 &2592283840863600004
 MonoBehaviour:
@@ -1257,7 +1259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: b9f33189f64b5e04f87fa4467deaf77a
   hasSpawned: 0
 --- !u!114 &5848661643072328350
 MonoBehaviour:
@@ -1459,7 +1461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: b9f33189f64b5e04f87fa4467deaf77a
   hasSpawned: 0
 --- !u!1 &6494726391512442223
 GameObject:

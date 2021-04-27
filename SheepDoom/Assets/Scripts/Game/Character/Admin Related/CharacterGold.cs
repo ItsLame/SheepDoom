@@ -32,6 +32,7 @@ namespace SheepDoom
         //gold call function
         public float GetCurrentGold()
         {
+            Debug.Log("Getting " + this.gameObject.name + "'s gold..");
             return CurrentGold;
         }
 

@@ -9,6 +9,9 @@ namespace SheepDoom
     public class PlayerAdmin : NetworkBehaviour
     {
         // Mainly player attributes 
+        [Header("PlayerID for skills")]
+        [SerializeField]
+        [SyncVar] private float charID;
 
         [Header("Team affiliation (1 for Blue, 2 for Red")]
         [SerializeField]
@@ -34,6 +37,11 @@ namespace SheepDoom
         public void setTeamIndex(float value)
         {
             TeamIndex = value;
+        }
+
+        public float getCharID()
+        {
+            return charID;
         }
 
         [Server]
