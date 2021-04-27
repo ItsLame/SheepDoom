@@ -52,16 +52,22 @@ namespace SheepDoom
         [SerializeField] private GameObject ScoreboardRed;
         [SerializeField] private GameObject BlueWinLose;
         [SerializeField] private GameObject RedWinLose;
+        [SerializeField] private GameObject BP1Star;
         [SerializeField] private GameObject BluePlayer1Image;
         [SerializeField] private GameObject BluePlayer1Name;
+        [SerializeField] private GameObject BP2Star;
         [SerializeField] private GameObject BluePlayer2Image;
         [SerializeField] private GameObject BluePlayer2Name;
+        [SerializeField] private GameObject BP3Star;
         [SerializeField] private GameObject BluePlayer3Image;
         [SerializeField] private GameObject BluePlayer3Name;
+        [SerializeField] private GameObject RP1Star;
         [SerializeField] private GameObject RedPlayer1Image;
         [SerializeField] private GameObject RedPlayer1Name;
+        [SerializeField] private GameObject RP2Star;
         [SerializeField] private GameObject RedPlayer2Image;
         [SerializeField] private GameObject RedPlayer2Name;
+        [SerializeField] private GameObject RP3Star;
         [SerializeField] private GameObject RedPlayer3Image;
         [SerializeField] private GameObject RedPlayer3Name;
 
@@ -285,6 +291,43 @@ namespace SheepDoom
             get { return RedPlayer3Name; }
             set { RedPlayer3Name = value; }
         }
+
+        public GameObject P_BP1Star
+        {
+            get { return BP1Star; }
+            set { BP1Star = value; }
+        }
+
+        public GameObject P_BP2Star
+        {
+            get { return BP2Star; }
+            set { BP2Star = value; }
+        }
+
+        public GameObject P_BP3Star
+        {
+            get { return BP3Star; }
+            set { BP3Star = value; }
+        }
+
+        public GameObject P_RP1Star
+        {
+            get { return RP1Star; }
+            set { RP1Star = value; }
+        }
+
+        public GameObject P_RP2Star
+        {
+            get { return RP2Star; }
+            set { RP2Star = value; }
+        }
+
+        public GameObject P_RP3Star
+        {
+            get { return RP3Star; }
+            set { RP3Star = value; }
+        }
+
 
 
         #endregion

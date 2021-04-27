@@ -34,8 +34,6 @@ namespace SheepDoom
         public Text blueScoreText;
         public Text redScoreText;
         public GameObject[] players;
-        public string[] playerNames = new string[6];
-        public int[] playerTeams = new int[6];
         public Text BluePlayerNameText1;
         public Text BluePlayerNameText2;
         public Text BluePlayerNameText3;
@@ -43,6 +41,20 @@ namespace SheepDoom
         public Text RedPlayerNameText2;
         public Text RedPlayerNameText3;
 
+        public Image BluePlayerImage1UI;
+        public Image BluePlayerImage2UI;
+        public Image BluePlayerImage3UI;
+        public Image RedPlayerImage1UI;
+        public Image RedPlayerImage2UI;
+        public Image RedPlayerImage3UI;
+        public string TopPlayer;
+        public int TempMostKills;
+        public Image BP1StarImageUI;
+        public Image BP2StarImageUI;
+        public Image BP3StarImageUI;
+        public Image RP1StarImageUI;
+        public Image RP2StarImageUI;
+        public Image RP3StarImageUI;
         // Start is called before the first frame update
         /*void Start()
         {
@@ -151,6 +163,70 @@ namespace SheepDoom
             redScoreText = redScore.GetComponent<Text>();
             redScoreText.text = redCaptureScore.ToString();
 
+            //Blue Team Pull UI text
+            GameObject BluePlayerName1 = FindMe.instance.P_BluePlayerName1;
+            BluePlayerNameText1 = BluePlayerName1.GetComponent<Text>();
+
+            GameObject BluePlayerName2 = FindMe.instance.P_BluePlayerName2;
+            BluePlayerNameText2 = BluePlayerName2.GetComponent<Text>();
+
+            GameObject BluePlayerName3 = FindMe.instance.P_BluePlayerName2;
+            BluePlayerNameText3 = BluePlayerName3.GetComponent<Text>();
+
+            //Blue Team Pull UI image
+            GameObject BluePlayerImage1 = FindMe.instance.P_BluePlayerImage1;
+            BluePlayerImage1UI = BluePlayerImage1.GetComponent<Image>();
+
+            GameObject BluePlayerImage2 = FindMe.instance.P_BluePlayerImage2;
+            BluePlayerImage2UI = BluePlayerImage2.GetComponent<Image>();
+
+            GameObject BluePlayerImage3 = FindMe.instance.P_BluePlayerImage3;
+            BluePlayerImage3UI = BluePlayerImage3.GetComponent<Image>();
+
+            //Red Team Pull UI text
+            GameObject RedPlayerName1 = FindMe.instance.P_RedPlayerName1;
+            RedPlayerNameText1 = RedPlayerName1.GetComponent<Text>();
+
+            GameObject RedPlayerName2 = FindMe.instance.P_RedPlayerName2;
+            RedPlayerNameText2 = RedPlayerName2.GetComponent<Text>();
+
+            GameObject RedPlayerName3 = FindMe.instance.P_RedPlayerName3;
+            RedPlayerNameText3 = RedPlayerName3.GetComponent<Text>();
+
+            //Red Team Pull UI image
+            GameObject RedPlayerImage1 = FindMe.instance.P_RedPlayerImage1;
+            RedPlayerImage1UI = RedPlayerImage1.GetComponent<Image>();
+
+            GameObject RedPlayerImage2 = FindMe.instance.P_RedPlayerImage2;
+            RedPlayerImage2UI = RedPlayerImage2.GetComponent<Image>();
+
+            GameObject RedPlayerImage3 = FindMe.instance.P_RedPlayerImage3;
+            RedPlayerImage3UI = RedPlayerImage3.GetComponent<Image>();
+
+            //Blue Team Star Player
+            GameObject BP1StarImage = FindMe.instance.P_BP1Star;
+            BP1StarImageUI = BP1StarImage.GetComponent<Image>();
+
+            GameObject BP2StarImage = FindMe.instance.P_BP2Star;
+            BP2StarImageUI = BP2StarImage.GetComponent<Image>();
+
+            GameObject BP3StarImage = FindMe.instance.P_BP3Star;
+            BP3StarImageUI = BP3StarImage.GetComponent<Image>();
+
+            //Red Team Star Player
+            GameObject RP1StarImage = FindMe.instance.P_RP1Star;
+            RP1StarImageUI = RP1StarImage.GetComponent<Image>();
+
+            GameObject RP2StarImage = FindMe.instance.P_RP2Star;
+            RP2StarImageUI = RP2StarImage.GetComponent<Image>();
+
+            GameObject RP3StarImage = FindMe.instance.P_RP3Star;
+            RP3StarImageUI = RP3StarImage.GetComponent<Image>();
+
+            //Character Image
+            Sprite CharacterImage = Resources.Load<Sprite>("circleface");
+            Debug.Log("Scoreboard: CharacterImage: " + CharacterImage);
+
             //Get all players' name and team id
             if (players.Length == 0)
             {
@@ -163,69 +239,94 @@ namespace SheepDoom
                 Debug.Log("Scoreboard: players.Length:" + players.Length);
                 for (int i = 0; i < players.Length; i++)
                 {
+                    //Get current player name and team
                     string name = player.GetComponent<PlayerObj>().GetPlayerName();
-                    string[] playerNames = new string[] { name };
-                    Debug.Log("Scoreboard: playerName: " + playerNames[i]);
                     int team = (int)player.GetComponent<PlayerAdmin>().getTeamIndex();
-                    int[] playerTeams = new int[] { team };
-                    Debug.Log("Scoreboard: playerTeam: " + playerTeams[i]);
-
-                    if (playerTeams[i] == 1) //Blue Team
+                    int kills = (int)player.GetComponent<PlayerAdmin>().PlayerKills;
+                    if (TempMostKills < kills)
                     {
-                        //Pull UI
-                        GameObject BluePlayerName1 = FindMe.instance.P_BluePlayerName1;
-                        BluePlayerNameText1 = BluePlayerName1.GetComponent<Text>();
+                        TempMostKills = kills;
+                        TopPlayer = name;
+                    }
 
-                        GameObject BluePlayerName2 = FindMe.instance.P_BluePlayerName2;
-                        BluePlayerNameText2 = BluePlayerName2.GetComponent<Text>();
-
-                        GameObject BluePlayerName3 = FindMe.instance.P_BluePlayerName2;
-                        BluePlayerNameText3 = BluePlayerName3.GetComponent<Text>();
-
-                        Debug.Log("Scoreboard: End of FindMe for PlayerNames");
-                        //Put name into UI 
+                    if (team == 1) //If current player is Blue Team
+                    {
+                        //Put name & image into UI 
                         if (BluePlayerNameText1.text != null)
                         {
-                            BluePlayerNameText1.text = playerNames[i];
+                            BluePlayerNameText1.text = name;
+                            BluePlayerImage1UI.sprite = CharacterImage;
+                            BluePlayerImage1UI.color = new Color32(255, 255, 255, 255);
+                            Debug.Log("Scoreboard: BluePlayerNameText1: " + name);
                         }
                         else if (BluePlayerNameText2.text != null)
                         {
-                            BluePlayerNameText2.text = playerNames[i];
+                            BluePlayerNameText2.text = name;
+                            BluePlayerImage2UI.sprite = CharacterImage;
+                            BluePlayerImage2UI.color = new Color32(255, 255, 255, 255);
+                            Debug.Log("Scoreboard: BluePlayerNameText2: " + name);
                         }
                         else if (BluePlayerNameText3.text != null)
                         {
-                            BluePlayerNameText3.text = playerNames[i];
+                            BluePlayerNameText3.text = name;
+                            BluePlayerImage3UI.sprite = CharacterImage;
+                            BluePlayerImage3UI.color = new Color32(255, 255, 255, 255);
+                            Debug.Log("Scoreboard: BluePlayerNameText3: " + name);
                         }
                     }
-                    else if (playerTeams[i] == 2) //Red Team
+                    else if (team == 2) //If current player is Red Team
                     {
-                        //Pull UI
-                        GameObject RedPlayerName1 = FindMe.instance.P_RedPlayerName1;
-                        RedPlayerNameText1 = RedPlayerName1.GetComponent<Text>();
-
-                        GameObject RedPlayerName2 = FindMe.instance.P_RedPlayerName2;
-                        RedPlayerNameText2 = RedPlayerName2.GetComponent<Text>();
-
-                        GameObject RedPlayerName3 = FindMe.instance.P_RedPlayerName3;
-                        RedPlayerNameText3 = RedPlayerName3.GetComponent<Text>();
-
-                        //Put name into UI 
+                        //Put name & image into UI 
                         if (RedPlayerNameText1.text != null)
                         {
-                            RedPlayerNameText1.text = playerNames[i];
+                            RedPlayerNameText1.text = name;
+                            RedPlayerImage1UI.sprite = CharacterImage;
+                            RedPlayerImage1UI.color = new Color32(255, 255, 255, 255);
+                            Debug.Log("Scoreboard: RedPlayerNameText1: " + name);
                         }
                         else if (RedPlayerNameText2.text != null)
                         {
-                            RedPlayerNameText2.text = playerNames[i];
+                            RedPlayerNameText2.text = name;
+                            RedPlayerImage2UI.sprite = CharacterImage;
+                            RedPlayerImage2UI.color = new Color32(255, 255, 255, 255);
+                            Debug.Log("Scoreboard: RedPlayerNameText2: " + name);
                         }
                         else if (RedPlayerNameText3.text != null)
                         {
-                            RedPlayerNameText3.text = playerNames[i];
+                            RedPlayerNameText3.text = name;
+                            RedPlayerImage3UI.sprite = CharacterImage;
+                            RedPlayerImage3UI.color = new Color32(255, 255, 255, 255);
+                            Debug.Log("Scoreboard: RedPlayerNameText3: " + name);
                         }
                     }
                 }
             }
-
+            //Make star player image show
+            if (BluePlayerNameText1.text == TopPlayer)
+            {
+                BP1StarImageUI.color = new Color32(255, 255, 255, 255);
+            }
+            else if (BluePlayerNameText2.text == TopPlayer)
+            {
+                BP2StarImageUI.color = new Color32(255, 255, 255, 255);
+            }
+            else if (BluePlayerNameText3.text == TopPlayer)
+            {
+                BP3StarImageUI.color = new Color32(255, 255, 255, 255);
+            }
+            else if (RedPlayerNameText1.text == TopPlayer)
+            {
+                RP1StarImageUI.color = new Color32(255, 255, 255, 255);
+            }
+            else if (RedPlayerNameText2.text == TopPlayer)
+            {
+                RP2StarImageUI.color = new Color32(255, 255, 255, 255);
+            }
+            else if (RedPlayerNameText3.text == TopPlayer)
+            {
+                RP3StarImageUI.color = new Color32(255, 255, 255, 255);
+            }
+           
 
             //if blue team wins
             if (TeamID == 1)
