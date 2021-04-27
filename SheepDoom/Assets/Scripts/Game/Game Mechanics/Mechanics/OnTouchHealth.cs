@@ -34,6 +34,11 @@ namespace SheepDoom
             hitboxActive = _status;
         }
 
+        void Start()
+        {
+
+        }
+
         //when collide with player
         [Server]
         private void OnTriggerEnter(Collider col)
@@ -129,10 +134,20 @@ namespace SheepDoom
             NetworkServer.Destroy(gameObject);
         }
 
-        public override void OnStartServer()
+        [Command]
+        void CmdSetTeamIndex(GameObject _parent)
         {
+            Debug.Log("Ran command");
+            parentTeamID = _parent.GetComponent<PlayerAdmin>().getTeamIndex();
+        }
+
+        void Update()
+        {   
             if(hasParent)
-                parentTeamID = parent.GetComponent<PlayerAdmin>().getTeamIndex();
+            {
+                if (parentTeamID == 0)
+                    parentTeamID = parent.GetComponent<PlayerAdmin>().getTeamIndex();
+            }
         }
     }
 }

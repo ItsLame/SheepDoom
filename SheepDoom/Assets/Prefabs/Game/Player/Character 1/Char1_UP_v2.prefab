@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5528555257311068245}
   - component: {fileID: 1933974116085354088}
   - component: {fileID: 5608938039272465082}
+  - component: {fileID: -8181147357034866778}
   m_Layer: 0
   m_Name: Char1_UP_v2
   m_TagString: Ulti
@@ -184,3 +185,18 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &-8181147357034866778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3543547152907490667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
