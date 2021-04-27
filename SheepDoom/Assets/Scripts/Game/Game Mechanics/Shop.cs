@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 namespace SheepDoom
 {
-    public class Shop : NetworkBehaviour
+    public class Shop : MonoBehaviour
     {
         //linking to player
         public GameObject Player;

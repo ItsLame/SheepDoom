@@ -177,55 +177,9 @@ namespace SheepDoom
                     GameObject FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
                     FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                     NetworkServer.Spawn(FiredProjectile, connectionToClient);
-                    //TargetAttackManipulate(connectionToClient, true, false, (cooldown1 * cooldown1Multiplier));
                 }
                 else if (attackType && MeleeAttackObject != null) // melee attack
                     MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(true);
-                //if off cd
-                /*if (cooldown1_inGame <= 0 && ismeeleeattack == false)
-                {
-                    Debug.Log("Firing Normal Atk");
-                    var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
-                    FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
-                    NetworkServer.Spawn(FiredProjectile, connectionToClient);
-
-                    //resetcd
-                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
-                }*/
-
-                /* else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
-                 {
-                     Debug.Log("Melee Normal Atk");
-
-                     //turn on hitbox script
-                     MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(true);
-
-                     if (!cooldown1MultiplierActive)
-                     {
-                         MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
-                     }
-
-                     if (cooldown1MultiplierActive)
-                     {
-                         MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
-                     }
-
-
-                     if (meleeCombo == 1)
-                     {
-                         //TargetMeleeAttack(/*connectionToClient, "right");
-                         meleeCombo = 2;
-                     }
-
-                     else if (meleeCombo == 2)
-                     {
-                         //TargetMeleeAttack(/*connectionToClient, "left");
-                         meleeCombo = 1;
-                     }
-
-                     //resetcd
-                     cooldown1_inGame = cooldown1;
-                 }*/
             }
         }
 
