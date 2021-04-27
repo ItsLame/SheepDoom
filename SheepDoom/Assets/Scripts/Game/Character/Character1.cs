@@ -40,7 +40,6 @@ namespace SheepDoom
         {
             if(!_isAltSpecial)
                 firedProjectile = Instantiate(normalSpecial, spawnPoint.position, spawnPoint.rotation);
-                
             else if(_isAltSpecial)
                 firedProjectile = Instantiate(altSpecial, spawnPoint.position, spawnPoint.rotation);
             firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
