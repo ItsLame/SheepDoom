@@ -39,17 +39,12 @@ namespace SheepDoom
         void CmdSpecialAtk(bool _isAltSpecial)
         {
             if(!_isAltSpecial)
-            {
                 firedProjectile = Instantiate(normalSpecial, spawnPoint.position, spawnPoint.rotation);
-                firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
-                NetworkServer.Spawn(firedProjectile, connectionToClient);
-            }
+                
             else if(_isAltSpecial)
-            {
                 firedProjectile = Instantiate(altSpecial, spawnPoint.position, spawnPoint.rotation);
-                firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
-                NetworkServer.Spawn(firedProjectile, connectionToClient);
-            }
+            firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+            NetworkServer.Spawn(firedProjectile, connectionToClient);
         }
     }
 }
