@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 6869177918369833713}
   - component: {fileID: 3913887420858538012}
   - component: {fileID: 522307010120700973}
+  - component: {fileID: 8703848159002313800}
   - component: {fileID: 1088759763548799350}
   - component: {fileID: 2592283840863600004}
   - component: {fileID: 7037161822337196194}
@@ -305,15 +306,9 @@ MonoBehaviour:
   hasPurchasedUlti: 0
   AlternateSpecial: 0
   AlternateUlti: 0
-  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
-    type: 3}
-  MeleeAttackObject: {fileID: 4008510119826717395}
-  Projectile2: {fileID: 0}
-  Projectile2_v2: {fileID: 0}
   Projectile3: {fileID: 7103345307366881107, guid: 00d9bcd2adf695c4f8b6bf49988c366a,
     type: 3}
   Projectile3_v2: {fileID: 0}
-  SkillChild: {fileID: 4134774580701406288}
   Skillchild_v2: {fileID: 0}
   UltiChild: {fileID: 0}
   UltiChild_v2: {fileID: 0}
@@ -323,9 +318,6 @@ MonoBehaviour:
   cooldown3: 4
   cooldown1Multiplier: 0.5
   cooldown1MultiplerTimer: 5
-  ismeeleeattack: 1
-  meleeAttackDuration1: 0.2
-  meleeAttackSpeedMultiplier: 2
   animator: {fileID: 0}
 --- !u!114 &3805828758684287360
 MonoBehaviour:
@@ -500,6 +492,25 @@ MonoBehaviour:
   isNeutral: 0
   isBoss: 0
   isMinion: 0
+--- !u!114 &8703848159002313800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540617473773694058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b92bb81daa284e4398069bf107ec7d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  normalAtkMelee: {fileID: 4008510119826717395}
+  normalSpecial: {fileID: 4134774580701406288}
+  altSpecial: {fileID: 0}
+  meleeAttackDuration1: 0.2
+  meleeAttackSpeedMultiplier: 2
 --- !u!114 &1088759763548799350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1449,7 +1460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  duration: 2
+  duration: 4
   durationInGame: 0
   isDisabled: 0
 --- !u!114 &3498517542375057051

@@ -167,7 +167,7 @@ namespace SheepDoom
                 hasPurchasedSpecial = true;
 
                 //set player bool 'haspurchasedspecial' to true
-                Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedSpecial();
+                Player.GetComponent<PlayerAttack>().PlayerHasPurchasedSpecial(false);
 
                 Debug.Log("First Special Purchased");
             }
@@ -192,7 +192,7 @@ namespace SheepDoom
                 Player.GetComponent<CharacterGold>().CmdVaryGold(-SpecialCost);
 
                 //set alternative special chosen
-                Player.GetComponent<PlayerAttack>().CMD_AlternateSpecial();
+                Player.GetComponent<PlayerAttack>().PlayerHasPurchasedSpecial(true);
 
                 //if choose 2nd, disable 1st
                 SpecialButton1.GetComponent<Button>().interactable = false;
@@ -200,7 +200,7 @@ namespace SheepDoom
                 hasPurchasedSpecial = true;
 
                 //set player bool 'haspurchasedspecial' to true
-                Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedSpecial();
+                //Player.GetComponent<PlayerAttack>().PlayerHasPurchasedSpecial();
 
                 Debug.Log("Second Special Purchased");
 

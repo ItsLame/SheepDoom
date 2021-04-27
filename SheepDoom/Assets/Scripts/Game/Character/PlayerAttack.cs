@@ -43,16 +43,13 @@ namespace SheepDoom
 
         [Header("Skill projectiles")]
         [Space(15)]
-        public GameObject Projectile;
-        public GameObject MeleeAttackObject;
-        public GameObject Projectile2;
-        public GameObject Projectile2_v2;
+        //public GameObject Projectile2;
+        //public GameObject Projectile2_v2;
         public GameObject Projectile3;
         public GameObject Projectile3_v2;
 
         [Header("Children to be activated")]
         [Space(15)]
-        public GameObject SkillChild;
         public GameObject Skillchild_v2;
         public GameObject UltiChild;
         public GameObject UltiChild_v2;
@@ -80,13 +77,6 @@ namespace SheepDoom
         private float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
         private bool cooldown1Happening;
 
-        [Header("Melee attack variables")]
-        [Space(15)]
-        [SerializeField]
-        private bool ismeeleeattack;
-        [SerializeField]
-        private float meleeAttackDuration1, meleeAttackSpeedMultiplier;
-        private float meleeCombo;
         [Space(15)]
         //Melee
         public Animator animator;
@@ -98,12 +88,8 @@ namespace SheepDoom
             cooldown2_inGame = 0;
             cooldown3_inGame = 0;
 
-            if (ismeeleeattack && MeleeAttackObject != null)
-                meleeCombo = 1;
-
             cooldown1MultiplierActive = false;
             cooldown1MultiplierTimerInGame = cooldown1MultiplerTimer;
-            //            meleeAttackSpeedMultiplier = 1;
 
             //get playerID
             charID = this.gameObject.GetComponent<PlayerAdmin>().getCharID();
@@ -115,43 +101,16 @@ namespace SheepDoom
 
             if (cooldown1_inGame <= 0)
             {
-                CmdAttackClick(ismeeleeattack);
-
-                if (!ismeeleeattack)
-                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
-                else if (ismeeleeattack && MeleeAttackObject != null)
+                if (charID == 1)
                 {
-                    if (meleeCombo == 1)
-                    {
-                        if (!cooldown1MultiplierActive)
-                        {
-                            MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
-                            MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, "right");
-                        }
-                        else if (cooldown1MultiplierActive)
-                        {
-                            MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
-                            MeleeAttackObject.GetComponent<ObjectMovementScript>().move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "right");
-                        }
-
-                        meleeCombo = 2;
-                    }
-                    else if (meleeCombo == 2)
-                    {
-                        if (!cooldown1MultiplierActive)
-                        {
-                            MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
-                            MeleeAttackObject.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, "left");
-                        }
-                        else if (cooldown1MultiplierActive)
-                        {
-                            MeleeAttackObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
-                            MeleeAttackObject.GetComponent<ObjectMovementScript>().move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "left");
-                        }
-
-                        meleeCombo = 1;
-                    }
-
+                    Character1 comp = GetComponent<Character1>();
+                    comp.normalAtk();
+                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
+                }
+                else if (charID == 2)
+                {
+                    Character2 comp = GetComponent<Character2>();
+                    comp.normalAtk(cooldown1MultiplierActive);
                     cooldown1_inGame = cooldown1;
                 }
             }
@@ -160,44 +119,43 @@ namespace SheepDoom
         public void SpecialSkillClick()
         {
             if (!hasAuthority) return;
-            CmdSpecialSkillClick();
+
+            if(cooldown2_inGame <= 0)
+            {
+                if(charID == 1)
+                {
+                    Character1 comp = GetComponent<Character1>();
+                    if (hasPurchasedSpecial)
+                    {
+                        if (!AlternateSpecial)
+                            comp.SpecialAtk(false);
+                        else if (AlternateSpecial)
+                            comp.SpecialAtk(true);
+                    }
+                }
+                else if(charID == 2)
+                {
+                    Character2 comp = GetComponent<Character2>();
+                    if(hasPurchasedSpecial)
+                    {
+                        if (!AlternateSpecial)
+                            comp.SpecialAtk(false);
+                        else if (AlternateSpecial)
+                        {
+                            cooldown1MultiplierTimerInGame = cooldown1MultiplerTimer;
+                            cooldown1MultiplierActive = true;
+                            cooldown1 = (cooldown1 * cooldown1Multiplier) + 0.05f;
+                        }
+                    }
+                }
+                cooldown2_inGame = cooldown2;
+            }
         }
 
         public void UltiClick()
         {
             if (!hasAuthority) return;
             CmdUltiClick();
-        }
-
-        [Command]
-        //if atk button is pressed
-        void CmdAttackClick(bool attackType)
-        {
-            //if not dead
-            if (!GetComponent<PlayerHealth>().isPlayerDead())
-            {
-                if (!attackType) // ranged projectile
-                {
-                    GameObject FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
-                    FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
-                    NetworkServer.Spawn(FiredProjectile, connectionToClient);
-                }
-                else if (attackType && MeleeAttackObject != null) // melee attack
-                    MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(true);
-            }
-        }
-
-        [Client] // call from client to tell server
-        public void ServerSetHitBox(bool _hitBox)
-        {
-            if (!hasAuthority) return;
-            CmdSetHitBox(_hitBox);
-        }
-
-        [Command]
-        void CmdSetHitBox(bool _hitBox)
-        {
-            MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(_hitBox);
         }
 
         //if special skill is pressed
@@ -217,27 +175,27 @@ namespace SheepDoom
                             // Special 1 for Character 1
                             // Fires a ball that starts out fast then ends at a slow constant speed
                             // Inflicts slow debuff
-                            if (charID == 1)
+                           /* if (charID == 1)
                             {
                                 Debug.Log("Firing Special Atk");
                                 var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
                                 FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
                                 NetworkServer.Spawn(FiredProjectile, connectionToClient);
                                 cooldown2_inGame = cooldown2;
-                            }
+                            }*/
 
                             // Special 1 for Character 2
                             // Activates a Shield in front of the player (child)
                             // Blocks all projectiles except piercing projectiles (not destroyed on contact)]
-                            else if (charID == 2)
+                            /* (charID == 2)
                             {
                                 Debug.Log("Activating Shield");
                                 TargetActivateChild1_Clients();
                                 TargetActivateChild1_Server();
                                 cooldown2_inGame = cooldown2;
-                            }
+                            }*/
 
-                            else if (charID == 3)
+                            if (charID == 3)
                             {
 
                             }
@@ -256,29 +214,25 @@ namespace SheepDoom
                             {
 
                             }
-
-
-
                         }
-
                         //else its the second special
                         else
                         {
                             // Special 2 for Character 1
                             // Drops a landmine projectile with a very long duration
                             // Detonate & stuns on enemy contact
-                            if (charID == 1)
+                           /* if (charID == 1)
                             {
                                 Debug.Log("Firing Special Atk 2");
                                 var FiredProjectile = Instantiate(Projectile2_v2, SpawnPoint.position, SpawnPoint.rotation);
                                 FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
                                 NetworkServer.Spawn(FiredProjectile, connectionToClient);
                                 cooldown2_inGame = cooldown2;
-                            }
+                            }*/
 
                             // Special 2 for Character 2
                             // Activates a self attack speed buff that increases atk intervals by 2x
-                            else if (charID == 2)
+                            if (charID == 2)
                             {
                                 //dont cast buff before atk animation finish
                                 if (cooldown1Happening) return;
@@ -445,10 +399,12 @@ namespace SheepDoom
         }
 
         //command to set purchasespecial to true
-        [Command]
-        public void CMD_playerHasPurchasedSpecial()
+        [Client]
+        public void PlayerHasPurchasedSpecial(bool _isAlt)
         {
+            if (!hasAuthority) return;
             hasPurchasedSpecial = true;
+            AlternateSpecial = _isAlt;
         }
 
         //command to set purchasedulti to true
@@ -459,11 +415,6 @@ namespace SheepDoom
         }
 
         //command to set alternate special to true
-        [Command]
-        public void CMD_AlternateSpecial()
-        {
-            AlternateSpecial = true;
-        }
 
         //command to set alternate ulti to true
         [Command]
@@ -476,42 +427,45 @@ namespace SheepDoom
         void Update()
         {
             //if not 0, reduce cd per second
-            if (cooldown1_inGame >= 0)
+            if (isClient && hasAuthority)
             {
-                cooldown1Happening = true;
-                cooldown1_inGame -= Time.deltaTime;
-            }
-            else if (cooldown1_inGame <= 0)
-            {
-                cooldown1Happening = false;
-            }
-            // --------------------------------------------------------------------//
+                if (cooldown1_inGame >= 0)
+                {
+                    cooldown1Happening = true;
+                    cooldown1_inGame -= Time.deltaTime;
+                }
+                else if (cooldown1_inGame <= 0)
+                {
+                    cooldown1Happening = false;
+                }
+                // --------------------------------------------------------------------//
 
-            if (cooldown1MultiplierActive)
-            {
-                cooldown1MultiplierTimerInGame -= Time.deltaTime;
-            }
+                if (cooldown1MultiplierActive)
+                {
+                    cooldown1MultiplierTimerInGame -= Time.deltaTime;
+                }
 
-            //remove atkspd buff once times up
-            if (cooldown1MultiplierTimerInGame <= 0 && cooldown1MultiplierActive)
-            {
-                resetNormalAtk = true;
-            }
+                //remove atkspd buff once times up
+                if (cooldown1MultiplierTimerInGame <= 0 && cooldown1MultiplierActive)
+                {
+                    resetNormalAtk = true;
+                }
 
-            if (resetNormalAtk == true)
-            {
-                normalAtkNormalize();
-                resetNormalAtk = false;
-            }
+                if (resetNormalAtk)
+                {
+                    normalAtkNormalize();
+                    resetNormalAtk = false;
+                }
 
-            if (cooldown2_inGame >= 0)
-            {
-                cooldown2_inGame -= Time.deltaTime;
-            }
+                if (cooldown2_inGame >= 0)
+                {
+                    cooldown2_inGame -= Time.deltaTime;
+                }
 
-            if (cooldown3_inGame >= 0)
-            {
-                cooldown3_inGame -= Time.deltaTime;
+                if (cooldown3_inGame >= 0)
+                {
+                    cooldown3_inGame -= Time.deltaTime;
+                }
             }
 
         }
@@ -523,7 +477,7 @@ namespace SheepDoom
             Debug.Log("Atk Spd Buff ended");
         }
 
-        [ClientRpc]
+        /*[ClientRpc]
         void TargetActivateChild1_Clients()
         {
             SkillChild.GetComponent<MeshRenderer>().enabled = true;
@@ -538,6 +492,6 @@ namespace SheepDoom
             SkillChild.GetComponent<BoxCollider>().enabled = true;
             SkillChild.GetComponent<PlayerChild>().refreshDuration();
 
-        }
+        }*/
     }
 }
