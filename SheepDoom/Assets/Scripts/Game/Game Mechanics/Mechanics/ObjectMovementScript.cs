@@ -87,7 +87,7 @@ namespace SheepDoom
             isGoingRight = false;
             isGoingStraight = false;
             isGoingBack = false;
-            GetComponent<GetParents>().getParent().GetComponent<PlayerAttack>().ServerSetHitBox(false);
+            GetComponent<GetParents>().getParent().GetComponent<Character2>().ServerSetHitBox(false);
             //this.gameObject.GetComponent<OnTouchHealth>().SetHitBox(false);
         }
 
