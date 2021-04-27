@@ -84,9 +84,11 @@ namespace SheepDoom
             PlayerDeathsText.text = PlayerDeaths.ToString();
             TowerCapturesText.text = TowerCaptures.ToString();
 
-            if (gameObject.layer == 8)
+            //if (gameObject.layer == 8)
+            if (PlayerObj.instance.GetTeamIndex() == 1)
                 shop = FindMe.instance.P_BlueShop;
-            else if (gameObject.layer == 9)
+            //else if (gameObject.layer == 9)
+            else if (PlayerObj.instance.GetTeamIndex() == 2)
                 shop = FindMe.instance.P_RedShop;
             shop.GetComponent<Shop>().SetPlayer(gameObject);
         }

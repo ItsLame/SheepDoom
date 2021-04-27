@@ -26,7 +26,8 @@ namespace SheepDoom
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
-            teamID = gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+            teamID = PlayerObj.instance.GetTeamIndex();
+            //teamID = gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
             assignButtons(gameObject); // no point assigning buttons on server because u dont have a single player view
         }
 
@@ -53,8 +54,7 @@ namespace SheepDoom
             _ShopUltiButton1 = FindMe.instance.P_ShopUlti1.GetComponent<Button>();
             _ShopUltiButton2 = FindMe.instance.P_ShopUlti2.GetComponent<Button>();
 
-
-            if (teamID == 1)
+            if (PlayerObj.instance.GetTeamIndex() == 1)
             {
                 GameObject blueShop = FindMe.instance.P_BlueShop;
                 UnityAction buySpecial1 = new UnityAction(blueShop.gameObject.GetComponent<Shop>().SelectFirstSpecial);
@@ -68,7 +68,7 @@ namespace SheepDoom
                 _ShopUltiButton2.onClick.AddListener(buyUlti2);
             }
 
-            if (teamID == 2)
+            if (PlayerObj.instance.GetTeamIndex() == 2)
             {
                 GameObject redShop = FindMe.instance.P_RedShop;
                 UnityAction buySpecial1 = new UnityAction(redShop.gameObject.GetComponent<Shop>().SelectFirstSpecial);
