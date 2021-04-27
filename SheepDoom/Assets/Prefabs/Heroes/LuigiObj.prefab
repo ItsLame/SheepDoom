@@ -187,7 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  baseSpeed: 0
+  baseSpeed: 2.5
   speed: 0
   isSpeedAltered: 0
   speedAlterDuration: 0

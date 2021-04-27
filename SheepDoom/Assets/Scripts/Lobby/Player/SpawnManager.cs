@@ -123,8 +123,10 @@ namespace SheepDoom
             {
                 NetworkIdentity hero = null;
                 string heroName = string.Empty;
+                string matchID = string.Empty;
 
                 heroName = player.GetComponent<PlayerObj>().GetHeroName();
+                matchID = player.GetComponent<PlayerObj>().GetMatchID();
 
                 switch(heroName)
                 {
@@ -141,6 +143,11 @@ namespace SheepDoom
                         spawn = Instantiate(hero.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
                     else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
                         spawn = Instantiate(hero.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
+                }
+
+                if(spawn != null)
+                {
+                    MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveObjToNewScene(MatchMaker.instance.GetMatches()[matchID].GetScenes()[2], spawn);
                 }
             }
 

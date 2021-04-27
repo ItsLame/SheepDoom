@@ -97,10 +97,16 @@ namespace SheepDoom
             StartCoroutine(LoadGameScene(P_gameScene, conn));
         }
 
-        [Server]
-        public void MoveToCharSelect(Scene _scene)
+        [Server]    // move scene manager to new scene
+        public void MoveToNewScene(Scene _scene)
         {
             SceneManager.MoveGameObjectToScene(gameObject, _scene);
+        }
+
+        [Server]    // move other objects to new scene
+        public void MoveObjToNewScene(Scene _scene, GameObject _gameObject)
+        {
+            SceneManager.MoveGameObjectToScene(_gameObject, _scene);
         }
 
         [Server]

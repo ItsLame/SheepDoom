@@ -304,14 +304,14 @@ namespace SheepDoom
             {
                 if(_charSelect)
                 {
-                    matches[_matchID].GetSDSceneManager().MoveToCharSelect(matches[_matchID].GetScenes()[1]);
+                    matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetScenes()[1]);
                     foreach(GameObject player in matches[_matchID].GetPlayerObjList())
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[1], _matchID, true, false);
                     matches[_matchID].GetCharacterSelectUIManager().StartCharSelect(_matchID);
                 }
                 else if(_game)
                 {
-                    matches[_matchID].GetSDSceneManager().MoveToCharSelect(matches[_matchID].GetScenes()[2]);
+                    matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetScenes()[2]);
                     foreach(GameObject player in matches[_matchID].GetPlayerObjList())
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[2], _matchID, false, true);
                     // <<insert here>> start function of game scene (if there's any)
