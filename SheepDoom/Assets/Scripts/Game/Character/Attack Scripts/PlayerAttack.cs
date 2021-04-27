@@ -22,6 +22,7 @@ namespace SheepDoom
         public bool AlternateSpecial = false;
         public bool AlternateUlti = false;
 
+        /*
         [Header("If player skills are firing projectiles")]
         public bool isSpecial1Projectile;
         public bool isSpecial2Projectile;
@@ -38,7 +39,7 @@ namespace SheepDoom
         public bool isSpecial1Buff;
         public bool isSpecial2Buff;
         public bool isUlti1Buff;
-        public bool isUlti2Buff;
+        public bool isUlti2Buff; */
 
         [Header("Skill projectiles")]
         [Space(15)]
@@ -64,15 +65,18 @@ namespace SheepDoom
         [SerializeField]
         private float cooldown1, cooldown2, cooldown3;
 
+        [Space(15)]
         //cooldown 1 cd multiplier
         [SerializeField]
-        [Space(15)]
-        private float cooldown1Multiplier, cooldown1MultiplerTimer, cooldown1MultiplierTimerInGame;
+        private float cooldown1Multiplier;
+        [SerializeField]
+        private float cooldown1MultiplerTimer;
+        private float cooldown1MultiplierTimerInGame;
         private bool cooldown1MultiplierActive;
         private bool resetNormalAtk = false;
 
         [Header("Skillcd values to be used n manipulated in game")]
-        [SerializeField]
+ //       [SerializeField]
         private float cooldown1_inGame, cooldown2_inGame, cooldown3_inGame;
         private bool cooldown1Happening;
 
@@ -162,7 +166,7 @@ namespace SheepDoom
         public void UltiClick()
         {
             if (!hasAuthority) return;
-            CmdUltiClick();
+            CmdUltiClick(); 
         }
 
         [Command]
@@ -181,51 +185,7 @@ namespace SheepDoom
                 }
                 else if (attackType && MeleeAttackObject != null) // melee attack
                     MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(true);
-                //if off cd
-                /*if (cooldown1_inGame <= 0 && ismeeleeattack == false)
-                {
-                    Debug.Log("Firing Normal Atk");
-                    var FiredProjectile = Instantiate(Projectile, SpawnPoint.position, SpawnPoint.rotation);
-                    FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
-                    NetworkServer.Spawn(FiredProjectile, connectionToClient);
 
-                    //resetcd
-                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
-                }*/
-
-                /* else if (cooldown1_inGame <= 0 && ismeeleeattack == true)
-                 {
-                     Debug.Log("Melee Normal Atk");
-
-                     //turn on hitbox script
-                     MeleeAttackObject.GetComponent<OnTouchHealth>().SetHitBox(true);
-
-                     if (!cooldown1MultiplierActive)
-                     {
-                         MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
-                     }
-
-                     if (cooldown1MultiplierActive)
-                     {
-                         MeleeAttackObject.gameObject.GetComponent<ObjectMovementScript>().SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
-                     }
-
-
-                     if (meleeCombo == 1)
-                     {
-                         //TargetMeleeAttack(/*connectionToClient, "right");
-                         meleeCombo = 2;
-                     }
-
-                     else if (meleeCombo == 2)
-                     {
-                         //TargetMeleeAttack(/*connectionToClient, "left");
-                         meleeCombo = 1;
-                     }
-
-                     //resetcd
-                     cooldown1_inGame = cooldown1;
-                 }*/
             }
         }
 
@@ -268,7 +228,6 @@ namespace SheepDoom
                                 cooldown2_inGame = cooldown2;
                             }
 
-
                             // Special 1 for Character 2
                             // Activates a Shield in front of the player (child)
                             // Blocks all projectiles except piercing projectiles (not destroyed on contact)]
@@ -280,30 +239,27 @@ namespace SheepDoom
                                 cooldown2_inGame = cooldown2;
                             }
 
-                            /*
-                                //special1 projectile settings
-                                if (isSpecial1Projectile)
-                                {
-                                Debug.Log("Firing Special Atk");
-                                var FiredProjectile = Instantiate(Projectile2, SpawnPoint.position, SpawnPoint.rotation);
-                                FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
-                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
-                                cooldown2_inGame = cooldown2;
-                                }*/
-
-                            /*
-                            else if (isSpecial1Child)
+                            else if (charID == 3)
                             {
-                                TargetActivateChild1_Clients();
-                                TargetActivateChild1_Server();
-                                cooldown2_inGame = cooldown2;
-                            } */
-
-                            else if (isSpecial1Buff)
-                            {
-
 
                             }
+
+                            else if (charID == 4)
+                            {
+
+                            }
+
+                            else if (charID == 5)
+                            {
+
+                            }
+
+                            else if (charID == 6)
+                            {
+
+                            }
+
+
 
                         }
 
@@ -335,32 +291,26 @@ namespace SheepDoom
                                 cooldown2_inGame = cooldown2;
                             }
 
-                            /*
-                            //special2 projectile settings
-                            if (isSpecial2Projectile)
-                            {
-                                Debug.Log("Firing Special Atk 2");
-                                var FiredProjectile = Instantiate(Projectile2_v2, SpawnPoint.position, SpawnPoint.rotation);
-                                FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(this.gameObject);
-                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
-                                cooldown2_inGame = cooldown2;
-                            }
-
-                            else if (isSpecial2Child)
+                            else if (charID == 3)
                             {
 
                             }
-                            
-                            else if (isSpecial2Buff)
+
+                            else if (charID == 4)
                             {
-                                //dont cast buff before atk animation finish
-                                if (cooldown1Happening) return;
-                                Debug.Log("Atk Spd Buff activated");
-                                cooldown1MultiplierTimerInGame = cooldown1MultiplerTimer;
-                                cooldown1MultiplierActive = true;
-                                cooldown1 = (cooldown1 * cooldown1Multiplier) + 0.05f;
-                                cooldown2_inGame = cooldown2;
-                            }*/
+
+                            }
+
+                            else if (charID == 5)
+                            {
+
+                            }
+
+                            else if (charID == 6)
+                            {
+
+                            }
+
                         }
 
 
@@ -404,26 +354,25 @@ namespace SheepDoom
 
                             }
 
-                            /*
-                            if (isUlti1Projectile)
-                            {
-                                Debug.Log("Firing Ultimate Atk");
-                                var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position, SpawnPoint.rotation);
-                                FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
-                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
-                                cooldown3_inGame = cooldown3;
-                            }
-                            
-
-                            else if (isUlti1Child)
+                            else if (charID == 3)
                             {
 
                             }
 
-                            else if (isUlti1Buff)
+                            else if (charID == 4)
                             {
 
-                            } */
+                            }
+
+                            else if (charID == 5)
+                            {
+
+                            }
+
+                            else if (charID == 6)
+                            {
+
+                            }
 
                         }
 
@@ -453,28 +402,25 @@ namespace SheepDoom
                                 cooldown3_inGame = cooldown3;
                             }
 
-                            /*
-                            if (isUlti2Projectile)
-                            {
-                                Debug.Log("Firing Ultimate Atk 2");
-                                var FiredProjectile = Instantiate(Projectile3_v2, SpawnPoint.position, SpawnPoint.rotation);
-                                FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
-                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
-                                cooldown3_inGame = cooldown3;
-                            }
-
-                            else if (isUlti2Child)
+                            else if (charID == 3)
                             {
 
                             }
 
-                            else if (isUlti2Buff)
+                            else if (charID == 4)
                             {
-                                Debug.Log("MoveSpd Buff activated");
-                                //speed up char movespd by 1.5x for 5s
-                                this.gameObject.GetComponent<CharacterMovement>().changeSpeed("speedUp", 5, 1.5f);
-                                cooldown3_inGame = cooldown3;
-                            } */
+
+                            }
+
+                            else if (charID == 5)
+                            {
+
+                            }
+
+                            else if (charID == 6)
+                            {
+
+                            }
 
                         }
 
