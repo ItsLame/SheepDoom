@@ -18,6 +18,11 @@ namespace SheepDoom
         public float y_rotaspeed;
         public float z_rotaspeed;
 
+        [Header("Movement Properties")]
+        [SerializeField] private bool isMovingDown;
+        [SerializeField] private bool isMovingLeft;
+        [SerializeField] private bool isMovingRight;
+
         [Header("Damage Properties")]
         [Space(15)]
         public int damage;
@@ -194,8 +199,27 @@ namespace SheepDoom
                 //rotation movement
                 transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
 
-                //basic forward movement
-                transform.Translate(Vector3.forward * m_Speed * Time.deltaTime);
+                if (isMovingDown)
+                {
+                    transform.Translate(Vector3.down * m_Speed * Time.deltaTime);
+                }
+
+                else if (isMovingLeft)
+                {
+                    transform.Translate(Vector3.left * m_Speed * Time.deltaTime);
+                }
+
+                else if (isMovingRight)
+                {
+                    transform.Translate(Vector3.right * m_Speed * Time.deltaTime);
+                }
+
+                else
+                {
+                    //basic forward movement
+                    transform.Translate(Vector3.forward * m_Speed * Time.deltaTime);
+                }
+
 
                 //adjust acceleration rate per frame
                 if (isAccelerating)
