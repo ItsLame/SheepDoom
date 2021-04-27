@@ -310,7 +310,8 @@ MonoBehaviour:
   MeleeAttackObject: {fileID: 4008510119826717395}
   Projectile2: {fileID: 0}
   Projectile2_v2: {fileID: 0}
-  Projectile3: {fileID: 0}
+  Projectile3: {fileID: 7103345307366881107, guid: 00d9bcd2adf695c4f8b6bf49988c366a,
+    type: 3}
   Projectile3_v2: {fileID: 0}
   SkillChild: {fileID: 4134774580701406288}
   Skillchild_v2: {fileID: 0}
@@ -1605,7 +1606,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5351908081636857107
 Transform:
   m_ObjectHideFlags: 0

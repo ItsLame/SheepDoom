@@ -346,10 +346,22 @@ namespace SheepDoom
                                 cooldown3_inGame = cooldown3;
                             }
 
-                            //
+                            // Ultimate 1 for Character 2
+                            // After a certain delay, sleeps all enemies in a large AOE in front of character
+                            // Sleep: Player is immobilized and debuff is removed when player takes damage
                             else if (charID == 2)
                             {
+                                Debug.Log("Firing Ultimate Atk");
+                                Vector3 additionalDistance = new Vector3(0, 40, 0);
+                                var FiredProjectile = Instantiate(Projectile3, SpawnPoint.position + (transform.forward * 30) + additionalDistance, SpawnPoint.rotation);
 
+                                FiredProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+//                                FiredProjectile.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
+//                                FiredProjectile.GetComponent<ObjectMovementScript>().move(4, "down");
+
+
+                                NetworkServer.Spawn(FiredProjectile, connectionToClient);
+                                cooldown3_inGame = cooldown3;
                             }
 
                             else if (charID == 3)
