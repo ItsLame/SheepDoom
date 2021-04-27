@@ -84,6 +84,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3457716172643982884}
   - component: {fileID: 6475561081208374970}
+  - component: {fileID: 5685996887154514434}
   m_Layer: 9
   m_Name: MinionCollider
   m_TagString: BaseMinion
@@ -115,10 +116,23 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5685996887154514434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3075930914696227453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b43b0b0339c09f4e8e4927315011686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 8278160488922250821}
 --- !u!1 &4224963179454615335
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +236,7 @@ RectTransform:
   m_GameObject: {fileID: 4286456150406609328}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.074}
-  m_LocalScale: {x: 0.1575725, y: 0.3996425, z: 0.3996425}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 1924680804745124797}
   - {fileID: 4551484535231892067}
@@ -231,7 +245,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.02, y: 0.939}
+  m_AnchoredPosition: {x: -0.02, y: 0.75}
   m_SizeDelta: {x: 20, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &259784828358939286
@@ -303,11 +317,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4286456150406609328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcff89a1e268fea4a8a2b61b1bcba8f4, type: 3}
+  m_Script: {fileID: 11500000, guid: c6d3b00740177a74d873e485502c5602, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   foregroundimage: {fileID: 2933648434215932818}
-  updatespeedseconds: 0.5
+  updatespeedseconds: 0.2
 --- !u!1 &8278160488922250821
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,12 +334,15 @@ GameObject:
   - component: {fileID: 4845920925660771603}
   - component: {fileID: 5033433189816787489}
   - component: {fileID: 2119394237772557191}
-  - component: {fileID: 2232297401316802236}
   - component: {fileID: 1726418527979177131}
   - component: {fileID: 6800082829237668903}
-  m_Layer: 9
+  - component: {fileID: -8878632984452253741}
+  - component: {fileID: 2604463573454587433}
+  - component: {fileID: -4652393214133118069}
+  - component: {fileID: 5892546946559195054}
+  m_Layer: 0
   m_Name: TeamConsortiumRangedCreep
-  m_TagString: Untagged
+  m_TagString: TeamConsortiumRangeCreep
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -339,7 +356,7 @@ Transform:
   m_GameObject: {fileID: 8278160488922250821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_Children:
   - {fileID: 6181575291275588499}
   - {fileID: 3457716172643982884}
@@ -406,48 +423,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 16
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2232297401316802236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8278160488922250821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 882160927b766014eaa70b7e41c853d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waypoints:
-  - {fileID: 1603850157325218366, guid: a706c3ac1f5d47a45a12459a32a289a4, type: 3}
-  - {fileID: 7933859406255028398, guid: 8eb7e0085240a1241a873a7003f15af2, type: 3}
-  - {fileID: 1376386659234710339, guid: 8304b7b97128cb24f9cfd5b9d9904387, type: 3}
-  - {fileID: 1346849789753717331, guid: c80e830a2082b674cbad1617c1b9c301, type: 3}
-  - {fileID: 3033225961934240665, guid: a20fc79918f04c34d8841859db12bae8, type: 3}
-  StartIndex: 0
-  ismeleeattack: 0
-  CreepMoveSpeed: 20
-  timeBetweenAttacks: 2
-  sightRange: 32
-  attackRange: 20
-  playerInSightRange: 0
-  playerInAttackRange: 0
-  TeamCoalition: 0
-  whatisplayer:
-    serializedVersion: 2
-    m_Bits: 256
-  projectile: {fileID: 3321324340310797477, guid: e237935973540a54f86fcb325efbe1eb,
-    type: 3}
-  animator: {fileID: 0}
-  attackPoint: {fileID: 0}
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  meleedamage: 50
-  maxHealth: 50
-  goldValue: 2
-  targetObject: {fileID: 0}
-  Murderer: {fileID: 0}
 --- !u!195 &1726418527979177131
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -457,14 +432,14 @@ NavMeshAgent:
   m_GameObject: {fileID: 8278160488922250821}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
+  m_Radius: 1
+  m_Speed: 0
+  m_Acceleration: 300
+  avoidancePriority: 0
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0.5
@@ -486,3 +461,93 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-8878632984452253741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8278160488922250821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &2604463573454587433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8278160488922250821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 0
+  localPositionSensitivity: 0.01
+  localRotationSensitivity: 0.01
+  localScaleSensitivity: 0.01
+--- !u!114 &-4652393214133118069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8278160488922250821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  forceHidden: 0
+--- !u!114 &5892546946559195054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8278160488922250821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1910a3c72479ec3449dc351c795eb1ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  waypoints:
+  - {fileID: 5025137307999347345, guid: 7e130f37463faac4bb5df4d2aed9a3a5, type: 3}
+  - {fileID: 1601260377792171736, guid: 22e7630655743a1489cde7c1dc505075, type: 3}
+  - {fileID: 3993287873418924031, guid: de11748f58b201c439e808eb73908285, type: 3}
+  StartIndex: 0
+  agent: {fileID: 1726418527979177131}
+  ismeleeattack: 0
+  CreepMoveSpeed: 20
+  timeBetweenAttacks: 2
+  sightRange: 50
+  attackRange: 30
+  playerInSightRange: 0
+  playerInAttackRange: 0
+  TeamCoalition: 0
+  whatisplayer:
+    serializedVersion: 2
+    m_Bits: 256
+  projectile: {fileID: 3321324340310797477, guid: e237935973540a54f86fcb325efbe1eb,
+    type: 3}
+  animator: {fileID: 0}
+  attackPoint: {fileID: 0}
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  meleedamage: 50
+  maxHealth: 50
+  goldValue: 2

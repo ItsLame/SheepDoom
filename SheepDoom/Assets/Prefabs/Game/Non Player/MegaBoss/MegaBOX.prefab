@@ -89,6 +89,8 @@ GameObject:
   - component: {fileID: 8685654332314622575}
   - component: {fileID: 8685654332314622480}
   - component: {fileID: 8685654332314622481}
+  - component: {fileID: 5379244690971615734}
+  - component: {fileID: -8505771274155786409}
   m_Layer: 0
   m_Name: MegaBOX
   m_TagString: Untagged
@@ -195,12 +197,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6ca64366565e045b770870453fbb60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   waypoints:
-  - {fileID: 2872654879134856366, guid: a44948aba694b2343b67d8ac8c324c6c, type: 3}
-  - {fileID: 5026907054706671254, guid: a27d90d4d6897d54982e06a17e4a64fe, type: 3}
-  - {fileID: 7948381726571760862, guid: 58be8d88d6ff1974b9ab60b5c6ef3590, type: 3}
-  - {fileID: 5026907054706671254, guid: a27d90d4d6897d54982e06a17e4a64fe, type: 3}
-  StartIndex: 0
+  - {fileID: 7335195739248088119, guid: 70269db1a56846e44ade022d4f4446e6, type: 3}
+  - {fileID: 5846234344403813109, guid: 385ab804dece07848991811619714a8a, type: 3}
+  - {fileID: 2511402091190169265, guid: 6a948272e06811a4ea8823a28dcffe27, type: 3}
+  StartIndex: 1
   ismeleeattack: 0
   CreepMoveSpeed: 15
   timeBetweenAttacks: 2
@@ -253,6 +256,40 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5379244690971615734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8685654332314622482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &-8505771274155786409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8685654332314622482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 1
+  localPositionSensitivity: 0.01
+  localRotationSensitivity: 0.01
+  localScaleSensitivity: 0.01
 --- !u!1 &8685654332454407307
 GameObject:
   m_ObjectHideFlags: 0

@@ -100,9 +100,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  fixXdist: -530
-  fixYdist: 515
-  fixZdist: 40
+  fixXdist: -595
+  fixYdist: 590
+  fixZdist: 52
   smoothness: 0.5
 --- !u!114 &8694533476953732670
 MonoBehaviour:

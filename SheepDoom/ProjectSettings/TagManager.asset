@@ -16,6 +16,12 @@ TagManager:
   - MegaBoss
   - Team1
   - lobbyPlayer
+  - Other
+  - TeamConsortiumRangeCreep
+  - TeamCoalitionRangeCreep
+  - MapItem
+  - TeamCoaHealPad
+  - TeamConHealPad
   layers:
   - Default
   - TransparentFX
@@ -33,7 +39,7 @@ TagManager:
   - Background
   - Towers
   - PlayerCollisionbox
-  - 
+  - IgnoreLayer
   - 
   - 
   - 

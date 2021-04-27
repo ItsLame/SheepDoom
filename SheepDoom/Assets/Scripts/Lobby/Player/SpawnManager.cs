@@ -24,10 +24,28 @@ namespace SheepDoom
         [Space(15)]
         [Header("Player number based on the order they are spawned")]
         private float currentPlayerNumber;
-        [Header("Spawn position")]
+        public float playerTeamID;
+
+        [Header("Spawn position (Team 1)")]
         public GameObject playerSpawnPoint1;
         public GameObject playerSpawnPoint2;
         public GameObject playerSpawnPoint3;
+
+
+        [Header("Spawn position (Team 2)")]
+        [Space(15)]
+        public GameObject playerSpawnPoint4;
+        public GameObject playerSpawnPoint5;
+        public GameObject playerSpawnPoint6;
+
+        [Space(15)]
+        //the time we will use
+        public float SecondsTimer = 0;
+        public float MinutesTimer = 0;
+        private TimeSpan timePlaying;
+
+        //TEMPORARY
+        [SyncVar] private float playerTeamID_TEMP = 0;
 
         // dynamically store and call functions and dispatched on the player object spawned by the client
         // note that client prefab/object and player prefab/object are 2 different things but are connected
@@ -108,25 +126,39 @@ namespace SheepDoom
                 GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().addPlayer();
                 currentPlayerNumber = GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().PlayerCount;
 
-                Debug.Log("Number of players: " + currentPlayerNumber);
+                //get the teamID selected in menu
+                //GameObject teamD = GameObject.Find("NetworkManager");
+                //Debug.Log("GameObject teamD found");
+                //playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
 
                 if (currentPlayerNumber == 1)
                 {
                     spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
                 }
+                //Debug.Log("playerTeamID: " + playerTeamID);
 
-                else if (currentPlayerNumber == 2)
+                //Debug.Log("Number of players: " + currentPlayerNumber);
+
+                //if (playerTeamID == 1)
+                if (playerTeamID_TEMP == 1)
                 {
                     spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint2.transform.position, Quaternion.identity);
+                    Debug.Log("Spawning in blue team");
+                    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
+                    spawn.gameObject.GetComponent<PlayerAdmin>().setTeamIndex(1);
                 }
 
-                else if (currentPlayerNumber == 3)
+                if (playerTeamID_TEMP == 2)
+                //if (playerTeamID == 2)
                 {
                     spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint3.transform.position, Quaternion.identity);
+                    Debug.Log("Spawning in red team");
+                    spawn = Instantiate(gameplayPlayerPrefab2.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
+                    spawn.gameObject.GetComponent<PlayerAdmin>().setTeamIndex(2);
                 }
                 */
             }
- 
+
             SetPlayerObj(spawn);
 
             //assign player attack functions to buttons
@@ -137,6 +169,22 @@ namespace SheepDoom
         }
 
         #region Start & Stop Callbacks
+
+        public override void OnStartClient()
+        {
+            //get the teamID selected in menu
+            GameObject teamD = GameObject.Find("NetworkManager");
+            Debug.Log("GameObject teamD found");
+            playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
+            
+            CmdTeamID_TEMP(playerTeamID);
+        }
+
+        [Command]
+        private void CmdTeamID_TEMP(float playerTeamID)
+        {
+            playerTeamID_TEMP = playerTeamID;
+        }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned

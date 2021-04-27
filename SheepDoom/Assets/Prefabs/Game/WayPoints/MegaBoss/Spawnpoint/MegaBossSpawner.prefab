@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6987506769598844655}
   - component: {fileID: 6987506769598844648}
+  - component: {fileID: 6690167427066597792}
   m_Layer: 0
-  m_Name: MegaBossdeafaultwaypoint
+  m_Name: MegaBossSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,6 +44,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2c72b4abb192f4db89d924d92cdf71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minionmelee: {fileID: 1095861980290289919, guid: 9be863f240ea23c44a7d7ad715269b14,
+  syncMode: 0
+  syncInterval: 0.1
+  Minionmelee: {fileID: 8685654332314622482, guid: fafd7bf6ed0f74942a18f9aa4e8add73,
     type: 3}
-  spawndelay: 10
+--- !u!114 &6690167427066597792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6987506769598844654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
