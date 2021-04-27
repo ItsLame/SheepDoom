@@ -154,7 +154,6 @@ namespace SheepDoom
             else if(!P_gameSceneLoaded)
             {
                 yield return StartCoroutine(LoadGameScene(_gameScene, conn));
-                P_gameSceneLoaded = true;
             }
         }
 
@@ -176,7 +175,9 @@ namespace SheepDoom
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2].name, true); // load game
 
                 SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2]);
-            }   
+            }
+
+            P_gameSceneLoaded = true;
         }
 
         [Server]
