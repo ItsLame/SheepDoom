@@ -30,14 +30,27 @@ namespace SheepDoom
             currenthealth = maxHealth;
         }
 
-        [Server]
+        [Server]    
         public void modifyinghealth(float amount)
         {
             currenthealth += amount;
 
             float currenthealthPct = currenthealth / maxHealth;
             OnHealthPctChanged(currenthealthPct);
+
+            // wake player up if taking damage
+            // health modify is called before debuffing so if the new damage type has a debuff
+            // the waking up will occur first, n debuffing immediately after
+            if (amount < 0)
+            {
+                if (this.gameObject.GetComponent<CharacterMovement>().isSleeped)
+                {
+                    this.gameObject.GetComponent<CharacterMovement>().changeSpeed("stop", 0.1f, 0);
+                }
+            }
+
         }
+
         // Update is called once per frame
         void Update()
         {

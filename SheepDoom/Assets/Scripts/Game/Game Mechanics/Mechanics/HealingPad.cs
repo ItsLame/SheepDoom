@@ -18,9 +18,10 @@ namespace SheepDoom
             {
                 if(gameObject.CompareTag("TeamCoaHealPad"))
                 {
-                    if(other.gameObject.layer == 8 && !other.GetComponent<PlayerHealth>().GetHealthStatus()) // heal ally
+                    if((other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1) && !other.GetComponent<PlayerHealth>().GetHealthStatus()) // heal ally
                         other.GetComponent<PlayerHealth>().modifyinghealth(HealRate);
-                    else if(other.gameObject.layer == 9)
+
+                    else if((other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2))
                     {
                         other.GetComponent<PlayerHealth>().modifyinghealth(-(HealRate * 2)); // damage enemy
                         if(other.GetComponent<PlayerHealth>().getHealth() <= 0)
@@ -29,9 +30,10 @@ namespace SheepDoom
                 }
                 else if (gameObject.CompareTag("TeamConHealPad"))
                 {
-                    if (other.gameObject.layer == 9 && !other.GetComponent<PlayerHealth>().GetHealthStatus())
+                    if ((other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2) && !other.GetComponent<PlayerHealth>().GetHealthStatus())
                         other.GetComponent<PlayerHealth>().modifyinghealth(HealRate);
-                    else if (other.gameObject.layer == 8)
+
+                    else if ((other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1))
                     {
                         other.GetComponent<PlayerHealth>().modifyinghealth(-(HealRate * 2));
                         if (other.GetComponent<PlayerHealth>().getHealth() <= 0)

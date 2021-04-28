@@ -5,7 +5,7 @@ using UnityStandardAssets.CrossPlatformInput;
 using Mirror;
 
 namespace SheepDoom
-{   
+{
     public class CharacterMovement : NetworkBehaviour
     {
         //original speed
@@ -18,6 +18,13 @@ namespace SheepDoom
         public float speedAlterDuration;
         public float speedAlterStrength;
 
+        [Header("Debuffs check")]
+        [Space(15)]
+        public bool isSlowed;
+        public bool isStopped;
+        [SyncVar] public bool isSleeped;
+        public bool isSpeedUp;
+
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
@@ -27,30 +34,47 @@ namespace SheepDoom
         [Server]
         public void changeSpeed(string type, float duration, float strength)
         {
-            TargetChangeSpeed(type, duration, strength);
+            TargetChangeSpeed(connectionToClient, type, duration, strength);
         }
 
-        
+
         //for player debuffs handling
         [TargetRpc] // calculate effects on movement on client, then client-auth sync movement into server
-        void TargetChangeSpeed(string type, float duration, float strength)
+        void TargetChangeSpeed(NetworkConnection conn, string type, float duration, float strength)
         {
+            //if target is already debuffed, replace it with new debuff
+            if (isSpeedAltered)
+            {
+                CmdSetBuffStatus("all", false);
+            }
+
             isSpeedAltered = true;
             speedAlterDuration = duration;
             if (type == "slow")
             {
-                Debug.Log("Inflicting slow debuff");
+                Debug.Log("Inflicted with slow debuff");
+                CmdSetBuffStatus("slow", true);
                 speedAlterStrength = strength;
                 speed *= speedAlterStrength;
             }
             else if (type == "stop")
             {
-                Debug.Log("Inflicting stop debuff");
+                Debug.Log("Inflicted with stop debuff");
+                CmdSetBuffStatus("stop", true);
                 speed = 0;
             }
+
+            else if (type == "sleep")
+            {
+                Debug.Log("Inflicted with sleep debuff");
+                CmdSetBuffStatus("sleep", true);
+                speed = 0;
+            }
+
             else if (type == "speedUp")
             {
                 Debug.Log("Speeding up..");
+                CmdSetBuffStatus("speedUp", true);
                 speedAlterStrength = strength;
                 speed *= speedAlterStrength;
             }
@@ -58,7 +82,7 @@ namespace SheepDoom
 
         void FixedUpdate()
         {
-            if(!hasAuthority) return;
+            if (!hasAuthority) return;
 
             Move();
 
@@ -71,7 +95,7 @@ namespace SheepDoom
         {
             //reduce timer per second
             speedAlterDuration -= Time.deltaTime;
-            Debug.Log("Speed Alter Duration: " + speedAlterDuration);
+            //            Debug.Log("Speed Alter Duration: " + speedAlterDuration);
 
             //remove debuff when duration is up
             if (speedAlterDuration <= 0)
@@ -80,6 +104,13 @@ namespace SheepDoom
                 speed = baseSpeed;
                 Debug.Log("Speed Over:" + speedAlterStrength + ", " + speed);
                 isSpeedAltered = false;
+
+                //falsify all movespd effects on target
+                if (isSlowed || isStopped || isSleeped || isSpeedUp)
+                {
+                    CmdSetBuffStatus("all", false);
+                }
+
             }
         }
 
@@ -95,6 +126,38 @@ namespace SheepDoom
                     this.transform.rotation = Quaternion.LookRotation(moveMe);
 
                 this.transform.position += moveMe;
+            }
+        }
+
+        [Command]
+        void CmdSetBuffStatus(string name, bool _buffStatus)
+        {
+            if (name == "sleep")
+            {
+                isSleeped = _buffStatus;
+            }
+
+            else if (name == "slow")
+            {
+                isSlowed = _buffStatus;
+            }
+
+            else if (name == "stop")
+            {
+                isStopped = _buffStatus;
+            }
+
+            else if (name == "speedUp")
+            {
+                isSpeedUp = _buffStatus;
+            }
+
+            else if (name == "all")
+            {
+                isSleeped = _buffStatus;
+                isSlowed = _buffStatus;
+                isStopped = _buffStatus;
+                isSpeedUp = _buffStatus;
             }
         }
     }

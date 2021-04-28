@@ -120,6 +120,9 @@ MonoBehaviour:
   x_rotaspeed: 0
   y_rotaspeed: 0
   z_rotaspeed: 0
+  isMovingDown: 0
+  isMovingLeft: 0
+  isMovingRight: 0
   damage: 30
   destroyOnContact: 1
   m_Rigidbody: {fileID: -8817962291198315760}
@@ -137,7 +140,9 @@ MonoBehaviour:
   slowRate: 0
   slowDebuffDuration: 0
   StopDebuff: 1
-  stopDebuffDuration: 1
+  stopDebuffDuration: 3
+  SleepDebuff: 0
+  sleepDebuffDuration: 0
 --- !u!114 &4309939885416895172
 MonoBehaviour:
   m_ObjectHideFlags: 0

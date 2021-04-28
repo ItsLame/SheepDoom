@@ -63,6 +63,12 @@ namespace SheepDoom
         {
             if (!hasAuthority) return;
 
+            //disable attack when sleeped or stopped
+            if (this.gameObject.GetComponent<CharacterMovement>().isSleeped || this.gameObject.GetComponent<CharacterMovement>().isStopped)
+            {
+                return;
+            }
+
             if (cooldown1_inGame <= 0 && !GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if (charID == 1)
@@ -77,6 +83,13 @@ namespace SheepDoom
                     comp.normalAtk(cooldown1MultiplierActive);
                     cooldown1_inGame = cooldown1;
                 }
+
+                else if (charID == 3)
+                {
+                    Character3 comp = GetComponent<Character3>();
+                    comp.normalAtk();
+                    cooldown1_inGame = cooldown1;
+                }
             }
         }
 
@@ -84,7 +97,13 @@ namespace SheepDoom
         {
             if (!hasAuthority) return;
 
-            if(cooldown2_inGame <= 0 && !GetComponent<PlayerHealth>().isPlayerDead())
+            //disable attack when sleeped or stopped
+            if (this.gameObject.GetComponent<CharacterMovement>().isSleeped || this.gameObject.GetComponent<CharacterMovement>().isStopped)
+            {
+                return;
+            }
+
+            if (cooldown2_inGame <= 0 && !GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if(charID == 1)
                 {
@@ -92,6 +111,7 @@ namespace SheepDoom
                     if (hasPurchasedSpecial)
                         comp.SpecialAtk(AlternateSpecial);
                 }
+
                 else if(charID == 2)
                 {
                     Character2 comp = GetComponent<Character2>();
@@ -107,6 +127,13 @@ namespace SheepDoom
                         }
                     }
                 }
+
+                else if (charID == 3)
+                {
+                    Character3 comp = GetComponent<Character3>();
+                    if (hasPurchasedSpecial)
+                        comp.SpecialAtk(AlternateSpecial);
+                }
                 cooldown2_inGame = cooldown2;
             }
         }
@@ -114,8 +141,15 @@ namespace SheepDoom
         public void UltiClick()
         {
             if (!hasAuthority) return;
-            
-            if(cooldown3_inGame <= 0 && !GetComponent<PlayerHealth>().isPlayerDead())
+
+
+            //disable attack when sleeped or stopped
+            if (this.gameObject.GetComponent<CharacterMovement>().isSleeped || this.gameObject.GetComponent<CharacterMovement>().isStopped)
+            {
+                return;
+            }
+
+            if (cooldown3_inGame <= 0 && !GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if(charID == 1)
                 {
