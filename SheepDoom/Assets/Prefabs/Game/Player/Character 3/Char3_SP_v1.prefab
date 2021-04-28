@@ -95,7 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  healAmount: 30
+  healAmount: 5
 --- !u!65 &1468711348947311975
 BoxCollider:
   m_ObjectHideFlags: 0
