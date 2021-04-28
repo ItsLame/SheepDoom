@@ -306,9 +306,6 @@ MonoBehaviour:
   hasPurchasedUlti: 0
   AlternateSpecial: 0
   AlternateUlti: 0
-  Projectile3: {fileID: 7103345307366881107, guid: 00d9bcd2adf695c4f8b6bf49988c366a,
-    type: 3}
-  Projectile3_v2: {fileID: 0}
   Skillchild_v2: {fileID: 0}
   UltiChild: {fileID: 0}
   UltiChild_v2: {fileID: 0}
@@ -508,7 +505,9 @@ MonoBehaviour:
   syncInterval: 0.1
   normalAtkMelee: {fileID: 4008510119826717395}
   normalSpecial: {fileID: 4134774580701406288}
-  altSpecial: {fileID: 0}
+  normalUlti: {fileID: 7103345307366881107, guid: 00d9bcd2adf695c4f8b6bf49988c366a,
+    type: 3}
+  spawnPoint: {fileID: 3805828759594656768}
   meleeAttackDuration1: 0.2
   meleeAttackSpeedMultiplier: 2
 --- !u!114 &1088759763548799350

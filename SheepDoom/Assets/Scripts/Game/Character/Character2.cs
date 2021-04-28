@@ -8,7 +8,12 @@ namespace SheepDoom
     public class Character2 : NetworkBehaviour
     {
         [SerializeField]
-        private GameObject normalAtkMelee, normalSpecial, altSpecial;
+        private GameObject normalAtkMelee, normalSpecial, normalUlti;
+        private GameObject firedProjectile;
+
+        [SerializeField]
+        private Transform spawnPoint;
+
         [SerializeField]
         private float meleeAttackDuration1, meleeAttackSpeedMultiplier;
         private int meleeCombo = 1;
@@ -68,13 +73,9 @@ namespace SheepDoom
         }
 
         [Client]
-        public void SpecialAtk(bool _isAltSpecial)
+        public void SpecialAtk()
         {
-            if(!_isAltSpecial)
-            {
-                Debug.Log("AA");
-                CmdSpecialAtk();
-            }
+            CmdSpecialAtk();
         }
 
         [Command]
@@ -82,20 +83,39 @@ namespace SheepDoom
         {
             if(normalSpecial != null)
             {
-                Debug.Log("BB");
                 normalSpecial.GetComponent<MeshRenderer>().enabled = true;
                 normalSpecial.GetComponent<BoxCollider>().enabled = true;
                 normalSpecial.GetComponent<PlayerChild>().refreshDuration();
-                RpcEnableShieldSkill();
+                RpcEnableSkill();
             }
         }
 
+        [Client]
+        public void UltiAtk(bool _isAltUlti)
+        {
+            Vector3 additionalDistance = new Vector3(0, 40, 0);
+            additionalDistance += (transform.forward * 30);
+            CmdUltiAtk(additionalDistance, _isAltUlti);
+        }
+
+        [Command]
+        void CmdUltiAtk(Vector3 _distance, bool _isAltUlti)
+        {
+            if (!_isAltUlti)
+            {
+                firedProjectile = Instantiate(normalUlti, spawnPoint.position + _distance, spawnPoint.rotation);
+                firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+                NetworkServer.Spawn(firedProjectile, connectionToClient);
+            }
+            else if (_isAltUlti)
+                GetComponent<CharacterMovement>().changeSpeed("speedUp", 5, 1.5f);  
+        }
+
         [ClientRpc]
-        void RpcEnableShieldSkill()
+        void RpcEnableSkill()
         {
             if (normalSpecial != null)
             {
-                Debug.Log("CC");
                 normalSpecial.GetComponent<MeshRenderer>().enabled = true;
                 normalSpecial.GetComponent<BoxCollider>().enabled = true;
                 normalSpecial.GetComponent<PlayerChild>().refreshDuration();

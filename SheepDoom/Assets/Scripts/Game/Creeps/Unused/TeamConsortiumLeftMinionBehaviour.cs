@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using System;
 using Mirror;
 
-namespace SheepDoom
+/*namespace SheepDoom
 {
     public class TeamConsortiumLeftMinionBehaviour : NetworkBehaviour
     {
@@ -144,7 +144,7 @@ namespace SheepDoom
                     isLockedOn = false;
                     StartMovingToWayPoint();
                     return;
-                }*/
+                }
 
                 if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
                     goBackToTravelling();
@@ -282,7 +282,7 @@ namespace SheepDoom
             {
                 yield return null;
             }
-        } */
+        } 
 
         private void Destroyy()
         {
@@ -302,4 +302,4 @@ namespace SheepDoom
             return currenthealth;
         }
     }
-}
+}*/

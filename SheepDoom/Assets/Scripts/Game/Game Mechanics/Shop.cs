@@ -87,12 +87,6 @@ namespace SheepDoom
                         {
                             if (hit.collider.gameObject.layer == Player.layer)
                                 OpenShopUI();
-                            /*if (hit.collider.gameObject.layer == 8 && Player.layer == 8)
-                                OpenShopUI();
-                            else if (hit.collider.gameObject.layer == 9 && Player.layer == 9)
-                                OpenShopUI();
-                            */
-                            //Debug.Log("Shop Pressed!");
                         }
                     }
                 }
@@ -100,9 +94,7 @@ namespace SheepDoom
 
             //spacebar to open shop for debugging
             if (Input.GetKeyDown(KeyCode.Space))
-            {
                 OpenShopUI();
-            }
 #endif
         }
 
@@ -216,13 +208,13 @@ namespace SheepDoom
             {
                 Player.GetComponent<CharacterGold>().CmdVaryGold(-UltiCost);
 
+                //set player bool 'haspurchasedulti' to true
+                Player.GetComponent<PlayerAttack>().PlayerHasPurchasedUlti(false);
+
                 //if choose 1st, disable 2nd
                 UltiButton2.GetComponent<Button>().interactable = false;
 //                PlayerUltiButton.GetComponent<Button>().interactable = true;
                 hasPurchasedUlti = true;
-
-                //set player bool 'haspurchasedulti' to true
-                Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedUlti();
 
                 Debug.Log("First Ulti Purchased");
                 //update player gold
@@ -236,16 +228,13 @@ namespace SheepDoom
             if (!hasPurchasedUlti && (PlayerGold - UltiCost >= 0))
             {
                 Player.GetComponent<CharacterGold>().CmdVaryGold(-UltiCost);
-
-                //set alternate ulti true
-                Player.GetComponent<PlayerAttack>().CMD_AlternateUlti(); 
                 //if choose 2nd, disable 1st
                 UltiButton1.GetComponent<Button>().interactable = false;
   //              PlayerUltiButton.GetComponent<Button>().interactable = true;
                 hasPurchasedUlti = true;
 
                 //set player bool 'haspurchasedulti' to true
-                Player.GetComponent<PlayerAttack>().CMD_playerHasPurchasedUlti();
+                Player.GetComponent<PlayerAttack>().PlayerHasPurchasedUlti(true);
 
                 Debug.Log("Second Ulti Purchased");
 

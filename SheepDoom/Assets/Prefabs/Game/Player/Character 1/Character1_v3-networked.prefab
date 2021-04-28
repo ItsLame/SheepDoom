@@ -1066,15 +1066,10 @@ MonoBehaviour:
   hasPurchasedUlti: 0
   AlternateSpecial: 0
   AlternateUlti: 0
-  Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
-    type: 3}
-  Projectile2_v2: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
-    type: 3}
   Projectile3: {fileID: 3543547152907490667, guid: 2ccd3ae1f3b84704f8d3ce10d513d664,
     type: 3}
   Projectile3_v2: {fileID: 3543547152907490667, guid: f1eaf3061d966ec4499d5258118c148e,
     type: 3}
-  SkillChild: {fileID: 0}
   Skillchild_v2: {fileID: 0}
   UltiChild: {fileID: 0}
   UltiChild_v2: {fileID: 0}
@@ -1278,6 +1273,9 @@ MonoBehaviour:
     type: 3}
   altSpecial: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
     type: 3}
+  normalUlti: {fileID: 3543547152907490667, guid: 2ccd3ae1f3b84704f8d3ce10d513d664,
+    type: 3}
+  altUlti: {fileID: 3543547152907490667, guid: f1eaf3061d966ec4499d5258118c148e, type: 3}
   spawnPoint: {fileID: 5660135970150263288}
 --- !u!114 &8449280143259454606
 MonoBehaviour:

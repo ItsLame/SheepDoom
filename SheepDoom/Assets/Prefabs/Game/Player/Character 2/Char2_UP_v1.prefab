@@ -139,7 +139,7 @@ MonoBehaviour:
   slowRate: 0
   slowDebuffDuration: 0
   StopDebuff: 1
-  stopDebuffDuration: 2
+  stopDebuffDuration: 4
 --- !u!114 &4309939885416895172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 00d9bcd2adf695c4f8b6bf49988c366a
+  m_AssetId: 
   hasSpawned: 0
 --- !u!65 &2287852981883151537
 BoxCollider:

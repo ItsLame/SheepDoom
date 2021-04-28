@@ -200,26 +200,13 @@ namespace SheepDoom
                 transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
 
                 if (isMovingDown)
-                {
                     transform.Translate(Vector3.down * m_Speed * Time.deltaTime);
-                }
-
                 else if (isMovingLeft)
-                {
                     transform.Translate(Vector3.left * m_Speed * Time.deltaTime);
-                }
-
                 else if (isMovingRight)
-                {
                     transform.Translate(Vector3.right * m_Speed * Time.deltaTime);
-                }
-
                 else
-                {
-                    //basic forward movement
-                    transform.Translate(Vector3.forward * m_Speed * Time.deltaTime);
-                }
-
+                    transform.Translate(Vector3.forward * m_Speed * Time.deltaTime); //basic forward movement
 
                 //adjust acceleration rate per frame
                 if (isAccelerating)

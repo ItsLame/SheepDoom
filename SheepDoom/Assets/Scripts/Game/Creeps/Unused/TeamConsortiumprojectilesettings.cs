@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-namespace SheepDoom
+/*namespace SheepDoom
 {
     public class TeamConsortiumprojectilesettings : NetworkBehaviour
     {
@@ -69,4 +69,4 @@ namespace SheepDoom
             transform.Translate(Vector3.forward * m_Speed * Time.deltaTime);
         }
     }
-}
+}*/

@@ -47,30 +47,23 @@ namespace SheepDoom
                 case "up":
                     isGoingUp = true;
                     break;
-
                 case "down":
                     isGoingDown = true;
                     break;
-
                 case "left":
                     isGoingLeft = true;
                     break;
-
                 case "right":
                     isGoingRight = true;
                     break;
-
                 case "straight":
                     isGoingStraight = true;
                     break;
-
                 case "back":
                     isGoingBack = true;
                     break;
-
                 default:
                     break;
-
             }
         }
 
@@ -87,21 +80,14 @@ namespace SheepDoom
             isGoingRight = false;
             isGoingStraight = false;
             isGoingBack = false;
-            GetComponent<GetParents>().getParent().GetComponent<Character2>().ServerSetHitBox(false);
-            //this.gameObject.GetComponent<OnTouchHealth>().SetHitBox(false);
+            if(GetComponent<GetParents>().getParent().GetComponent<PlayerAdmin>().getCharID() == 2)
+                GetComponent<GetParents>().getParent().GetComponent<Character2>().ServerSetHitBox(false);
         }
 
         // Update is called once per frame
         void Update()
         {
             if (isServer || !GetComponent<GetParents>().getParent().GetComponent<NetworkIdentity>().hasAuthority) return;
-            //calculate timer
-            /*if (isMoving && currentTimer >= 0)
-                currentTimer -= Time.deltaTime;*/
-
-            //change bool to call stop once when time is up
-            /*if (isMoving && currentTimer <= 0)
-                stop = true;*/
 
             //stop moving when time is up
             if (stop)
