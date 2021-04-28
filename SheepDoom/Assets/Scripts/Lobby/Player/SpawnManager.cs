@@ -140,17 +140,29 @@ namespace SheepDoom
 
                 if(hero != null)
                 {
+                    // spawn under this script's obj
+                    spawn = Instantiate(hero.gameObject, transform);
+
+                    /*
                     if(player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                         spawn = Instantiate(hero.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
                     else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
                         spawn = Instantiate(hero.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
-
-                    //SceneManager.MoveGameObjectToScene(spawn, SceneManager.GetSceneAt(SceneManager.sceneCount-1));
+                    */
                 }
 
                 if(spawn != null)
                 {
-                    MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveObjToNewScene(MatchMaker.instance.GetMatches()[matchID].GetScenes()[2], spawn);
+                    // unparent spawn from the prev obj
+                    spawn.transform.SetParent(null);
+
+                    // go to spawn point   
+                    if(player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                        spawn.transform.SetPositionAndRotation(playerSpawnPoint1.transform.position, Quaternion.identity);
+                    else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                        spawn.transform.SetPositionAndRotation(playerSpawnPoint2.transform.position, Quaternion.identity);
+                    
+                    //MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveObjToNewScene(MatchMaker.instance.GetMatches()[matchID].GetScenes()[2], spawn);
                 }
             }
 

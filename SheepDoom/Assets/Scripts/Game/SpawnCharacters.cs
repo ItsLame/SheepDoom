@@ -13,11 +13,13 @@ namespace SheepDoom
 {
     public class SpawnCharacters : NetworkBehaviour
     {
+        //[SerializeField] private GameObject MinionTest;
         private void Start()
         {
             if(isClient)
             {
                 PlayerObj.instance.ci.GetComponent<SpawnManager>().SpawnPlayer("game", PlayerObj.instance.gameObject);
+                Debug.Log("My name " + PlayerObj.instance.getPlayerName() + ", my hero " + PlayerObj.instance.GetHeroName() + ", my team " + PlayerObj.instance.GetTeamIndex());
             }
         }
 

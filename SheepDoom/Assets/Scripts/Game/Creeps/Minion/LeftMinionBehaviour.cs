@@ -248,15 +248,23 @@ namespace SheepDoom
         {
             if(gameObject.CompareTag("TeamCoalitionRangeCreep"))
             {
-                GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
+                //GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
+                //FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
+                GameObject FiredProjectile = Instantiate(projectile, transform);
                 FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
+                FiredProjectile.transform.SetParent(null, false);
+                FiredProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
                 NetworkServer.Spawn(FiredProjectile);
                 alreadyattacked = true;
             }
             else if(gameObject.CompareTag("TeamConsortiumRangeCreep"))
             {
-                GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
+                GameObject FiredProjectile = Instantiate(projectile, transform);
                 FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
+                FiredProjectile.transform.SetParent(null, false);
+                FiredProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
+                //GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
+                //FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
                 NetworkServer.Spawn(FiredProjectile);
                 alreadyattacked = true;
             }
@@ -279,7 +287,6 @@ namespace SheepDoom
                     currentPoint++;
             }
             
-
             transform.LookAt(target);
             agent.SetDestination(target);
             agent.speed = CreepMoveSpeed;
