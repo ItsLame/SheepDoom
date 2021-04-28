@@ -906,7 +906,7 @@ GameObject:
   - component: {fileID: 6459418408009445500}
   - component: {fileID: 2014472282729360730}
   m_Layer: 8
-  m_Name: Peach
+  m_Name: Peach (C3)
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1233,9 +1233,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  normalAtkProjectile: {fileID: 5276780869706628407, guid: 15e7b38ab531e6540a5627a07f08a821,
+  normalAtkProjectile: {fileID: 5276780869706628407, guid: 6b0aa51fe9a6bbd4f8a7ed7359a4ac9a,
     type: 3}
-  normalSpecial: {fileID: 5276780869706628407, guid: 081e79c478d55ab4b86a791c6628ff18,
+  normalSpecial: {fileID: 5276780869706628407, guid: 89158681b65bd8c4abfa8115705b73e9,
     type: 3}
   altSpecial: {fileID: 5276780869706628407, guid: 8510bbcdbca796549a38d80cafb04016,
     type: 3}

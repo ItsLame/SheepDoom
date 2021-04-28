@@ -99,13 +99,12 @@ namespace SheepDoom
                     //if healing area is set by another object activate it 
                     if (hasHealingRadiusObject)
                     {
-                        HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
                         HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
                     }
 
 
                     if (destroyOnContact)
-                        Invoke("Destroyy", 0.1f);
+                    Invoke("Destroyy", 0.2f);
                 }
             }
             else if (col.gameObject.CompareTag("Tower"))
@@ -129,12 +128,11 @@ namespace SheepDoom
                 //if healing area is set by another object activate it 
                 if (hasHealingRadiusObject)
                 {
-                    HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
                     HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
                 }
 
                 if (destroyOnContact)
-                    Destroyy();
+                    Invoke("Destroyy", 0.2f);
             }
             else if (col.gameObject.CompareTag("BaseMinion"))
             {
@@ -150,12 +148,11 @@ namespace SheepDoom
                         //if healing area is set by another object activate it 
                         if (hasHealingRadiusObject)
                         {
-                            HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
                             HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
                         }
 
                         if (destroyOnContact)
-                            Destroyy();
+                            Invoke("Destroyy", 0.2f);
                     }
                 }
                 else if (ownerTeamID == 1)
@@ -171,12 +168,11 @@ namespace SheepDoom
                         //if healing area is set by another object activate it 
                         if (hasHealingRadiusObject)
                         {
-                            HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
                             HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
                         }
 
                         if (destroyOnContact)
-                            Destroyy();
+                            Invoke("Destroyy", 0.2f);
                     }
                 }
             }
@@ -188,18 +184,17 @@ namespace SheepDoom
                 //if healing area is set by another object activate it 
                 if (hasHealingRadiusObject)
                 {
-                    HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
                     HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
                 }
 
                 if (destroyOnContact)
-                    Destroyy();
+                    Invoke("Destroyy", 0.2f);
             }
             else if (col.gameObject.CompareTag("Other"))
             {
                 Debug.Log(gameObject.name + "touched other" + col.gameObject.name); ;
                 if (destroyOnContact)
-                    Destroyy();
+                    Invoke("Destroyy", 0.2f);
             }
             /*
             if (col.gameObject.layer == 9)

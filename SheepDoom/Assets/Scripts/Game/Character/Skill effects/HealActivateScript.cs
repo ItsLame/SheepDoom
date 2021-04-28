@@ -17,8 +17,11 @@ namespace SheepDoom
             teamID = ID;
         }
 
+        
         public void activateHeal()
         {
+            this.gameObject.GetComponent<BoxCollider>().enabled = true;
+            Debug.Log("BoxCollider Activated?: " + this.gameObject.GetComponent<BoxCollider>().enabled);
             healActivated = true;
         }
 
@@ -26,14 +29,22 @@ namespace SheepDoom
         {
             if (healActivated)
             {
-                Debug.Log("Heal Activated");
-                if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == teamID)
+                if (other.gameObject.CompareTag("Player"))
                 {
-                    Debug.Log("Healing Player " + other.gameObject.name);
-                    other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(healAmount);
+                    Debug.Log("Player " + other.gameObject.name + " found");
+                    Debug.Log("Heal Activated");
+
+                    if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == teamID)
+                    {
+                        Debug.Log("Healing Player " + other.gameObject.name + " with teamID of " + teamID);
+                        other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(healAmount);
+                    }
+
+                    healActivated = false;
                 }
 
-                healActivated = false;
+
+
             }
         }
     }
