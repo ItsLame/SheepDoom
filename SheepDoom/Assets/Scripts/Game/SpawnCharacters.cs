@@ -2,6 +2,7 @@
 using Mirror;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
@@ -15,7 +16,9 @@ namespace SheepDoom
         private void Start()
         {
             if(isClient)
+            {
                 PlayerObj.instance.ci.GetComponent<SpawnManager>().SpawnPlayer("game", PlayerObj.instance.gameObject);
+            }
         }
 
         #region Start & Stop Callbacks

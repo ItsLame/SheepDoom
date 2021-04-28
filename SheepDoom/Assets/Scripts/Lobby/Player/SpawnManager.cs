@@ -5,6 +5,7 @@ using System.Collections;
 using System;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace SheepDoom
 {
@@ -143,10 +144,14 @@ namespace SheepDoom
                         spawn = Instantiate(hero.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
                     else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
                         spawn = Instantiate(hero.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
+
+                    //SceneManager.MoveGameObjectToScene(spawn, SceneManager.GetSceneAt(SceneManager.sceneCount-1));
                 }
 
                 if(spawn != null)
                 {
+                    if(SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                        MoveSpawnPlayer(conn, spawn);
                     MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveObjToNewScene(MatchMaker.instance.GetMatches()[matchID].GetScenes()[2], spawn);
                 }
             }
@@ -158,6 +163,13 @@ namespace SheepDoom
             //assignButtons(spawn);
             //Debug.Log("Are buttons assigned 3?");
             NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
+        }
+
+        [TargetRpc]
+        private void MoveSpawnPlayer(NetworkConnection conn, GameObject _spawn)
+        {
+            GameObject mySpawn = GameObject.Find(_spawn.name);
+            SceneManager.MoveGameObjectToScene(mySpawn, SceneManager.GetSceneAt(SceneManager.sceneCount-1));
         }
 
         #region Start & Stop Callbacks

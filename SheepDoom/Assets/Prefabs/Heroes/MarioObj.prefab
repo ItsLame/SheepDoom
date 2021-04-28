@@ -221,10 +221,10 @@ MonoBehaviour:
   UltiChild: {fileID: 0}
   UltiChild_v2: {fileID: 0}
   SpawnPoint: {fileID: 5529629295082256042}
-  cooldown1: 0
+  cooldown1: 1
   cooldown2: 0
   cooldown3: 0
-  cooldown1Multiplier: 0
+  cooldown1Multiplier: 1
   cooldown1MultiplerTimer: 0
   animator: {fileID: 0}
 --- !u!114 &4831583997314286434
