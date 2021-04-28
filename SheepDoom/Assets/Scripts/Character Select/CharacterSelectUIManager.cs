@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        private float secondsTimer = 10;
+        private float secondsTimer = 60;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
@@ -40,7 +40,6 @@ namespace SheepDoom
         private string[] heroesArr = {"Mario", "Luigi", "Peach", "Yoshi", "Bowser"};
         public SyncList<string> team1PickedHeroes = new SyncList<string>();
         public SyncList<string> team2PickedHeroes = new SyncList<string>();
-        //public SyncList<GameObject> notLockedInPlayers = new SyncList<GameObject>();
         //room matchID
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
@@ -191,8 +190,7 @@ namespace SheepDoom
             {
                 foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
                 {
-                    // check again after each loop
-                    if(MatchMaker.instance.GetMatches()[P_matchID].GetLockInCount() == MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count)
+                    if (MatchMaker.instance.GetMatches()[P_matchID].GetLockInCount() == MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count)
                         break;
 
                     if (_player.GetComponent<PlayerObj>().GetIsLockedIn())
@@ -206,13 +204,8 @@ namespace SheepDoom
                     else if(!_player.GetComponent<PlayerObj>().GetIsLockedIn())
                         AutoLockIn(_player);
                 }
-
-                // in for loop with notlockedinplayers.count
-                // do
-                //random a number 1-5
-                // if 1 = mario, 2 = bowser, 3 = luigi, 4 = peach, 5 = yoshi
-                //
-                // while hero in pickedheroes
+                
+                // start game
             }
             //else
                 // start game smoothly
@@ -241,7 +234,7 @@ namespace SheepDoom
             _player.GetComponent<PlayerObj>().SetIsLockedIn(true);
             MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();
 
-            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
                 TargetUpdateOwner(conn, _player, _player.GetComponent<PlayerObj>().GetHeroName(), true, false, true);
             
             RpcUpdateOthers(_player, _player.GetComponent<PlayerObj>().GetHeroName(), _player.GetComponent<PlayerObj>().GetTeamIndex(), false, true);
@@ -304,44 +297,34 @@ namespace SheepDoom
                 SetUI_Parent(_player);
             else if(_lockIn)
             {
-                // when other players (from same team) attempt to pick the hero, lock in button will be disabled
-                //GameObject.Find(_heroName).SendMessage("SetTaken", _lockIn);
-                //GameObject.Find(_heroName).SendMessage("OnClickHero");
-
                 //Hero hero = null;
                 GameObject hero = null;
                 switch (_heroName)
                 {
                     case "Mario":
-                        //hero = new Mario(mario.GetComponent<Mario>(), _lockIn, mario.GetComponent<Image>());
                         hero = mario;
                         break;
                     case "Luigi":
-                        //hero = new Luigi(luigi.GetComponent<Luigi>(), _lockIn, luigi.GetComponent<Image>());
                         hero = luigi;
                         break;
                     case "Peach":
-                        //hero = new Peach(peach.GetComponent<Peach>(), _lockIn, peach.GetComponent<Image>());
                         hero = peach;
                         break;
                     case "Yoshi":
-                        //hero = new Yoshi(yoshi.GetComponent<Yoshi>(), _lockIn, yoshi.GetComponent<Image>());
                         hero = yoshi;
                         break;
                     case "Bowser":
-                        //hero = new Bowser(bowser.GetComponent<Bowser>(), _lockIn, bowser.GetComponent<Image>());
                         hero = bowser;
                         break;
                 }
+
                 hero.SendMessage("SetTaken", _lockIn);
                 hero.SendMessage("OnClickHero");
-                //Debug.Log("TARGET UPDATE ISOWNER? " + _isOwner);
-                //Debug.Log("TARGET UPDATE PLAYER: " + _player.GetComponent<PlayerObj>().GetPlayerName() + " of team " +_player.GetComponent<PlayerObj>().GetTeamIndex());
 
                 if (_isOwner)
                 {
-                    //P_heroInfoImg.sprite = hero.P_heroIcon;
-                    //P_heroInfoText.text = hero.P_heroName + "\n-----\n" + hero.P_heroDesc;
+                    P_heroInfoImg.sprite = hero.GetComponent<Hero>().P_heroIcon;
+                    P_heroInfoText.text = hero.GetComponent<Hero>().P_heroName + "\n-----\n" + hero.GetComponent<Hero>().P_heroDesc;
 
                     // activates status panel to local player to prevent them from clicking other heroes
                     P_statusPanel.SetActive(_lockIn);
