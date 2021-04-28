@@ -56,25 +56,6 @@ namespace SheepDoom
             }
         }
 
-
-        // Update is called once per frame
-        /*void FixedUpdate()
-        {
-            if (!hasAuthority) return;
-
-            Move();
-        }*/
-
-        /*void Update()
-        {
-            if (!hasAuthority) return;
-
-            Move();
-
-            if (isSpeedAltered)
-                DebuffTimerCountdown();
-        }*/
-
         void FixedUpdate()
         {
             if(!hasAuthority) return;
@@ -102,6 +83,7 @@ namespace SheepDoom
             }
         }
 
+        [Client]
         private void Move()
         {
             if (!GetComponent<PlayerHealth>().isPlayerDead())

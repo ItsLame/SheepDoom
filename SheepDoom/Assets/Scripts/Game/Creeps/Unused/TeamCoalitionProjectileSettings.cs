@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SheepDoom
+/*namespace SheepDoom
 {
     public class TeamCoalitionProjectileSettings : MonoBehaviour
     {
@@ -44,4 +44,4 @@ namespace SheepDoom
 
         }
     }
-}
+}*/
