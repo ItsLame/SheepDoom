@@ -160,7 +160,7 @@ namespace SheepDoom
                     if(player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                         spawn.transform.SetPositionAndRotation(playerSpawnPoint1.transform.position, Quaternion.identity);
                     else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-                        spawn.transform.SetPositionAndRotation(playerSpawnPoint2.transform.position, Quaternion.identity);
+                        spawn.transform.SetPositionAndRotation(playerSpawnPoint4.transform.position, Quaternion.identity);
                     
                     //MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveObjToNewScene(MatchMaker.instance.GetMatches()[matchID].GetScenes()[2], spawn);
                 }
