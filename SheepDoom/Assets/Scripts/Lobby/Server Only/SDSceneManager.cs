@@ -91,12 +91,6 @@ namespace SheepDoom
             StartCoroutine(LoadScene(P_lobbyScene, P_characterSelectScene, P_gameScene, conn));
         }
 
-        [Client]
-        public void LoadGameScene(NetworkConnection conn)
-        {
-            StartCoroutine(LoadGameScene(P_gameScene, conn));
-        }
-
         [Server]    // move scene manager to new scene
         public void MoveToNewScene(Scene _scene)
         {
@@ -123,6 +117,12 @@ namespace SheepDoom
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[0].name, true); // load lobby
         }
 
+        [Server]
+        public void JoinGame(NetworkConnection conn, string _matchID)
+        {
+            ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, true); // game scene
+        }
+
         private IEnumerator LoadScene(string _lobbyScene, string _charSelectScene, string _gameScene, NetworkConnection conn)
         {
             if (!P_scenesLoaded)
@@ -138,8 +138,8 @@ namespace SheepDoom
                 while (!asyncLoadCharSelect.isDone)
                     yield return null;
 
-                newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - MatchMaker.instance.GetScenesUnloadedCount() - 1);
-                newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - MatchMaker.instance.GetScenesUnloadedCount());
+                newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 2);
+                newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 1);
                 // newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 2);
                 // newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 1);
                 // newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount());
@@ -159,20 +159,11 @@ namespace SheepDoom
             }
             else if(!P_gameSceneLoaded)
             {
-                yield return StartCoroutine(LoadGameScene(_gameScene, conn));
-            }
-        }
+                AsyncOperation asyncLoadGame = SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive);
+                while (!asyncLoadGame.isDone)
+                    yield return null;
 
-        private IEnumerator LoadGameScene(string _gameScene, NetworkConnection conn)
-        {   
-            // load game scene
-            AsyncOperation asyncLoadGame = SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive);
-            while (!asyncLoadGame.isDone)
-                yield return null;
-
-            if(isServer)
-            {
-                newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 2) - MatchMaker.instance.GetScenesUnloadedCount() + 1);
+                newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount());
 
                 // set scene in matches
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
@@ -181,10 +172,17 @@ namespace SheepDoom
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2].name, true); // load game
 
                 SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2]);
-            }
 
-            P_gameSceneLoaded = true;
+                P_gameSceneLoaded = true;
+            }
         }
+
+        /*
+        private IEnumerator LoadGameScene(string _gameScene, NetworkConnection conn)
+        {   
+            // load game scene
+        }
+        */
 
         [Server]
         private IEnumerator UnloadScene(NetworkConnection conn, string _matchID, bool _unloadLobby, bool _unloadCharSelect)

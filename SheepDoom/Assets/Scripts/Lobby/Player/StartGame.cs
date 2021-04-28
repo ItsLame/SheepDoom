@@ -30,7 +30,7 @@ namespace SheepDoom
                     // if server n host done, let other players load game scene n unload char select
                     StartCoroutine(WaitForServer(_matchID));
                     // check game scene load status n move objects after
-                    StartCoroutine(WaitForGameScene(_matchID));
+                    //StartCoroutine(WaitForGameScene(_matchID));
                 }
             }
             else
@@ -48,11 +48,17 @@ namespace SheepDoom
                 if(SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
                 {
                     if(conn != connectionToClient)
-                        TargetLoadGameScene(conn);
+                        // let user(s) load game scene
+                        MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinGame(conn, _matchID);
+                        //TargetLoadGameScene(conn);
                 }
             }
+
+            // proceed when loaded
+            MatchMaker.instance.StartNewScene(_matchID, false, true);
         }
 
+        /*
         [TargetRpc]
         private void TargetLoadGameScene(NetworkConnection conn)
         {
@@ -61,8 +67,9 @@ namespace SheepDoom
                 // are all in the same game scene (the copies are empty)
             SDSceneManager.instance.LoadGameScene(conn);
         }
+        */
 
-        private IEnumerator WaitForGameScene(string _matchID)
+        /*private IEnumerator WaitForGameScene(string _matchID)
         {
             while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_gameSceneLoaded)
                 yield return null;
@@ -70,6 +77,7 @@ namespace SheepDoom
             // proceed when loaded
             MatchMaker.instance.StartNewScene(_matchID, false, true);
         }
+        */
 
         [Server]
         public void MoveToNewScene(Scene _scene, string _matchID, bool _charSelect, bool _game)
