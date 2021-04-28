@@ -16,6 +16,8 @@ namespace SheepDoom
         //[SerializeField] private GameObject MinionTest;
         private void Start()
         {
+            Debug.Log("SPAWNING PLAYER CHARACTER");
+
             if(isClient)
             {
                 PlayerObj.instance.ci.GetComponent<SpawnManager>().SpawnPlayer("game", PlayerObj.instance.gameObject);

@@ -27,6 +27,18 @@ namespace SheepDoom
 
         private GameObject shop;
 
+        private void Start()
+        {
+            if(isClient)
+                CmdSetTeamIndex(PlayerObj.instance.GetTeamIndex());
+        }
+
+        [Command]
+        private void CmdSetTeamIndex(int _teamIndex)
+        {
+            setTeamIndex(_teamIndex);
+        }
+
         //accessor method for team index
         public float getTeamIndex()
         {

@@ -112,15 +112,15 @@ MonoBehaviour:
     type: 3}
   playerSelectPrefab: {fileID: 8812519712293616597, guid: 8506a642a33c97f469b98cf8b09f1f57,
     type: 3}
-  marioPrefab: {fileID: 8449280143259454606, guid: bb8ea933fbe320648bc08fddd17e56ab,
+  marioPrefab: {fileID: 8449280143259454606, guid: 1da91cc85af68ad4aa62f471e21d2833,
     type: 3}
-  luigiPrefab: {fileID: 8449280143259454606, guid: 077d508211d29b44191a560475df0eb2,
+  luigiPrefab: {fileID: 1088759763548799350, guid: a0617a5f1f5794446b539ba8354aba9b,
     type: 3}
-  peachPrefab: {fileID: 8449280143259454606, guid: 06444df3ff75d92499bb000f7f2b2ccb,
+  peachPrefab: {fileID: 8449280143259454606, guid: ad7ce6fe98ee08a4eb151a823436be3d,
     type: 3}
-  yoshiPrefab: {fileID: 8449280143259454606, guid: af7d7f509365c394bbd903c0cd6cb9c0,
+  yoshiPrefab: {fileID: 8449280143259454606, guid: fe52f95b8c9877745bc8457ba734437b,
     type: 3}
-  bowserPrefab: {fileID: 8449280143259454606, guid: c6c8b4e403b15ad46a0708192707bb72,
+  bowserPrefab: {fileID: 8449280143259454606, guid: 3f31b70d8c128564da7d08164b7b4a2d,
     type: 3}
   playerTeamID: 0
   playerSpawnPoint1: {fileID: 3580123260074344118, guid: 93e41b64510bf6e4f88f6ba284cc6991,
