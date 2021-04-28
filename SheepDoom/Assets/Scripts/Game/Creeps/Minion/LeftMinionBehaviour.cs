@@ -98,7 +98,7 @@ namespace SheepDoom
                     targetObject = other.gameObject;
                     isLockedOn = true;
                 }
-                else if (other.CompareTag("Player") && other.gameObject.layer == 9 && !other.GetComponent<PlayerHealth>().isPlayerDead())
+                else if (other.CompareTag("Player") && (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2) && !other.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;
@@ -111,7 +111,7 @@ namespace SheepDoom
                     targetObject = other.gameObject;
                     isLockedOn = true;
                 }
-                else if (other.CompareTag("Player") && other.gameObject.layer == 8 && !other.GetComponent<PlayerHealth>().isPlayerDead())
+                else if (other.CompareTag("Player") && (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1) && !other.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;

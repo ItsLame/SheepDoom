@@ -112,8 +112,9 @@ MonoBehaviour:
     type: 3}
   gameplayPlayerPrefab: {fileID: 8449280143259454606, guid: 9137392e5df5a964689d24c6355ba9bc,
     type: 3}
-  gameplayPlayerPrefab2: {fileID: 1088759763548799350, guid: b9f33189f64b5e04f87fa4467deaf77a,
+  gameplayPlayerPrefab2: {fileID: 8449280143259454606, guid: 4462982d0177d7c41966711e470631f5,
     type: 3}
+  playerTeamID: 0
   playerSpawnPoint1: {fileID: 3580123260074344118, guid: 93e41b64510bf6e4f88f6ba284cc6991,
     type: 3}
   playerSpawnPoint2: {fileID: 0}

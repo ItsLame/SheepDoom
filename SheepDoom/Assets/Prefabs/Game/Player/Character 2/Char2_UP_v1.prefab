@@ -138,8 +138,10 @@ MonoBehaviour:
   SlowDebuff: 0
   slowRate: 0
   slowDebuffDuration: 0
-  StopDebuff: 1
-  stopDebuffDuration: 4
+  StopDebuff: 0
+  stopDebuffDuration: 0
+  SleepDebuff: 1
+  sleepDebuffDuration: 4
 --- !u!114 &4309939885416895172
 MonoBehaviour:
   m_ObjectHideFlags: 0

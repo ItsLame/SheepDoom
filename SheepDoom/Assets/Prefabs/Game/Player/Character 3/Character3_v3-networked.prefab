@@ -114,7 +114,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0.00000094218, y: 1}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &779313207
@@ -903,6 +903,7 @@ GameObject:
   - component: {fileID: 2668921912398802697}
   - component: {fileID: 5250038974471889277}
   - component: {fileID: 3780656211629919999}
+  - component: {fileID: -4230013685054557495}
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
   - component: {fileID: 2014472282729360730}
@@ -1038,8 +1039,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  charID: 1
-  TeamIndex: 1
+  charID: 3
+  TeamIndex: 2
   PlayerKills: 0
   PlayerKillsText: {fileID: 0}
   PlayerDeaths: 0
@@ -1060,35 +1061,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  charID: 1
+  charID: 3
   hasPurchasedSpecial: 0
   hasPurchasedUlti: 0
   AlternateSpecial: 0
   AlternateUlti: 0
-  Projectile: {fileID: 5276780869706628407, guid: 964a157f7741830488b2b2c9ec21f37d,
-    type: 3}
-  MeleeAttackObject: {fileID: 0}
-  Projectile2: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
-    type: 3}
-  Projectile2_v2: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
-    type: 3}
-  Projectile3: {fileID: 3543547152907490667, guid: 2ccd3ae1f3b84704f8d3ce10d513d664,
-    type: 3}
-  Projectile3_v2: {fileID: 3543547152907490667, guid: f1eaf3061d966ec4499d5258118c148e,
-    type: 3}
-  SkillChild: {fileID: 0}
-  Skillchild_v2: {fileID: 0}
-  UltiChild: {fileID: 0}
-  UltiChild_v2: {fileID: 0}
-  SpawnPoint: {fileID: 5660135970150263288}
-  cooldown1: 0
+  cooldown1: 1
   cooldown2: 3
   cooldown3: 10
   cooldown1Multiplier: 0
   cooldown1MultiplerTimer: 0
-  ismeeleeattack: 0
-  meleeAttackDuration1: 0
-  meleeAttackSpeedMultiplier: 0
   animator: {fileID: 0}
 --- !u!114 &5660135970397916280
 MonoBehaviour:
@@ -1109,6 +1091,10 @@ MonoBehaviour:
   isSpeedAltered: 0
   speedAlterDuration: 0
   speedAlterStrength: 0
+  isSlowed: 0
+  isStopped: 0
+  isSleeped: 0
+  isSpeedUp: 0
 --- !u!114 &4028721829292908613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1263,6 +1249,29 @@ MonoBehaviour:
   isNeutral: 0
   isBoss: 0
   isMinion: 0
+--- !u!114 &-4230013685054557495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 922c213c0ff73a14c9081e17f5ad18f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  normalAtkProjectile: {fileID: 5276780869706628407, guid: 15e7b38ab531e6540a5627a07f08a821,
+    type: 3}
+  normalSpecial: {fileID: 5276780869706628407, guid: 081e79c478d55ab4b86a791c6628ff18,
+    type: 3}
+  altSpecial: {fileID: 5276780869706628407, guid: 8510bbcdbca796549a38d80cafb04016,
+    type: 3}
+  normalUlti: {fileID: 0}
+  altUlti: {fileID: 0}
+  spawnPoint: {fileID: 5660135970150263288}
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0

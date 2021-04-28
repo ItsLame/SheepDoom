@@ -6,11 +6,11 @@ using Mirror;
 namespace SheepDoom
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerProjectileSettings : NetworkBehaviour
+    public class ProjectileHealScript : NetworkBehaviour
     {
         //projectileOwner
         public GameObject owner;
-        [SyncVar]public float ownerTeamID;
+        [SyncVar] public float ownerTeamID;
 
         [Space(15)]
         //rotation controls
@@ -23,17 +23,23 @@ namespace SheepDoom
         [SerializeField] private bool isMovingLeft;
         [SerializeField] private bool isMovingRight;
 
-        [Header("Damage Properties")]
+        [Header("Damage/Healing Properties")]
         [Space(15)]
+        public bool healsAllies;
         public int damage;
         public bool destroyOnContact; //if projectile ill stop on first contact
         [SerializeField]
         private Rigidbody m_Rigidbody;
 
 
+        [Header("Healing AOE / object)")]
+        [Space(15)]
+        public GameObject HealingRadiusObject = null;
+        [SerializeField] private bool hasHealingRadiusObject;
+
         [Header("Bullet Properties")]
         [Space(15)]
-        public float m_Speed = 10f;   // default speed of projectile
+        public float m_Speed; // default speed of projectile
         public float m_Lifespan = 3f; // Lifespan per second
         private float m_StartTime = 0f;
         [Space(10)]
@@ -48,28 +54,13 @@ namespace SheepDoom
         public bool hasSpeedLimit;
         public float speedLimit;
 
-        [Header("Projectile Debuff Properties")]
-        [Space(15)]
-        public bool SlowDebuff;
-        public float slowRate;
-        public float slowDebuffDuration;
-
-        [Space(15)]
-        public bool StopDebuff;
-        public float stopDebuffDuration;
-
-        [Space(15)]
-        public bool SleepDebuff;
-        public float sleepDebuffDuration;
-
-
-
         //bool for calling kill counter increase once
         bool killCounterIncreaseCalled = false;
 
         public override void OnStartServer()
         {
             ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+            HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().setTeamID(ownerTeamID);
         }
 
         [Server]
@@ -81,29 +72,40 @@ namespace SheepDoom
                 //dont hurt the owner of the projectile, dont increase score if hitting dead player
                 if (col.gameObject != owner && !col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                 {
-                    //reduce HP of hit target
-                    col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
-
-                    //debuff player depending on bullet properties in inspector
-                    if (SlowDebuff)
-                        col.gameObject.GetComponent<CharacterMovement>().changeSpeed("slow", slowDebuffDuration, slowRate);
-
-                    else if (StopDebuff)
-                        col.gameObject.GetComponent<CharacterMovement>().changeSpeed("stop", stopDebuffDuration, 0);
-
-                    else if (SleepDebuff)
-                        col.gameObject.GetComponent<CharacterMovement>().changeSpeed("sleep", sleepDebuffDuration, 0);
-
-                    //increase killer's kill count if target is killed
-                    if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
+                    //if heals allies, heals first ally on touch
+                    if (healsAllies)
                     {
-                        col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
-                        owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
-                        col.gameObject.GetComponent<GameEvent>().whoKilled = owner.gameObject.GetComponent<PlayerObj>().GetPlayerName();
+                        if (col.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == ownerTeamID)
+                        {
+                            col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(damage);
+                        }
                     }
 
+                    //normal damaging
+                    else
+                    {
+                        //reduce HP of hit target
+                        col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
+
+                        //increase killer's kill count if target is killed
+                        if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
+                        {
+                            col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
+                            owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
+                            col.gameObject.GetComponent<GameEvent>().whoKilled = owner.gameObject.GetComponent<PlayerObj>().GetPlayerName();
+                        }
+                    }
+
+                    //if healing area is set by another object activate it 
+                    if (hasHealingRadiusObject)
+                    {
+                        HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+                        HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
+                    }
+
+
                     if (destroyOnContact)
-                        Destroyy();
+                        Invoke("Destroyy", 0.1f);
                 }
             }
             else if (col.gameObject.CompareTag("Tower"))
@@ -124,6 +126,13 @@ namespace SheepDoom
                 //                Debug.Log(owner + " hitting neutral minion");
                 owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
 
+                //if healing area is set by another object activate it 
+                if (hasHealingRadiusObject)
+                {
+                    HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+                    HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
+                }
+
                 if (destroyOnContact)
                     Destroyy();
             }
@@ -137,6 +146,13 @@ namespace SheepDoom
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                             owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
+
+                        //if healing area is set by another object activate it 
+                        if (hasHealingRadiusObject)
+                        {
+                            HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+                            HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
+                        }
 
                         if (destroyOnContact)
                             Destroyy();
@@ -152,6 +168,13 @@ namespace SheepDoom
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                             owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
 
+                        //if healing area is set by another object activate it 
+                        if (hasHealingRadiusObject)
+                        {
+                            HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+                            HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
+                        }
+
                         if (destroyOnContact)
                             Destroyy();
                     }
@@ -162,11 +185,19 @@ namespace SheepDoom
                 col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
                 //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
+                //if healing area is set by another object activate it 
+                if (hasHealingRadiusObject)
+                {
+                    HealingRadiusObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+                    HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
+                }
+
                 if (destroyOnContact)
                     Destroyy();
             }
             else if (col.gameObject.CompareTag("Other"))
             {
+                Debug.Log(gameObject.name + "touched other" + col.gameObject.name); ;
                 if (destroyOnContact)
                     Destroyy();
             }
@@ -205,7 +236,7 @@ namespace SheepDoom
 
         void Update()
         {
-            if(isClient && hasAuthority)
+            if (isClient && hasAuthority)
             {
                 //rotation movement
                 transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
@@ -241,7 +272,7 @@ namespace SheepDoom
                 }
             }
 
-            if(isServer)
+            if (isServer)
             {
                 m_StartTime += Time.deltaTime;
                 if (m_StartTime >= m_Lifespan)
@@ -250,3 +281,4 @@ namespace SheepDoom
         }
     }
 }
+
