@@ -32,7 +32,7 @@ namespace SheepDoom
                 SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
                 Debug.Log("MATCHID IN JOINGAMESCRIPT: " + matchIdInput);
                 
-                MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinLobby(connectionToClient, matchIdInput);
+                MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinMatch(connectionToClient, matchIdInput);
                 Debug.Log("Server joined game successfully");
             }
             else

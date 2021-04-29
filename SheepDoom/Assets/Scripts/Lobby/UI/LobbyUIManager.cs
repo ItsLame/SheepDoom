@@ -109,7 +109,7 @@ namespace SheepDoom
 
         #region Server Functions
 
-        public void ServerStartSetting(string _matchID)
+        private void ServerStartSetting(string _matchID)
         {
             //begin setting matchID
             SetUI_MatchID(_matchID);

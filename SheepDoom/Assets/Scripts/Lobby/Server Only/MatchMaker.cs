@@ -196,9 +196,11 @@ namespace SheepDoom
                 GameObject sdSceneManagerLocation = entry.Value.GetSDSceneManager().gameObject;
                 if (entry.Value.GetScenes().Contains(sdSceneManagerLocation.scene))
                 {
-                    if (entry.Value.GetScenes().Count == 2 && entry.Value.GetScenes()[1] == sdSceneManagerLocation.scene)
+                    if (entry.Value.GetScenes()[1] == sdSceneManagerLocation.scene)
+                    {
                         lobbyUnloadedCount++;
-                    else if (entry.Value.GetScenes().Count == 3 && entry.Value.GetScenes()[2] == sdSceneManagerLocation.scene)
+                    }
+                    else if (entry.Value.GetScenes()[2] == sdSceneManagerLocation.scene)
                     {
                         lobbyUnloadedCount++;
                         charSelectUnloadedCount++;

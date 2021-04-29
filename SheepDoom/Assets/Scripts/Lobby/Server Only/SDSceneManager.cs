@@ -27,8 +27,8 @@ namespace SheepDoom
         private bool scenesLoaded = false;
         private bool gameSceneLoaded = false;
 
-        public SyncList<Scene> SDmatchScenes = new SyncList<Scene>();
-        public SyncList<string> SDnameScenes = new SyncList<string>();
+        //public SyncList<Scene> SDmatchScenes = new SyncList<Scene>();
+        //public SyncList<string> SDnameScenes = new SyncList<string>();
 
         #region Properties
 
@@ -70,7 +70,7 @@ namespace SheepDoom
 
         #endregion
        
-        void Update()
+        /*void Update()
         {
             // (Debug) check scene list
             if(P_matchID != null)
@@ -83,7 +83,7 @@ namespace SheepDoom
                         SDnameScenes.Insert(i, SDmatchScenes[i].name);
                 }
             }
-        }
+        }*/
         
         [Server]
         public void StartScenes(NetworkConnection conn)
@@ -110,18 +110,20 @@ namespace SheepDoom
         }
 
         [Server]
-        public void JoinLobby(NetworkConnection conn, string _matchID) // for non-hosts
+        public void JoinMatch(NetworkConnection conn, string _matchID) // for non-hosts
         {
-            MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().ServerStartSetting(_matchID);
+            //MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().ServerStartSetting(_matchID);
+            ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, true); // load game 
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[1].name, true); // load char select
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[0].name, true); // load lobby
+
         }
 
-        [Server]
+        /*[Server]
         public void JoinGame(NetworkConnection conn, string _matchID)
         {
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, true); // game scene
-        }
+        }*/
 
         private IEnumerator LoadScene(string _lobbyScene, string _charSelectScene, string _gameScene, NetworkConnection conn)
         {
@@ -138,32 +140,34 @@ namespace SheepDoom
                 while (!asyncLoadCharSelect.isDone)
                     yield return null;
 
+                AsyncOperation asyncLoadGame = SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive);
+                 while (!asyncLoadGame.isDone)
+                     yield return null;
+
                 newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 2);
                 newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 1);
-                // newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 2);
-                // newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 1);
-                // newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount());
+                newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount());
 
                 // set scene in matches
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newLobbyScene);
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newCharSelectScene);
-                //MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
+                MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
 
                 // send scene load message to clients, latest loaded scene will be the active scene on client for hosts
-                //ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2].name, true);
+                ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2].name, true);
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[1].name, true); // load char select
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0].name, true); // load lobby
 
                 SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0]);
                 P_scenesLoaded = true;
             }
-            else if(!P_gameSceneLoaded)
+            /*else if(!P_gameSceneLoaded)
             {
                 AsyncOperation asyncLoadGame = SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive);
                 while (!asyncLoadGame.isDone)
                     yield return null;
 
-                newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount());
+                newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3));// - MatchMaker.instance.GetScenesUnloadedCount());
 
                 // set scene in matches
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
@@ -174,20 +178,13 @@ namespace SheepDoom
                 SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2]);
 
                 P_gameSceneLoaded = true;
-            }
+            }*/
         }
-
-        /*
-        private IEnumerator LoadGameScene(string _gameScene, NetworkConnection conn)
-        {   
-            // load game scene
-        }
-        */
 
         [Server]
         private IEnumerator UnloadScene(NetworkConnection conn, string _matchID, bool _unloadLobby, bool _unloadCharSelect)
         {
-            if(P_scenesLoaded || P_gameSceneLoaded)
+            if(P_scenesLoaded)// || P_gameSceneLoaded)
             {
                 int sceneIndex = 0;
 

@@ -23,21 +23,21 @@ namespace SheepDoom
             {
                 if(_charSelect)
                     MatchMaker.instance.StartNewScene(_matchID, true, false);
-                else if(_game)
+                /*else if(_game)
                 {
                     // start game scene for server & host (host is force start clicker for now)
                     MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().StartScenes(connectionToClient);
                     // if server n host done, let other players load game scene n unload char select
-                    StartCoroutine(WaitForServer(_matchID));
+                    //StartCoroutine(WaitForServer(_matchID));
                     // check game scene load status n move objects after
                     //StartCoroutine(WaitForGameScene(_matchID));
-                }
+                }*/
             }
             else
                 Debug.Log("Match ID: " + _matchID + " does not exist");
         }
         
-        private IEnumerator WaitForServer(string _matchID)
+        /*private IEnumerator WaitForServer(string _matchID)
         {
             while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_gameSceneLoaded)
                 yield return null;
@@ -56,7 +56,7 @@ namespace SheepDoom
 
             // proceed when loaded
             MatchMaker.instance.StartNewScene(_matchID, false, true);
-        }
+        }*/
 
         [Server]
         public void MoveToNewScene(Scene _scene, string _matchID, bool _charSelect, bool _game)
@@ -65,11 +65,12 @@ namespace SheepDoom
             SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
             gameObject.transform.SetParent(null, false);
             SceneManager.MoveGameObjectToScene(gameObject, _scene);
-            
-            if(_charSelect)
+
+            if (_charSelect)
                 MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, true, false);
             else if(_game)
                 MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, false, true);
+               
         }
 
         [TargetRpc]

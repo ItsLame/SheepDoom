@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        private float secondsTimer = 10;
+        private float secondsTimer = 60;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
@@ -183,7 +183,7 @@ namespace SheepDoom
             }
         }
 
-        [Server] // based on timer
+        /*[Server] // based on timer
         private void RequestGameStart()
         {
             GameObject playerHost = null;
@@ -230,6 +230,36 @@ namespace SheepDoom
                 // start game
                 playerHost.GetComponent<StartGame>().StartNewScene(playerHost.GetComponent<PlayerObj>().GetMatchID(), false, true);
             }   
+        }*/
+
+        [Server]
+        private void RequestGameStart()
+        {
+            if (MatchMaker.instance.GetMatches()[P_matchID].GetLockInCount() != MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count)
+            {
+                foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
+                {
+                    if (_player.GetComponent<PlayerObj>().GetIsLockedIn())
+                    {
+                        string _heroName = _player.GetComponent<PlayerObj>().GetHeroName();
+                        if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
+                            team1PickedHeroes.Add(_heroName);
+                        else if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
+                            team2PickedHeroes.Add(_heroName);
+                    }
+                    else if (!_player.GetComponent<PlayerObj>().GetIsLockedIn())
+                        AutoLockIn(_player);
+
+                    if (MatchMaker.instance.GetMatches()[P_matchID].GetLockInCount() == MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count)
+                        break;
+                }
+
+                MatchMaker.instance.StartNewScene(P_matchID, false, true);
+            }
+            else
+            {
+                MatchMaker.instance.StartNewScene(P_matchID, false, true);
+            }
         }
 
         private void AutoLockIn(GameObject _player)
@@ -343,9 +373,6 @@ namespace SheepDoom
 
                 if (_isOwner)
                 {
-                    //P_heroInfoImg.sprite = hero.GetComponent<Hero>().P_heroIcon;
-                    //P_heroInfoText.text = hero.GetComponent<Hero>().P_heroName + "\n-----\n" + hero.GetComponent<Hero>().P_heroDesc;
-
                     // activates status panel to local player to prevent them from clicking other heroes
                     P_statusPanel.SetActive(_lockIn);
                     // set lock in button to not interactable once locked in (can't un lock in)
