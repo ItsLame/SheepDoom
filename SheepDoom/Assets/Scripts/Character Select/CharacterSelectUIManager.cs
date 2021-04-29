@@ -211,12 +211,9 @@ namespace SheepDoom
                     else
                         continue;
                 }
-                
-                // start game
+               
                 playerHost.GetComponent<StartGame>().StartNewScene(playerHost.GetComponent<PlayerObj>().GetMatchID(), false, true);
             }
-            //else
-                // start game smoothly
             else
             {
                 foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())

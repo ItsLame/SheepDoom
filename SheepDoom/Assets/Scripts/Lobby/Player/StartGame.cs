@@ -58,27 +58,6 @@ namespace SheepDoom
             MatchMaker.instance.StartNewScene(_matchID, false, true);
         }
 
-        /*
-        [TargetRpc]
-        private void TargetLoadGameScene(NetworkConnection conn)
-        {
-            // load locally
-                // tried without targetrpc and server ends up having multiple copies of the game scene even though players
-                // are all in the same game scene (the copies are empty)
-            SDSceneManager.instance.LoadGameScene(conn);
-        }
-        */
-
-        /*private IEnumerator WaitForGameScene(string _matchID)
-        {
-            while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_gameSceneLoaded)
-                yield return null;
-
-            // proceed when loaded
-            MatchMaker.instance.StartNewScene(_matchID, false, true);
-        }
-        */
-
         [Server]
         public void MoveToNewScene(Scene _scene, string _matchID, bool _charSelect, bool _game)
         {
