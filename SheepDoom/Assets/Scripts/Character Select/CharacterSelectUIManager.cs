@@ -45,6 +45,8 @@ namespace SheepDoom
         [SyncVar] private string matchID = string.Empty;
         [SyncVar] private string timePlayingStr = "30";
 
+        private bool gameStarted = false;
+
         // so that don't share the same random result (but share the same system.random)
         private static readonly System.Random rand = new System.Random();
 
@@ -97,8 +99,15 @@ namespace SheepDoom
         [Server]
         public void StartCharSelect(string _matchID)
         {
-            ServerStartSetting(_matchID);
-            playersInScene = true;
+            if(P_matchID == _matchID)
+            {
+                ServerStartSetting();
+                playersInScene = true;
+            }
+            else
+            {
+                Debug.Log("matchmaker sent matchID and charselectuimanager matchid different");
+            }
         }
         private void Start()
         {
@@ -108,20 +117,19 @@ namespace SheepDoom
 
         void Update()
         {
-            if (isServer && playersInScene)
+            if (isServer && playersInScene && secondsTimer > 0)
             {
-                if(secondsTimer > 0)
-                {
-                    secondsTimer -= Time.deltaTime;
-                    timePlaying = TimeSpan.FromSeconds(secondsTimer);
-                    timePlayingStr = timePlaying.ToString("%s");
-                    timerText.text = timePlayingStr;
-                }
-                else
-                {
+                secondsTimer -= Time.deltaTime;
+                timePlaying = TimeSpan.FromSeconds(secondsTimer);
+                timePlayingStr = timePlaying.ToString("%s");
+                timerText.text = timePlayingStr;
+
+               if (secondsTimer <= 0 && !gameStarted)
+               {
                     RequestGameStart();
+                    return;
                     // random lockin for players who havent locked in, then start game
-                }
+               }
             }
 
             if (isClient)
@@ -130,9 +138,9 @@ namespace SheepDoom
 
         #region Server Functions
 
-        private void ServerStartSetting(string _matchID)
+        private void ServerStartSetting()
         {
-            P_matchID = _matchID;
+            //P_matchID = _matchID;
             lockInButton.SetActive(false);  // so that server won't have lock in button
         }
 
@@ -254,12 +262,22 @@ namespace SheepDoom
                         break;
                 }
 
-                MatchMaker.instance.StartNewScene(P_matchID, false, true);
+                MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartScenes();
+                StartCoroutine(WaitForGameScene());
             }
             else
             {
-                MatchMaker.instance.StartNewScene(P_matchID, false, true);
+                MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartScenes();
+                StartCoroutine(WaitForGameScene());
             }
+        }
+
+        private IEnumerator WaitForGameScene()
+        {
+            while (!MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().P_gameSceneLoaded)
+                yield return null;
+            MatchMaker.instance.StartNewScene(P_matchID, false, true);
+            gameStarted = true;
         }
 
         private void AutoLockIn(GameObject _player)
@@ -473,7 +491,6 @@ namespace SheepDoom
         public override void OnStartServer()
         {
             instance = this;
-            MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].SetCharacterSelectUIManager(instance);
         }
 
         /// <summary>

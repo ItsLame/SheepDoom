@@ -1132,7 +1132,6 @@ GameObject:
   - component: {fileID: 5848661643072328350}
   - component: {fileID: 1089760752597466277}
   - component: {fileID: 5517714342370570122}
-  - component: {fileID: 8455708040640167070}
   m_Layer: 0
   m_Name: MeleeAttack
   m_TagString: Untagged
@@ -1290,21 +1289,6 @@ MonoBehaviour:
   currentTimer: 0
   isMoving: 0
   stop: 0
---- !u!114 &8455708040640167070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4008510119826717395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  forceHidden: 0
 --- !u!1 &4134774580701406288
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,7 +1304,6 @@ GameObject:
   - component: {fileID: 6483910365227715863}
   - component: {fileID: 4847808717629266875}
   - component: {fileID: 3498517542375057051}
-  - component: {fileID: 8307853001089148031}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Other
@@ -1448,21 +1431,6 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &8307853001089148031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4134774580701406288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7fdb599e1359924bad6255660370252, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  forceHidden: 0
 --- !u!1 &6494726391512442223
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,14 +13,22 @@ namespace SheepDoom
 {
     public class GameManager : NetworkBehaviour
     {
-        //[SerializeField] private GameObject MinionTest;
+        public static GameManager instance;
+
         private bool playersInScene = false;
         private bool playersLoaded = false;
+        private int playersLoadedCount = 0;
         [SerializeField]
-        private string matchID;
+        [SyncVar] private string matchID = string.Empty;
         [SerializeField]
         private Transform team1SpawnPoint, team2SpawnPoint;
-        
+
+        public string P_matchID
+        {
+            get { return matchID; }
+            set { matchID = value; }
+        }
+
         public bool GetPlayerSpawnStatus()
         {
             return playersInScene;
@@ -29,20 +37,23 @@ namespace SheepDoom
         [Server]
         public void StartGameScene(string _matchID)
         {
-            matchID = _matchID;
-            playersInScene = true;
+            Debug.Log("AA");
+            if (P_matchID == _matchID)
+                playersInScene = true;
+            else
+                Debug.Log("mismatch in gamemanager matchID and matchmaker sent matchid");
         }
         
         void Update()
         {
-            if(isServer && playersInScene)
+            if(isServer && playersInScene && (playersLoadedCount != MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count))
             {
-                 foreach(GameObject _player in MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList())
-                 {
-                    //spawn player
-                 }
-                playersLoaded = true;
-                playersInScene = false;
+                Debug.Log("BB");
+                foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
+                {
+                    _player.GetComponent<PlayerObj>().ci.GetComponent<SpawnManager>().SpawnForGame("game", _player);
+                    playersLoadedCount++;
+                }
             }
         }
 
@@ -64,13 +75,20 @@ namespace SheepDoom
         /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
-        public override void OnStartServer() { }
+        public override void OnStartServer() 
+        {
+            instance = this;
+            //MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].SetGameManager(instance);
+        }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned
         /// <para>Useful for saving object data in persistent storage</para>
         /// </summary>
-        public override void OnStopServer() { }
+        public override void OnStopServer() 
+        {
+            instance = this;
+        }
 
         /// <summary>
         /// Called on every NetworkBehaviour when it is activated on a client.

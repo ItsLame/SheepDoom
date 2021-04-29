@@ -23,6 +23,7 @@ namespace SheepDoom
         private SDSceneManager sdSceneManager;
         private LobbyUIManager lobbyUIManager;
         private CharacterSelectUIManager characterSelectUIManager;
+        private GameManager gameManager;
 
         public Match(string matchID, GameObject player, SDSceneManager sdSceneManager)
         {
@@ -85,24 +86,14 @@ namespace SheepDoom
             return characterSelectUIManager;
         }
 
-        /*public Scene GetLoadedLobbyScene()
-        {
-            return loadedLobbyScene;
-        }
-
-        public Scene GetLoadedCharSelectScene()
-        {
-            return loadedCharSelectScene;
-        }
-
-        public Scene GetLoadedGameScene()
-        {
-            return loadedGameScene;
-        }*/
-
         public SyncList<Scene> GetScenes()
         {
             return matchScenes;
+        }
+
+        public GameManager GetGameManager()
+        {
+            return gameManager;
         }
 
         #endregion
@@ -162,6 +153,11 @@ namespace SheepDoom
         public void SetScene(Scene scene)
         {
             matchScenes.Add(scene);
+        }
+
+        public void SetGameManager(GameManager _gameManageer)
+        {
+            gameManager = _gameManageer;
         }
 
         #endregion
@@ -315,8 +311,15 @@ namespace SheepDoom
                 {
                     matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetScenes()[2]);
                     foreach(GameObject player in matches[_matchID].GetPlayerObjList())
-                        player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[2], _matchID, false, true);
-                    
+                    {
+                        if(SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                        {
+                            matches[_matchID].GetSDSceneManager().JoinGame(conn, _matchID);
+                            player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[2], _matchID, false, true);
+                        }
+                    }
+                        
+                    matches[_matchID].GetGameManager().StartGameScene(_matchID);
                 }
             }
         }

@@ -33,7 +33,9 @@ namespace SheepDoom
         [SyncVar] private string startStatusMsg = string.Empty;
         
         //room matchID
+        [SerializeField]
         [SyncVar] private string matchID = string.Empty;
+        private bool matchIDSet = false;
         
         #region Properties
         
@@ -101,10 +103,19 @@ namespace SheepDoom
 
         private void Start()
         {
-            if(isServer)
-                ServerStartSetting(SDSceneManager.instance.P_matchID);
+            /*(isServer)
+                ServerStartSetting(SDSceneManager.instance.P_matchID);*/
             if(isClient)
                 ClientStartSetting();
+        }
+
+        void Update()
+        {
+            if(isServer && P_matchID != string.Empty && !matchIDSet)
+            {
+                ServerStartSetting(P_matchID);
+                matchIDSet = true;
+            }
         }
 
         #region Server Functions
@@ -483,7 +494,7 @@ namespace SheepDoom
         public override void OnStartServer()
         {
             instance = this;
-            MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].SetLobbyUIManager(instance);
+            //MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].SetLobbyUIManager(instance);
         }
 
         /// <summary>

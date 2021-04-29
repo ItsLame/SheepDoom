@@ -109,11 +109,19 @@ namespace SheepDoom
 
         public void SpawnPlayer(string playerType, GameObject player)
         {
+            Debug.Log("EE");
             CmdRequestPlayerObjSpawn(playerType, player);
         }
 
         [Command] // Request player object to be spawned for client
         void CmdRequestPlayerObjSpawn(string playerType, GameObject player)
+        {
+            NetworkSpawnPlayer(playerType, player);
+            
+        }
+
+        [Server]
+        public void SpawnForGame(string playerType, GameObject player)
         {
             NetworkSpawnPlayer(playerType, player);
         }
@@ -133,6 +141,7 @@ namespace SheepDoom
             //}
             else if (playerType == "game")
             {
+                Debug.Log("is player null? " + player);
                 NetworkIdentity hero = null;
                 string heroName = string.Empty;
                 string matchID = string.Empty;
@@ -153,13 +162,6 @@ namespace SheepDoom
                 {
                     // spawn under this script's obj
                     spawn = Instantiate(hero.gameObject, transform);
-
-                    /*
-                    if(player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                        spawn = Instantiate(hero.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
-                    else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-                        spawn = Instantiate(hero.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
-                    */
                 }
 
                 if(spawn != null)
@@ -174,8 +176,6 @@ namespace SheepDoom
                         P_playerSpawnPoint = team2SpawnPoint;
                     
                     spawn.transform.SetPositionAndRotation(P_playerSpawnPoint.transform.position, Quaternion.identity);
-
-                    //MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveObjToNewScene(MatchMaker.instance.GetMatches()[matchID].GetScenes()[2], spawn);
                 }
             }
 
