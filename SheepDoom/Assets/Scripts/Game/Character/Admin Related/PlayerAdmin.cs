@@ -15,7 +15,7 @@ namespace SheepDoom
 
         [Header("Team affiliation (1 for Blue, 2 for Red")]
         [SerializeField]
-        [SyncVar] private float TeamIndex;
+        [SyncVar] private int TeamIndex;
 
         [Header("Player scores")]
         [SyncVar(hook = nameof(SyncPlayerKill))] public float PlayerKills;
@@ -46,7 +46,7 @@ namespace SheepDoom
         }
 
         //set method for teamindex
-        public void setTeamIndex(float value)
+        public void setTeamIndex(int value)
         {
             TeamIndex = value;
         }
