@@ -51,8 +51,8 @@ namespace SheepDoom
         public virtual void OnClickHero()
         {
             // change hero info view (right side) if do this will change icon for other teammates as well
-            //CharacterSelectUIManager.instance.P_heroInfoImg.sprite = P_heroIcon;
-            //CharacterSelectUIManager.instance.P_heroInfoText.text = P_heroName + "\n-----\n" + P_heroDesc;
+            CharacterSelectUIManager.instance.P_heroInfoImg.sprite = P_heroIcon;
+            CharacterSelectUIManager.instance.P_heroInfoText.text = P_heroName + "\n-----\n" + P_heroDesc;
 
             // set hero info locally
             if (!P_isTaken)

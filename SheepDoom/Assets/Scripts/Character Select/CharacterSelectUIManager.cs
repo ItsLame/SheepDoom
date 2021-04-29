@@ -343,12 +343,11 @@ namespace SheepDoom
                 }
 
                 hero.SendMessage("SetTaken", _lockIn);
-                hero.SendMessage("OnClickHero");
 
                 if (_isOwner)
                 {
-                    P_heroInfoImg.sprite = hero.GetComponent<Hero>().P_heroIcon;
-                    P_heroInfoText.text = hero.GetComponent<Hero>().P_heroName + "\n-----\n" + hero.GetComponent<Hero>().P_heroDesc;
+                    //P_heroInfoImg.sprite = hero.GetComponent<Hero>().P_heroIcon;
+                    //P_heroInfoText.text = hero.GetComponent<Hero>().P_heroName + "\n-----\n" + hero.GetComponent<Hero>().P_heroDesc;
 
                     // activates status panel to local player to prevent them from clicking other heroes
                     P_statusPanel.SetActive(_lockIn);
