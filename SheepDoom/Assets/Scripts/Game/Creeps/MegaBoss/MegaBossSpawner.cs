@@ -18,7 +18,10 @@ public class MegaBossSpawner : NetworkBehaviour
     IEnumerator TimeUntilSpawn()
     {
         yield return new WaitForSeconds(20);
-        Instantiate(Minionmelee, transform.position, transform.rotation);
+        //Instantiate(Minionmelee, transform.position, transform.rotation);
+        GameObject spawnMega = Instantiate(Minionmelee, transform);
+        spawnMega.transform.SetParent(null, false);
+        spawnMega.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
     }
 
 }

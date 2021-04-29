@@ -236,7 +236,11 @@ namespace SheepDoom
             {
                 transform.LookAt(targetObject.transform);
                 //Attack
-                Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+                //Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+                Rigidbody rb = Instantiate(projectile, transform).GetComponent<Rigidbody>();
+
+                rb.transform.SetParent(null, false);
+                rb.transform.SetPositionAndRotation(this.transform.position, Quaternion.identity);
 
                 rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
                 //    rb.AddForce(transform.up * 8, ForceMode.Impulse);

@@ -28,7 +28,8 @@ namespace SheepDoom
             nextspawntime = Time.time + spawndelay;
             //GameObject creep = Instantiate(Minion, transform.position, transform.rotation);
             GameObject creep = Instantiate(Minion, transform);
-            creep.transform.SetParent(null);
+            creep.transform.SetParent(null, false);
+            creep.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
             NetworkServer.Spawn(creep);
         }
 

@@ -32,8 +32,13 @@ namespace SheepDoom
         [Command]
         void CmdNormalAtk()
         {
-            firedProjectile = Instantiate(normalAtkProjectile, spawnPoint.position, spawnPoint.rotation);
+            //firedProjectile = Instantiate(normalAtkProjectile, spawnPoint.position, spawnPoint.rotation);
+            
+            firedProjectile = Instantiate(normalAtkProjectile, transform);
             firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+            firedProjectile.transform.SetParent(null, false);
+            firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+            
             NetworkServer.Spawn(firedProjectile, connectionToClient);
         }
 
@@ -47,10 +52,16 @@ namespace SheepDoom
         void CmdSpecialAtk(bool _isAltSpecial)
         {
             if (!_isAltSpecial)
-                firedProjectile = Instantiate(normalSpecial, spawnPoint.position, spawnPoint.rotation);
+                //firedProjectile = Instantiate(normalSpecial, spawnPoint.position, spawnPoint.rotation);
+                firedProjectile = Instantiate(normalSpecial, transform);
             else if (_isAltSpecial)
-                firedProjectile = Instantiate(altSpecial, spawnPoint.position, spawnPoint.rotation);
+                //firedProjectile = Instantiate(altSpecial, spawnPoint.position, spawnPoint.rotation);
+                firedProjectile = Instantiate(altSpecial, transform);
+            
             firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
+            firedProjectile.transform.SetParent(null, false);
+            firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+            
             NetworkServer.Spawn(firedProjectile, connectionToClient);
         }
 
@@ -88,10 +99,14 @@ namespace SheepDoom
         {
             Debug.Log("CmdUltiAtk-ing");
             if (!_isAltUlti)
-                firedProjectile = Instantiate(normalUlti, spawnPoint.position, spawnPoint.rotation);
+                firedProjectile = Instantiate(normalUlti, transform);
             else if (_isAltUlti)
-                firedProjectile = Instantiate(altUlti, spawnPoint.position, spawnPoint.rotation); ;
+                firedProjectile = Instantiate(altUlti, transform);
+            
             firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
+            firedProjectile.transform.SetParent(null, false);
+            firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+            
             NetworkServer.Spawn(firedProjectile, connectionToClient);
 
         }

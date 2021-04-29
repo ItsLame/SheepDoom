@@ -102,7 +102,10 @@ namespace SheepDoom
                         attackDurationInGame = attackDuration;
                         isAttacking = true;
                         Debug.Log("Death ball attacking");
-                        Instantiate(AuraDamageObject, this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        //Instantiate(AuraDamageObject, this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        GameObject spawnAura = Instantiate(AuraDamageObject, transform);
+                        spawnAura.transform.SetParent(null, false);
+                        spawnAura.transform.SetPositionAndRotation(this.gameObject.transform.position, this.gameObject.transform.rotation);
                         //reset attack timer
                         attackCooldownInGame = attackCooldown;
                     }
@@ -134,7 +137,10 @@ namespace SheepDoom
                             attackDurationInGame = attackDuration;
                             Debug.Log("Death ball attacking");
                             isAttacking = true;
-                            Instantiate(AuraDamageObject, this.gameObject.transform.position, this.gameObject.transform.rotation);
+                            //Instantiate(AuraDamageObject, this.gameObject.transform.position, this.gameObject.transform.rotation);
+                            GameObject spawnAura = Instantiate(AuraDamageObject, transform);
+                            spawnAura.transform.SetParent(null, false);
+                            spawnAura.transform.SetPositionAndRotation(this.gameObject.transform.position, this.gameObject.transform.rotation);
                             //reset attack timer
                             attackCooldownInGame = attackCooldown;
                         }
