@@ -905,7 +905,7 @@ GameObject:
   - component: {fileID: 6459418408009445500}
   - component: {fileID: 2014472282729360730}
   m_Layer: 8
-  m_Name: Yoshi
+  m_Name: Yoshi (C4)
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1172,12 +1172,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  respawnLocation: {fileID: 3580123260074344118, guid: 93e41b64510bf6e4f88f6ba284cc6991,
-    type: 3}
+  respawnLocation: {fileID: 0}
   respawnTimerRef: 5
   respawnTimerInGame: 0
-  deathOverlay: {fileID: 7072208613197537347, guid: af933045f5f2ec54f89114511f0edef0,
-    type: 3}
+  deathOverlay: {fileID: 0}
   deadTextObject: {fileID: 0}
   respawninginObject: {fileID: 0}
   PlayerRespawnTimerObject: {fileID: 0}

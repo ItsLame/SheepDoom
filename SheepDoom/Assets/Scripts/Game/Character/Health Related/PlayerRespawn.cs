@@ -10,11 +10,9 @@ namespace SheepDoom
     public class PlayerRespawn : NetworkBehaviour
     {
         //target respawn location
-        public GameObject respawnLocation;
-        [SerializeField]
-        private float respawnTimerRef;
-        [SerializeField]
-        private float respawnTimerInGame;
+        [SerializeField] private GameObject respawnLocation = null;
+        [SerializeField] private float respawnTimerRef;
+        [SerializeField] private float respawnTimerInGame;
         private float respawnDisplayNumber;
 
         [Space(15)]
@@ -23,10 +21,16 @@ namespace SheepDoom
 
 
         [Space(15)]
-        public GameObject deathOverlay;
-        public GameObject deadTextObject;
-        public GameObject respawninginObject;
-        public GameObject PlayerRespawnTimerObject;
+        [SerializeField] private GameObject deathOverlay;
+        [SerializeField] private GameObject deadTextObject;
+        [SerializeField] private GameObject respawninginObject;
+        [SerializeField] private GameObject PlayerRespawnTimerObject;
+
+        private void Start()
+        {
+            if(isClient)
+                respawnLocation = PlayerObj.instance.ci.GetComponent<SpawnManager>().P_playerSpawnPoint;
+        }
 
         // Update is called once per frame
         void Update()

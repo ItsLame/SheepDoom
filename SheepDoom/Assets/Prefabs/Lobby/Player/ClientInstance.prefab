@@ -110,8 +110,6 @@ MonoBehaviour:
   syncInterval: 0.1
   playerPrefab: {fileID: 8812519712293616597, guid: 887d73d39868dd74684111b8284d4913,
     type: 3}
-  playerSelectPrefab: {fileID: 8812519712293616597, guid: 8506a642a33c97f469b98cf8b09f1f57,
-    type: 3}
   marioPrefab: {fileID: 8449280143259454606, guid: 1da91cc85af68ad4aa62f471e21d2833,
     type: 3}
   luigiPrefab: {fileID: 1088759763548799350, guid: a0617a5f1f5794446b539ba8354aba9b,
@@ -122,14 +120,7 @@ MonoBehaviour:
     type: 3}
   bowserPrefab: {fileID: 8449280143259454606, guid: 3f31b70d8c128564da7d08164b7b4a2d,
     type: 3}
-  playerTeamID: 0
-  playerSpawnPoint1: {fileID: 3580123260074344118, guid: 93e41b64510bf6e4f88f6ba284cc6991,
+  team1SpawnPoint: {fileID: 3580123260074344118, guid: 93e41b64510bf6e4f88f6ba284cc6991,
     type: 3}
-  playerSpawnPoint2: {fileID: 0}
-  playerSpawnPoint3: {fileID: 0}
-  playerSpawnPoint4: {fileID: 6425602078007353856, guid: 41b240c0cbfb07c46939ae68e9a9eb19,
+  team2SpawnPoint: {fileID: 6425602078007353856, guid: 41b240c0cbfb07c46939ae68e9a9eb19,
     type: 3}
-  playerSpawnPoint5: {fileID: 0}
-  playerSpawnPoint6: {fileID: 0}
-  SecondsTimer: 0
-  MinutesTimer: 0

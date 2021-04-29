@@ -17,7 +17,7 @@ namespace SheepDoom
 
         [Header("Setting up player")]
         [SerializeField] private NetworkIdentity playerPrefab = null;
-        [SerializeField] private NetworkIdentity playerSelectPrefab = null;
+        //[SerializeField] private NetworkIdentity playerSelectPrefab = null;
         //[SerializeField] private NetworkIdentity playerGameplayPrefab = null;
 
         [Space(15)]
@@ -32,41 +32,54 @@ namespace SheepDoom
 
         [Space(15)]
         [Header("Player number based on the order they are spawned")]
-        private float currentPlayerNumber;
-        public float playerTeamID;
+        //private float currentPlayerNumber;
+        [SerializeField] private GameObject playerSpawnPoint;
+        [SerializeField] [SyncVar(hook = nameof(OnTeamUpdate))] private int playerTeamID = 0;
+        //public float playerTeamID;
 
         [Header("Spawn position (Team 1)")]
-        public GameObject playerSpawnPoint1;
-        public GameObject playerSpawnPoint2;
-        public GameObject playerSpawnPoint3;
-
+        [SerializeField] private GameObject team1SpawnPoint;
 
         [Header("Spawn position (Team 2)")]
         [Space(15)]
-        public GameObject playerSpawnPoint4;
-        public GameObject playerSpawnPoint5;
-        public GameObject playerSpawnPoint6;
+        [SerializeField] private GameObject team2SpawnPoint;
+        
+        #region Properties
 
-        [Space(15)]
-        //the time we will use
-        public float SecondsTimer = 0;
-        public float MinutesTimer = 0;
-        private TimeSpan timePlaying;
+        public GameObject P_playerSpawnPoint
+        {
+            get{return playerSpawnPoint;}
+            set{playerSpawnPoint = value;}
+        }
 
-        //TEMPORARY
-        //[SyncVar] private float playerTeamID_TEMP = 0;
+        public int P_playerTeamID
+        {
+            get{return playerTeamID;}
+            set{playerTeamID = value;}
+        }
+
+        #endregion
 
         // dynamically store and call functions and dispatched on the player object spawned by the client
         // note that client prefab/object and player prefab/object are 2 different things but are connected
         public static event Action<GameObject> OnClientPlayerSpawned;
 
+        private void OnTeamUpdate(int oldTeamID, int newTeamID)
+        {
+            if(newTeamID == 1)
+                P_playerSpawnPoint = team1SpawnPoint;
+            else if(newTeamID == 2)
+                P_playerSpawnPoint = team2SpawnPoint;
+        }
+
         void Awake()
         {
             _cn = GetComponent<ClientName>();
         }
+
         private void Start()
         {
-            currentPlayerNumber = 0;
+            //currentPlayerNumber = 0;
         }
 
         // This function will be called when player object is spawned for a client, make sure to pass the player obj
@@ -116,10 +129,10 @@ namespace SheepDoom
             {
                 spawn = Instantiate(playerPrefab.gameObject);
             }
-            else if (playerType == "select")
-            {
-                spawn = Instantiate(playerSelectPrefab.gameObject);
-            }
+            //else if (playerType == "select")
+            //{
+                //spawn = Instantiate(playerSelectPrefab.gameObject);
+            //}
             else if (playerType == "game")
             {
                 NetworkIdentity hero = null;
@@ -158,10 +171,12 @@ namespace SheepDoom
 
                     // go to spawn point   
                     if(player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                        spawn.transform.SetPositionAndRotation(playerSpawnPoint1.transform.position, Quaternion.identity);
+                        P_playerSpawnPoint = team1SpawnPoint;
                     else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-                        spawn.transform.SetPositionAndRotation(playerSpawnPoint4.transform.position, Quaternion.identity);
+                        P_playerSpawnPoint = team2SpawnPoint;
                     
+                    spawn.transform.SetPositionAndRotation(P_playerSpawnPoint.transform.position, Quaternion.identity);
+
                     //MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveObjToNewScene(MatchMaker.instance.GetMatches()[matchID].GetScenes()[2], spawn);
                 }
             }
@@ -219,6 +234,19 @@ namespace SheepDoom
 }
 
 #region archive
+//public GameObject playerSpawnPoint2;
+//public GameObject playerSpawnPoint3;
+//public GameObject playerSpawnPoint5;
+//public GameObject playerSpawnPoint6;
+
+//[Space(15)]
+//the time we will use
+//public float SecondsTimer = 0;
+//public float MinutesTimer = 0;
+//private TimeSpan timePlaying;
+
+//TEMPORARY
+//[SyncVar] private float playerTeamID_TEMP = 0;
 /*foreach(var player in MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetPlayerObjList())
 {
     if(player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
