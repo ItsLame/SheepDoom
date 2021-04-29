@@ -91,10 +91,14 @@ namespace SheepDoom
             TowerCapturesText.text = TowerCaptures.ToString();
             
             int playerTeamID = PlayerObj.instance.GetTeamIndex();
+
+            //temporary solution, since (i think) have delay, immediately set locally first
+            setTeamIndex(playerTeamID);
             CmdSetTeamIndex(playerTeamID);
-            if (playerTeamID == 1)
+
+            if (getTeamIndex() == 1)
                 FindMe.instance.P_BlueShop.GetComponent<Shop>().P_shopPlayer = gameObject;
-            else if (playerTeamID == 2)
+            else if (getTeamIndex() == 2)
                 FindMe.instance.P_RedShop.GetComponent<Shop>().P_shopPlayer = gameObject;
         }
 

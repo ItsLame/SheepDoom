@@ -1038,7 +1038,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 3
-  TeamIndex: 2
+  TeamIndex: 0
   PlayerKills: 0
   PlayerKillsText: {fileID: 0}
   PlayerDeaths: 0
@@ -1130,6 +1130,7 @@ MonoBehaviour:
   _ShopSpecialButton2: {fileID: 0}
   _ShopUltiButton1: {fileID: 0}
   _ShopUltiButton2: {fileID: 0}
+  _ShopX: {fileID: 0}
 --- !u!114 &4896812141411699882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1248,7 +1249,6 @@ MonoBehaviour:
   isChannelingComplete: 0
   channelTime: 5
   lastPos: {x: 0, y: 0, z: 0}
-  hasMoved: 0
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0
