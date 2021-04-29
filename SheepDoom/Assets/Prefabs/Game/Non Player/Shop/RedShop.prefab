@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7928973642880095623}
   - component: {fileID: 7928973642880095622}
   - component: {fileID: 7928973642880095621}
-  - component: {fileID: 7928973642880095620}
   - component: {fileID: 7928973642880095739}
+  - component: {fileID: 2396792437612704727}
   m_Layer: 0
   m_Name: RedShop
   m_TagString: Shop
@@ -95,34 +95,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7928973642880095620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7928973642880095737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd27a8d26b4cbdd499124444006133ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  Player: {fileID: 0}
-  PlayerGold: 0
-  SpecialCost: 5
-  UltiCost: 10
-  ShopMenuUI: {fileID: 0}
-  SpecialButton1: {fileID: 0}
-  SpecialButton2: {fileID: 0}
-  UltiButton1: {fileID: 0}
-  UltiButton2: {fileID: 0}
-  GameUI: {fileID: 0}
-  PlayerSpecialButton: {fileID: 0}
-  PlayerUltiButton: {fileID: 0}
-  hasPurchasedSpecial: 0
-  hasPurchasedUlti: 0
 --- !u!114 &7928973642880095739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,3 +111,29 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
+--- !u!114 &2396792437612704727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7928973642880095737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60bdbb10bc286e64db12cfd9fd1fc9c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopMenuUI: {fileID: 0}
+  ShopPlayer: {fileID: 0}
+  PlayerGold: 0
+  ShopTeamIndex: 2
+  SpecialCost: 5
+  UltiCost: 10
+  ShopMenuUI: {fileID: 0}
+  SpecialButton1: {fileID: 0}
+  SpecialButton2: {fileID: 0}
+  UltiButton1: {fileID: 0}
+  UltiButton2: {fileID: 0}
+  GameUI: {fileID: 0}
+  PlayerSpecialButton: {fileID: 0}
+  PlayerUltiButton: {fileID: 0}

@@ -27,18 +27,6 @@ namespace SheepDoom
 
         private GameObject shop;
 
-        private void Start()
-        {
-            if(isClient)
-                CmdSetTeamIndex(PlayerObj.instance.GetTeamIndex());
-        }
-
-        [Command]
-        private void CmdSetTeamIndex(int _teamIndex)
-        {
-            setTeamIndex(_teamIndex);
-        }
-
         //accessor method for team index
         public float getTeamIndex()
         {
@@ -86,6 +74,12 @@ namespace SheepDoom
                 PlayerDeathsText.text = newValue.ToString();
         }
 
+        [Command]
+        private void CmdSetTeamIndex(int _teamIndex)
+        {
+            setTeamIndex(_teamIndex);
+        }
+
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
@@ -95,12 +89,13 @@ namespace SheepDoom
             PlayerKillsText.text = PlayerKills.ToString();
             PlayerDeathsText.text = PlayerDeaths.ToString();
             TowerCapturesText.text = TowerCaptures.ToString();
-
-            if (gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1)
-                shop = FindMe.instance.P_BlueShop;
-            else if (gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2)
-                shop = FindMe.instance.P_RedShop;
-            shop.GetComponent<Shop>().SetPlayer(gameObject);
+            
+            int playerTeamID = PlayerObj.instance.GetTeamIndex();
+            CmdSetTeamIndex(playerTeamID);
+            if (playerTeamID == 1)
+                FindMe.instance.P_BlueShop.GetComponent<Shop>().P_shopPlayer = gameObject;
+            else if (playerTeamID == 2)
+                FindMe.instance.P_RedShop.GetComponent<Shop>().P_shopPlayer = gameObject;
         }
 
         public override void OnStartServer()

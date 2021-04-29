@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 394620152954680745}
   - component: {fileID: 394620152954680744}
   - component: {fileID: 394620152954680747}
-  - component: {fileID: 394620152954680750}
+  - component: {fileID: 9144286216737418159}
   - component: {fileID: 3316887811581365637}
   m_Layer: 0
   m_Name: BlueShop
@@ -95,7 +95,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2438034, y: 1.1450181, z: 1.2818404}
   m_Center: {x: 0.046049513, y: 0.072509065, z: 0.14092039}
---- !u!114 &394620152954680750
+--- !u!114 &9144286216737418159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,13 +104,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 394620152954680725}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd27a8d26b4cbdd499124444006133ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 705093bb3f0f57e45af419a118acf82a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  Player: {fileID: 0}
+  shopMenuUI: {fileID: 0}
+  ShopPlayer: {fileID: 0}
   PlayerGold: 0
+  ShopTeamIndex: 1
   SpecialCost: 5
   UltiCost: 10
   ShopMenuUI: {fileID: 0}
@@ -121,8 +121,6 @@ MonoBehaviour:
   GameUI: {fileID: 0}
   PlayerSpecialButton: {fileID: 0}
   PlayerUltiButton: {fileID: 0}
-  hasPurchasedSpecial: 0
-  hasPurchasedUlti: 0
 --- !u!114 &3316887811581365637
 MonoBehaviour:
   m_ObjectHideFlags: 0
