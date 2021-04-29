@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        private float secondsTimer = 60;
+        private float secondsTimer = 30;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
@@ -43,7 +43,7 @@ namespace SheepDoom
         //room matchID
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
-        [SyncVar] private string timePlayingStr = "60";
+        [SyncVar] private string timePlayingStr = "30";
 
         // so that don't share the same random result (but share the same system.random)
         private static readonly System.Random rand = new System.Random();
