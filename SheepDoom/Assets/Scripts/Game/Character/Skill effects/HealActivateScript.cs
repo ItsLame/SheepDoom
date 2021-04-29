@@ -12,6 +12,8 @@ namespace SheepDoom
         private bool healActivated = false;
         private float teamID;
 
+        [Header("If damages enemy over time, tick")]
+        [SerializeField] private bool damagesEnemy;
         public void setTeamID(float ID)
         {
             teamID = ID;
@@ -35,13 +37,34 @@ namespace SheepDoom
                     Debug.Log("Player " + other.gameObject.name + " found");
                     Debug.Log("Heal Activated");
 
+                    //heal ally in range
                     if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == teamID)
                     {
                         Debug.Log("Healing Player " + other.gameObject.name + " with teamID of " + teamID);
                         other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(healAmount);
                     }
 
-//                    healActivated = false;
+                    if (damagesEnemy)
+                    {
+                        //damage enemy in range
+                        if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() != teamID)
+                        {
+                            Debug.Log("Damaging player " + other.gameObject.name + " with teamID of " + teamID);
+
+                            // increase killer's kill count if target is killed
+                            // non lethal dmg
+                            if (other.gameObject.GetComponent<PlayerHealth>().getHealth() < 5) return;
+                            other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-healAmount);
+
+
+
+                        }
+                    }
+ 
+
+
+
+                    //                    healActivated = false;
                 }
 
 

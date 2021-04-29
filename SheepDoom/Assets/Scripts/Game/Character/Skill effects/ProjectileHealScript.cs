@@ -26,6 +26,7 @@ namespace SheepDoom
         [Header("Damage/Healing Properties")]
         [Space(15)]
         public bool healsAllies;
+        public bool healsSelf;
         public int damage;
         public bool destroyOnContact; //if projectile ill stop on first contact
         [SerializeField]
@@ -70,8 +71,16 @@ namespace SheepDoom
             //if hit player
             if (col.gameObject.CompareTag("Player"))
             {
+                if (healsSelf)
+                {
+                    if (col.gameObject == owner)
+                    {
+                        col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(damage);
+                    }
+                }
+
                 //dont hurt the owner of the projectile, dont increase score if hitting dead player
-                if (!col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
+                if (col.gameObject != owner && !col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     //if heals allies, heals first ally on touch
                     if (healsAllies)
@@ -107,7 +116,7 @@ namespace SheepDoom
 
 
                     if (destroyOnContact)
-                    Invoke("Destroyy", durationBeforeDestroy);
+                        Invoke("Destroyy", durationBeforeDestroy);
                 }
             }
             else if (col.gameObject.CompareTag("Tower"))
@@ -221,7 +230,7 @@ namespace SheepDoom
         }
 
         [Server]
-        private void Destroyy()
+        public void Destroyy()
         {
             NetworkServer.Destroy(gameObject);
         }

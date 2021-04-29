@@ -22,6 +22,15 @@ namespace SheepDoom
         private float castTime;
         private float castTimeInGame = 0;
 
+        [Header("Channeling timer calculations")]
+        [SerializeField] private bool isChanneling;
+        [SerializeField] private bool isChannelingComplete;
+        [SerializeField] private float channelTime;
+        private float channelTimeInGame = 0;
+
+        [Header("Transform checks for movement for casting & Channeling")]
+        [SerializeField] private Vector3 lastPos;
+
 
         [Client]
         public void normalAtk()
@@ -33,12 +42,12 @@ namespace SheepDoom
         void CmdNormalAtk()
         {
             //firedProjectile = Instantiate(normalAtkProjectile, spawnPoint.position, spawnPoint.rotation);
-            
+
             firedProjectile = Instantiate(normalAtkProjectile, transform);
             firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
             firedProjectile.transform.SetParent(null, false);
             firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-            
+
             NetworkServer.Spawn(firedProjectile, connectionToClient);
         }
 
@@ -57,11 +66,11 @@ namespace SheepDoom
             else if (_isAltSpecial)
                 //firedProjectile = Instantiate(altSpecial, spawnPoint.position, spawnPoint.rotation);
                 firedProjectile = Instantiate(altSpecial, transform);
-            
+
             firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
             firedProjectile.transform.SetParent(null, false);
             firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-            
+
             NetworkServer.Spawn(firedProjectile, connectionToClient);
         }
 
@@ -71,6 +80,23 @@ namespace SheepDoom
             isCasting = true;
             Debug.Log("Start Casting");
             castTimeInGame = castTime;
+
+            //set transform
+            lastPos = transform.position;
+        }
+
+        [Client]
+        void startChanneling()
+        {
+            isChanneling = true;
+            CmdUltiAtk(true);
+            Debug.Log("Start Channeling");
+
+            //set transform
+            lastPos = transform.position;
+
+            //set timer
+            channelTimeInGame = channelTime;
         }
 
         [Client]
@@ -90,7 +116,8 @@ namespace SheepDoom
                 }*/
             }
             else if (_isAltUlti)
-                CmdUltiAtk(_isAltUlti);
+                startChanneling();
+
 
         }
 
@@ -99,68 +126,54 @@ namespace SheepDoom
         {
             Debug.Log("CmdUltiAtk-ing");
             if (!_isAltUlti)
+            {
                 firedProjectile = Instantiate(normalUlti, transform);
-            else if (_isAltUlti)
-                firedProjectile = Instantiate(altUlti, transform);
-            
-            firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
-            firedProjectile.transform.SetParent(null, false);
-            firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-            
-            NetworkServer.Spawn(firedProjectile, connectionToClient);
-
-        }
-
-        /*[Command]
-        void CmdUltiAtk(bool _isAltUlti)
-        {
-            Debug.Log("Ulti pressed");
-            // Has a casting time before its instantiated
-            if (!_isAltUlti)
-            {
-                startCasting();
-
-                if (isCastingComplete)
-                {
-                    fireCastedSkill("ulti");
-                    isCastingComplete = false;
-                }
-
-            }
-
-            else if (_isAltUlti)
-            {
-                firedProjectile = Instantiate(altUlti, spawnPoint.position, spawnPoint.rotation);
                 firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
+                firedProjectile.transform.SetParent(null, false);
+                firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
             }
 
+            else if (_isAltUlti)
+            {
+                firedProjectile = Instantiate(altUlti, transform);
+                firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
+                firedProjectile.transform.SetParent(null, false);
+                firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
 
-        }*/
+                //setting channeling conditions (if owner moves, destroy)
+                firedProjectile.GetComponent<ChannelingScript>().setOwner(this.gameObject);
 
-        //        [Command]
-        /* void fireCastedSkill(string skillID)
-         {
-             if (skillID == "ulti1")
-             {
-                 firedProjectile = Instantiate(normalUlti, spawnPoint.position, spawnPoint.rotation);
-                 firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
-                 NetworkServer.Spawn(firedProjectile, connectionToClient);
-                 isCastingComplete = false;
-             }
+                //setting healing over time conditions (heal allies, damage enemies)
+                firedProjectile.GetComponent<HealActivateScript>().setTeamID(this.gameObject.GetComponent<PlayerAdmin>().getTeamIndex());
+                firedProjectile.GetComponent<HealActivateScript>().activateHeal();
 
-         }*/
+
+                NetworkServer.Spawn(firedProjectile, connectionToClient);
+            }
+
+        }
+
 
         private void Update()
         {
             if (isClient && hasAuthority)
             {
-                //start the castimg
+                // ======================================== for casting timer calculations ================================== 
+                //start the casting 
                 if (isCasting)
                 {
                     Debug.Log("Casting......");
                     castTimeInGame -= Time.deltaTime;
                     Debug.Log("Cast time left: " + castTimeInGame);
+
+                    //check for movement
+                    if (lastPos != transform.position)
+                    {
+                        Debug.Log("Player Moved, stopping incantation");
+                        isCasting = false;
+                    }
 
                 }
 
@@ -172,7 +185,7 @@ namespace SheepDoom
                     isCasting = false;
                 }
 
-                
+
                 if (isCastingComplete)
                 {
                     Debug.Log("isCastingComplete 2: " + isCastingComplete);
@@ -193,12 +206,50 @@ namespace SheepDoom
                     Debug.Log("Casting failed");
                     isCasting = false;
                 }
+
+                // ================================ calculation for channeling timers ===================================
+                if (isChanneling)
+                {
+                    Debug.Log("Channeling ult 2...");
+                    channelTimeInGame -= Time.deltaTime;
+                    Debug.Log("Channeling time left: " + channelTimeInGame);
+
+                    //check for movement
+                    if (lastPos != transform.position)
+                    {
+                        Debug.Log("Player Moved, stopping channeling");
+                        isChanneling = false;
+                    }
+                }
+
+                //end channeling when time is up
+                if (isChanneling && channelTimeInGame <= 0)
+                {
+ //                   Destroyy(firedProjectile);
+                    isChanneling = false;
+                }
+
+                //if interrupted by cc (stun)
+                if (isChanneling && gameObject.GetComponent<CharacterMovement>().isStopped)
+                {
+                    Debug.Log("Channeling stopped");
+                    isChanneling = false;
+                }
+
+                //if interrupted by cc (sleep)
+                if (isChanneling && gameObject.GetComponent<CharacterMovement>().isSleeped)
+                {
+                    Debug.Log("Channeling stopped");
+                    isChanneling = false;
+                }
+
             }
 
 
 
             //    }
         }
+
     }
 
 }

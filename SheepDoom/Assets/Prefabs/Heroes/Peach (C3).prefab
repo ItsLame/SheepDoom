@@ -1239,12 +1239,16 @@ MonoBehaviour:
     type: 3}
   normalUlti: {fileID: 5276780869706628407, guid: f31c77e8d542ab447b8679df5650216a,
     type: 3}
-  altUlti: {fileID: 5276780869706628407, guid: 3d76c7011da12274a988bc2ac12cedb3, type: 3}
+  altUlti: {fileID: 5276780869706628407, guid: e04d5f08cb7b67a45a7a34c294e32c4d, type: 3}
   spawnPoint: {fileID: 5660135970150263288}
   isCasting: 0
   isCastingComplete: 0
   castTime: 1.5
-  castTimeInGame: 0
+  isChanneling: 0
+  isChannelingComplete: 0
+  channelTime: 5
+  lastPos: {x: 0, y: 0, z: 0}
+  hasMoved: 0
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0

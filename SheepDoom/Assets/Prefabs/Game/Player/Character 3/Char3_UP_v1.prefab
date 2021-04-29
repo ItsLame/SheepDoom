@@ -186,6 +186,7 @@ MonoBehaviour:
   isMovingLeft: 0
   isMovingRight: 0
   healsAllies: 1
+  healsSelf: 1
   damage: 75
   destroyOnContact: 1
   m_Rigidbody: {fileID: 0}
