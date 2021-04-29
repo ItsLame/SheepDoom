@@ -422,13 +422,16 @@ namespace SheepDoom
 
         public void ForceStart()
         {
-            CmdForceStart(PlayerObj.instance.gameObject, PlayerObj.instance.GetMatchID());
+            //CmdForceStart(PlayerObj.instance.gameObject, PlayerObj.instance.GetMatchID());
+            CmdForceStart();
         }
 
         [Command(ignoreAuthority = true)]
-        private void CmdForceStart(GameObject _player, string _matchID)
+        //private void CmdForceStart(GameObject _player, string _matchID)
+        private void CmdForceStart()
         {
-            _player.GetComponent<StartGame>().StartNewScene(_matchID, false, true);
+            RequestGameStart();
+            //_player.GetComponent<StartGame>().StartNewScene(_matchID, false, true);
         }
 
         #endregion
