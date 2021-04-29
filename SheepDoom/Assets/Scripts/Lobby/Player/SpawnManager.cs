@@ -17,8 +17,6 @@ namespace SheepDoom
 
         [Header("Setting up player")]
         [SerializeField] private NetworkIdentity playerPrefab = null;
-        //[SerializeField] private NetworkIdentity playerSelectPrefab = null;
-        //[SerializeField] private NetworkIdentity playerGameplayPrefab = null;
 
         [Space(15)]
         [Header("Characters")]

@@ -14,6 +14,16 @@ namespace SheepDoom
     public class SpawnCharacters : NetworkBehaviour
     {
         //[SerializeField] private GameObject MinionTest;
+        private bool playersInScene = false;
+        [SerializeField]
+        private Transform team1SpawnPoint, team2SpawnPoint;
+        
+        [Server]
+        public void StartGameScene()
+        {
+            playersInScene = true;
+        }
+
         /*private void Start()
         {
             Debug.Log("SPAWNING PLAYER CHARACTER");
