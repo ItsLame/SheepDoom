@@ -41,6 +41,7 @@ namespace SheepDoom
         [Space(15)]
         public float m_Speed; // default speed of projectile
         public float m_Lifespan = 3f; // Lifespan per second
+        [SerializeField] private float durationBeforeDestroy;
         private float m_StartTime = 0f;
         [Space(10)]
         public bool isAccelerating = false;
@@ -70,7 +71,7 @@ namespace SheepDoom
             if (col.gameObject.CompareTag("Player"))
             {
                 //dont hurt the owner of the projectile, dont increase score if hitting dead player
-                if (col.gameObject != owner && !col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
+                if (!col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     //if heals allies, heals first ally on touch
                     if (healsAllies)
@@ -84,6 +85,8 @@ namespace SheepDoom
                     //normal damaging
                     else
                     {
+                        if (col.gameObject != owner) return;
+
                         //reduce HP of hit target
                         col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
 
@@ -104,7 +107,7 @@ namespace SheepDoom
 
 
                     if (destroyOnContact)
-                    Invoke("Destroyy", 0.2f);
+                    Invoke("Destroyy", durationBeforeDestroy);
                 }
             }
             else if (col.gameObject.CompareTag("Tower"))
@@ -132,7 +135,7 @@ namespace SheepDoom
                 }
 
                 if (destroyOnContact)
-                    Invoke("Destroyy", 0.2f);
+                    Invoke("Destroyy", durationBeforeDestroy);
             }
             else if (col.gameObject.CompareTag("BaseMinion"))
             {
@@ -152,7 +155,7 @@ namespace SheepDoom
                         }
 
                         if (destroyOnContact)
-                            Invoke("Destroyy", 0.2f);
+                            Invoke("Destroyy", durationBeforeDestroy);
                     }
                 }
                 else if (ownerTeamID == 1)
@@ -172,7 +175,7 @@ namespace SheepDoom
                         }
 
                         if (destroyOnContact)
-                            Invoke("Destroyy", 0.2f);
+                            Invoke("Destroyy", durationBeforeDestroy);
                     }
                 }
             }
@@ -188,13 +191,13 @@ namespace SheepDoom
                 }
 
                 if (destroyOnContact)
-                    Invoke("Destroyy", 0.2f);
+                    Invoke("Destroyy", durationBeforeDestroy);
             }
             else if (col.gameObject.CompareTag("Other"))
             {
                 Debug.Log(gameObject.name + "touched other" + col.gameObject.name); ;
                 if (destroyOnContact)
-                    Invoke("Destroyy", 0.2f);
+                    Invoke("Destroyy", durationBeforeDestroy);
             }
             /*
             if (col.gameObject.layer == 9)

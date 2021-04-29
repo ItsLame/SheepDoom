@@ -20,10 +20,10 @@ namespace SheepDoom
 
         [Header("Debuffs check")]
         [Space(15)]
-        public bool isSlowed;
-        public bool isStopped;
+        [SyncVar] public bool isSlowed;
+        [SyncVar] public bool isStopped;
         [SyncVar] public bool isSleeped;
-        public bool isSpeedUp;
+        [SyncVar] public bool isSpeedUp;
 
         public override void OnStartClient()
         {

@@ -15,6 +15,13 @@ namespace SheepDoom
         [SerializeField]
         private Transform spawnPoint;
 
+        [Header("Cast timer calculations")]
+        [SerializeField]
+        private bool isCasting, isCastingComplete;
+        [SerializeField]
+        private float castTime;
+        private float castTimeInGame = 0;
+
 
         [Client]
         public void normalAtk()
@@ -39,29 +46,144 @@ namespace SheepDoom
         [Command]
         void CmdSpecialAtk(bool _isAltSpecial)
         {
-            if(!_isAltSpecial)
+            if (!_isAltSpecial)
                 firedProjectile = Instantiate(normalSpecial, spawnPoint.position, spawnPoint.rotation);
-            else if(_isAltSpecial)
+            else if (_isAltSpecial)
                 firedProjectile = Instantiate(altSpecial, spawnPoint.position, spawnPoint.rotation);
             firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
             NetworkServer.Spawn(firedProjectile, connectionToClient);
         }
 
         [Client]
+        void startCasting()
+        {
+            isCasting = true;
+            Debug.Log("Start Casting");
+            castTimeInGame = castTime;
+        }
+
+        [Client]
         public void UltiAtk(bool _isAltUlti)
         {
-            CmdUltiAtk(_isAltUlti);
+            if (!_isAltUlti)
+            {
+                startCasting();
+                Debug.Log("isCastingComplete 1: " + isCastingComplete);
+
+                /*
+                if (isCastingComplete)
+                {
+                    Debug.Log("isCastingComplete 2: " + isCastingComplete);
+                    CmdUltiAtk(_isAltUlti);
+                    isCastingComplete = false;
+                }*/
+            }
+            else if (_isAltUlti)
+                CmdUltiAtk(_isAltUlti);
+
         }
 
         [Command]
         void CmdUltiAtk(bool _isAltUlti)
         {
-            if(!_isAltUlti)
+            Debug.Log("CmdUltiAtk-ing");
+            if (!_isAltUlti)
                 firedProjectile = Instantiate(normalUlti, spawnPoint.position, spawnPoint.rotation);
-            else if(_isAltUlti)
-                firedProjectile = Instantiate(altUlti, spawnPoint.position, spawnPoint.rotation);
-            firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+            else if (_isAltUlti)
+                firedProjectile = Instantiate(altUlti, spawnPoint.position, spawnPoint.rotation); ;
+            firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
             NetworkServer.Spawn(firedProjectile, connectionToClient);
+
+        }
+
+        /*[Command]
+        void CmdUltiAtk(bool _isAltUlti)
+        {
+            Debug.Log("Ulti pressed");
+            // Has a casting time before its instantiated
+            if (!_isAltUlti)
+            {
+                startCasting();
+
+                if (isCastingComplete)
+                {
+                    fireCastedSkill("ulti");
+                    isCastingComplete = false;
+                }
+
+            }
+
+            else if (_isAltUlti)
+            {
+                firedProjectile = Instantiate(altUlti, spawnPoint.position, spawnPoint.rotation);
+                firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
+                NetworkServer.Spawn(firedProjectile, connectionToClient);
+            }
+
+
+        }*/
+
+        //        [Command]
+        /* void fireCastedSkill(string skillID)
+         {
+             if (skillID == "ulti1")
+             {
+                 firedProjectile = Instantiate(normalUlti, spawnPoint.position, spawnPoint.rotation);
+                 firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
+                 NetworkServer.Spawn(firedProjectile, connectionToClient);
+                 isCastingComplete = false;
+             }
+
+         }*/
+
+        private void Update()
+        {
+            if (isClient && hasAuthority)
+            {
+                //start the castimg
+                if (isCasting)
+                {
+                    Debug.Log("Casting......");
+                    castTimeInGame -= Time.deltaTime;
+                    Debug.Log("Cast time left: " + castTimeInGame);
+
+                }
+
+                //when casting is complete
+                if (isCasting && castTimeInGame <= 0)
+                {
+                    Debug.Log("Casting complete");
+                    isCastingComplete = true;
+                    isCasting = false;
+                }
+
+                
+                if (isCastingComplete)
+                {
+                    Debug.Log("isCastingComplete 2: " + isCastingComplete);
+                    CmdUltiAtk(false);
+                    isCastingComplete = false;
+                }
+
+                //if interrupted by cc (stun)
+                if (isCasting && gameObject.GetComponent<CharacterMovement>().isStopped)
+                {
+                    Debug.Log("Casting failed");
+                    isCasting = false;
+                }
+
+                //if interrupted by cc (sleep)
+                if (isCasting && gameObject.GetComponent<CharacterMovement>().isSleeped)
+                {
+                    Debug.Log("Casting failed");
+                    isCasting = false;
+                }
+            }
+
+
+
+            //    }
         }
     }
+
 }
