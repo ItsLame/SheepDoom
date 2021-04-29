@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        private float secondsTimer = 60;
+        private float secondsTimer = 10;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
@@ -186,6 +186,8 @@ namespace SheepDoom
         [Server] // based on timer
         private void RequestGameStart()
         {
+            GameObject playerHost = null;
+
             if(MatchMaker.instance.GetMatches()[P_matchID].GetLockInCount() != MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count) // check whether all locked in
             {
                 foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
@@ -203,12 +205,34 @@ namespace SheepDoom
                     }
                     else if(!_player.GetComponent<PlayerObj>().GetIsLockedIn())
                         AutoLockIn(_player);
+
+                    if(_player.GetComponent<PlayerObj>().GetIsHost())
+                        playerHost = _player;
+                    else
+                        continue;
                 }
                 
                 // start game
+                playerHost.GetComponent<StartGame>().StartNewScene(playerHost.GetComponent<PlayerObj>().GetMatchID(), false, true);
             }
             //else
                 // start game smoothly
+            else
+            {
+                foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
+                {
+                    if(_player.GetComponent<PlayerObj>().GetIsHost())
+                    {
+                        playerHost = _player;
+                        break;
+                    }
+                    else
+                        continue;
+                }
+
+                // start game
+                playerHost.GetComponent<StartGame>().StartNewScene(playerHost.GetComponent<PlayerObj>().GetMatchID(), false, true);
+            }   
         }
 
         private void AutoLockIn(GameObject _player)
