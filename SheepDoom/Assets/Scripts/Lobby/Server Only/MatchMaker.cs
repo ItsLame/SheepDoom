@@ -316,7 +316,7 @@ namespace SheepDoom
                     matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetScenes()[2]);
                     foreach(GameObject player in matches[_matchID].GetPlayerObjList())
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[2], _matchID, false, true);
-                    // <<insert here>> start function of game scene (if there's any)
+                    
                 }
             }
         }

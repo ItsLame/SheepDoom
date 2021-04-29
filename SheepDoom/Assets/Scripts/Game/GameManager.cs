@@ -11,17 +11,39 @@ using UnityEngine.SceneManagement;
 
 namespace SheepDoom
 {
-    public class SpawnCharacters : NetworkBehaviour
+    public class GameManager : NetworkBehaviour
     {
         //[SerializeField] private GameObject MinionTest;
         private bool playersInScene = false;
+        private bool playersLoaded = false;
+        [SerializeField]
+        private string matchID;
         [SerializeField]
         private Transform team1SpawnPoint, team2SpawnPoint;
         
-        [Server]
-        public void StartGameScene()
+        public bool GetPlayerSpawnStatus()
         {
+            return playersInScene;
+        }
+
+        [Server]
+        public void StartGameScene(string _matchID)
+        {
+            matchID = _matchID;
             playersInScene = true;
+        }
+        
+        void Update()
+        {
+            if(isServer && playersInScene)
+            {
+                 foreach(GameObject _player in MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList())
+                 {
+                    //spawn player
+                 }
+                playersLoaded = true;
+                playersInScene = false;
+            }
         }
 
         /*private void Start()
