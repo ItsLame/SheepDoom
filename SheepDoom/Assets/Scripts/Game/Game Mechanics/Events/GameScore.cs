@@ -48,7 +48,9 @@ namespace SheepDoom
         public Image RedPlayerImage2UI;
         public Image RedPlayerImage3UI;
         public string TopPlayer;
-        public int TempMostKills;
+        public double TempHighestScore;
+        public int TempTopPlayerNoOfTower;
+        public Sprite CharacterImage;
         public Image BP1StarImageUI;
         public Image BP2StarImageUI;
         public Image BP3StarImageUI;
@@ -145,6 +147,25 @@ namespace SheepDoom
         // shows scoreboard etc when game ends, will add timer counter condition in the future
         public void GameEnd(int TeamID)
         {
+            //Stop scripts from updating KDA and team score
+            /*
+            Method 1
+            GetComponent(PlayerObj).enabled = false;
+
+            Method 2 - https://answers.unity.com/questions/930234/stop-script-immediately-from-another-script.html
+            public bool IsEnabled = true;
+            put at function
+            if(!IsEnabled) return; //prevents anything happening after this line
+            and set IsEnabled = false; here GameEnd
+            set IsEnabled = true; when from lobby load into game/gamestart?
+
+            Scripts to stop:
+            - player.GetComponent<PlayerAdmin>().PlayerKills;
+            - player.GetComponent<PlayerAdmin>().PlayerDeaths;
+            - player.GetComponent<PlayerAdmin>().TowerCaptures;
+            - ScoreUp()
+            */
+
             //Scoreboard display Victory/Defeat for blue team
             GameObject blueTeam = FindMe.instance.P_BlueWinLose;
             blueDisplay = blueTeam.GetComponent<Text>();
@@ -224,13 +245,16 @@ namespace SheepDoom
             RP3StarImageUI = RP3StarImage.GetComponent<Image>();
 
             //Character Image
-            Sprite CharacterImage = Resources.Load<Sprite>("circleface");
-            Debug.Log("Scoreboard: CharacterImage: " + CharacterImage);
+            Sprite Character1 = Resources.Load<Sprite>("Mario");
+            Sprite Character2 = Resources.Load<Sprite>("Luigi");
+            Sprite Character3 = Resources.Load<Sprite>("Peach");
+            Sprite Character4 = Resources.Load<Sprite>("Yoshi");
+            Sprite Character5 = Resources.Load<Sprite>("Bowser");
+            Sprite Character6 = Resources.Load<Sprite>("circleface");
 
             //Get all players' name and team id
             if (players.Length == 0)
             {
-                Debug.Log("Scoreboard: FindGameObjectsWithTag");
                 players = GameObject.FindGameObjectsWithTag("Player");
             }
 
@@ -239,95 +263,109 @@ namespace SheepDoom
                 Debug.Log("Scoreboard: players.Length:" + players.Length);
                 for (int i = 0; i < players.Length; i++)
                 {
-                    //Get current player name and team
+                    //======================= GET CURRENT PLAYER INFORMATION ========================
                     string name = player.GetComponent<PlayerObj>().GetPlayerName();
+                    int charId = (int)player.GetComponent<PlayerAdmin>().getCharID();
                     int team = (int)player.GetComponent<PlayerAdmin>().getTeamIndex();
                     int kills = (int)player.GetComponent<PlayerAdmin>().PlayerKills;
-                    if (TempMostKills < kills)
+                    int deaths = (int)player.GetComponent<PlayerAdmin>().PlayerDeaths;
+                    int towerCap = (int)player.GetComponent<PlayerAdmin>().TowerCaptures;
+
+                    //======================= CALCULATE PLAYER SCORE (STAR PLAYER) ========================
+                    double currentPlayerScore = (kills - deaths) + (towerCap * 1.5);
+                    if (TempHighestScore < currentPlayerScore)
                     {
-                        TempMostKills = kills;
+                        TempHighestScore = currentPlayerScore;
+                        TempTopPlayerNoOfTower = towerCap;
                         TopPlayer = name;
                     }
+                    else if (TempHighestScore == currentPlayerScore) //if tie score
+                    {
+                        //check who capture more towers
+                        if (TempTopPlayerNoOfTower < towerCap)
+                        {
+                            TempHighestScore = currentPlayerScore;
+                            TempTopPlayerNoOfTower = towerCap;
+                            TopPlayer = name;
+                        }
+                    }
 
+                    //======================= GET CURRENT PLAYER'S CHARACTER IMAGE ========================
+                    if (charId == 1)
+                        CharacterImage = Character1;
+                    if (charId == 2)
+                        CharacterImage = Character2;
+                    if (charId == 3)
+                        CharacterImage = Character3;
+                    if (charId == 4)
+                        CharacterImage = Character4;
+                    if (charId == 5)
+                        CharacterImage = Character5;
+                    if (charId == 6)
+                        CharacterImage = Character6;
+
+                    //======================= DISPLAY CURRENT PLAYER INFORMATION ========================
                     if (team == 1) //If current player is Blue Team
                     {
                         //Put name & image into UI 
-                        if (BluePlayerNameText1.text != null)
+                        if (string.IsNullOrEmpty(BluePlayerNameText1.text))
                         {
                             BluePlayerNameText1.text = name;
                             BluePlayerImage1UI.sprite = CharacterImage;
                             BluePlayerImage1UI.color = new Color32(255, 255, 255, 255);
-                            Debug.Log("Scoreboard: BluePlayerNameText1: " + name);
                         }
-                        else if (BluePlayerNameText2.text != null)
+                        else if (string.IsNullOrEmpty(BluePlayerNameText2.text))
                         {
                             BluePlayerNameText2.text = name;
                             BluePlayerImage2UI.sprite = CharacterImage;
                             BluePlayerImage2UI.color = new Color32(255, 255, 255, 255);
-                            Debug.Log("Scoreboard: BluePlayerNameText2: " + name);
                         }
-                        else if (BluePlayerNameText3.text != null)
+                        else if (string.IsNullOrEmpty(BluePlayerNameText3.text))
                         {
                             BluePlayerNameText3.text = name;
                             BluePlayerImage3UI.sprite = CharacterImage;
                             BluePlayerImage3UI.color = new Color32(255, 255, 255, 255);
-                            Debug.Log("Scoreboard: BluePlayerNameText3: " + name);
                         }
                     }
                     else if (team == 2) //If current player is Red Team
                     {
                         //Put name & image into UI 
-                        if (RedPlayerNameText1.text != null)
+                        if (string.IsNullOrEmpty(RedPlayerNameText1.text))
                         {
                             RedPlayerNameText1.text = name;
                             RedPlayerImage1UI.sprite = CharacterImage;
                             RedPlayerImage1UI.color = new Color32(255, 255, 255, 255);
-                            Debug.Log("Scoreboard: RedPlayerNameText1: " + name);
                         }
-                        else if (RedPlayerNameText2.text != null)
+                        else if (string.IsNullOrEmpty(RedPlayerNameText2.text))
                         {
                             RedPlayerNameText2.text = name;
                             RedPlayerImage2UI.sprite = CharacterImage;
                             RedPlayerImage2UI.color = new Color32(255, 255, 255, 255);
-                            Debug.Log("Scoreboard: RedPlayerNameText2: " + name);
                         }
-                        else if (RedPlayerNameText3.text != null)
+                        else if (string.IsNullOrEmpty(RedPlayerNameText3.text))
                         {
                             RedPlayerNameText3.text = name;
                             RedPlayerImage3UI.sprite = CharacterImage;
                             RedPlayerImage3UI.color = new Color32(255, 255, 255, 255);
-                            Debug.Log("Scoreboard: RedPlayerNameText3: " + name);
                         }
                     }
                 }
             }
-            //Make star player image show
+            //======================= DISPLAY STAR PLAYER ========================
             if (BluePlayerNameText1.text == TopPlayer)
-            {
                 BP1StarImageUI.color = new Color32(255, 255, 255, 255);
-            }
-            else if (BluePlayerNameText2.text == TopPlayer)
-            {
+            if (BluePlayerNameText2.text == TopPlayer)
                 BP2StarImageUI.color = new Color32(255, 255, 255, 255);
-            }
-            else if (BluePlayerNameText3.text == TopPlayer)
-            {
+            if (BluePlayerNameText3.text == TopPlayer)
                 BP3StarImageUI.color = new Color32(255, 255, 255, 255);
-            }
-            else if (RedPlayerNameText1.text == TopPlayer)
-            {
+            if (RedPlayerNameText1.text == TopPlayer)
                 RP1StarImageUI.color = new Color32(255, 255, 255, 255);
-            }
-            else if (RedPlayerNameText2.text == TopPlayer)
-            {
+            if (RedPlayerNameText2.text == TopPlayer)
                 RP2StarImageUI.color = new Color32(255, 255, 255, 255);
-            }
-            else if (RedPlayerNameText3.text == TopPlayer)
-            {
+            if (RedPlayerNameText3.text == TopPlayer)
                 RP3StarImageUI.color = new Color32(255, 255, 255, 255);
-            }
-           
 
+            //======================= DISPLAY SCOREBOARD AND SET TEAM'S WIN/LOSE ========================
             //if blue team wins
             if (TeamID == 1)
             {
