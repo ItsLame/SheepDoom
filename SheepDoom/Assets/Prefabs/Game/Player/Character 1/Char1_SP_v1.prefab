@@ -149,12 +149,12 @@ MonoBehaviour:
   accelMultiplier: 1.11
   hasSpeedLimit: 1
   speedLimit: 50
-  SlowDebuff: 0
+  SlowDebuff: 1
   slowRate: 0.5
   slowDebuffDuration: 2
   StopDebuff: 0
   stopDebuffDuration: 0
-  SleepDebuff: 1
+  SleepDebuff: 0
   sleepDebuffDuration: 5
 --- !u!114 &4309939885416895172
 MonoBehaviour:

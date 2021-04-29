@@ -103,8 +103,12 @@ namespace SheepDoom
         {
             if (!_isAltUlti)
             {
-                firedProjectile = Instantiate(normalUlti, spawnPoint.position + _distance, spawnPoint.rotation);
+                //firedProjectile = Instantiate(normalUlti, spawnPoint.position + _distance, spawnPoint.rotation);
+                firedProjectile = Instantiate(normalUlti, transform);
                 firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+                firedProjectile.transform.SetParent(null, false);
+                firedProjectile.transform.SetPositionAndRotation(spawnPoint.position + _distance, spawnPoint.rotation);
+                
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
             }
             else if (_isAltUlti)

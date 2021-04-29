@@ -1038,7 +1038,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 3
-  TeamIndex: 2
+  TeamIndex: 0
   PlayerKills: 0
   PlayerKillsText: {fileID: 0}
   PlayerDeaths: 0
@@ -1066,7 +1066,7 @@ MonoBehaviour:
   AlternateUlti: 0
   cooldown1: 1
   cooldown2: 3
-  cooldown3: 10
+  cooldown3: 3
   cooldown1Multiplier: 0
   cooldown1MultiplerTimer: 0
   animator: {fileID: 0}
@@ -1130,6 +1130,7 @@ MonoBehaviour:
   _ShopSpecialButton2: {fileID: 0}
   _ShopUltiButton1: {fileID: 0}
   _ShopUltiButton2: {fileID: 0}
+  _ShopX: {fileID: 0}
 --- !u!114 &4896812141411699882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1237,9 +1238,17 @@ MonoBehaviour:
     type: 3}
   altSpecial: {fileID: 5276780869706628407, guid: 8510bbcdbca796549a38d80cafb04016,
     type: 3}
-  normalUlti: {fileID: 0}
-  altUlti: {fileID: 0}
+  normalUlti: {fileID: 5276780869706628407, guid: f31c77e8d542ab447b8679df5650216a,
+    type: 3}
+  altUlti: {fileID: 5276780869706628407, guid: e04d5f08cb7b67a45a7a34c294e32c4d, type: 3}
   spawnPoint: {fileID: 5660135970150263288}
+  isCasting: 0
+  isCastingComplete: 0
+  castTime: 1.5
+  isChanneling: 0
+  isChannelingComplete: 0
+  channelTime: 5
+  lastPos: {x: 0, y: 0, z: 0}
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0

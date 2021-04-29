@@ -46,7 +46,10 @@ public class NeutralCreepSpawner : MonoBehaviour
     //spawn function
     public void spawnNeutral()
     {
-        Instantiate(NeutralUnitToSpawn, transform.position, transform.rotation);
+        //Instantiate(NeutralUnitToSpawn, transform.position, transform.rotation);
+        GameObject spawnNeut = Instantiate(NeutralUnitToSpawn, transform);
+        spawnNeut.transform.SetParent(null, false);
+        spawnNeut.transform.SetPositionAndRotation(transform.position, transform.rotation);
     }
 
     //notify that neutral is killed function

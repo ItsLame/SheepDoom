@@ -28,6 +28,7 @@ namespace SheepDoom
         [Header("--- Game UI ---")]
         [Space(5)]
         [SerializeField] private GameObject ShopUI;
+        [SerializeField] private GameObject ShopUI_X;
         [SerializeField] private GameObject GameEvent;
         [SerializeField] private GameObject PlayerGold;
         [SerializeField] private GameObject ShopGold;
@@ -328,7 +329,11 @@ namespace SheepDoom
             set { RP3Star = value; }
         }
 
-
+        public GameObject P_ShopUI_X
+        {
+            get { return ShopUI_X; }
+            set { ShopUI_X = value; }
+        }
 
         #endregion
 

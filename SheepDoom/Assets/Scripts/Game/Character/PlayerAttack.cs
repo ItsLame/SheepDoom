@@ -163,6 +163,14 @@ namespace SheepDoom
                     if(hasPurchasedUlti)
                         comp.UltiAtk(AlternateUlti);
                 }
+
+                else if (charID == 3)
+                {
+                    Character3 comp = GetComponent<Character3>();
+                    if (hasPurchasedUlti)
+                        comp.UltiAtk(AlternateUlti);
+                }
+
                 cooldown3_inGame = cooldown3;
             }
         }

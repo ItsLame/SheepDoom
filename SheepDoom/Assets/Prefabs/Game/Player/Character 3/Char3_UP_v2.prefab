@@ -13,12 +13,14 @@ GameObject:
   - component: {fileID: 8667719001022603764}
   - component: {fileID: 3806095058765235975}
   - component: {fileID: 214666321797050571}
-  - component: {fileID: 8692580842347780821}
   - component: {fileID: 1154819171685241453}
   - component: {fileID: 6318584878260124242}
   - component: {fileID: -7296495513448223525}
+  - component: {fileID: -5300916057954425129}
+  - component: {fileID: 7157855459539821467}
+  - component: {fileID: 6121168346309314981}
   m_Layer: 0
-  m_Name: Char1_P
+  m_Name: Char3_UP_v2
   m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +35,7 @@ Transform:
   m_GameObject: {fileID: 5276780869706628407}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5.24195}
+  m_LocalScale: {x: 120, y: 120, z: 120}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -64,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9ae3227416d89c5408e6d6b27459b4bf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,8 +98,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 5, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: -0.014760816}
 --- !u!54 &214666321797050571
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -114,48 +116,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8692580842347780821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5276780869706628407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77eea89e6c691be448b734990ff93ee0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  owner: {fileID: 0}
-  ownerTeamID: 0
-  x_rotaspeed: 0
-  y_rotaspeed: 0
-  z_rotaspeed: 0
-  isMovingDown: 0
-  isMovingLeft: 0
-  isMovingRight: 0
-  damage: 10
-  destroyOnContact: 1
-  m_Rigidbody: {fileID: 214666321797050571}
-  m_Speed: 100
-  m_Lifespan: 0.8
-  isAccelerating: 0
-  isDeccelerating: 0
-  accelerationRate: 0
-  deccelerationRate: 0
-  accelMultiplierOn: 0
-  accelMultiplier: 0
-  hasSpeedLimit: 0
-  speedLimit: 0
-  SlowDebuff: 0
-  slowRate: 0
-  slowDebuffDuration: 0
-  StopDebuff: 0
-  stopDebuffDuration: 0
-  SleepDebuff: 0
-  sleepDebuffDuration: 0
 --- !u!114 &1154819171685241453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,7 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: e04d5f08cb7b67a45a7a34c294e32c4d
   hasSpawned: 0
 --- !u!114 &6318584878260124242
 MonoBehaviour:
@@ -205,3 +165,73 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   forceHidden: 0
+--- !u!114 &-5300916057954425129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5276780869706628407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd4ea098fe3a09d4ca62757702f1040b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  healAmount: 0.5
+  damagesEnemy: 1
+--- !u!114 &7157855459539821467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5276780869706628407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a68c447dd6430304a85e0daa66059605, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  owner: {fileID: 0}
+  ownerTeamID: 0
+  x_rotaspeed: 0
+  y_rotaspeed: 0
+  z_rotaspeed: 0
+  isMovingDown: 0
+  isMovingLeft: 0
+  isMovingRight: 0
+  healsAllies: 0
+  healsSelf: 0
+  damage: 0
+  destroyOnContact: 0
+  m_Rigidbody: {fileID: 0}
+  HealingRadiusObject: {fileID: 0}
+  hasHealingRadiusObject: 0
+  m_Speed: 0
+  m_Lifespan: 5
+  durationBeforeDestroy: 0
+  isAccelerating: 0
+  isDeccelerating: 0
+  accelerationRate: 0
+  deccelerationRate: 0
+  accelMultiplierOn: 0
+  accelMultiplier: 0
+  hasSpeedLimit: 0
+  speedLimit: 0
+--- !u!114 &6121168346309314981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5276780869706628407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68afaa65703debb428886df3d603771e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 0}
+  ownerTransform: {x: 0, y: 0, z: 0}

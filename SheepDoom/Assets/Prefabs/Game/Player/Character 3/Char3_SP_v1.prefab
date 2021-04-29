@@ -303,6 +303,7 @@ MonoBehaviour:
   hasHealingRadiusObject: 1
   m_Speed: 75
   m_Lifespan: 2
+  durationBeforeDestroy: 0.1
   isAccelerating: 0
   isDeccelerating: 0
   accelerationRate: 0

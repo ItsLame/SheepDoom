@@ -11,14 +11,17 @@ namespace SheepDoom
     {
         [Header("UI Attack Buttons")]
         [Space(15)]
-        public Button _NormalButton;
-        public Button _SpecialButton;
-        public Button _UltiButton;
+        [SerializeField] private Button _NormalButton;
+        [SerializeField] private Button _SpecialButton;
+        [SerializeField] private Button _UltiButton;
 
-        public Button _ShopSpecialButton1;
-        public Button _ShopSpecialButton2;
-        public Button _ShopUltiButton1;
-        public Button _ShopUltiButton2;
+        [Header("UI Shop Buttons")]
+        [Space(15)]
+        [SerializeField] private Button _ShopSpecialButton1;
+        [SerializeField] private Button _ShopSpecialButton2;
+        [SerializeField] private Button _ShopUltiButton1;
+        [SerializeField] private Button _ShopUltiButton2;
+        [SerializeField] private Button _ShopX;
 
         //player teamID
         private float teamID;
@@ -26,8 +29,7 @@ namespace SheepDoom
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
-            teamID = PlayerObj.instance.GetTeamIndex();
-            //teamID = gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+            teamID = gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
             assignButtons(gameObject); // no point assigning buttons on server because u dont have a single player view
         }
 
@@ -50,38 +52,42 @@ namespace SheepDoom
 
             //assign shop buttons based on teamID
             _ShopSpecialButton1 = FindMe.instance.P_ShopSpecial1.GetComponent<Button>();
-            _ShopSpecialButton2 = FindMe.instance.P_ShopSpecial2.GetComponent<Button>(); ;
+            _ShopSpecialButton2 = FindMe.instance.P_ShopSpecial2.GetComponent<Button>();
             _ShopUltiButton1 = FindMe.instance.P_ShopUlti1.GetComponent<Button>();
             _ShopUltiButton2 = FindMe.instance.P_ShopUlti2.GetComponent<Button>();
+            _ShopX = FindMe.instance.P_ShopUI_X.GetComponent<Button>();
 
-            if (PlayerObj.instance.GetTeamIndex() == 1)
+            if (teamID == 1)
             {
                 GameObject blueShop = FindMe.instance.P_BlueShop;
-                UnityAction buySpecial1 = new UnityAction(blueShop.gameObject.GetComponent<Shop>().SelectFirstSpecial);
-                UnityAction buySpecial2 = new UnityAction(blueShop.gameObject.GetComponent<Shop>().SelectSecondSpecial);
-                UnityAction buyUlti1 = new UnityAction(blueShop.gameObject.GetComponent<Shop>().SelectFirstUlti);
-                UnityAction buyUlti2 = new UnityAction(blueShop.gameObject.GetComponent<Shop>().SelectSecondUlti);
+                UnityAction buySpecial1 = new UnityAction(blueShop.gameObject.GetComponent<BlueShop>().SelectFirstSpecial);
+                UnityAction buySpecial2 = new UnityAction(blueShop.gameObject.GetComponent<BlueShop>().SelectSecondSpecial);
+                UnityAction buyUlti1 = new UnityAction(blueShop.gameObject.GetComponent<BlueShop>().SelectFirstUlti);
+                UnityAction buyUlti2 = new UnityAction(blueShop.gameObject.GetComponent<BlueShop>().SelectSecondUlti);
+                UnityAction closeShop = new UnityAction(blueShop.gameObject.GetComponent<BlueShop>().CloseShopUI);
 
                 _ShopSpecialButton1.onClick.AddListener(buySpecial1);
                 _ShopSpecialButton2.onClick.AddListener(buySpecial2);
                 _ShopUltiButton1.onClick.AddListener(buyUlti1);
                 _ShopUltiButton2.onClick.AddListener(buyUlti2);
+                _ShopX.onClick.AddListener(closeShop);
             }
 
-            if (PlayerObj.instance.GetTeamIndex() == 2)
+            if (teamID == 2)
             {
                 GameObject redShop = FindMe.instance.P_RedShop;
-                UnityAction buySpecial1 = new UnityAction(redShop.gameObject.GetComponent<Shop>().SelectFirstSpecial);
-                UnityAction buySpecial2 = new UnityAction(redShop.gameObject.GetComponent<Shop>().SelectSecondSpecial);
-                UnityAction buyUlti1 = new UnityAction(redShop.gameObject.GetComponent<Shop>().SelectFirstUlti);
-                UnityAction buyUlti2 = new UnityAction(redShop.gameObject.GetComponent<Shop>().SelectSecondUlti);
+                UnityAction buySpecial1 = new UnityAction(redShop.gameObject.GetComponent<RedShop>().SelectFirstSpecial);
+                UnityAction buySpecial2 = new UnityAction(redShop.gameObject.GetComponent<RedShop>().SelectSecondSpecial);
+                UnityAction buyUlti1 = new UnityAction(redShop.gameObject.GetComponent<RedShop>().SelectFirstUlti);
+                UnityAction buyUlti2 = new UnityAction(redShop.gameObject.GetComponent<RedShop>().SelectSecondUlti);
+                UnityAction closeShop = new UnityAction(redShop.gameObject.GetComponent<RedShop>().CloseShopUI);
 
                 _ShopSpecialButton1.onClick.AddListener(buySpecial1);
                 _ShopSpecialButton2.onClick.AddListener(buySpecial2);
                 _ShopUltiButton1.onClick.AddListener(buyUlti1);
                 _ShopUltiButton2.onClick.AddListener(buyUlti2);
+                _ShopX.onClick.AddListener(closeShop);
             }
-
         }
     }
 }
