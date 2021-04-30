@@ -341,7 +341,7 @@ GameObject:
   - component: {fileID: -4652393214133118069}
   - component: {fileID: 5892546946559195054}
   m_Layer: 0
-  m_Name: TeamConsortiumRangedCreep
+  m_Name: TeamConsortiumMeleeCreep
   m_TagString: TeamConsortiumRangeCreep
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -531,11 +531,11 @@ MonoBehaviour:
   - {fileID: 3993287873418924031, guid: de11748f58b201c439e808eb73908285, type: 3}
   StartIndex: 0
   agent: {fileID: 1726418527979177131}
-  ismeleeattack: 0
+  ismeleeattack: 1
   CreepMoveSpeed: 20
   timeBetweenAttacks: 2
-  sightRange: 50
-  attackRange: 30
+  sightRange: 30
+  attackRange: 10
   playerInSightRange: 0
   playerInAttackRange: 0
   TeamCoalition: 0

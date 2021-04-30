@@ -8,7 +8,7 @@ public class MegaBossSpawner : NetworkBehaviour
     private float nextspawntime;
 
     [SerializeField]
-    private GameObject Minionmelee;
+    private GameObject Minion;
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class MegaBossSpawner : NetworkBehaviour
     {
         yield return new WaitForSeconds(20);
         //Instantiate(Minionmelee, transform.position, transform.rotation);
-        GameObject spawnMega = Instantiate(Minionmelee, transform);
+        GameObject spawnMega = Instantiate(Minion, transform);
         spawnMega.transform.SetParent(null, false);
         spawnMega.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
     }
