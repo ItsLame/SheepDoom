@@ -54,7 +54,7 @@ namespace SheepDoom
         [Server]
         public void IncreaseCount(bool _isTower, bool _isKill, bool _isDeath)
         {
-            Debug.Log("IncreaseCount called: " + _isTower + ", " + _isKill + ", " + _isDeath);
+            Debug.Log("IncreaseCount called for " + gameObject.name + ": " + _isTower + ", " + _isKill + ", " + _isDeath);
             if(_isTower)
                 TowerCaptures += 1;
             else if(_isKill)
