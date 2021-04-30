@@ -124,6 +124,9 @@ namespace SheepDoom
                         col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
                         owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
                         col.gameObject.GetComponent<GameEvent>().whoKilled = owner.gameObject.GetComponent<PlayerAdmin>().P_playerName;
+
+                        //increase gold
+                        owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(10);
                     }
 
                     if (destroyOnContact)
@@ -146,7 +149,7 @@ namespace SheepDoom
 
 
                 //                Debug.Log(owner + " hitting neutral minion");
-                owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
+                owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
 
                 if (destroyOnContact)
                     Destroyy();
@@ -160,7 +163,7 @@ namespace SheepDoom
                         GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
-                            owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
+                            owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
 
                         if (destroyOnContact)
                             Destroyy();
@@ -174,7 +177,7 @@ namespace SheepDoom
                         GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
-                            owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
+                            owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
 
                         if (destroyOnContact)
                             Destroyy();

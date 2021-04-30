@@ -46,6 +46,14 @@ namespace SheepDoom
             Debug.Log("Current Gold after: " + CurrentGold);
         }
 
+        public void ServerVaryGold(float goldValueChange)
+        {
+            Debug.Log("Current Gold: " + CurrentGold);
+            Debug.Log("Gold increased by " + goldValueChange);
+            CurrentGold += goldValueChange;
+            Debug.Log("Current Gold after: " + CurrentGold);
+        }
+
         public override void OnStartClient()
         {
             if (!hasAuthority) return;

@@ -21,7 +21,7 @@ namespace SheepDoom
         public NavMeshAgent agent;
         [Space(15)]
         public bool ismeleeattack = false;
-        Animator charAnim;
+        //       Animator charAnim;
 
         //Aggro
         //private float speed = 15.0f;
@@ -37,12 +37,11 @@ namespace SheepDoom
 
         //states 
         public float sightRange, attackRange;
-        public bool playerInSightRange, playerInAttackRange;
 
-        public bool TeamCoalition;
+        //       public bool TeamCoalition;
 
         //layermask
-        public LayerMask whatisplayer;
+        //       public LayerMask whatisplayer;
         [Space(15)]
         //Ranged Projectile
         public GameObject projectile;
@@ -65,7 +64,6 @@ namespace SheepDoom
         [Space(15)]
         private GameObject targetObject = null;
         private bool isLockedOn = false;
-        // public bool isplayer = false;
 
         public event Action<float> OnHealthPctChanged = delegate { };
 
@@ -77,7 +75,6 @@ namespace SheepDoom
 
         void Start()
         {
-            charAnim = GetComponent<Animator>();
         }
 
         public override void OnStartServer()
@@ -91,26 +88,32 @@ namespace SheepDoom
         [Server]
         private void OnTriggerEnter(Collider other)
         {
-            if(gameObject.CompareTag("TeamCoalitionRangeCreep") && !isLockedOn)
+            //if not locked on, search for new targets
+            if (gameObject.CompareTag("TeamCoalitionRangeCreep") && !isLockedOn)
             {
+                //atk da enemy creepu
                 if (other.CompareTag("TeamConsortiumRangeCreep"))
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;
                 }
+                //check for not dead player thats in the enemy team
                 else if (other.CompareTag("Player") && (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2) && !other.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;
                 }
             }
-            else if(gameObject.CompareTag("TeamConsortiumRangeCreep") && !isLockedOn)
+            else if (gameObject.CompareTag("TeamConsortiumRangeCreep") && !isLockedOn)
             {
-                if(other.CompareTag("TeamCoalitionRangeCreep"))
+                //same attack the enemy creepes
+                if (other.CompareTag("TeamCoalitionRangeCreep"))
                 {
                     targetObject = other.gameObject;
                     isLockedOn = true;
                 }
+
+                //enemy players r not spared
                 else if (other.CompareTag("Player") && (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1) && !other.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     targetObject = other.gameObject;
@@ -120,58 +123,66 @@ namespace SheepDoom
         }
 
         [Server]
+        private void OnTriggerStay(Collider other)
+        {
+            // don't bother with others thats not locked on
+            if (other.gameObject != targetObject) return;
+
+            // follow only the target if target still in range
+            if (isLockedOn && other.gameObject == targetObject)
+            {
+                //attack player in range
+                if (Vector3.Distance(gameObject.transform.position, other.gameObject.transform.position) < attackRange)
+                {
+                    RangedAttackPlayer();
+                }
+
+                //else chase in range
+                else
+                {
+                    //                  transform.LookAt(targetObject.transform);
+                    agent.autoBraking = false;
+                    agent.SetDestination(targetObject.transform.position);
+                }
+
+
+            }
+        }
+
+        [Server]
         private void OnTriggerExit(Collider other) // exit happened before playerinsight range happened
         {
-            if(gameObject.CompareTag("TeamCoalitionRangeCreep"))
+            //go back to travelling if target goes out of range
+            if (isLockedOn && other.gameObject == targetObject)
             {
-                if (other.CompareTag("Player") && other.gameObject.layer == 9)
-                    goBackToTravelling();
+                isLockedOn = false;
+                targetObject = null;
+                agent.autoBraking = false;
+                goBackToTravelling();
             }
-            else if(gameObject.CompareTag("TeamConsortiumRangeCreep"))
-            {
-                if (other.CompareTag("Player") && other.gameObject.layer == 8)
-                    goBackToTravelling();
-            }
+
         }
 
         void Update()
         {
             if (isServer)
             {
-                // dist = Vector3.Distance(playerTransf.position, transform.position);
-                //Check if Player in sightrange
-                playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
-
-                //Check if Player in attackrange
-                playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatisplayer);
-
-                /*if (target == null)
+                //check for position relative to current waypoint
+                if (currentPoint < waypoints.Length)
                 {
-                    targetObject = null;
-                    isLockedOn = false;
-                    StartMovingToWayPoint();
-                    return;
-                }*/
+                    target = waypoints[currentPoint].position;
+                    direction = target - transform.position;
+                    if (direction.magnitude < 10)
+                        currentPoint++;
+                }
 
-                if(targetObject == null)
+                if (targetObject == null)
                 {
                     isLockedOn = false;
                     goBackToTravelling();
                     return;
                 }
 
-                /*if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
-                    goBackToTravelling();*/
-                    
-
-                if (playerInSightRange && !playerInAttackRange && isLockedOn)                
-                    ChasePlayer();
-
-                if (playerInAttackRange && playerInSightRange && !ismeleeattack)
-                    RangedAttackPlayer();
-
-                if (playerInAttackRange && playerInSightRange && ismeleeattack)
-                    MeleeAttackPlayer();
 
                 if (currenthealth <= 0)
                     Destroyy();
@@ -179,13 +190,10 @@ namespace SheepDoom
         }
 
         [Server]
-        void ChasePlayer()
+        void ChaseTarget()
         {
-            if (targetObject != null)
-            {
-                agent.autoBraking = false;
-                agent.SetDestination(targetObject.transform.position);
-            }
+            agent.autoBraking = false;
+            agent.SetDestination(targetObject.transform.position);
         }
 
         //go back to patrol when player is dead
@@ -198,74 +206,45 @@ namespace SheepDoom
             StartMovingToWayPoint();
         }
 
-        void MeleeAttackPlayer()
-        {
-            //Make sure enemy doesn't move
-            agent.SetDestination(transform.position);
-
-            transform.LookAt(targetObject.transform);
-
-            if (!alreadyattacked)
-            {
-                //Meele attack for dog
-                transform.LookAt(targetObject.transform);
-                animator.SetTrigger("Attack");
-                animator.SetTrigger("AttackToIdle");
-                Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
-
-                foreach (Collider enemy in hitenmies)
-                    enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
-
-                Debug.Log("MeleeAttack!");
-                alreadyattacked = true;
-                Invoke("ResetAttack", timeBetweenAttacks);
-            }
-        }
-
         [Server]
         private void RangedAttackPlayer()
         {
-            if (targetObject == null)
-                goBackToTravelling();
-            else //Make sure enemy doesn't move
-            {
- //               Debug.Log("Attacking enemy");
-                agent.SetDestination(transform.position);
-                agent.autoBraking = true;
-  //              transform.LookAt(targetObject.transform);
+            //               Debug.Log("Attacking enemy");
+            agent.SetDestination(transform.position);
+            agent.autoBraking = true;
+            //              transform.LookAt(targetObject.transform);
 
-                if (!alreadyattacked)
-                {
-                    transform.LookAt(targetObject.transform);
-                    FireProjectile();//Attack
-                    Invoke("ResetAttack", timeBetweenAttacks);
-                }
+            if (!alreadyattacked)
+            {
+                transform.LookAt(targetObject.transform);
+                FireProjectile();//Attack
+                Invoke("ResetAttack", timeBetweenAttacks);
             }
+
         }
 
         [Server]
         private void FireProjectile()
         {
-            if(gameObject.CompareTag("TeamCoalitionRangeCreep"))
+            if (gameObject.CompareTag("TeamCoalitionRangeCreep"))
             {
-                //GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
-                //FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
+
                 GameObject FiredProjectile = Instantiate(projectile, transform);
                 FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
                 FiredProjectile.transform.SetParent(null, false);
                 FiredProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
                 NetworkServer.Spawn(FiredProjectile);
+
                 alreadyattacked = true;
             }
-            else if(gameObject.CompareTag("TeamConsortiumRangeCreep"))
+            else if (gameObject.CompareTag("TeamConsortiumRangeCreep"))
             {
                 GameObject FiredProjectile = Instantiate(projectile, transform);
                 FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
                 FiredProjectile.transform.SetParent(null, false);
                 FiredProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
-                //GameObject FiredProjectile = Instantiate(projectile, this.transform.position, this.transform.rotation);
-                //FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
                 NetworkServer.Spawn(FiredProjectile);
+
                 alreadyattacked = true;
             }
         }
@@ -283,10 +262,10 @@ namespace SheepDoom
             {
                 target = waypoints[currentPoint].position;
                 direction = target - transform.position;
-                if (direction.magnitude < 10)
+                if (direction.magnitude < 1)
                     currentPoint++;
             }
-            
+
             transform.LookAt(target);
             agent.SetDestination(target);
             agent.speed = CreepMoveSpeed;
@@ -296,7 +275,7 @@ namespace SheepDoom
         public void TakeDamage(float damage)
         {
             currenthealth += damage;
-//              RpcUpdateMinionHp();
+            //              RpcUpdateMinionHp();
             float currenthealthPct = currenthealth / maxHealth;
             OnHealthPctChanged(currenthealthPct);
         }
@@ -304,14 +283,6 @@ namespace SheepDoom
         private void Destroyy()
         {
             NetworkServer.Destroy(this.gameObject);
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, sightRange);
         }
 
         public float getHealth()

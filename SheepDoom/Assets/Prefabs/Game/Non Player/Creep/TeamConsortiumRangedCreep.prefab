@@ -421,7 +421,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 16
+  m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &1726418527979177131
 NavMeshAgent:
@@ -475,7 +475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: de31ad35a15e5e94bbbe8e7c1c44beef
   hasSpawned: 0
 --- !u!114 &2604463573454587433
 MonoBehaviour:
@@ -533,14 +533,8 @@ MonoBehaviour:
   ismeleeattack: 0
   CreepMoveSpeed: 20
   timeBetweenAttacks: 2
-  sightRange: 50
-  attackRange: 30
-  playerInSightRange: 0
-  playerInAttackRange: 0
-  TeamCoalition: 0
-  whatisplayer:
-    serializedVersion: 2
-    m_Bits: 256
+  sightRange: 0
+  attackRange: 40
   projectile: {fileID: 3321324340310797477, guid: e237935973540a54f86fcb325efbe1eb,
     type: 3}
   animator: {fileID: 0}
