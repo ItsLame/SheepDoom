@@ -33,6 +33,11 @@ namespace SheepDoom
                 Destroyy();
             }
 
+            if (col.CompareTag("Shield"))
+            {
+                Destroyy();
+            }
+
             if (owner != null)
             {
                 if (owner.CompareTag("TeamCoalitionRangeCreep"))
@@ -56,6 +61,14 @@ namespace SheepDoom
                     {
                         col.transform.parent.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         Destroyy();
+                    }
+
+                    else if (col.gameObject.CompareTag("Shield"))
+                    {
+                        if (col.gameObject.GetComponent<ObjectFollowScript>().teamID == 2)
+                        {
+                                Destroyy();
+                        }
                     }
                 }
                 else if (owner.CompareTag("TeamConsortiumRangeCreep"))
@@ -81,7 +94,15 @@ namespace SheepDoom
                         Destroyy();
                     }
 
+                    else if (col.gameObject.CompareTag("Shield"))
+                    {
+                        if (col.gameObject.GetComponent<ObjectFollowScript>().teamID == 1)
+                        {
+                            Destroyy();
+                        }
+                    }
                 }
+
 
 
             }

@@ -10,7 +10,7 @@ namespace SheepDoom
     {
         //projectileOwner
         public GameObject owner;
-        [SyncVar]public float ownerTeamID;
+        [SyncVar] public float ownerTeamID;
 
         [Space(15)]
         //rotation controls
@@ -19,9 +19,9 @@ namespace SheepDoom
         public float z_rotaspeed;
 
         [Header("Movement Properties")]
-        [SerializeField] private bool isMovingDown;
-        [SerializeField] private bool isMovingLeft;
-        [SerializeField] private bool isMovingRight;
+        [SerializeField] [SyncVar] public bool isMovingDown;
+        [SerializeField] [SyncVar] public bool isMovingLeft;
+        [SerializeField] [SyncVar] public bool isMovingRight;
 
         [Header("Damage Properties")]
         [Space(15)]
@@ -66,6 +66,29 @@ namespace SheepDoom
 
         //bool for calling kill counter increase once
         bool killCounterIncreaseCalled = false;
+
+        //method to set direction of projectile
+        public void setDirection(string direction)
+        {
+
+            if (direction == "left")
+            {
+                isMovingLeft = true;
+                Debug.Log("Setting direction to " + direction + " ," + isMovingLeft);
+            }
+
+            else if (direction == "right")
+            {
+                isMovingRight = true;
+                Debug.Log("Setting direction to " + direction + " ," + isMovingRight);
+            }
+
+            else if (direction == "down")
+            {
+                isMovingDown = true;
+                Debug.Log("Setting direction to " + direction + " ," + isMovingDown);
+            }
+        }
 
         public override void OnStartServer()
         {
@@ -170,6 +193,15 @@ namespace SheepDoom
                 if (destroyOnContact)
                     Destroyy();
             }
+
+            else if (col.gameObject.CompareTag("Shield"))
+            {
+                if (col.gameObject.GetComponent<ObjectFollowScript>().teamID != ownerTeamID)
+                {
+                    if (destroyOnContact)
+                        Destroyy();
+                }
+            }
             /*
             if (col.gameObject.layer == 9)
             {
@@ -205,7 +237,7 @@ namespace SheepDoom
 
         void Update()
         {
-            if(isClient && hasAuthority)
+            if (isClient && hasAuthority)
             {
                 //rotation movement
                 transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
@@ -241,7 +273,7 @@ namespace SheepDoom
                 }
             }
 
-            if(isServer)
+            if (isServer)
             {
                 m_StartTime += Time.deltaTime;
                 if (m_StartTime >= m_Lifespan)

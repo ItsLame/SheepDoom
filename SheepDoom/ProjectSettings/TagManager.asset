@@ -23,6 +23,7 @@ TagManager:
   - TeamCoaHealPad
   - TeamConHealPad
   - Stage
+  - Shield
   layers:
   - Default
   - TransparentFX

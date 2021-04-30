@@ -8,11 +8,15 @@ namespace SheepDoom
     public class Character2 : NetworkBehaviour
     {
         [SerializeField]
-        private GameObject normalAtkMelee, normalSpecial, normalUlti;
+        private GameObject normalAtkMelee, normalAtkMelee2, normalSpecial, normalUlti;
         private GameObject firedProjectile;
 
+
+
+
         [SerializeField]
-        private Transform spawnPoint;
+        private Transform spawnPoint, meleeAtkSpawn1, meleeAtkSpawn2;
+
 
         [SerializeField]
         private float meleeAttackDuration1, meleeAttackSpeedMultiplier;
@@ -21,42 +25,101 @@ namespace SheepDoom
         [Client]
         public void normalAtk(bool _multiplier)
         {
-            CmdNormalAtk();
-            ObjectMovementScript comp = normalAtkMelee.GetComponent<ObjectMovementScript>();
-            if (meleeCombo == 1)
-            {
-                if(!_multiplier)
-                {
-                    comp.SetMoveSpeed(120);
-                    comp.move(meleeAttackDuration1, "right");
-                }
-                else if (_multiplier)
-                {
-                    comp.SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
-                    comp.move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "right");
-                }
-                meleeCombo = 2;
-            }
-            else if(meleeCombo == 2)
-            {
-                if(!_multiplier)
-                {
-                    comp.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
-                    comp.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, "left");
-                }
-                else if(_multiplier)
-                {
-                    comp.SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
-                    comp.move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "left");
-                }
-                meleeCombo = 1;
-            }
+            CmdNormalAtk(_multiplier);
+        }
+
+        [Client]
+        public void setProjectileDirection(GameObject projectile, string direction)
+        {
+            projectile.GetComponent<PlayerProjectileSettings>().setDirection(direction);
         }
 
         [Command]
-        void CmdNormalAtk()
+        void CmdNormalAtk(bool _multiplier)
         {
-            normalAtkMelee.GetComponent<OnTouchHealth>().SetHitBox(true);
+            if (meleeCombo == 1)
+            {
+                if (!_multiplier)
+                {
+                    Debug.Log("Firing melee from left to right");
+                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+                    firedProjectile.transform.SetParent(null, false);
+                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
+
+                    //set direction
+                    //                 setProjectileDirection(firedProjectile, "right");
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingRight = true;
+
+                    NetworkServer.Spawn(firedProjectile, connectionToClient);
+                    //                   comp.SetMoveSpeed(120);
+                    //                   comp.move(meleeAttackDuration1, "right");
+                }
+                else if (_multiplier)
+                {
+                    Debug.Log("Firing melee from left to right v2");
+                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+
+                    //change speed and lifetime
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().m_Lifespan /= meleeAttackSpeedMultiplier;
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().m_Speed *= meleeAttackSpeedMultiplier;
+
+                    //set direction
+                    setProjectileDirection(firedProjectile, "right");
+                    //                    firedProjectile.GetComponent<PlayerProjectileSettings>().setDirection("right");
+
+                    firedProjectile.transform.SetParent(null, false);
+                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
+
+                    NetworkServer.Spawn(firedProjectile, connectionToClient);
+
+                    //                   comp.SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
+                    //                   comp.move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "right");
+                }
+                meleeCombo = 2;
+            }
+            else if (meleeCombo == 2)
+            {
+                if (!_multiplier)
+                {
+                    Debug.Log("Firing melee from right to left");
+                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn2);
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+                    firedProjectile.transform.SetParent(null, false);
+                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn2.position, meleeAtkSpawn2.rotation);
+
+                    //set direction
+                    //                    setProjectileDirection(firedProjectile, "left");
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingLeft = true;
+
+                    NetworkServer.Spawn(firedProjectile, connectionToClient);
+                    //                   comp.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
+                    //                   comp.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, "left");
+                }
+                else if (_multiplier)
+                {
+                    Debug.Log("Firing melee from right to left v2");
+                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn2);
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
+
+                    //change speed and lifetime
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().m_Lifespan /= meleeAttackSpeedMultiplier;
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().m_Speed *= meleeAttackSpeedMultiplier;
+
+                    //set direction
+                    setProjectileDirection(firedProjectile, "left");
+                    //                    firedProjectile.GetComponent<PlayerProjectileSettings>().setDirection("left");
+
+                    firedProjectile.transform.SetParent(null, false);
+                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn2.position, meleeAtkSpawn2.rotation);
+
+                    NetworkServer.Spawn(firedProjectile, connectionToClient);
+                    //                   comp.SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
+                    //                   comp.move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "left");
+                }
+                meleeCombo = 1;
+            }
         }
 
         [Client] // call from client to tell server
@@ -81,13 +144,31 @@ namespace SheepDoom
         [Command]
         void CmdSpecialAtk()
         {
-            if(normalSpecial != null)
-            {
-                normalSpecial.GetComponent<MeshRenderer>().enabled = true;
-                normalSpecial.GetComponent<BoxCollider>().enabled = true;
-                normalSpecial.GetComponent<PlayerChild>().refreshDuration();
-                RpcEnableSkill();
-            }
+            /* 
+                             firedProjectile = Instantiate(altUlti, transform);
+                firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
+                firedProjectile.transform.SetParent(null, false);
+                firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+
+                //setting channeling conditions (if owner moves, destroy)
+                firedProjectile.GetComponent<ChannelingScript>().setOwner(this.gameObject);
+
+                //setting healing over time conditions (heal allies, damage enemies)
+                firedProjectile.GetComponent<HealActivateScript>().setTeamID(this.gameObject.GetComponent<PlayerAdmin>().getTeamIndex());
+                firedProjectile.GetComponent<HealActivateScript>().activateHeal();
+
+
+                NetworkServer.Spawn(firedProjectile, connectionToClient);
+             */
+
+            firedProjectile = Instantiate(normalSpecial, transform);
+            firedProjectile.transform.SetParent(null, false);
+            firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+
+            //set owner
+            firedProjectile.GetComponent<ObjectFollowScript>().owner = this.gameObject;
+
+            NetworkServer.Spawn(firedProjectile, connectionToClient);
         }
 
         [Client]
@@ -108,13 +189,14 @@ namespace SheepDoom
                 firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                 firedProjectile.transform.SetParent(null, false);
                 firedProjectile.transform.SetPositionAndRotation(spawnPoint.position + _distance, spawnPoint.rotation);
-                
+
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
             }
             else if (_isAltUlti)
-                GetComponent<CharacterMovement>().changeSpeed("speedUp", 5, 1.5f);  
+                GetComponent<CharacterMovement>().changeSpeed("speedUp", 5, 1.5f);
         }
 
+        /*
         [ClientRpc]
         void RpcEnableSkill()
         {
@@ -124,6 +206,6 @@ namespace SheepDoom
                 normalSpecial.GetComponent<BoxCollider>().enabled = true;
                 normalSpecial.GetComponent<PlayerChild>().refreshDuration();
             }
+        } */
         }
     }
-}
