@@ -9,13 +9,11 @@ namespace SheepDoom
     public class PlayerAdmin : NetworkBehaviour
     {
         // Mainly player attributes 
-        [Header("PlayerID for skills")]
-        [SerializeField]
-        [SyncVar] private float charID;
-
-        [Header("Team affiliation (1 for Blue, 2 for Red")]
-        [SerializeField]
-        [SyncVar] private int TeamIndex;
+        [Header("Player Info")]
+        [SerializeField] [SyncVar] private float charID;
+        [SerializeField] [SyncVar] private string playerName;
+        [SerializeField] [SyncVar] private int TeamIndex;
+        //[Header("Team affiliation (1 for Blue, 2 for Red")]
 
         [Header("Player scores")]
         [SyncVar(hook = nameof(SyncPlayerKill))] public float PlayerKills;
@@ -24,8 +22,9 @@ namespace SheepDoom
         public Text PlayerDeathsText;
         [SyncVar(hook = nameof(SyncTowerCapture))] public float TowerCaptures;
         public Text TowerCapturesText;
-
         private GameObject shop;
+
+        #region Accessors
 
         //accessor method for team index
         public float getTeamIndex()
@@ -43,6 +42,14 @@ namespace SheepDoom
         {
             return charID;
         }
+
+        public string P_playerName
+        {
+            get{return playerName;}
+            set{playerName = value;}
+        }
+
+        #endregion
 
         [Server]
         public void IncreaseCount(bool _isTower, bool _isKill, bool _isDeath)
@@ -75,9 +82,10 @@ namespace SheepDoom
         }
 
         [Command]
-        private void CmdSetTeamIndex(int _teamIndex)
+        private void CmdSetInfo(int _teamIndex, string _playerName)
         {
             setTeamIndex(_teamIndex);
+            P_playerName = _playerName;
         }
 
         public override void OnStartClient()
@@ -90,11 +98,14 @@ namespace SheepDoom
             PlayerDeathsText.text = PlayerDeaths.ToString();
             TowerCapturesText.text = TowerCaptures.ToString();
             
-            int playerTeamID = PlayerObj.instance.GetTeamIndex();
+            int _playerTeamID = PlayerObj.instance.GetTeamIndex();
+            string _playerName = PlayerObj.instance.GetPlayerName();
 
             //temporary solution, since (i think) have delay, immediately set locally first
-            setTeamIndex(playerTeamID);
-            CmdSetTeamIndex(playerTeamID);
+            setTeamIndex(_playerTeamID);
+            P_playerName = _playerName;
+            
+            CmdSetInfo(_playerTeamID, PlayerObj.instance.GetPlayerName());
 
             if (getTeamIndex() == 1)
                 FindMe.instance.P_BlueShop.GetComponent<Shop>().P_shopPlayer = gameObject;
