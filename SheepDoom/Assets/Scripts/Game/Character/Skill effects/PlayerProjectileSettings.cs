@@ -123,7 +123,7 @@ namespace SheepDoom
                         Debug.Log("Killed player, increasing score");
                         col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
                         owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
-                        col.gameObject.GetComponent<GameEvent>().whoKilled = owner.gameObject.GetComponent<PlayerObj>().GetPlayerName();
+                        col.gameObject.GetComponent<GameEvent>().whoKilled = owner.gameObject.GetComponent<PlayerAdmin>().P_playerName;
                     }
 
                     if (destroyOnContact)

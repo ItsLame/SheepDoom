@@ -17,7 +17,6 @@ namespace SheepDoom
 
         [SerializeField]
         public GameObject completeGameUI;
-        public GameObject completeGameUI2;
 
         //counters for tower captures per team
         //hard coded for now
@@ -147,6 +146,7 @@ namespace SheepDoom
         // shows scoreboard etc when game ends, will add timer counter condition in the future
         public void GameEnd(int TeamID)
         {
+            Debug.Log("Scoreboard: game end start");
             //Stop scripts from updating KDA and team score
             /*
             Method 1

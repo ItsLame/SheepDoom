@@ -88,7 +88,7 @@ namespace SheepDoom
         public void SetPlayerDead()
         {
             playerDead = true;
-            GetComponent<GameEvent>().gotKilled = PlayerObj.instance.GetPlayerName();
+            GetComponent<GameEvent>().gotKilled = this.GetComponent<PlayerAdmin>().P_playerName;
         }
 
         IEnumerator TimeBeforeDeath()
