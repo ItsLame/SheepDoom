@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 1088759763548799350}
   - component: {fileID: 2592283840863600004}
   - component: {fileID: 7037161822337196194}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Luigi (C2)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -276,6 +276,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 2
+  playerName: 
   TeamIndex: 0
   PlayerKills: 0
   PlayerKillsText: {fileID: 0}

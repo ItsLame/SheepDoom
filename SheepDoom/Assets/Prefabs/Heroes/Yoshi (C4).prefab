@@ -904,7 +904,7 @@ GameObject:
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
   - component: {fileID: 2014472282729360730}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Yoshi (C4)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1037,6 +1037,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 4
+  playerName: 
   TeamIndex: 0
   PlayerKills: 0
   PlayerKillsText: {fileID: 0}
