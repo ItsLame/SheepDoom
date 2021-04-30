@@ -52,7 +52,7 @@ namespace SheepDoom
         public Animator animator;
         [Space(15)]
         //melee attackpoint
-        public Transform meleeattackPoint;
+        public Transform attackPoint;
         public LayerMask enemyLayers;
         public int meleedamage = 50;
         [Space(15)]
@@ -207,51 +207,20 @@ namespace SheepDoom
 
             if (!alreadyattacked)
             {
-                //Melee attack for dog
+                //Meele attack for dog
                 transform.LookAt(targetObject.transform);
-                /*animator.SetTrigger("Attack");
-                animator.SetTrigger("AttackToIdle");*/
-                Collider[] hitenemies = Physics.OverlapSphere(meleeattackPoint.position, attackRange, enemyLayers);
+                animator.SetTrigger("Attack");
+                animator.SetTrigger("AttackToIdle");
+                Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 
-                foreach (Collider enemy in hitenemies)
-                {
-                    if (gameObject.CompareTag("TeamCoalitionRangeCreep"))
-                    {
-                        if (enemy.CompareTag("Player") && (enemy.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2))
-                        {
-                            enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
-                        }
-                        if (enemy.CompareTag("BaseMinion") && enemy.gameObject.layer == 9)
-                        {
-                            enemy.transform.parent.GetComponent<LeftMinionBehaviour>().TakeDamage(-meleedamage);
-                        }
-                    }
-                    if (gameObject.CompareTag("TeamConsortiumRangeCreep"))
-                    {
-                        if (enemy.CompareTag("Player") && (enemy.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1))
-                        {
-                            enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
-                        }
-                        if (enemy.CompareTag("BaseMinion") && enemy.gameObject.layer == 8)
-                        {
-                            enemy.transform.parent.GetComponent<LeftMinionBehaviour>().TakeDamage(-meleedamage);
-                        }
-                    }
-                    if (enemy.GetComponent<PlayerHealth>().getHealth() <= 0)
-                    {
-                        enemy.GetComponent<PlayerHealth>().SetPlayerDead();
-                        enemy.gameObject.GetComponent<GameEvent>().isMinion = true;
-                        goBackToTravelling();
-                    }
-                }
-
+                foreach (Collider enemy in hitenmies)
+                    enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
 
                 Debug.Log("MeleeAttack!");
                 alreadyattacked = true;
                 Invoke("ResetAttack", timeBetweenAttacks);
             }
         }
-   
 
         [Server]
         private void RangedAttackPlayer()

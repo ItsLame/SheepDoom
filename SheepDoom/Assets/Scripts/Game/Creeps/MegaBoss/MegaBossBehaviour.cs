@@ -74,28 +74,24 @@ namespace SheepDoom
 
         public event Action<float> OnHealthPctChanged = delegate { };
 
-        void HealthBarUpdate(float oldValue, float newValue)
-        {
-            float currenthealthPct = newValue / maxHealth;
-            OnHealthPctChanged(currenthealthPct);
-        }
-
         void Start()
         {
-            charAnim = GetComponent<Animator>();
-        }
 
-        public override void OnStartServer()
-        {
+            targetObject = null;
+            isLockedOn = false;
+            charAnim = GetComponent<Animator>();
+            agent = GetComponent<NavMeshAgent>();
+
             currenthealth = maxHealth;
             currentPoint = StartIndex;
-            StartMovingToWayPoint();
-            agent.autoBraking = false;
+
+            StartCoroutine(TimeUntilAggressivemode());
+
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if ((other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1) && other.CompareTag("Player"))
+            if (other.gameObject.layer == 8 && other.CompareTag("Player"))
             {
                 if (!isLockedOn)
                 {
@@ -104,7 +100,7 @@ namespace SheepDoom
                 }
 
             }
-            else if ((other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2) && other.CompareTag("Player"))
+            else if (other.gameObject.layer == 9 && other.CompareTag("Player"))
             {
                 if (!isLockedOn)
                 {
@@ -139,80 +135,70 @@ namespace SheepDoom
                 // Debug.Log("Player " + other.gameObject.name + " has left minion zone");
                 targetObject = null;
             }
-            else if (other.gameObject.tag == "TeamConsortiumRangeCreep")
-            {
-                // Debug.Log("Player " + other.gameObject.name + " has left minion zone");
-                targetObject = null;
-            }
-            else if (other.gameObject.tag == "TeamCoalitionRangeCreep")
-            {
-                // Debug.Log("Player " + other.gameObject.name + " has left minion zone");
-                targetObject = null;
-            }
         }
 
         void Update()
         {
-            if (isServer)
+            // dist = Vector3.Distance(playerTransf.position, transform.position);
+            //Check if Player in sightrange
+            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
+
+            //Check if Player in attackrange
+            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatisplayer);
+
+            if (target == null)
             {
-                // dist = Vector3.Distance(playerTransf.position, transform.position);
-                //Check if Player in sightrange
-                playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatisplayer);
-
-                //Check if Player in attackrange
-                playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatisplayer);
-
-                /*if (target == null)
-                {
-                    targetObject = null;
-                    isLockedOn = false;
-                    StartMovingToWayPoint();
-                    return;
-                }*/
-
-                if (targetObject == null)
-                {
-                    isLockedOn = false;
-                    goBackToTravelling();
-                    return;
-                }
-
-                /*if (!playerInSightRange && !playerInAttackRange && !isLockedOn)
-                    goBackToTravelling();*/
-
-
-                if (playerInSightRange && !playerInAttackRange && isLockedOn)
-                    ChasePlayer();
-
-                if (playerInAttackRange && playerInSightRange && !ismeleeattack)
-                    RangedAttackPlayer();
-
-                if (playerInAttackRange && playerInSightRange && ismeleeattack)
-                    MeleeAttackPlayer();
-
-                if (currenthealth <= 0)
-                    Destroyy();
+                agent.autoBraking = false;
+                targetObject = null;
+                isLockedOn = false;
+                StartMovingToWayPoint();
+                return;
             }
+
+
+            if (!playerInSightRange && !playerInAttackRange)
+            {
+                StartMovingToWayPoint();
+                isLockedOn = false;
+            }
+
+            if (playerInSightRange && !playerInAttackRange)
+            {
+                agent.autoBraking = false;
+                ChasePlayer();
+            }
+
+            if (playerInAttackRange && playerInSightRange && ismeleeattack == false)
+            {
+                RangedAttackPlayer();
+            }
+            if (playerInAttackRange && playerInSightRange && ismeleeattack == true)
+            {
+                MeleeAttackPlayer();
+            }
+
+            if (currenthealth <= 0)
+            {
+                // Debug.Log(this.gameObject.name + "has died");
+
+
+                Destroyy();
+
+
+
+            }
+
         }
-        [Server]
+
         void ChasePlayer()
         {
             if (targetObject != null)
             {
-                agent.autoBraking = false;
                 agent.SetDestination(targetObject.transform.position);
             }
+
+
         }
-        //go back to patrol when player is dead
-        [Server]
-        public void goBackToTravelling()
-        {
-            isLockedOn = false;
-            targetObject = null;
-            agent.autoBraking = false;
-            StartMovingToWayPoint();
-        }
-        [Server]
         void MeleeAttackPlayer()
         {
             //Make sure enemy doesn't move
@@ -224,34 +210,14 @@ namespace SheepDoom
             {
                 //Meele attack for dog
                 transform.LookAt(targetObject.transform);
-                /*animator.SetTrigger("Attack");
-                animator.SetTrigger("AttackToIdle");*/
-                Collider[] hitenemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+                animator.SetTrigger("Attack");
+                animator.SetTrigger("AttackToIdle");
+                Collider[] hitenmies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 
-                foreach (Collider enemy in hitenemies)
+                foreach (Collider enemy in hitenmies)
                 {
-                    if (enemy.CompareTag("Player") && (enemy.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2))
-                    {
-                        enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
-                    }
-                    else if (enemy.CompareTag("BaseMinion") && enemy.gameObject.layer == 9)
-                    {
-                        enemy.transform.parent.GetComponent<LeftMinionBehaviour>().TakeDamage(-meleedamage);
-                    }
-                    else if (enemy.CompareTag("Player") && (enemy.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1))
-                    {
-                        enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
-                    }
-                    else if (enemy.CompareTag("BaseMinion") && enemy.gameObject.layer == 8)
-                    {
-                        enemy.transform.parent.GetComponent<LeftMinionBehaviour>().TakeDamage(-meleedamage);
-                    }
-                    if (enemy.GetComponent<PlayerHealth>().getHealth() <= 0)
-                    {
-                        enemy.GetComponent<PlayerHealth>().SetPlayerDead();
-                        enemy.gameObject.GetComponent<GameEvent>().isMinion = true;
-                        goBackToTravelling();
-                    }
+                    enemy.GetComponent<PlayerHealth>().modifyinghealth(-meleedamage);
+
                 }
                 Debug.Log("MeleeAttack!");
                 alreadyattacked = true;
@@ -259,95 +225,93 @@ namespace SheepDoom
             }
         }
 
-            [Server]
-            void RangedAttackPlayer()
-            {
-                //Make sure enemy doesn't move
-                agent.SetDestination(transform.position);
+        void RangedAttackPlayer()
+        {
+            //Make sure enemy doesn't move
+            agent.SetDestination(transform.position);
 
+            transform.LookAt(targetObject.transform);
+
+            if (!alreadyattacked)
+            {
                 transform.LookAt(targetObject.transform);
+                //Attack
+                //Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+                Rigidbody rb = Instantiate(projectile, transform).GetComponent<Rigidbody>();
 
-                if (!alreadyattacked)
-                {
-                    transform.LookAt(targetObject.transform);
-                    //Attack
-                    //Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-                    Rigidbody rb = Instantiate(projectile, transform).GetComponent<Rigidbody>();
+                rb.transform.SetParent(null, false);
+                rb.transform.SetPositionAndRotation(this.transform.position, Quaternion.identity);
 
-                    rb.transform.SetParent(null, false);
-                    rb.transform.SetPositionAndRotation(this.transform.position, Quaternion.identity);
+                rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
+                //    rb.AddForce(transform.up * 8, ForceMode.Impulse);
 
-                    rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-                    //    rb.AddForce(transform.up * 8, ForceMode.Impulse);
-
-                    alreadyattacked = true;
-                    Invoke("ResetAttack", timeBetweenAttacks);
-                }
-            }
-            [Server]
-            void ResetAttack()
-            {
-                alreadyattacked = false;
-            }
-            [Server]
-            void StartMovingToWayPoint()
-            {
-                if (currentPoint < waypoints.Length)
-                {
-                    target = waypoints[currentPoint].position;
-                    direction = target - transform.position;
-                    if (direction.magnitude < 5 && passivestate == false)
-                    {
-
-                        currentPoint++;
-                    }
-                    else
-                    {
-                        agent.autoBraking = true;
-                    }
-
-                }
-                else if (currentPoint == waypoints.Length && passivestate == false)
-                {
-                    currentPoint = 0;
-                }
-                else if (currentPoint == waypoints.Length && passivestate == true)
-                {
-                    agent.autoBraking = true;
-                }
-                transform.LookAt(target);
-                agent.SetDestination(target);
-                agent.speed = CreepMoveSpeed;
-
-            }
-            [Server]
-            public void TakeDamage(int damage)
-            {
-                currenthealth += damage;
-
-                float currenthealthPct = (float)currenthealth / (float)maxHealth;
-                OnHealthPctChanged(currenthealthPct);
-            }
-
-            private void Destroyy()
-            {
-                NetworkServer.Destroy(this.gameObject);
-             }
-
-            private void OnDrawGizmosSelected()
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(transform.position, attackRange);
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, sightRange);
-            }
-            IEnumerator TimeUntilAggressivemode()
-            {
-                yield return new WaitForSeconds(20);
-                passivestate = false;
-                agent.autoBraking = false;
+                alreadyattacked = true;
+                Invoke("ResetAttack", timeBetweenAttacks);
             }
         }
 
+        void ResetAttack()
+        {
+            alreadyattacked = false;
+        }
 
+        void StartMovingToWayPoint()
+        {
+            if (currentPoint < waypoints.Length)
+            {
+                target = waypoints[currentPoint].position;
+                direction = target - transform.position;
+                if (direction.magnitude < 5 && passivestate == false)
+                {
+
+                    currentPoint++;
+                }
+                else
+                {
+                    agent.autoBraking = true;
+                }
+
+            }
+            else if (currentPoint == waypoints.Length && passivestate == false)
+            {
+                currentPoint = 0;
+            }
+            else if (currentPoint == waypoints.Length && passivestate == true)
+            {
+                agent.autoBraking = true;
+            }
+            transform.LookAt(target);
+            agent.SetDestination(target);
+            agent.speed = CreepMoveSpeed;
+
+        }
+        public void TakeDamage(int damage)
+        {
+            currenthealth += damage;
+
+            float currenthealthPct = (float)currenthealth / (float)maxHealth;
+            OnHealthPctChanged(currenthealthPct);
+        }
+
+        private void Destroyy()
+        {
+            Destroy(this.gameObject);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, sightRange);
+        }
+        IEnumerator TimeUntilAggressivemode()
+        {
+            yield return new WaitForSeconds(20);
+            passivestate = false;
+            agent.autoBraking = false;
+        }
     }
+
+
+}
