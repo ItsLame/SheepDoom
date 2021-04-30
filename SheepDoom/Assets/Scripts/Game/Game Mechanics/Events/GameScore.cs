@@ -264,7 +264,7 @@ namespace SheepDoom
                 for (int i = 0; i < players.Length; i++)
                 {
                     //======================= GET CURRENT PLAYER INFORMATION ========================
-                    string name = player.GetComponent<PlayerObj>().GetPlayerName();
+                    string name = player.GetComponent<PlayerAdmin>().P_playerName;
                     int charId = (int)player.GetComponent<PlayerAdmin>().getCharID();
                     int team = (int)player.GetComponent<PlayerAdmin>().getTeamIndex();
                     int kills = (int)player.GetComponent<PlayerAdmin>().PlayerKills;

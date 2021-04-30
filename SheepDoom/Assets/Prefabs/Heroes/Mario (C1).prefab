@@ -896,12 +896,12 @@ GameObject:
   - component: {fileID: 5660135970397916280}
   - component: {fileID: 3294719002493811009}
   - component: {fileID: 4896812141411699882}
-  - component: {fileID: 384625984419833668}
   - component: {fileID: -771400089307640272}
   - component: {fileID: 2668921912398802697}
   - component: {fileID: 5250038974471889277}
   - component: {fileID: 3780656211629919999}
   - component: {fileID: 1017492842763491974}
+  - component: {fileID: 3463108292721184319}
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
   - component: {fileID: 2014472282729360730}
@@ -1131,20 +1131,6 @@ MonoBehaviour:
   _ShopUltiButton1: {fileID: 0}
   _ShopUltiButton2: {fileID: 0}
   _ShopX: {fileID: 0}
---- !u!114 &384625984419833668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8015437381331526034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 205665d6082bcd64fafa8c386660683d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerNameLobby: {fileID: 0}
-  playerNameCharacterSelect: {fileID: 0}
 --- !u!114 &-771400089307640272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1242,6 +1228,19 @@ MonoBehaviour:
     type: 3}
   altUlti: {fileID: 3543547152907490667, guid: f1eaf3061d966ec4499d5258118c148e, type: 3}
   spawnPoint: {fileID: 5660135970150263288}
+--- !u!114 &3463108292721184319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015437381331526034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724a5249a7209a241b9d9790c293a3b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerName: {fileID: 750191605}
 --- !u!114 &8449280143259454606
 MonoBehaviour:
   m_ObjectHideFlags: 0

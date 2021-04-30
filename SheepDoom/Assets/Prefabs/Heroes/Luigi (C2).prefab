@@ -132,12 +132,12 @@ GameObject:
   - component: {fileID: 3805828758684287360}
   - component: {fileID: 6333437392463213753}
   - component: {fileID: 4154898345577890130}
-  - component: {fileID: 6279603492664990916}
   - component: {fileID: 1087264228214064072}
   - component: {fileID: 6869177918369833713}
   - component: {fileID: 3913887420858538012}
   - component: {fileID: 522307010120700973}
   - component: {fileID: 8703848159002313800}
+  - component: {fileID: 341605522974131500}
   - component: {fileID: 1088759763548799350}
   - component: {fileID: 2592283840863600004}
   - component: {fileID: 7037161822337196194}
@@ -369,20 +369,6 @@ MonoBehaviour:
   _ShopUltiButton1: {fileID: 0}
   _ShopUltiButton2: {fileID: 0}
   _ShopX: {fileID: 0}
---- !u!114 &6279603492664990916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1540617473773694058}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 205665d6082bcd64fafa8c386660683d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerNameLobby: {fileID: 0}
-  playerNameCharacterSelect: {fileID: 0}
 --- !u!114 &1087264228214064072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,6 +468,19 @@ MonoBehaviour:
   meleeAtkSpawn2: {fileID: 7491488441001068098}
   meleeAttackDuration1: 0.2
   meleeAttackSpeedMultiplier: 2
+--- !u!114 &341605522974131500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540617473773694058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724a5249a7209a241b9d9790c293a3b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerName: {fileID: 8817435344151137805}
 --- !u!114 &1088759763548799350
 MonoBehaviour:
   m_ObjectHideFlags: 0
