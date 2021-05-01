@@ -8,7 +8,7 @@ namespace SheepDoom
 {
     public class BaseCreepSpawner : NetworkBehaviour
     {
-        private float nextspawntime = 5;
+        private float nextspawntime = 20;
 
         [SerializeField] private GameObject Minion;
         [SerializeField] private float spawndelay;

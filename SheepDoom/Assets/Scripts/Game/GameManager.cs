@@ -17,7 +17,7 @@ namespace SheepDoom
 
         private bool playersInScene = false;
         private bool playersLoaded = false;
-        private int playersLoadedCount = 0;
+        //private int playersLoadedCount = 0;
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
         [SerializeField]
@@ -46,14 +46,15 @@ namespace SheepDoom
         
         void Update()
         {
-            if(isServer && playersInScene && (playersLoadedCount != MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count))
+            if(isServer && playersInScene && !playersLoaded)
             {
                 Debug.Log("BB");
                 foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
                 {
                     _player.GetComponent<PlayerObj>().ci.GetComponent<SpawnManager>().SpawnForGame("game", _player);
-                    playersLoadedCount++;
                 }
+                playersLoaded = true;
+                return;
             }
         }
 
