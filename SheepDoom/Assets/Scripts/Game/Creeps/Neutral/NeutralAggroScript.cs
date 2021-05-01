@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 namespace SheepDoom
 {
-    public class NeutralAggroScript : MonoBehaviour
+    public class NeutralAggroScript : NetworkBehaviour
     {
         [Header("Current Target")]
         public GameObject Attacker;
@@ -77,6 +78,7 @@ namespace SheepDoom
 
         }
 
+        [Server]
         private void OnTriggerStay(Collider other)
         {
             //1st priority: lock on to first player
@@ -125,7 +127,6 @@ namespace SheepDoom
                     {
                         transform.LookAt(Attacker.transform);
                         this.gameObject.transform.position += transform.forward * moveSpdInGame * Time.deltaTime;
-
                     }
 
                     //if in attack range
