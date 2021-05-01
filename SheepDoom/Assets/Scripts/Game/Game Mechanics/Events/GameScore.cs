@@ -184,16 +184,6 @@ namespace SheepDoom
             redScoreText = redScore.GetComponent<Text>();
             redScoreText.text = redCaptureScore.ToString();
 
-            //Blue Team Pull UI text
-            GameObject BluePlayerName1 = FindMe.instance.P_BluePlayerName1;
-            BluePlayerNameText1 = BluePlayerName1.GetComponent<Text>();
-
-            GameObject BluePlayerName2 = FindMe.instance.P_BluePlayerName2;
-            BluePlayerNameText2 = BluePlayerName2.GetComponent<Text>();
-
-            GameObject BluePlayerName3 = FindMe.instance.P_BluePlayerName2;
-            BluePlayerNameText3 = BluePlayerName3.GetComponent<Text>();
-
             //Blue Team Pull UI image
             GameObject BluePlayerImage1 = FindMe.instance.P_BluePlayerImage1;
             BluePlayerImage1UI = BluePlayerImage1.GetComponent<Image>();
@@ -203,16 +193,6 @@ namespace SheepDoom
 
             GameObject BluePlayerImage3 = FindMe.instance.P_BluePlayerImage3;
             BluePlayerImage3UI = BluePlayerImage3.GetComponent<Image>();
-
-            //Red Team Pull UI text
-            GameObject RedPlayerName1 = FindMe.instance.P_RedPlayerName1;
-            RedPlayerNameText1 = RedPlayerName1.GetComponent<Text>();
-
-            GameObject RedPlayerName2 = FindMe.instance.P_RedPlayerName2;
-            RedPlayerNameText2 = RedPlayerName2.GetComponent<Text>();
-
-            GameObject RedPlayerName3 = FindMe.instance.P_RedPlayerName3;
-            RedPlayerNameText3 = RedPlayerName3.GetComponent<Text>();
 
             //Red Team Pull UI image
             GameObject RedPlayerImage1 = FindMe.instance.P_RedPlayerImage1;
@@ -261,8 +241,29 @@ namespace SheepDoom
             foreach (GameObject player in players)
             {
                 Debug.Log("Scoreboard: players.Length:" + players.Length);
+
                 for (int i = 0; i < players.Length; i++)
                 {
+                    //Blue Team Pull UI text
+                    GameObject BluePlayerName1 = FindMe.instance.P_BluePlayerName1;
+                    BluePlayerNameText1 = BluePlayerName1.GetComponent<Text>();
+
+                    GameObject BluePlayerName2 = FindMe.instance.P_BluePlayerName2;
+                    BluePlayerNameText2 = BluePlayerName2.GetComponent<Text>();
+
+                    GameObject BluePlayerName3 = FindMe.instance.P_BluePlayerName2;
+                    BluePlayerNameText3 = BluePlayerName3.GetComponent<Text>();
+
+                    //Red Team Pull UI text
+                    GameObject RedPlayerName1 = FindMe.instance.P_RedPlayerName1;
+                    RedPlayerNameText1 = RedPlayerName1.GetComponent<Text>();
+
+                    GameObject RedPlayerName2 = FindMe.instance.P_RedPlayerName2;
+                    RedPlayerNameText2 = RedPlayerName2.GetComponent<Text>();
+
+                    GameObject RedPlayerName3 = FindMe.instance.P_RedPlayerName3;
+                    RedPlayerNameText3 = RedPlayerName3.GetComponent<Text>();
+
                     //======================= GET CURRENT PLAYER INFORMATION ========================
                     string name = player.GetComponent<PlayerAdmin>().P_playerName;
                     int charId = (int)player.GetComponent<PlayerAdmin>().getCharID();
@@ -293,60 +294,63 @@ namespace SheepDoom
                     //======================= GET CURRENT PLAYER'S CHARACTER IMAGE ========================
                     if (charId == 1)
                         CharacterImage = Character1;
-                    else if(charId == 2)
+                    else if (charId == 2)
                         CharacterImage = Character2;
-                    else if(charId == 3)
+                    else if (charId == 3)
                         CharacterImage = Character3;
-                    else if(charId == 4)
+                    else if (charId == 4)
                         CharacterImage = Character4;
-                    else if(charId == 5)
+                    else if (charId == 5)
                         CharacterImage = Character5;
-                    else if(charId == 6)
+                    else if (charId == 6)
                         CharacterImage = Character6;
 
-                    //======================= DISPLAY CURRENT PLAYER INFORMATION ========================
-                    if (team == 1) //If current player is Blue Team
+                    if (BluePlayerNameText1.text != name && BluePlayerNameText2.text != name && BluePlayerNameText3.text != name && RedPlayerNameText1.text != name && RedPlayerNameText2.text != name && RedPlayerNameText3.text != name)
                     {
-                        //Put name & image into UI 
-                        if (BluePlayerNameText1.text != null)
+                        //======================= DISPLAY CURRENT PLAYER INFORMATION ========================
+                        if (team == 1) //If current player is Blue Team
                         {
-                            BluePlayerNameText1.text = name;
-                            BluePlayerImage1UI.sprite = CharacterImage;
-                            BluePlayerImage1UI.color = new Color32(255, 255, 255, 255);
+                            //Put name & image into UI 
+                            if (string.IsNullOrEmpty(BluePlayerNameText1.text))
+                            {
+                                BluePlayerNameText1.text = name;
+                                BluePlayerImage1UI.sprite = CharacterImage;
+                                BluePlayerImage1UI.color = new Color32(255, 255, 255, 255);
+                            }
+                            else if (string.IsNullOrEmpty(BluePlayerNameText2.text))
+                            {
+                                BluePlayerNameText2.text = name;
+                                BluePlayerImage2UI.sprite = CharacterImage;
+                                BluePlayerImage2UI.color = new Color32(255, 255, 255, 255);
+                            }
+                            else if (string.IsNullOrEmpty(BluePlayerNameText3.text))
+                            {
+                                BluePlayerNameText3.text = name;
+                                BluePlayerImage3UI.sprite = CharacterImage;
+                                BluePlayerImage3UI.color = new Color32(255, 255, 255, 255);
+                            }
                         }
-                        else if (BluePlayerNameText2.text != null)
+                        else if (team == 2) //If current player is Red Team
                         {
-                            BluePlayerNameText2.text = name;
-                            BluePlayerImage2UI.sprite = CharacterImage;
-                            BluePlayerImage2UI.color = new Color32(255, 255, 255, 255);
-                        }
-                        else if (BluePlayerNameText3.text != null)
-                        {
-                            BluePlayerNameText3.text = name;
-                            BluePlayerImage3UI.sprite = CharacterImage;
-                            BluePlayerImage3UI.color = new Color32(255, 255, 255, 255);
-                        }
-                    }
-                    else if (team == 2) //If current player is Red Team
-                    {
-                        //Put name & image into UI 
-                        if (RedPlayerNameText1.text != null)
-                        {
-                            RedPlayerNameText1.text = name;
-                            RedPlayerImage1UI.sprite = CharacterImage;
-                            RedPlayerImage1UI.color = new Color32(255, 255, 255, 255);
-                        }
-                        else if (RedPlayerNameText2.text != null)
-                        {
-                            RedPlayerNameText2.text = name;
-                            RedPlayerImage2UI.sprite = CharacterImage;
-                            RedPlayerImage2UI.color = new Color32(255, 255, 255, 255);
-                        }
-                        else if (RedPlayerNameText3.text != null)
-                        {
-                            RedPlayerNameText3.text = name;
-                            RedPlayerImage3UI.sprite = CharacterImage;
-                            RedPlayerImage3UI.color = new Color32(255, 255, 255, 255);
+                            //Put name & image into UI 
+                            if (string.IsNullOrEmpty(RedPlayerNameText1.text))
+                            {
+                                RedPlayerNameText1.text = name;
+                                RedPlayerImage1UI.sprite = CharacterImage;
+                                RedPlayerImage1UI.color = new Color32(255, 255, 255, 255);
+                            }
+                            else if (string.IsNullOrEmpty(RedPlayerNameText2.text))
+                            {
+                                RedPlayerNameText2.text = name;
+                                RedPlayerImage2UI.sprite = CharacterImage;
+                                RedPlayerImage2UI.color = new Color32(255, 255, 255, 255);
+                            }
+                            else if (string.IsNullOrEmpty(RedPlayerNameText3.text))
+                            {
+                                RedPlayerNameText3.text = name;
+                                RedPlayerImage3UI.sprite = CharacterImage;
+                                RedPlayerImage3UI.color = new Color32(255, 255, 255, 255);
+                            }
                         }
                     }
                 }
@@ -354,15 +358,15 @@ namespace SheepDoom
             //======================= DISPLAY STAR PLAYER ========================
             if (BluePlayerNameText1.text == TopPlayer)
                 BP1StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if(BluePlayerNameText2.text == TopPlayer)
+            else if (BluePlayerNameText2.text == TopPlayer)
                 BP2StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if(BluePlayerNameText3.text == TopPlayer)
+            else if (BluePlayerNameText3.text == TopPlayer)
                 BP3StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if(RedPlayerNameText1.text == TopPlayer)
+            else if (RedPlayerNameText1.text == TopPlayer)
                 RP1StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if(RedPlayerNameText2.text == TopPlayer)
+            else if (RedPlayerNameText2.text == TopPlayer)
                 RP2StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if(RedPlayerNameText3.text == TopPlayer)
+            else if (RedPlayerNameText3.text == TopPlayer)
                 RP3StarImageUI.color = new Color32(255, 255, 255, 255);
 
             //======================= DISPLAY SCOREBOARD AND SET TEAM'S WIN/LOSE ========================
