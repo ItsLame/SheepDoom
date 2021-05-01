@@ -25,7 +25,7 @@ namespace SheepDoom
         //logging number to check if base/tower is under capture or not
         private int numOfCapturers;
         private bool giveScoreToCapturers;
-        private bool isBase;
+        [SerializeField] private bool isBase;
 
         public event Action<float> OnHealthPctChangedTower = delegate { };
 
@@ -162,8 +162,13 @@ namespace SheepDoom
                 P_capturedByBlue = false;
             }
             SetTowerColor();
-            P_giveScoreToCapturers = true;
-            P_scoreGameObject.GetComponent<GameScore>().ScoreUp(P_capturedByBlue, P_capturedByRed);
+
+            if (!isBase)
+            {
+                P_giveScoreToCapturers = true;
+                P_scoreGameObject.GetComponent<GameScore>().ScoreUp(P_capturedByBlue, P_capturedByRed);
+            }
+
             ModifyingHealth(P_hp);
         }
 

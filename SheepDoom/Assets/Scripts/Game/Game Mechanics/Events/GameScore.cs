@@ -289,38 +289,38 @@ namespace SheepDoom
                             TopPlayer = name;
                         }
                     }
-
+                    Debug.Log("Scoreboard: top player is " + TopPlayer + " with a score of " + TempHighestScore);
                     //======================= GET CURRENT PLAYER'S CHARACTER IMAGE ========================
                     if (charId == 1)
                         CharacterImage = Character1;
-                    if (charId == 2)
+                    else if(charId == 2)
                         CharacterImage = Character2;
-                    if (charId == 3)
+                    else if(charId == 3)
                         CharacterImage = Character3;
-                    if (charId == 4)
+                    else if(charId == 4)
                         CharacterImage = Character4;
-                    if (charId == 5)
+                    else if(charId == 5)
                         CharacterImage = Character5;
-                    if (charId == 6)
+                    else if(charId == 6)
                         CharacterImage = Character6;
 
                     //======================= DISPLAY CURRENT PLAYER INFORMATION ========================
                     if (team == 1) //If current player is Blue Team
                     {
                         //Put name & image into UI 
-                        if (string.IsNullOrEmpty(BluePlayerNameText1.text))
+                        if (BluePlayerNameText1.text != null)
                         {
                             BluePlayerNameText1.text = name;
                             BluePlayerImage1UI.sprite = CharacterImage;
                             BluePlayerImage1UI.color = new Color32(255, 255, 255, 255);
                         }
-                        else if (string.IsNullOrEmpty(BluePlayerNameText2.text))
+                        else if (BluePlayerNameText2.text != null)
                         {
                             BluePlayerNameText2.text = name;
                             BluePlayerImage2UI.sprite = CharacterImage;
                             BluePlayerImage2UI.color = new Color32(255, 255, 255, 255);
                         }
-                        else if (string.IsNullOrEmpty(BluePlayerNameText3.text))
+                        else if (BluePlayerNameText3.text != null)
                         {
                             BluePlayerNameText3.text = name;
                             BluePlayerImage3UI.sprite = CharacterImage;
@@ -330,19 +330,19 @@ namespace SheepDoom
                     else if (team == 2) //If current player is Red Team
                     {
                         //Put name & image into UI 
-                        if (string.IsNullOrEmpty(RedPlayerNameText1.text))
+                        if (RedPlayerNameText1.text != null)
                         {
                             RedPlayerNameText1.text = name;
                             RedPlayerImage1UI.sprite = CharacterImage;
                             RedPlayerImage1UI.color = new Color32(255, 255, 255, 255);
                         }
-                        else if (string.IsNullOrEmpty(RedPlayerNameText2.text))
+                        else if (RedPlayerNameText2.text != null)
                         {
                             RedPlayerNameText2.text = name;
                             RedPlayerImage2UI.sprite = CharacterImage;
                             RedPlayerImage2UI.color = new Color32(255, 255, 255, 255);
                         }
-                        else if (string.IsNullOrEmpty(RedPlayerNameText3.text))
+                        else if (RedPlayerNameText3.text != null)
                         {
                             RedPlayerNameText3.text = name;
                             RedPlayerImage3UI.sprite = CharacterImage;
@@ -354,15 +354,15 @@ namespace SheepDoom
             //======================= DISPLAY STAR PLAYER ========================
             if (BluePlayerNameText1.text == TopPlayer)
                 BP1StarImageUI.color = new Color32(255, 255, 255, 255);
-            if (BluePlayerNameText2.text == TopPlayer)
+            else if(BluePlayerNameText2.text == TopPlayer)
                 BP2StarImageUI.color = new Color32(255, 255, 255, 255);
-            if (BluePlayerNameText3.text == TopPlayer)
+            else if(BluePlayerNameText3.text == TopPlayer)
                 BP3StarImageUI.color = new Color32(255, 255, 255, 255);
-            if (RedPlayerNameText1.text == TopPlayer)
+            else if(RedPlayerNameText1.text == TopPlayer)
                 RP1StarImageUI.color = new Color32(255, 255, 255, 255);
-            if (RedPlayerNameText2.text == TopPlayer)
+            else if(RedPlayerNameText2.text == TopPlayer)
                 RP2StarImageUI.color = new Color32(255, 255, 255, 255);
-            if (RedPlayerNameText3.text == TopPlayer)
+            else if(RedPlayerNameText3.text == TopPlayer)
                 RP3StarImageUI.color = new Color32(255, 255, 255, 255);
 
             //======================= DISPLAY SCOREBOARD AND SET TEAM'S WIN/LOSE ========================
