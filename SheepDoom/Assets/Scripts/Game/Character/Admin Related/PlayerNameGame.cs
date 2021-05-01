@@ -22,7 +22,6 @@ namespace SheepDoom
                 yield return null;
 
             playerName.text = this.GetComponent<PlayerAdmin>().P_playerName;
-            Debug.Log("Scoreboard: playerName:" + playerName.text);
         }
 
         public Text getPlayerName()
