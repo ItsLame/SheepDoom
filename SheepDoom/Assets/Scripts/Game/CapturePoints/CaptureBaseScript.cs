@@ -55,7 +55,49 @@ namespace SheepDoom
             // this is tower's script
             P_isBase = true;
         }
-        
+
+        protected override void OnTriggerStay(Collider _collider)
+        {
+            if (isServer)
+            {
+                if (_collider.CompareTag("Player"))
+                {
+                    // get player teamID
+                    float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                    // get info of is player dead or alive
+                    bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
+
+                    OnStay(_collider, tID);
+
+                    if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
+                    {
+                        //have another condition to check whether base can be captured
+                        //if no outer tower has been captured base cant be captured
+                        
+                        //if blue team
+                        if (P_capturedByBlue)
+                        {
+                            if (ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
+                            {
+                                ModifyingHealth(-(P_captureRate * Time.deltaTime));
+                                RpcUpdateClients(false, true, P_isBase);
+                            }
+                        }
+
+                        else if (P_capturedByRed)
+                        {
+                            if (ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
+                            {
+                                ModifyingHealth(-(P_captureRate * Time.deltaTime));
+                                RpcUpdateClients(false, true, P_isBase);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
         protected override void Victory()
         {
             Debug.Log("Scoreboard: victory call game end");

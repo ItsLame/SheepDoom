@@ -24,6 +24,7 @@ TagManager:
   - TeamConHealPad
   - Stage
   - Shield
+  - DeathBall
   layers:
   - Default
   - TransparentFX

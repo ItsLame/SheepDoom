@@ -395,14 +395,25 @@ namespace SheepDoom
 
         public override void OnStartServer()
         {
-            blueCaptureScore = 1;
-            redCaptureScore = 1;
+            blueCaptureScore = 2;
+            redCaptureScore = 2;
             updateScoreDisplay();
         }
 
         public override void OnStartClient()
         {
             updateScoreDisplay(); // when start on client, it will automatically take values from server
+        }
+
+        //accessor method for scores
+        public float getBlueScore()
+        {
+            return blueCaptureScore;
+        }
+
+        public float getRedScore()
+        {
+            return redCaptureScore;
         }
     }
 }

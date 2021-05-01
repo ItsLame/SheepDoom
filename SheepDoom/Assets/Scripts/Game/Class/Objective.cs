@@ -219,8 +219,13 @@ namespace SheepDoom
 
                     if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
                     {
-                        ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                        RpcUpdateClients(false, true, P_isBase);
+                        //decrease point normally if not base
+                        if (!isBase)
+                        {
+                            ModifyingHealth(-(P_captureRate * Time.deltaTime));
+                            RpcUpdateClients(false, true, P_isBase);
+                        }
+
                     }
                 }
             }
