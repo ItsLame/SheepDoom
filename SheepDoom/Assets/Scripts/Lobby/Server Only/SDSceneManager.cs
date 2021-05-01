@@ -79,12 +79,6 @@ namespace SheepDoom
             SceneManager.MoveGameObjectToScene(gameObject, _scene);
         }
 
-        [Server]    // move other objects to new scene
-        public void MoveObjToNewScene(Scene _scene, GameObject _gameObject)
-        {
-            SceneManager.MoveGameObjectToScene(_gameObject, _scene);
-        }
-
         [Server]
         public void UnloadScenes(NetworkConnection conn, string _matchID, bool _unloadLobby, bool _unloadCharSelect)
         {
@@ -94,7 +88,6 @@ namespace SheepDoom
         [Server]
         public void JoinMatch(NetworkConnection conn, string _matchID) // for non-hosts
         {
-            //ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, true); // load game 
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[1].name, true); // load char select
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[0].name, true); // load lobby
         }
@@ -111,40 +104,21 @@ namespace SheepDoom
                 // latest loaded scene on client will be the active scene i think
                 // load lobby scene
                 yield return SceneManager.LoadSceneAsync(_lobbyScene, LoadSceneMode.Additive);
-                /*AsyncOperation asyncLoadLobby = SceneManager.LoadSceneAsync(_lobbyScene, LoadSceneMode.Additive);
-                while (!asyncLoadLobby.isDone)
-                    yield return null;*/
-
+                newLobbyScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
                 MatchMaker.instance.GetMatches()[P_matchID].SetLobbyUIManager(LobbyUIManager.instance);
                 MatchMaker.instance.GetMatches()[P_matchID].GetLobbyUIManager().P_matchID = P_matchID;
+
                 // load character select scene
                 yield return SceneManager.LoadSceneAsync(_charSelectScene, LoadSceneMode.Additive);
-
-                /*AsyncOperation asyncLoadCharSelect = SceneManager.LoadSceneAsync(_charSelectScene, LoadSceneMode.Additive);
-                while (!asyncLoadCharSelect.isDone)
-                    yield return null;*/
-
+                newCharSelectScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
                 MatchMaker.instance.GetMatches()[P_matchID].SetCharacterSelectUIManager(CharacterSelectUIManager.instance);
                 MatchMaker.instance.GetMatches()[P_matchID].GetCharacterSelectUIManager().P_matchID = P_matchID;
-
-                //yield return SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive);
-               /* AsyncOperation asyncLoadGame = SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive);
-                while (!asyncLoadGame.isDone)
-                    yield return null;*/
-                //MatchMaker.instance.GetMatches()[P_matchID].SetGameManager(GameManager.instance);
-                //MatchMaker.instance.GetMatches()[P_matchID].GetGameManager().P_matchID = P_matchID;
-
-                newLobbyScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 2);
-                newCharSelectScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount() - 1);
-                //newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount());
                 
                 // set scene in matches
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newLobbyScene);
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newCharSelectScene);
-                //MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
 
                 // send scene load message to clients, latest loaded scene will be the active scene on client for hosts
-                //ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[2].name, true);
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[1].name, true); // load char select
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0].name, true); // load lobby
 
@@ -154,9 +128,9 @@ namespace SheepDoom
             else if(!P_gameSceneLoaded)
             {
                 yield return SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive);
+                newGameScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
                 MatchMaker.instance.GetMatches()[P_matchID].SetGameManager(GameManager.instance);
                 MatchMaker.instance.GetMatches()[P_matchID].GetGameManager().P_matchID = P_matchID;
-                newGameScene = SceneManager.GetSceneAt((MatchMaker.instance.GetMatches().Count * 3) - MatchMaker.instance.GetScenesUnloadedCount());
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
                 P_gameSceneLoaded = true;
             }
