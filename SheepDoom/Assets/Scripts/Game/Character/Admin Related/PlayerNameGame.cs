@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 namespace SheepDoom
 {
-    public class PlayerNameGame : NetworkBehaviour
+    public class PlayerNameGame : MonoBehaviour
     {
         [SerializeField] private Text playerName;
 
-        // Start is called before the first frame update
-        void Start()
+        void Update()
         {
             StartCoroutine(SetPlayerName());
         }

@@ -356,19 +356,21 @@ namespace SheepDoom
                 }
             }
             //======================= DISPLAY STAR PLAYER ========================
-            if (BluePlayerNameText1.text == TopPlayer)
-                BP1StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if (BluePlayerNameText2.text == TopPlayer)
-                BP2StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if (BluePlayerNameText3.text == TopPlayer)
-                BP3StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if (RedPlayerNameText1.text == TopPlayer)
-                RP1StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if (RedPlayerNameText2.text == TopPlayer)
-                RP2StarImageUI.color = new Color32(255, 255, 255, 255);
-            else if (RedPlayerNameText3.text == TopPlayer)
-                RP3StarImageUI.color = new Color32(255, 255, 255, 255);
-
+            if (!string.IsNullOrEmpty(TopPlayer))
+            {
+                if (BluePlayerNameText1.text == TopPlayer)
+                    BP1StarImageUI.color = new Color32(255, 255, 255, 255);
+                else if (BluePlayerNameText2.text == TopPlayer)
+                    BP2StarImageUI.color = new Color32(255, 255, 255, 255);
+                else if (BluePlayerNameText3.text == TopPlayer)
+                    BP3StarImageUI.color = new Color32(255, 255, 255, 255);
+                else if (RedPlayerNameText1.text == TopPlayer)
+                    RP1StarImageUI.color = new Color32(255, 255, 255, 255);
+                else if (RedPlayerNameText2.text == TopPlayer)
+                    RP2StarImageUI.color = new Color32(255, 255, 255, 255);
+                else if (RedPlayerNameText3.text == TopPlayer)
+                    RP3StarImageUI.color = new Color32(255, 255, 255, 255);
+            }
             //======================= DISPLAY SCOREBOARD AND SET TEAM'S WIN/LOSE ========================
             //if blue team wins
             if (TeamID == 1)
