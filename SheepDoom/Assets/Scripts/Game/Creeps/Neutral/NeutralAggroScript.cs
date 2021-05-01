@@ -7,7 +7,11 @@ namespace SheepDoom
 {
     public class NeutralAggroScript : NetworkBehaviour
     {
+        [Header("Starting position")]
+        [SerializeField] private Transform startPos;
+
         [Header("Current Target")]
+        [Space(15)]
         public GameObject Attacker;
         public bool LockedOn;
 
@@ -38,6 +42,7 @@ namespace SheepDoom
             moveSpdInGame = moveSpd;
         }
 
+        [Server]
         // Update is called once per frame
         void Update()
         {
@@ -62,6 +67,7 @@ namespace SheepDoom
             }
         }
 
+        [Server]
         private void OnTriggerEnter(Collider other)
         {
             //if no target, lock onto a new player in range
@@ -155,6 +161,7 @@ namespace SheepDoom
 
         }
 
+        [Server]
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Player") && LockedOn)
@@ -163,6 +170,12 @@ namespace SheepDoom
                 Attacker = null;
                 LockedOn = false;
             }
+        }
+
+        [Server]
+        public void backToStart()
+        {
+            this.gameObject.transform.position = startPos.transform.position;
         }
     }
 
