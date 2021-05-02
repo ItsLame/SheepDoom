@@ -44,7 +44,7 @@ namespace SheepDoom
                 {
                     if (col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
                     {
-                        if (col.gameObject.layer == 9) // consortium
+                        if (col.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2) // consortium
                         {
                             col.GetComponent<PlayerHealth>().modifyinghealth(-damage);
                             Destroyy();
@@ -75,7 +75,7 @@ namespace SheepDoom
                 {
                     if (col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
                     {
-                        if (col.gameObject.layer == 8) // coalition
+                        if (col.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1) // coalition
                         {
                             col.GetComponent<PlayerHealth>().modifyinghealth(-damage);
                             Destroyy();
