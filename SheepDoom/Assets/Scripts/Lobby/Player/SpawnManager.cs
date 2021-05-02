@@ -32,7 +32,6 @@ namespace SheepDoom
         [Header("Player number based on the order they are spawned")]
         //private float currentPlayerNumber;
         [SerializeField] private GameObject playerSpawnPoint;
-        [SerializeField] [SyncVar(hook = nameof(OnTeamUpdate))] private int playerTeamID = 0;
         //public float playerTeamID;
 
         [Header("Spawn position (Team 1)")]
@@ -50,34 +49,15 @@ namespace SheepDoom
             set{playerSpawnPoint = value;}
         }
 
-        public int P_playerTeamID
-        {
-            get{return playerTeamID;}
-            set{playerTeamID = value;}
-        }
-
         #endregion
 
         // dynamically store and call functions and dispatched on the player object spawned by the client
         // note that client prefab/object and player prefab/object are 2 different things but are connected
         public static event Action<GameObject> OnClientPlayerSpawned;
 
-        private void OnTeamUpdate(int oldTeamID, int newTeamID)
-        {
-            if(newTeamID == 1)
-                P_playerSpawnPoint = team1SpawnPoint;
-            else if(newTeamID == 2)
-                P_playerSpawnPoint = team2SpawnPoint;
-        }
-
         void Awake()
         {
             _cn = GetComponent<ClientName>();
-        }
-
-        private void Start()
-        {
-            //currentPlayerNumber = 0;
         }
 
         // This function will be called when player object is spawned for a client, make sure to pass the player obj
@@ -135,13 +115,8 @@ namespace SheepDoom
             {
                 spawn = Instantiate(playerPrefab.gameObject);
             }
-            //else if (playerType == "select")
-            //{
-                //spawn = Instantiate(playerSelectPrefab.gameObject);
-            //}
             else if (playerType == "game")
             {
-                Debug.Log("is player null? " + player);
                 NetworkIdentity hero = null;
                 string heroName = string.Empty;
                 string matchID = string.Empty;

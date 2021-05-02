@@ -15,13 +15,8 @@ namespace SheepDoom
     {
         public static GameManager instance;
 
-        private bool playersInScene = false;
-        private bool playersLoaded = false;
-        //private int playersLoadedCount = 0;
         [SerializeField]
         [SyncVar] private string matchID = string.Empty;
-        [SerializeField]
-        private Transform team1SpawnPoint, team2SpawnPoint;
 
         public string P_matchID
         {
@@ -29,34 +24,16 @@ namespace SheepDoom
             set { matchID = value; }
         }
 
-        public bool GetPlayerSpawnStatus()
-        {
-            return playersInScene;
-        }
-
         [Server]
         public void StartGameScene(string _matchID)
         {
-            Debug.Log("AA");
             if (P_matchID == _matchID)
-                playersInScene = true;
+                Debug.Log("Correct match");
             else
                 Debug.Log("mismatch in gamemanager matchID and matchmaker sent matchid");
         }
         
-        void Update()
-        {
-            if(isServer && playersInScene && !playersLoaded)
-            {
-                Debug.Log("BB");
-                foreach (GameObject _player in MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList())
-                {
-                    _player.GetComponent<PlayerObj>().ci.GetComponent<SpawnManager>().SpawnForGame("game", _player);
-                }
-                playersLoaded = true;
-                return;
-            }
-        }
+        
 
         /*private void Start()
         {

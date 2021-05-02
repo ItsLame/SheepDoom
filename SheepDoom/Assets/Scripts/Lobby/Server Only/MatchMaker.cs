@@ -96,6 +96,11 @@ namespace SheepDoom
             return gameManager;
         }
 
+        public SyncListGameObject GetheroList()
+        {
+            return heroes;
+        }
+
         #endregion
 
         #region Set
@@ -287,11 +292,14 @@ namespace SheepDoom
                     }
 
                     foreach(GameObject player in matches[_matchID].GetPlayerObjList())
-                    {
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[2], _matchID, false, true);
-                    }
-                        
-                    matches[_matchID].GetGameManager().StartGameScene(_matchID);
+
+                    foreach(GameObject player in matches[_matchID].GetPlayerObjList())
+                    {
+                        Client ci = player.GetComponent<PlayerObj>().ci;
+                        ci.GetComponent<SpawnManager>().SpawnForGame("game", player);
+                        matches[_matchID].GetHeroesList().Add(ci.GetComponent<SpawnManager>().GetPlayerObj());
+                    }  
                 }
             }
         }
