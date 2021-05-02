@@ -17,46 +17,13 @@ namespace SheepDoom
         }
 
         [Server]
-        public void StartNewScene(string _matchID, bool _charSelect, bool _game)
+        public void StartNewScene(string _matchID)
         {
             if (pO.GetMatchID() == _matchID) // check matchID
-            {
-                if(_charSelect)
-                    MatchMaker.instance.StartNewScene(_matchID, true, false);
-                /*else if(_game)
-                {
-                    // start game scene for server & host (host is force start clicker for now)
-                    MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().StartScenes(connectionToClient);
-                    // if server n host done, let other players load game scene n unload char select
-                    //StartCoroutine(WaitForServer(_matchID));
-                    // check game scene load status n move objects after
-                    //StartCoroutine(WaitForGameScene(_matchID));
-                }*/
-            }
+                MatchMaker.instance.StartNewScene(_matchID, true, false);
             else
                 Debug.Log("Match ID: " + _matchID + " does not exist");
         }
-        
-        /*private IEnumerator WaitForServer(string _matchID)
-        {
-            while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_gameSceneLoaded)
-                yield return null;
-
-             // start game scene for all remaining players
-            foreach (var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
-            {
-                if(SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
-                {
-                    if(conn != connectionToClient)
-                        // let user(s) load game scene
-                        MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinGame(conn, _matchID);
-                        //TargetLoadGameScene(conn);
-                }
-            }
-
-            // proceed when loaded
-            MatchMaker.instance.StartNewScene(_matchID, false, true);
-        }*/
 
         [Server]
         public void MoveToNewScene(Scene _scene, string _matchID, bool _charSelect, bool _game)

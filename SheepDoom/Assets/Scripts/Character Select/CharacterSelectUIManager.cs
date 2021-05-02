@@ -104,10 +104,6 @@ namespace SheepDoom
                 ServerStartSetting();
                 playersInScene = true;
             }
-            else
-            {
-                Debug.Log("matchmaker sent matchID and charselectuimanager matchid different");
-            }
         }
         private void Start()
         {
@@ -181,7 +177,6 @@ namespace SheepDoom
                 }
                 else if(!_lockIn)
                     SetUI_Hero(_player, _heroName, _lockIn);    // server view
-                    //TargetUpdateOwner(conn, _player, _heroName, true, _init, _lockIn); // local client view
 
                 RpcUpdateOthers(_player, _heroName, _teamIndex, _init, _lockIn);    // other client view
             }
@@ -290,8 +285,6 @@ namespace SheepDoom
             if(_player.GetComponent<NetworkIdentity>().hasAuthority)
             {
                 string _heroName = _player.GetComponent<PlayerObj>().GetHeroName();
-                Debug.Log("HERONAME: " + _heroName);
-
                 ClientRequestUpdate(_heroName, true);
             }
         }
@@ -304,8 +297,6 @@ namespace SheepDoom
                 SetUI_Player(_player);
                 SetUI_Team(_player, _teamIndex);
             }
-
-            //Debug.Log("Player: "+_player.GetComponent<PlayerObj>().GetPlayerName()+"\tSet HeroName: "+_heroName+"\nInit Status: "+_init+"\tLock In Status: "+_lockIn);
 
             SetUI_Hero(_player, _heroName, _lockIn);
         }
@@ -395,7 +386,6 @@ namespace SheepDoom
             // will need to add another bool when hero lock-in is implemented
             if (!_lockIn)
             {
-                Debug.Log("SETUI_HERO LOCK IN? NO...");
                 if (_heroName == string.Empty)
                     _player.GetComponent<PlayerLobbyUI>().P_playerCharacter.text = "Picking a Hero...";
                 else
@@ -406,7 +396,6 @@ namespace SheepDoom
             }
             else if (_lockIn)
             {
-                Debug.Log("SETUI_HERO LOCK IN? YES! " + _heroName);
                 _player.GetComponent<PlayerObj>().SetHeroName(_heroName);
                 _player.GetComponent<PlayerLobbyUI>().P_playerCharacter.text = _heroName;
             }
@@ -415,13 +404,6 @@ namespace SheepDoom
         #endregion
 
         #region Debug
-
-        public void ForceStart()
-        {
-            //CmdForceStart(PlayerObj.instance.gameObject, PlayerObj.instance.GetMatchID());
-            CmdForceStart();
-        }
-
         [Command(ignoreAuthority = true)]
         //private void CmdForceStart(GameObject _player, string _matchID)
         private void CmdForceStart()
@@ -487,91 +469,3 @@ namespace SheepDoom
         #endregion
     }
 }
-
-#region archive
-
-/*
-private IEnumerator UnloadLobbyScene()
-{
-    if(isServer)
-        SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
-    if(isClient)
-    {
-        yield return new WaitForSecondsRealtime(0.5f);
-        SceneManager.UnloadSceneAsync(SDSceneManager.instance.P_lobbyScene);
-    }
-}
-*/
-
-/*private IEnumerator RequestCharacterSelectUpdate(string _matchID, GameObject _player, bool _startGame)
-{
-    //CmdRequestCharacterSelectUpdate(_matchID, _player, _startGame);
-
-    _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerLobbyObject.SetActive(false);
-    _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(true);
-
-    if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-    {
-        P_team1GameObject.SetActive(true);
-        P_team2GameObject.SetActive(false);
-    }
-    else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-    {
-        P_team1GameObject.SetActive(false);
-        P_team2GameObject.SetActive(true);
-    }
-
-    if(_startGame == true)
-        _player.GetComponent<PlayerObj>().ci.GetComponent<SpawnManager>().SpawnPlayer("game");
-
-    yield return null;
-}*/
-
-/*private IEnumerator SetUI_CharacterSelect(string _matchID)
-{
-    if(isServer)
-    {
-        while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_scenesLoaded)
-            yield return null;
-
-        foreach(var _player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
-        {
-            if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-                _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.transform, false);
-            else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-                _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team2GameObject.transform, false);
-        }
-    }
-
-    if(isClient)
-    {
-
-    }
-
-    if(isServer)
-    {
-        //while(!MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().P_characterSelectSceneLoaded)
-            yield return null;
-
-        foreach(var _player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
-        {
-            if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-            {
-                MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.SetActive(true);
-                MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team2GameObject.SetActive(false);
-
-                _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.transform, false);
-            }
-
-            else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-            {
-                MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team1GameObject.SetActive(false);
-                MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team2GameObject.SetActive(true);
-
-                _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetCharacterSelectUIManager().P_team2GameObject.transform, false);
-            }
-        }
-    }
-}*/
-
-#endregion

@@ -258,9 +258,6 @@ namespace SheepDoom
                     matches[_matchID].AddTeam2Count();
                     _player.GetComponent<PlayerObj>().SetTeamIndex(2);
                 }
-
-                Debug.Log("JOINED! TEAM1COUNT: " + matches[_matchID].GetTeam1Count());
-                Debug.Log("JOINED! TEAM2COUNT: " + matches[_matchID].GetTeam2Count());
                 
                 return true;
             }
@@ -325,7 +322,7 @@ namespace SheepDoom
         /// </summary>
         public override void OnStartClient() 
         {
-            DontDestroyOnLoad(gameObject);
+            
         }
 
         /// <summary>

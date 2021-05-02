@@ -103,8 +103,6 @@ namespace SheepDoom
 
         private void Start()
         {
-            /*(isServer)
-                ServerStartSetting(SDSceneManager.instance.P_matchID);*/
             if(isClient)
                 ClientStartSetting();
         }
@@ -115,6 +113,7 @@ namespace SheepDoom
             {
                 ServerStartSetting(P_matchID);
                 matchIDSet = true;
+                return;
             }
         }
 
@@ -190,8 +189,6 @@ namespace SheepDoom
                 MatchMaker.instance.GetMatches()[_matchID].MinusTeam2Count();
             }
             StartCoroutine(SetUI_Lobby(_matchID));
-            Debug.Log(_matchID + " TEAM1: " + MatchMaker.instance.GetMatches()[_matchID].GetTeam1Count());
-            Debug.Log(_matchID + " TEAM2: " + MatchMaker.instance.GetMatches()[_matchID].GetTeam2Count());
         }
 
         [Server]
@@ -208,7 +205,6 @@ namespace SheepDoom
                 MatchMaker.instance.GetMatches()[_matchID].AddCountReady();
             }
             SetUI_StartReadyUI(_player, false);
-            Debug.Log("Lobby ready count: " + MatchMaker.instance.GetMatches()[_matchID].GetReadyCount());
         }
 
         [Server]
@@ -219,7 +215,7 @@ namespace SheepDoom
                 if (MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == MatchMaker.instance.GetMatches()[_matchID].GetReadyCount()) // all ready
                 {
                     MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_startStatusMsg = "Game starting..";
-                    _player.GetComponent<StartGame>().StartNewScene(_matchID, true, false);
+                    _player.GetComponent<StartGame>().StartNewScene(_matchID);
                 }
                 else
                     MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_startStatusMsg = "Some players not ready!";
@@ -385,11 +381,8 @@ namespace SheepDoom
                 if (_player.GetComponent<NetworkIdentity>().hasAuthority)
                 {
                     P_matchIDText.GetComponent<Text>().text = _matchID;
-                    Debug.Log("Player object's matchID: " + _player.GetComponent<PlayerObj>().GetMatchID() + " = " + "lobbyUI's matchID: " + _matchID);
                     CmdRequestLobbyUpdate(_matchID, _player, false, false, false);
                 }
-                else
-                    Debug.Log(_player + "object has no authority for setuilobby");
             }
 
             if(isServer)
@@ -399,9 +392,6 @@ namespace SheepDoom
 
                 foreach(var _player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
                 {
-                    Debug.Log("Player matchID: " + _player.GetComponent<PlayerObj>().GetMatchID());
-                    Debug.Log("Player index: " + _player.GetComponent<PlayerObj>().GetTeamIndex());
-
                     if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                         _player.GetComponent<PlayerObj>().gameObject.transform.SetParent(MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_team1GameObject.transform, false);
                     else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
@@ -479,7 +469,7 @@ namespace SheepDoom
         [Command(ignoreAuthority = true)]
         private void CmdForceStart(GameObject _player, string _matchID)
         {
-            _player.GetComponent<StartGame>().StartNewScene(_matchID, true, false);
+            _player.GetComponent<StartGame>().StartNewScene(_matchID);
         }
 
         #endregion
@@ -494,7 +484,6 @@ namespace SheepDoom
         public override void OnStartServer()
         {
             instance = this;
-            //MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].SetLobbyUIManager(instance);
         }
 
         /// <summary>
@@ -539,242 +528,4 @@ namespace SheepDoom
 
         #endregion
     }
-
-    #region client archive
-    /*private IEnumerator RequestLobbyUpdate(string _matchID, GameObject _player, bool _startMatch)
-       {
-           CmdRequestLobbyUpdate(_matchID, _player, _startMatch);
-
-           yield return null;
-       }*/
-
-    /*[Command(ignoreAuthority = true)]
-        private void CmdRequestLobbyUpdate(string _matchID, GameObject _player, bool _startMatch)
-        {
-            StartCoroutine(SetUI_Lobby(_matchID));
-            Debug.Log("Count in networkid-conn list: " + SDNetworkManager.LocalPlayersNetId.Count);
-            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
-            {
-                Debug.Log("Did i find the correct connection?");
-                foreach(var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
-                {
-                    TargetUpdateJoiner(conn, player);
-                }
-
-                RpcUpdateExisting(_player);
-                
-                if(_startMatch == true)
-                    MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().StartCharacterSelectScene();
-            }
-            else
-            {
-                Debug.Log("Connection with this netID does not exist");
-            }
-        }*/
-
-    /*private IEnumerator SetUI_StartReadyButton(GameObject _player)
-        {
-            while(startButton == null && readyButton == null)
-                yield return "start/ready button missing!";
-
-            //set start/ready buttons
-            if(_player.GetComponent<PlayerObj>().GetIsHost() == true)
-            {
-                P_startButton.SetActive(true);
-                P_readyButton.SetActive(false);
-            }
-            else if(_player.GetComponent<PlayerObj>().GetIsHost() == false)
-            {
-                if(!P_readyButton.activeSelf)
-                {
-                    P_startButton.SetActive(false);
-                    P_readyButton.SetActive(true);
-                }
-
-                if(_player.GetComponent<PlayerObj>().GetIsReady() == true)
-                    readyButton.transform.GetChild(0).GetComponent<Text>().text = "Cancel";
-                else if(_player.GetComponent<PlayerObj>().GetIsReady() == false)
-                    readyButton.transform.GetChild(0).GetComponent<Text>().text = "Ready";
-            }
-        }*/
-
-    /*private IEnumerator SetUI_SwapButton(GameObject _player)
-    {
-        while(P_toTeam1Button == null && P_toTeam2Button == null)
-            yield return "swap buttons button missing!";
-
-        //set swap buttons
-        if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-        {
-            P_toTeam1Button.SetActive(false);
-            P_toTeam2Button.SetActive(true);
-        }
-        else if(_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-        {
-            P_toTeam1Button.SetActive(true);
-            P_toTeam2Button.SetActive(false);
-        }
-    }*/
-
-    /*private IEnumerator SetUI_TeamSwap(int GoTeam, GameObject _player)
-        {
-            while(GoTeam < 1 || GoTeam  > 2)
-                yield return "invalid team number!";
-
-            yield return StartCoroutine(RequestSwapUpdate(GoTeam, _player));
-            StartCoroutine(SetUI_SwapButton(_player));
-            StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false));
-        }*/
-
-    /* private IEnumerator RequestSwapUpdate(int GoTeam, GameObject _player)
-     {
-         CmdRequestSwapUpdate(GoTeam, _player);
-
-         while(_player.GetComponent<PlayerObj>().GetTeamIndex() != GoTeam)
-             yield return null;
-     }*/
-
-    /*[Command(ignoreAuthority = true)]
-    private void CmdRequestSwapUpdate(int GoTeam, GameObject _player)
-    {
-        if(GoTeam == 1 && _player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-        {
-            _player.GetComponent<PlayerObj>().SetTeamIndex(1);
-            while(_player.GetComponent<PlayerObj>().GetTeamIndex() != 1)
-                 _player.GetComponent<PlayerObj>().SetTeamIndex(1);
-
-            MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].AddTeam1Count();
-            MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].MinusTeam2Count();
-        }
-        else if(GoTeam == 2 && _player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-        {
-            _player.GetComponent<PlayerObj>().SetTeamIndex(2);
-            /*while(_player.GetComponent<PlayerObj>().GetTeamIndex() != 2)
-                _player.GetComponent<PlayerObj>().SetTeamIndex(2);
-
-            MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].AddTeam2Count();
-            MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].MinusTeam1Count();
-        }
-
-        Debug.Log("TEAM1: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count());
-        Debug.Log("TEAM2: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
-    }*/
-
-    /* private IEnumerator CheckStart(GameObject _player)
-       {
-           if(_player.GetComponent<PlayerObj>().GetIsHost() == true)
-           {
-               yield return StartCoroutine(RequestCheckStart(_player));
-           }   
-       }*/
-
-    /* private IEnumerator RequestCheckStart(GameObject _player)
-     {
-         CmdRequestCheckStart(_player);
-
-         yield return null;
-     }*/
-
-    /*private void ChangeReady(GameObject _player)
-        {
-            if(_player.GetComponent<PlayerObj>().GetIsReady() == true)
-                StartCoroutine(SetUI_Ready(false, _player));
-            else if(_player.GetComponent<PlayerObj>().GetIsReady() == false)
-                StartCoroutine(SetUI_Ready(true, _player));
-        }
-
-        private IEnumerator SetUI_Ready(bool ChangeReady, GameObject _player)
-        {
-            yield return StartCoroutine(RequestReadyUpdate(ChangeReady, _player));
-            //StartCoroutine(SetUI_StartReadyButton(_player));
-            //StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false));
-        }
-
-        private IEnumerator RequestReadyUpdate(bool ChangeReady, GameObject _player)
-        {
-            CmdRequestReadyUpdate(ChangeReady, _player);
-
-            while(ChangeReady != _player.GetComponent<PlayerObj>().GetIsReady())
-                yield return null;     
-        }
-
-        [Command(ignoreAuthority = true)]
-        private void CmdRequestReadyUpdate(bool ChangeReady, GameObject _player)
-        {
-            _player.GetComponent<PlayerObj>().SetIsReady(ChangeReady);
-            
-            if(_player.GetComponent<PlayerObj>().GetIsReady() == true)
-                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].AddCountReady();
-            else if(_player.GetComponent<PlayerObj>().GetIsReady() == false)
-                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].MinusCountReady();
-
-            Debug.Log(_player.GetComponent<PlayerObj>().GetMatchID() + " READY COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount());
-        }*/
-
-    /*[Command(ignoreAuthority = true)]
-        private void CmdRequestCheckStart(GameObject _player)
-        {
-            Debug.Log("--- BEGIN START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
-            //Debug.Log("CHECK READY COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount());
-            //Debug.Log("CHECK PLAYERS COUNT: " + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetPlayerObjList().Count);
-            //Debug.Log("CHECK TEAM1 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count());
-            //Debug.Log("CHECK TEAM2 COUNT:" + MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count());
-
-            string startStatusMsg = string.Empty;
-            bool startMatch = false;
-
-            // if all players are ready
-            if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetReadyCount() ==
-                MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetPlayerObjList().Count)
-            {
-                Debug.Log("START PASS CHECK 1");
-                startStatusMsg = "";
-                startMatch = false;
-
-                // if there's at least 1 player in each team
-                if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count() > 0 &&
-                    MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count() > 0)
-                {
-                        _player.GetComponent<PlayerObj>().SetIsReady(true);
-                        startStatusMsg = "SUCCESS";
-                        Debug.Log("START PASS CHECK 2, SUCCESS");
-
-                        startMatch = true;
-                }
-                else
-                {
-                    Debug.Log("START CHECK 2 FAIL");
-
-                    _player.GetComponent<PlayerObj>().SetIsReady(false);
-                    if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam1Count() <= 0)
-                        startStatusMsg  = "Team 1 is empty!";
-                    else if(MatchMaker.instance.GetMatches()[_player.GetComponent<PlayerObj>().GetMatchID()].GetTeam2Count() <= 0)
-                        startStatusMsg  = "Team 2 is empty!";
-                    
-                    startMatch = false;
-                }
-            }
-            else
-            {
-                Debug.Log("START CHECK 1 FAIL");
-
-                _player.GetComponent<PlayerObj>().SetIsReady(false);
-                startStatusMsg  = "Some players not ready!";
-                startMatch = false;
-            }
-
-            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
-                TargetRequestCheckStart(conn, startStatusMsg, _player, startMatch);
-
-            Debug.Log("--- END START CHECK " + _player.GetComponent<PlayerObj>().GetMatchID() + " ---");
-        }
-
-        [TargetRpc]
-        private void TargetRequestCheckStart(NetworkConnection conn, string _startStatusMsg, GameObject _player, bool _startMatch)
-        {
-            Debug.Log("startmatch true/false? "+_startMatch);
-            P_startStatusText.GetComponent<Text>().text = _startStatusMsg;
-            //StartCoroutine(RequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, _startMatch));
-        }*/
-    #endregion
 }

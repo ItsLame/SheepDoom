@@ -15,11 +15,8 @@ namespace SheepDoom
         // Start is called before the first frame update
         void Start()
         {
-            if (!Application.isBatchMode)
-            { //Headless build
+            if (!Application.isBatchMode) //Headless build
                 Debug.Log($"=== Client Build ===");
-                //networkManager.StartHost();
-            }
             else
             {
                 Debug.Log($"=== Server Build ===");
@@ -32,8 +29,8 @@ namespace SheepDoom
             string user = username.text;
             if(ClientName.ClientLogin(user)) // server is inactive, so this is only assigned on client at first
             {
-    
-                networkManager.StartClient(); // change to StartHost() if you don't want to build to test and just wanna use unity editor to test
+                networkManager.networkAddress = "localhost";
+                networkManager.StartClient(); 
             }
         }
 

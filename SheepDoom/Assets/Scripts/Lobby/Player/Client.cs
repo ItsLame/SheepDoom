@@ -32,10 +32,7 @@ namespace SheepDoom
                 }   
             }
             else
-            {
-                Debug.Log("Retrieved client instance for client");
                 return client; // if this is returned, server client is not connected to the player object, so no authority
-            }
         }
 
         public override void OnStartServer()

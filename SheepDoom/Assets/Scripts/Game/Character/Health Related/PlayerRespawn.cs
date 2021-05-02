@@ -29,10 +29,7 @@ namespace SheepDoom
         void Start()
         {
             if(isClient)
-            {
                 respawnLocation = PlayerObj.instance.ci.GetComponent<SpawnManager>().P_playerSpawnPoint;
-                Debug.Log("Whats my respawnLoc: " + respawnLocation.name);
-            }
         }
                 
 
@@ -133,7 +130,6 @@ namespace SheepDoom
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
-            //respawnLocation = PlayerObj.instance.ci.GetComponent<SpawnManager>().P_playerSpawnPoint;
             respawnTimerInGame = respawnTimerRef;
             deathOverlay = FindMe.instance.P_DeathOverlay;
             deadTextObject = FindMe.instance.P_DeadText;

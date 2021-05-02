@@ -134,15 +134,7 @@ namespace SheepDoom
                 if(instance != null)
                     Debug.Log("PlayerObj initialized!");
                 else
-                {
-                    Debug.Log("Failed initialization of PlayerObj");
                     return;
-                }
-            }
-            else
-            {
-                Debug.Log("Client instance is null");
-                return;
             }
         }
 

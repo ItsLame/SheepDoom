@@ -244,7 +244,6 @@ namespace SheepDoom
         public override void OnStartServer() 
         {
             GameObject mm = Instantiate(matchMaker.gameObject);
-            NetworkServer.Spawn(mm);
             DontDestroyOnLoad(mm);
         }
 

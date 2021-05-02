@@ -54,7 +54,6 @@ namespace SheepDoom
         [Server]
         public void IncreaseCount(bool _isTower, bool _isKill, bool _isDeath)
         {
-            Debug.Log("IncreaseCount called for " + gameObject.name + ": " + _isTower + ", " + _isKill + ", " + _isDeath);
             if(_isTower)
                 TowerCaptures += 1;
             else if(_isKill)
@@ -101,7 +100,6 @@ namespace SheepDoom
             int _playerTeamID = PlayerObj.instance.GetTeamIndex();
             string _playerName = PlayerObj.instance.GetPlayerName();
 
-            //temporary solution, since (i think) have delay, immediately set locally first
             setTeamIndex(_playerTeamID);
             P_playerName = _playerName;
             

@@ -83,7 +83,6 @@ namespace SheepDoom
             _cn.SetClientName();
             _cn.SetPlayerName(_cn.GetClientName());
             OnClientPlayerSpawned?.Invoke(_player);
-            Debug.Log("Player object spawned");
         }
 
         // only works on client
@@ -104,7 +103,6 @@ namespace SheepDoom
 
         public void SpawnPlayer(string playerType, GameObject player)
         {
-            Debug.Log("EE");
             CmdRequestPlayerObjSpawn(playerType, player);
         }
 
@@ -170,11 +168,6 @@ namespace SheepDoom
             }
 
             SetPlayerObj(spawn);
-
-            //assign player attack functions to buttons
-            //Debug.Log("Are buttons assigned?");
-            //assignButtons(spawn);
-            //Debug.Log("Are buttons assigned 3?");
             NetworkServer.Spawn(spawn, connectionToClient); // pass the client's connection to spawn the player obj prefab for the correct client into any point in the game
         }
 
@@ -221,62 +214,3 @@ namespace SheepDoom
     }
 }
 
-#region archive
-//public GameObject playerSpawnPoint2;
-//public GameObject playerSpawnPoint3;
-//public GameObject playerSpawnPoint5;
-//public GameObject playerSpawnPoint6;
-
-//[Space(15)]
-//the time we will use
-//public float SecondsTimer = 0;
-//public float MinutesTimer = 0;
-//private TimeSpan timePlaying;
-
-//TEMPORARY
-//[SyncVar] private float playerTeamID_TEMP = 0;
-/*foreach(var player in MatchMaker.instance.GetMatches()[SDSceneManager.instance.P_matchID].GetPlayerObjList())
-{
-    if(player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
-        spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
-    else if(player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
-        spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint2.transform.position, Quaternion.identity);
-}*/
-
-//add 1 to the playercounter in script in networkmanager
-/*
-GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().addPlayer();
-currentPlayerNumber = GameObject.Find("NetworkManager").GetComponent<PlayerCounter>().PlayerCount;
-
-//get the teamID selected in menu
-//GameObject teamD = GameObject.Find("NetworkManager");
-//Debug.Log("GameObject teamD found");
-//playerTeamID = teamD.GetComponent<DebugTeamSelector>().getTeamID();
-
-if (currentPlayerNumber == 1)
-{
-    spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
-}
-//Debug.Log("playerTeamID: " + playerTeamID);
-
-//Debug.Log("Number of players: " + currentPlayerNumber);
-
-//if (playerTeamID == 1)
-if (playerTeamID_TEMP == 1)
-{
-    spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint2.transform.position, Quaternion.identity);
-    Debug.Log("Spawning in blue team");
-    spawn = Instantiate(gameplayPlayerPrefab.gameObject, playerSpawnPoint1.transform.position, Quaternion.identity);
-    spawn.gameObject.GetComponent<PlayerAdmin>().setTeamIndex(1);
-}
-
-if (playerTeamID_TEMP == 2)
-//if (playerTeamID == 2)
-{
-    spawn = Instantiate(playerGameplayPrefab.gameObject, playerSpawnPoint3.transform.position, Quaternion.identity);
-    Debug.Log("Spawning in red team");
-    spawn = Instantiate(gameplayPlayerPrefab2.gameObject, playerSpawnPoint4.transform.position, Quaternion.identity);
-    spawn.gameObject.GetComponent<PlayerAdmin>().setTeamIndex(2);
-}
-*/
-#endregion

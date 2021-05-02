@@ -72,11 +72,28 @@ namespace SheepDoom
         [SerializeField] private GameObject RedPlayer3Image;
         [SerializeField] private GameObject RedPlayer3Name;
 
+        [Header("Spawn points")]
+        [SerializeField] private GameObject team1SpawnPoint;
+        [SerializeField] private GameObject team2SpawnPoint;
+
         public bool isInit { get; private set;}
 
         #endregion
 
         #region Properties
+
+        public GameObject P_team1SpawnPoint
+        {
+            get { return team1SpawnPoint; }
+            set { team1SpawnPoint = value; }
+        }
+
+        public GameObject P_team2SpawnPoint
+        {
+            get { return team2SpawnPoint; }
+            set { team2SpawnPoint = value; }
+        }
+
         public GameObject P_ShopSpecial1
         {
             get { return ShopSpecial1; }

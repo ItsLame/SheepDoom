@@ -25,12 +25,6 @@ namespace SheepDoom
             playerNameLobby.text = this.GetComponent<PlayerObj>().GetPlayerName();
             playerNameCharacterSelect.text = this.GetComponent<PlayerObj>().GetPlayerName();
         }
-
-        public Text getPlayerName()
-        {
-            return null;
-            //return playerName;
-        }
     }
 }
 
