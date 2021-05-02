@@ -7,8 +7,7 @@ namespace SheepDoom
 {
     public class NeutralAggroScript : NetworkBehaviour
     {
-        [Header("Starting position")]
-        [SerializeField] private Transform startPos;
+
 
         [Header("Current Target")]
         [Space(15)]
@@ -172,11 +171,7 @@ namespace SheepDoom
             }
         }
 
-        [Server]
-        public void backToStart()
-        {
-            this.gameObject.transform.position = startPos.transform.position;
-        }
+
     }
 
 }
