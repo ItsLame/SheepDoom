@@ -22,10 +22,8 @@ namespace SheepDoom
         //hard coded for now
         [Space(20)]
         [SerializeField]
-        //[SyncVar(hook = nameof(updateScoreDisplayClient))] private float blueCaptureScore;
         [SyncVar] private float blueCaptureScore;
         [SerializeField]
-        //[SyncVar(hook = nameof(updateScoreDisplayClient))] private float redCaptureScore;
         [SyncVar] private float redCaptureScore;
 
         public Text blueDisplay;

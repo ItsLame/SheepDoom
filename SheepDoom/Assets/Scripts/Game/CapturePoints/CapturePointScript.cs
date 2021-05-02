@@ -53,7 +53,7 @@ namespace SheepDoom
             P_inGameHP = P_hp;
             
             // no one is capturing it at start so put at 0
-            P_numOfCapturers = 0;
+            //P_numOfCapturers = 0;
 
             // this is tower's script
             P_isBase = false;

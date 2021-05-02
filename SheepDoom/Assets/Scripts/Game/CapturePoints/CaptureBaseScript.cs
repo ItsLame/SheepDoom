@@ -34,7 +34,6 @@ namespace SheepDoom
 
         protected override bool P_capturedByBlue { get => CapturedByBlue; set => CapturedByBlue = value; }
         protected override bool P_capturedByRed { get => CapturedByRed; set => CapturedByRed = value; }
-        //protected override float P_inGameHP { get => InGameHP; set => InGameHP = value; }
 
         protected override void InitObjective()
         {
@@ -50,49 +49,35 @@ namespace SheepDoom
             P_inGameHP = P_hp;
             
             // no one is capturing it at start so put at 0
-            P_numOfCapturers = 0;
+            //P_numOfCapturers = 0;
 
             // this is tower's script
             P_isBase = true;
         }
 
+        [ServerCallback]
         protected override void OnTriggerStay(Collider _collider)
         {
-            if (isServer)
+            if (_collider.CompareTag("Player"))
             {
-                if (_collider.CompareTag("Player"))
+                // get player teamID
+                float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                // get info of is player dead or alive
+                bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
+
+                if(!isDed)
                 {
-                    // get player teamID
-                    float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-                    // get info of is player dead or alive
-                    bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
-
-                    OnStay(_collider, tID);
-
-                    if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
+                    //have another condition to check whether base can be captured
+                    //if no outer tower has been captured base cant be captured
+                    if (P_capturedByBlue && tID == 2 && ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
                     {
-                        //have another condition to check whether base can be captured
-                        //if no outer tower has been captured base cant be captured
-                        
-                        //if blue team
-                        if (P_capturedByBlue)
-                        {
-                            if (ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
-                            {
-                                ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                                RpcUpdateClients(false, true, P_isBase);
-                            }
-                        }
-
-                        else if (P_capturedByRed)
-                        {
-                            if (ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
-                            {
-                                ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                                RpcUpdateClients(false, true, P_isBase);
-                            }
-                        }
-
+                        ModifyingHealth(-(P_captureRate * Time.deltaTime));
+                        RpcUpdateClients(false, true);
+                    }
+                    else if(P_capturedByRed && tID == 1 && ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
+                    {
+                        ModifyingHealth(-(P_captureRate * Time.deltaTime));
+                        RpcUpdateClients(false, true);
                     }
                 }
             }
@@ -115,164 +100,3 @@ namespace SheepDoom
         }
     }
 }
-
-#region archive
-
-//P_inGameHP = P_hp; // set the tower's hp based on the settings
-//P_numOfCapturers = 0; // no one is capturing it at start so put at 0
-
-/*
-// blue team victory when base hp 0
-if (P_inGameHP <= 0 && !P_capturedByBlue)
-{
-    //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
-    P_scoreGameObject.GetComponent<GameScore>().GameEnd(1);
-}
-
-// red team victory if base hp 0
-if (P_inGameHP <= 0 && !P_capturedByRed)
-{
-    // reference the score script to END THE GAME IN RED VICTORY   <------------------------------------------------- GAME END CALL
-    P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
-}
-*/
-
-// Update is called once per frame
-/*
-protected override void Update()
-{
-    // regen hp if tower is not under capture
-    /*if ((P_numOfCapturers == 0) && (P_inGameHP < P_hp))
-    {
-        //P_inGameHP += BaseRegenRate * Time.deltaTime;
-        ModifyingHealth(P_regenRate * Time.deltaTime);
-        // debug showing base hp
-        //Debug.Log(this.name + " HP: " + P_inGameHP);
-    }
-    */
-
-    /*
-    // blue team victory when base hp 0
-    if (P_inGameHP <= 0 && !P_capturedByBlue)
-    {
-        //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
-        P_scoreGameObject.GetComponent<GameScore>().GameEnd(1);
-    }
-
-    // red team victory if base hp 0
-    if (P_inGameHP <= 0 && !P_capturedByRed)
-    {
-        // reference the score script to END THE GAME IN RED VICTORY   <------------------------------------------------- GAME END CALL
-        P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
-    }
-
-    base.Update();
-
-    
-
-    // set color accordingly
-    //SetTowerColor();
-}
-*/
-
-// for capture hp reduction when staying in area
-
-/*protected override void OnTriggerStay(Collider other)
-{
-    if (other.CompareTag("Player"))
-    {
-        float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-
-        // if point belongs to red, it can be captured by blue
-        if (P_capturedByRed && (tID == 1))
-        {
-            ModifyingHealth(-(P_captureRate * Time.deltaTime));
-            //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
-        }
-
-        // if point belongs to blue, it can be captured by red
-        if (P_capturedByBlue && (tID == 2))
-        {
-            ModifyingHealth(-(P_captureRate * Time.deltaTime));
-            //TowerInGameHP -= TowerCaptureRate * Time.deltaTime;
-        }
-    }
-}
-*/
-
-// from updat()
-
-/*
-// change color when captured by blue
-if (P_capturedByBlue)
-{
-    var captureRenderer = this.GetComponent<Renderer>();
-    captureRenderer.material.SetColor("_Color", Color.blue);
-}
-
-// else its red
-else
-{
-    var captureRenderer = this.GetComponent<Renderer>();
-    captureRenderer.material.SetColor("_Color", Color.red);
-}
-*/
-
-//check for player exit
-/*
-protected override void OnTriggerExit(Collider other)
-{
-    if (other.CompareTag("Player"))
-    {
-        //get player's team ID
-        float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-
-        //if point belongs to red, it can be captured by blue players
-        if (P_capturedByRed && (tID == 1))
-        {
-            P_numOfCapturers -= 1;
-        }
-
-        //if point belongs to blue, it can be captured by red players
-        if (P_capturedByBlue && (tID == 2))
-        {
-            P_numOfCapturers -= 1;
-        }
-    }
-}*/
-
-/*
-public void ModifyingHealth(float amount)
-{
-    P_inGameHP += amount;
-
-    float currenthealthPct = P_inGameHP / BaseHP;
-    OnHealthPctChangedTower(currenthealthPct);
-}
-*/
-
-//check for player enter
-/*
-protected override void OnTriggerEnter(Collider other)
-{
-    if (other.tag == "Player")
-    {
-        //get player's team ID
-        float tID = other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-
-        //if point belongs to red, it can be captured by blue players
-        if (P_capturedByRed && (tID == 1))
-        {
-            P_numOfCapturers += 1;
-        }
-
-        //if point belongs to blue, it can be captured by red players
-        if (P_capturedByBlue && (tID == 2))
-        {
-            P_numOfCapturers += 1;
-        }
-    }
-}
-*/
-
-#endregion
