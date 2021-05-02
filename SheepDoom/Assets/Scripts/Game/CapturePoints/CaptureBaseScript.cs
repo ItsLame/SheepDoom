@@ -72,12 +72,12 @@ namespace SheepDoom
                     if (P_capturedByBlue && tID == 2 && ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
                     {
                         ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                        RpcUpdateClients(false, true);
+                        RpcUpdateClients(false, true, false);
                     }
                     else if(P_capturedByRed && tID == 1 && ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
                     {
                         ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                        RpcUpdateClients(false, true);
+                        RpcUpdateClients(false, true, false);
                     }
                 }
             }

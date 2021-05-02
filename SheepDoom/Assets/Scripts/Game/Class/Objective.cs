@@ -127,23 +127,27 @@ namespace SheepDoom
             if (isServer)
             {
                 // once HP = 0, notify the scoring and convert the tower
-                if (P_inGameHP <= 0 && (!P_capturedByBlue || !P_capturedByRed))
+                if (P_inGameHP <= 0 && (!P_capturedByBlue || !P_capturedByRed) && !P_isBase)
                 {
                     //show which point is captured, change point authority and max out towerHP
                     CapturedServer(P_capturedByBlue, P_capturedByRed);
-                    RpcUpdateClients(true, false);
+                    RpcUpdateClients(true, false, false);
                 }
 
                 // regen hp if tower is not under capture
-                if ((P_numOfCapturers == 0) && (P_inGameHP < P_hp))
+                if (P_numOfCapturers == 0 && P_inGameHP < P_hp && !P_isBase)
                 {
+                    Debug.Log("Called for base");
                     ModifyingHealth(P_regenRate * Time.deltaTime);
-                    RpcUpdateClients(false, true);
-                }  
+                    RpcUpdateClients(false, true, false);
+                }
+                
+                if(P_isBase && P_inGameHP <= 0)
+                {
+                    Victory();
+                    RpcUpdateClients(false, false, true);
+                }
             }
-
-            if(P_isBase && P_inGameHP <= 10)
-                Victory();
         }
 
         private void CapturedServer(bool _byBlue, bool _byRed)
@@ -160,7 +164,7 @@ namespace SheepDoom
             }
             SetTowerColor();
 
-            if (!isBase)
+            if (!P_isBase)
             {
                 P_giveScoreToCapturers = true;
                 P_scoreGameObject.GetComponent<GameScore>().ScoreUp(P_capturedByBlue, P_capturedByRed);
@@ -170,13 +174,14 @@ namespace SheepDoom
         }
 
         [ClientRpc]
-        protected void RpcUpdateClients(bool _isCapture, bool _isChangeHp)
+        protected void RpcUpdateClients(bool _isCapture, bool _isChangeHp, bool _isEndGame)
         {
-            if(_isCapture)
-                // deals with syncvar delay
-                StartCoroutine(WaitForUpdate(P_capturedByBlue, P_capturedByRed));
-            else if(_isChangeHp)
+            if (_isCapture)
+                StartCoroutine(WaitForUpdate(P_capturedByBlue, P_capturedByRed)); // deals with syncvar delay
+            else if (_isChangeHp)
                 ModifyingHealth(0); // 0 because value from server will sync
+            else if (_isEndGame)
+                Victory();
         }
 
         private IEnumerator WaitForUpdate(bool _oldBlue, bool _oldRed)
@@ -205,7 +210,7 @@ namespace SheepDoom
         [ServerCallback]
         protected virtual void OnTriggerStay(Collider _collider)
         {
-            if (_collider.CompareTag("Player"))
+            if (_collider.CompareTag("Player") && !P_isBase)
             {
                 // get player teamID
                 float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
@@ -217,12 +222,8 @@ namespace SheepDoom
                 if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
                 {
                     //decrease point normally if not base
-                    if (!isBase)
-                    {
-                        ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                        RpcUpdateClients(false, true);
-                    }
-
+                    ModifyingHealth(-(P_captureRate * Time.deltaTime));
+                    RpcUpdateClients(false, true, false );
                 }
             }
         }

@@ -54,60 +54,13 @@ namespace SheepDoom
         public Image RP1StarImageUI;
         public Image RP2StarImageUI;
         public Image RP3StarImageUI;
-        // Start is called before the first frame update
-        /*void Start()
-        {
-            // changed to initialize on server only, if u put on start method, everytime new player joins, it will reinitialize to 1-1
-            //initialize score
-            //blueCaptureScore = 1;
-            //redCaptureScore = 1;
-
-            // they are already text components...
-            //get the attached score counters text component
-            //blueCaptureCounter = blueCaptureCounter.GetComponent<Text>();
-            //redCaptureCounter = redCaptureCounter.GetComponent<Text>();
-
-            //display score
-            blueCaptureCounter.text = blueCaptureScore.ToString();
-            redCaptureCounter.text = redCaptureScore.ToString();
-        }*/
 
         //update score display on all clients
         public void updateScoreDisplay()
         {
-            Debug.Log("blue capture score: " + blueCaptureScore);
-            Debug.Log("red capture score: " + redCaptureScore);
             blueCaptureCounter.text = blueCaptureScore.ToString();
             redCaptureCounter.text = redCaptureScore.ToString();
         }
-
-        /*
-        public void updateScoreDisplayClient(float oldValue, float newValue)
-        {
-            blueCaptureCounter.text = blueCaptureScore.ToString();
-            redCaptureCounter.text = redCaptureScore.ToString();
-        }*/
-
-        //scoring functions
-        /*public void blueScoreUp()
-        {
-            Debug.Log("Blue score +1");
-            //if blue scores, red will -1
-            blueCaptureScore += 1;
-            redCaptureScore -= 1;
-            //update display
-            updateScoreDisplay();
-        }
-
-        public void redScoreUp()
-        {
-            Debug.Log("Red score +1");
-            //if blue scores, red will -1
-            blueCaptureScore -= 1;
-            redCaptureScore += 1;
-            //update display
-            updateScoreDisplay();
-        }*/
 
         // causes a syncvar delay cuz this is only run on server
         public void ScoreUp(bool _byBlue, bool _byRed)
