@@ -11,9 +11,8 @@ namespace SheepDoom
         // Mainly player attributes 
         [Header("Player Info")]
         [SerializeField] [SyncVar] private float charID;
-        [SerializeField] [SyncVar] private string playerName;
+        [SerializeField] [SyncVar(hook = nameof(OnNameUpdate))] private string playerName;
         [SerializeField] [SyncVar] private int TeamIndex;
-        //[Header("Team affiliation (1 for Blue, 2 for Red")]
 
         [Header("Player scores")]
         [SyncVar(hook = nameof(SyncPlayerKill))] public float PlayerKills;
@@ -80,6 +79,11 @@ namespace SheepDoom
                 PlayerDeathsText.text = newValue.ToString();
         }
 
+        private void OnNameUpdate(string oldValue, string newValue)
+        {
+            GetComponent<PlayerNameGame>().SetPlayerName(newValue); // don't need has auth, because u wanna set on this object for all clients, not ur own only
+        }
+
         [Command]
         private void CmdSetInfo(int _teamIndex, string _playerName)
         {
@@ -101,7 +105,6 @@ namespace SheepDoom
             string _playerName = PlayerObj.instance.GetPlayerName();
 
             setTeamIndex(_playerTeamID);
-            P_playerName = _playerName;
             
             CmdSetInfo(_playerTeamID, PlayerObj.instance.GetPlayerName());
 
