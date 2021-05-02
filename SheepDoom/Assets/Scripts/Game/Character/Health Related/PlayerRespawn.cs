@@ -26,11 +26,15 @@ namespace SheepDoom
         [SerializeField] private GameObject respawninginObject;
         [SerializeField] private GameObject PlayerRespawnTimerObject;
 
-        private void Start()
+        void Start()
         {
             if(isClient)
+            {
                 respawnLocation = PlayerObj.instance.ci.GetComponent<SpawnManager>().P_playerSpawnPoint;
+                Debug.Log("Whats my respawnLoc: " + respawnLocation.name);
+            }
         }
+                
 
         // Update is called once per frame
         void Update()
@@ -103,9 +107,6 @@ namespace SheepDoom
             // change components on server, syncvared to client
             GetComponent<PlayerHealth>().RefillHealth();
             GetComponent<PlayerHealth>().revivePlayer();
-            //this.gameObject.GetComponent<CharacterMovement>().isDead = false;
-            //this.gameObject.GetComponent<PlayerAttack>().isDead = false;
-            //isDead = false;
             RpcPlayerAlive();
         }
 
@@ -132,6 +133,7 @@ namespace SheepDoom
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
+            //respawnLocation = PlayerObj.instance.ci.GetComponent<SpawnManager>().P_playerSpawnPoint;
             respawnTimerInGame = respawnTimerRef;
             deathOverlay = FindMe.instance.P_DeathOverlay;
             deadTextObject = FindMe.instance.P_DeadText;

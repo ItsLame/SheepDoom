@@ -16,7 +16,7 @@ namespace SheepDoom
         [SyncVar(hook = nameof(OnNameUpdate))] private string syncName; 
         [SerializeField]
         [SyncVar] private string matchID;
-        [SyncVar] private int teamIndex = 0;
+        [SyncVar(hook = nameof(OnTeamUpdate))] private int teamIndex = 0;
         [SyncVar] private bool isHost = false;
         [SyncVar] private bool isReady = false;
         [SyncVar] private bool isLockedIn = false;
@@ -111,6 +111,18 @@ namespace SheepDoom
             if (!hasAuthority) return;
             if (gameObject.CompareTag("lobbyPlayer"))
                 MainMenu.instance.SetPlayerName(next);
+        }
+
+        void OnTeamUpdate(int oldIndex, int newIndex)
+        {
+            if (!hasAuthority) return;
+            CmdSetClientTeamIndex(newIndex);
+        }
+
+        [Command]
+        void CmdSetClientTeamIndex(int _newIndex)
+        {
+            ci.GetComponent<SpawnManager>().P_playerTeamIndex = _newIndex;
         }
 
         private void InitializePlayerObj(Client _ci)

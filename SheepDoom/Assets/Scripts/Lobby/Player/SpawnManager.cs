@@ -27,12 +27,12 @@ namespace SheepDoom
         [SerializeField] private NetworkIdentity bowserPrefab = null;
         private GameObject currentPlayerObj = null;
         private ClientName _cn;
+        [SyncVar(hook = nameof(OnTeamUpdate))] private int teamIndex;
 
         [Space(15)]
         [Header("Player number based on the order they are spawned")]
         //private float currentPlayerNumber;
         [SerializeField] private GameObject playerSpawnPoint;
-        //public float playerTeamID;
 
         [Header("Spawn position (Team 1)")]
         [SerializeField] private GameObject team1SpawnPoint;
@@ -49,6 +49,12 @@ namespace SheepDoom
             set{playerSpawnPoint = value;}
         }
 
+        public int P_playerTeamIndex
+        {
+            get { return teamIndex; }
+            set { teamIndex = value; }
+        }
+
         #endregion
 
         // dynamically store and call functions and dispatched on the player object spawned by the client
@@ -58,6 +64,15 @@ namespace SheepDoom
         void Awake()
         {
             _cn = GetComponent<ClientName>();
+        }
+
+        void OnTeamUpdate(int oldIndex, int newIndex)
+        {
+            if (!hasAuthority) return;
+            if (newIndex == 1)
+                P_playerSpawnPoint = team1SpawnPoint;
+            else if (newIndex == 2)
+                P_playerSpawnPoint = team2SpawnPoint;
         }
 
         // This function will be called when player object is spawned for a client, make sure to pass the player obj
