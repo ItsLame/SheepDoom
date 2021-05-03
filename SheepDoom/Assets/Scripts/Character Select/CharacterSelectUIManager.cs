@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        private float secondsTimer = 10;
+        [SerializeField] private float secondsTimer = 10;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
