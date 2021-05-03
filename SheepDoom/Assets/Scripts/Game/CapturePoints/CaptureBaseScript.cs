@@ -15,7 +15,7 @@ namespace SheepDoom
 
         [Space(15)]
         [SerializeField] private GameObject BaseModel;
-        [SerializeField] private bool hasOpened;
+        [SerializeField] private bool hasClosed = false;
 
         //Base hp counters
         [Space(20)]
@@ -72,7 +72,14 @@ namespace SheepDoom
                 if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
                 {
                     P_numOfCapturers += 1;
-                    BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Close");
+
+                    //animation to close
+                    if (!hasClosed)
+                    {
+                        BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Close");
+                        hasClosed = true;
+                    }
+
                 }
 
             }
@@ -137,11 +144,17 @@ namespace SheepDoom
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
         }
 
+        [ServerCallback]
         protected override void OpenBaseAnim()
         {
-            Debug.Log("Opening Base Animation..");
-            BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Open");
-            Debug.Log("Opening Base Animation End...");
+            if (hasClosed)
+            {
+                Debug.Log("Opening Base Animation..");
+                BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Open");
+                Debug.Log("Opening Base Animation End...");
+                hasClosed = false;
+            }
+
         }
 
     }
