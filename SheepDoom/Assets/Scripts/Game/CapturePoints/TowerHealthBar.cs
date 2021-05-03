@@ -7,6 +7,7 @@ namespace SheepDoom
 {
     public class TowerHealthBar : HealthBar
     {
+        [SerializeField] private GameObject Tower;
         [SerializeField] private Image foregroundimage;
         [SerializeField] private float updatespeedseconds = 0.5f;
 
