@@ -6,7 +6,14 @@ using Mirror;
 namespace SheepDoom
 {
     public class GameScore : NetworkBehaviour
-    {
+    { 
+        public static GameScore instance;
+
+        [SerializeField] [SyncVar] private string matchID = string.Empty;
+        [SerializeField] private string TopPlayer;
+        [SerializeField] private double TempHighestScore;
+        [SerializeField] private float TempTopPlayerNoOfTower;
+        [SerializeField] private GameObject[] players;
         //the display text for tower scores
         [Space(20)]
         [SerializeField]
@@ -15,8 +22,33 @@ namespace SheepDoom
         [SerializeField]
         private Text redCaptureCounter;
 
-        [SerializeField]
-        public GameObject completeGameUI;
+        [Header("--- Kill, Death, Capture ---")]
+        [Space(5)]
+        [SerializeField] private GameObject completeGameUI;
+        [SerializeField] private GameObject ScoreboardBlue;
+        [SerializeField] private GameObject ScoreboardRed;
+        [SerializeField] private GameObject BlueWinLose;
+        [SerializeField] private GameObject RedWinLose;
+        [SerializeField] private GameObject BP1Star;
+        [SerializeField] private GameObject BluePlayer1Image;
+        [SerializeField] private GameObject BluePlayer1Name;
+        [SerializeField] private GameObject BP2Star;
+        [SerializeField] private GameObject BluePlayer2Image;
+        [SerializeField] private GameObject BluePlayer2Name;
+        [SerializeField] private GameObject BP3Star;
+        [SerializeField] private GameObject BluePlayer3Image;
+        [SerializeField] private GameObject BluePlayer3Name;
+        [SerializeField] private GameObject RP1Star;
+        [SerializeField] private GameObject RedPlayer1Image;
+        [SerializeField] private GameObject RedPlayer1Name;
+        [SerializeField] private GameObject RP2Star;
+        [SerializeField] private GameObject RedPlayer2Image;
+        [SerializeField] private GameObject RedPlayer2Name;
+        [SerializeField] private GameObject RP3Star;
+        [SerializeField] private GameObject RedPlayer3Image;
+        [SerializeField] private GameObject RedPlayer3Name;
+
+        private Sprite CharacterImage, Character1, Character2, Character3;
 
         //counters for tower captures per team
         //hard coded for now
@@ -26,34 +58,18 @@ namespace SheepDoom
         [SerializeField]
         [SyncVar] private float redCaptureScore;
 
-        public Text blueDisplay;
-        public Text redDisplay;
-        public Text blueScoreText;
-        public Text redScoreText;
-        public GameObject[] players;
-        public Text BluePlayerNameText1;
-        public Text BluePlayerNameText2;
-        public Text BluePlayerNameText3;
-        public Text RedPlayerNameText1;
-        public Text RedPlayerNameText2;
-        public Text RedPlayerNameText3;
+        public string P_matchID
+        {
+            get { return matchID; }
+            set { matchID = value; }
+        }
 
-        public Image BluePlayerImage1UI;
-        public Image BluePlayerImage2UI;
-        public Image BluePlayerImage3UI;
-        public Image RedPlayerImage1UI;
-        public Image RedPlayerImage2UI;
-        public Image RedPlayerImage3UI;
-        public string TopPlayer;
-        public double TempHighestScore;
-        public int TempTopPlayerNoOfTower;
-        public Sprite CharacterImage;
-        public Image BP1StarImageUI;
-        public Image BP2StarImageUI;
-        public Image BP3StarImageUI;
-        public Image RP1StarImageUI;
-        public Image RP2StarImageUI;
-        public Image RP3StarImageUI;
+        void Start()
+        {
+            Character1 = Resources.Load<Sprite>("Mario");
+            Character2 = Resources.Load<Sprite>("Luigi");
+            Character3 = Resources.Load<Sprite>("Peach");
+        }
 
         //update score display on all clients
         public void updateScoreDisplay()
@@ -116,236 +132,137 @@ namespace SheepDoom
             - player.GetComponent<PlayerAdmin>().TowerCaptures;
             - ScoreUp()
             */
-
-            //Scoreboard display Victory/Defeat for blue team
-            GameObject blueTeam = FindMe.instance.P_BlueWinLose;
-            blueDisplay = blueTeam.GetComponent<Text>();
-
-            //Scoreboard display Victory/Defeat for red team
-            GameObject redTeam = FindMe.instance.P_RedWinLose;
-            redDisplay = redTeam.GetComponent<Text>();
-
-            //Scoreboard Blue Team's Score
-            GameObject blueScore = FindMe.instance.P_ScoreboardBlue;
-            blueScoreText = blueScore.GetComponent<Text>();
-            blueScoreText.text = blueCaptureScore.ToString();
-
-            //Scoreboard Red Team's Score
-            GameObject redScore = FindMe.instance.P_ScoreboardRed;
-            redScoreText = redScore.GetComponent<Text>();
-            redScoreText.text = redCaptureScore.ToString();
-
-            //Blue Team Pull UI image
-            GameObject BluePlayerImage1 = FindMe.instance.P_BluePlayerImage1;
-            BluePlayerImage1UI = BluePlayerImage1.GetComponent<Image>();
-
-            GameObject BluePlayerImage2 = FindMe.instance.P_BluePlayerImage2;
-            BluePlayerImage2UI = BluePlayerImage2.GetComponent<Image>();
-
-            GameObject BluePlayerImage3 = FindMe.instance.P_BluePlayerImage3;
-            BluePlayerImage3UI = BluePlayerImage3.GetComponent<Image>();
-
-            //Red Team Pull UI image
-            GameObject RedPlayerImage1 = FindMe.instance.P_RedPlayerImage1;
-            RedPlayerImage1UI = RedPlayerImage1.GetComponent<Image>();
-
-            GameObject RedPlayerImage2 = FindMe.instance.P_RedPlayerImage2;
-            RedPlayerImage2UI = RedPlayerImage2.GetComponent<Image>();
-
-            GameObject RedPlayerImage3 = FindMe.instance.P_RedPlayerImage3;
-            RedPlayerImage3UI = RedPlayerImage3.GetComponent<Image>();
-
-            //Blue Team Star Player
-            GameObject BP1StarImage = FindMe.instance.P_BP1Star;
-            BP1StarImageUI = BP1StarImage.GetComponent<Image>();
-
-            GameObject BP2StarImage = FindMe.instance.P_BP2Star;
-            BP2StarImageUI = BP2StarImage.GetComponent<Image>();
-
-            GameObject BP3StarImage = FindMe.instance.P_BP3Star;
-            BP3StarImageUI = BP3StarImage.GetComponent<Image>();
-
-            //Red Team Star Player
-            GameObject RP1StarImage = FindMe.instance.P_RP1Star;
-            RP1StarImageUI = RP1StarImage.GetComponent<Image>();
-
-            GameObject RP2StarImage = FindMe.instance.P_RP2Star;
-            RP2StarImageUI = RP2StarImage.GetComponent<Image>();
-
-            GameObject RP3StarImage = FindMe.instance.P_RP3Star;
-            RP3StarImageUI = RP3StarImage.GetComponent<Image>();
-
-            //Character Image
-            Sprite Character1 = Resources.Load<Sprite>("Mario");
-            Sprite Character2 = Resources.Load<Sprite>("Luigi");
-            Sprite Character3 = Resources.Load<Sprite>("Peach");
-            Sprite Character4 = Resources.Load<Sprite>("Yoshi");
-            Sprite Character5 = Resources.Load<Sprite>("Bowser");
-            Sprite Character6 = Resources.Load<Sprite>("circleface");
+            ScoreboardBlue.GetComponent<Text>().text = blueCaptureScore.ToString();
+            ScoreboardRed.GetComponent<Text>().text = redCaptureScore.ToString();
 
             //Get all players' name and team id
             if (players.Length == 0)
-            {
                 players = GameObject.FindGameObjectsWithTag("Player");
-            }
 
             foreach (GameObject player in players)
             {
-                Debug.Log("Scoreboard: players.Length:" + players.Length);
 
-                for (int i = 0; i < players.Length; i++)
+                //======================= GET CURRENT PLAYER INFORMATION ========================
+                string name = player.GetComponent<PlayerAdmin>().P_playerName;
+                float charId = player.GetComponent<PlayerAdmin>().getCharID();
+                float team = player.GetComponent<PlayerAdmin>().getTeamIndex();
+                float kills = player.GetComponent<PlayerAdmin>().PlayerKills;
+                float deaths = player.GetComponent<PlayerAdmin>().PlayerDeaths;
+                float towerCap = player.GetComponent<PlayerAdmin>().TowerCaptures;
+
+                //======================= CALCULATE PLAYER SCORE (STAR PLAYER) ========================
+                double currentPlayerScore = (kills - deaths) + (towerCap * 1.5);
+                if (TempHighestScore < currentPlayerScore)
                 {
-                    //Blue Team Pull UI text
-                    GameObject BluePlayerName1 = FindMe.instance.P_BluePlayerName1;
-                    BluePlayerNameText1 = BluePlayerName1.GetComponent<Text>();
-
-                    GameObject BluePlayerName2 = FindMe.instance.P_BluePlayerName2;
-                    BluePlayerNameText2 = BluePlayerName2.GetComponent<Text>();
-
-                    GameObject BluePlayerName3 = FindMe.instance.P_BluePlayerName2;
-                    BluePlayerNameText3 = BluePlayerName3.GetComponent<Text>();
-
-                    //Red Team Pull UI text
-                    GameObject RedPlayerName1 = FindMe.instance.P_RedPlayerName1;
-                    RedPlayerNameText1 = RedPlayerName1.GetComponent<Text>();
-
-                    GameObject RedPlayerName2 = FindMe.instance.P_RedPlayerName2;
-                    RedPlayerNameText2 = RedPlayerName2.GetComponent<Text>();
-
-                    GameObject RedPlayerName3 = FindMe.instance.P_RedPlayerName3;
-                    RedPlayerNameText3 = RedPlayerName3.GetComponent<Text>();
-
-                    //======================= GET CURRENT PLAYER INFORMATION ========================
-                    string name = player.GetComponent<PlayerAdmin>().P_playerName;
-                    int charId = (int)player.GetComponent<PlayerAdmin>().getCharID();
-                    int team = (int)player.GetComponent<PlayerAdmin>().getTeamIndex();
-                    int kills = (int)player.GetComponent<PlayerAdmin>().PlayerKills;
-                    int deaths = (int)player.GetComponent<PlayerAdmin>().PlayerDeaths;
-                    int towerCap = (int)player.GetComponent<PlayerAdmin>().TowerCaptures;
-
-                    //======================= CALCULATE PLAYER SCORE (STAR PLAYER) ========================
-                    double currentPlayerScore = (kills - deaths) + (towerCap * 1.5);
-                    if (TempHighestScore < currentPlayerScore)
+                    TempHighestScore = currentPlayerScore;
+                    TempTopPlayerNoOfTower = towerCap;
+                    TopPlayer = name;
+                }
+                else if (TempHighestScore == currentPlayerScore) //if tie score
+                {
+                    //check who capture more towers
+                    if (TempTopPlayerNoOfTower < towerCap)
                     {
                         TempHighestScore = currentPlayerScore;
                         TempTopPlayerNoOfTower = towerCap;
                         TopPlayer = name;
                     }
-                    else if (TempHighestScore == currentPlayerScore) //if tie score
-                    {
-                        //check who capture more towers
-                        if (TempTopPlayerNoOfTower < towerCap)
-                        {
-                            TempHighestScore = currentPlayerScore;
-                            TempTopPlayerNoOfTower = towerCap;
-                            TopPlayer = name;
-                        }
-                    }
-                    Debug.Log("Scoreboard: top player is " + TopPlayer + " with a score of " + TempHighestScore);
-                    //======================= GET CURRENT PLAYER'S CHARACTER IMAGE ========================
-                    if (charId == 1)
-                        CharacterImage = Character1;
-                    else if (charId == 2)
-                        CharacterImage = Character2;
-                    else if (charId == 3)
-                        CharacterImage = Character3;
-                    else if (charId == 4)
-                        CharacterImage = Character4;
-                    else if (charId == 5)
-                        CharacterImage = Character5;
-                    else if (charId == 6)
-                        CharacterImage = Character6;
+                }
 
-                    if (BluePlayerNameText1.text != name && BluePlayerNameText2.text != name && BluePlayerNameText3.text != name && RedPlayerNameText1.text != name && RedPlayerNameText2.text != name && RedPlayerNameText3.text != name)
+                //======================= GET CURRENT PLAYER'S CHARACTER IMAGE ========================
+                if (charId == 1)
+                    CharacterImage = Character1;
+                else if (charId == 2)
+                    CharacterImage = Character2;
+                else if (charId == 3)
+                    CharacterImage = Character3;
+
+                if (team == 1)
+                {
+                    //Put name & image into UI 
+                    if (string.IsNullOrEmpty(BluePlayer1Name.GetComponent<Text>().text))
                     {
-                        //======================= DISPLAY CURRENT PLAYER INFORMATION ========================
-                        if (team == 1) //If current player is Blue Team
-                        {
-                            //Put name & image into UI 
-                            if (string.IsNullOrEmpty(BluePlayerNameText1.text))
-                            {
-                                BluePlayerNameText1.text = name;
-                                BluePlayerImage1UI.sprite = CharacterImage;
-                                BluePlayerImage1UI.color = new Color32(255, 255, 255, 255);
-                            }
-                            else if (string.IsNullOrEmpty(BluePlayerNameText2.text))
-                            {
-                                BluePlayerNameText2.text = name;
-                                BluePlayerImage2UI.sprite = CharacterImage;
-                                BluePlayerImage2UI.color = new Color32(255, 255, 255, 255);
-                            }
-                            else if (string.IsNullOrEmpty(BluePlayerNameText3.text))
-                            {
-                                BluePlayerNameText3.text = name;
-                                BluePlayerImage3UI.sprite = CharacterImage;
-                                BluePlayerImage3UI.color = new Color32(255, 255, 255, 255);
-                            }
-                        }
-                        else if (team == 2) //If current player is Red Team
-                        {
-                            //Put name & image into UI 
-                            if (string.IsNullOrEmpty(RedPlayerNameText1.text))
-                            {
-                                RedPlayerNameText1.text = name;
-                                RedPlayerImage1UI.sprite = CharacterImage;
-                                RedPlayerImage1UI.color = new Color32(255, 255, 255, 255);
-                            }
-                            else if (string.IsNullOrEmpty(RedPlayerNameText2.text))
-                            {
-                                RedPlayerNameText2.text = name;
-                                RedPlayerImage2UI.sprite = CharacterImage;
-                                RedPlayerImage2UI.color = new Color32(255, 255, 255, 255);
-                            }
-                            else if (string.IsNullOrEmpty(RedPlayerNameText3.text))
-                            {
-                                RedPlayerNameText3.text = name;
-                                RedPlayerImage3UI.sprite = CharacterImage;
-                                RedPlayerImage3UI.color = new Color32(255, 255, 255, 255);
-                            }
-                        }
+                        Debug.Log("I ran again and again");
+                        BluePlayer1Name.GetComponent<Text>().text = name;
+                        BluePlayer1Image.GetComponent<Image>().sprite = CharacterImage;
+                        BluePlayer1Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    }
+                    else if (string.IsNullOrEmpty(BluePlayer2Name.GetComponent<Text>().text))
+                    {
+                        BluePlayer2Name.GetComponent<Text>().text = name;
+                        BluePlayer2Image.GetComponent<Image>().sprite = CharacterImage;
+                        BluePlayer2Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    }
+                    else if (string.IsNullOrEmpty(BluePlayer3Name.GetComponent<Text>().text))
+                    {
+                        BluePlayer3Name.GetComponent<Text>().text = name;
+                        BluePlayer3Image.GetComponent<Image>().sprite = CharacterImage;
+                        BluePlayer3Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                     }
                 }
-            }
-            //======================= DISPLAY STAR PLAYER ========================
-            if (!string.IsNullOrEmpty(TopPlayer))
-            {
-                if (BluePlayerNameText1.text == TopPlayer)
-                    BP1StarImageUI.color = new Color32(255, 255, 255, 255);
-                else if (BluePlayerNameText2.text == TopPlayer)
-                    BP2StarImageUI.color = new Color32(255, 255, 255, 255);
-                else if (BluePlayerNameText3.text == TopPlayer)
-                    BP3StarImageUI.color = new Color32(255, 255, 255, 255);
-                else if (RedPlayerNameText1.text == TopPlayer)
-                    RP1StarImageUI.color = new Color32(255, 255, 255, 255);
-                else if (RedPlayerNameText2.text == TopPlayer)
-                    RP2StarImageUI.color = new Color32(255, 255, 255, 255);
-                else if (RedPlayerNameText3.text == TopPlayer)
-                    RP3StarImageUI.color = new Color32(255, 255, 255, 255);
-            }
-            //======================= DISPLAY SCOREBOARD AND SET TEAM'S WIN/LOSE ========================
-            //if blue team wins
-            if (TeamID == 1)
-            {
-                Debug.Log("Blue Team Wins!");
-                blueDisplay.text = "Victory";
-                redDisplay.text = "Defeat";
-                completeGameUI.SetActive(true);
-                completeGameUI.GetComponent<Animator>().SetTrigger("Complete");
-            }
+                else if (team == 2)
+                {
+                    if (string.IsNullOrEmpty(RedPlayer1Name.GetComponent<Text>().text))
+                    {
+                        Debug.Log("I ran again and again 2");
+                        RedPlayer1Name.GetComponent<Text>().text = name;
+                        RedPlayer1Image.GetComponent<Image>().sprite = CharacterImage;
+                        RedPlayer1Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    }
+                    else if (string.IsNullOrEmpty(RedPlayer2Name.GetComponent<Text>().text))
+                    {
+                        RedPlayer2Name.GetComponent<Text>().text = name;
+                        RedPlayer2Image.GetComponent<Image>().sprite = CharacterImage;
+                        RedPlayer2Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    }
+                    else if (string.IsNullOrEmpty(RedPlayer3Name.GetComponent<Text>().text))
+                    {
+                        RedPlayer3Name.GetComponent<Text>().text = name;
+                        RedPlayer3Image.GetComponent<Image>().sprite = CharacterImage;
+                        RedPlayer3Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    }
+                }
 
-            //if red team wins, not gonna use else for precision
-            if (TeamID == 2)
-            {
-                Debug.Log("Red Team Wins!");
-                blueDisplay.text = "Defeat";
-                redDisplay.text = "Victory";
-                completeGameUI.SetActive(true);
-                completeGameUI.GetComponent<Animator>().SetTrigger("Complete");
+                //======================= DISPLAY STAR PLAYER ========================
+                if (!string.IsNullOrEmpty(TopPlayer))
+                {
+                    if (BluePlayer1Name.GetComponent<Text>().text == TopPlayer)
+                        BP1Star.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    else if (BluePlayer2Name.GetComponent<Text>().text == TopPlayer)
+                        BP2Star.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    else if (BluePlayer3Name.GetComponent<Text>().text == TopPlayer)
+                        BP3Star.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    else if (RedPlayer1Name.GetComponent<Text>().text == TopPlayer)
+                        RP1Star.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    else if (RedPlayer2Name.GetComponent<Text>().text == TopPlayer)
+                        RP2Star.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                    else if (RedPlayer3Name.GetComponent<Text>().text == TopPlayer)
+                        RP3Star.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+                }
+                //======================= DISPLAY SCOREBOARD AND SET TEAM'S WIN/LOSE ========================
+                //if blue team wins
+                if (TeamID == 1)
+                {
+                    Debug.Log("Blue Team Wins!");
+                    BlueWinLose.GetComponent<Text>().text = "Victory";
+                    RedWinLose.GetComponent<Text>().text = "Defeat";
+                    completeGameUI.SetActive(true);
+                    completeGameUI.GetComponent<Animator>().SetTrigger("Complete");
+                }
+                else if (TeamID == 2) //if red team wins, not gonna use else for precision
+                {
+                    Debug.Log("Red Team Wins!");
+                    BlueWinLose.GetComponent<Text>().text = "Defeat";
+                    RedWinLose.GetComponent<Text>().text = "Victory";
+                    completeGameUI.SetActive(true);
+                    completeGameUI.GetComponent<Animator>().SetTrigger("Complete");
+                }
             }
         }
 
         public override void OnStartServer()
         {
+            instance = this;
             blueCaptureScore = 2;
             redCaptureScore = 2;
             updateScoreDisplay();
@@ -353,6 +270,7 @@ namespace SheepDoom
 
         public override void OnStartClient()
         {
+            instance = this;
             updateScoreDisplay(); // when start on client, it will automatically take values from server
         }
 

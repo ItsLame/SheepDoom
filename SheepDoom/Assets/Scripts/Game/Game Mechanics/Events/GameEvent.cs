@@ -33,21 +33,13 @@ namespace SheepDoom
                 if (isServer)
                 {
                     if (isNeutral)
-                    {
                         RpcAnnouncers(gotKilled + " has been slain by a neutral");
-                    }
                     else if(isBoss)
-                    {
                         RpcAnnouncers(gotKilled + " has been slain by a boss");
-                    }
                     else if (isMinion)
-                    {
                         RpcAnnouncers(gotKilled + " has been slain by a minion");
-                    }
                     else
-                    {
                         RpcAnnouncers(whoKilled + " has slain " + gotKilled);
-                    }
                 }
             }
         }

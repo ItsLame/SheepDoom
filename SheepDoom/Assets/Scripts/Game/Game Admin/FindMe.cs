@@ -51,7 +51,7 @@ namespace SheepDoom
         [SerializeField] private GameObject C;
         [SerializeField] private GameObject ScoreboardBlue;
         [SerializeField] private GameObject ScoreboardRed;
-        [SerializeField] private GameObject BlueWinLose;
+        /*[SerializeField] private GameObject BlueWinLose;
         [SerializeField] private GameObject RedWinLose;
         [SerializeField] private GameObject BP1Star;
         [SerializeField] private GameObject BluePlayer1Image;
@@ -70,30 +70,13 @@ namespace SheepDoom
         [SerializeField] private GameObject RedPlayer2Name;
         [SerializeField] private GameObject RP3Star;
         [SerializeField] private GameObject RedPlayer3Image;
-        [SerializeField] private GameObject RedPlayer3Name;
-
-        [Header("Spawn points")]
-        [SerializeField] private GameObject team1SpawnPoint;
-        [SerializeField] private GameObject team2SpawnPoint;
+        [SerializeField] private GameObject RedPlayer3Name;*/
 
         public bool isInit { get; private set;}
 
         #endregion
 
         #region Properties
-
-        public GameObject P_team1SpawnPoint
-        {
-            get { return team1SpawnPoint; }
-            set { team1SpawnPoint = value; }
-        }
-
-        public GameObject P_team2SpawnPoint
-        {
-            get { return team2SpawnPoint; }
-            set { team2SpawnPoint = value; }
-        }
-
         public GameObject P_ShopSpecial1
         {
             get { return ShopSpecial1; }
@@ -226,7 +209,7 @@ namespace SheepDoom
             set { ScoreboardRed = value; }
         }
 
-        public GameObject P_BlueWinLose
+        /*public GameObject P_BlueWinLose
         {
             get { return BlueWinLose; }
             set { BlueWinLose = value; }
@@ -344,7 +327,7 @@ namespace SheepDoom
         {
             get { return RP3Star; }
             set { RP3Star = value; }
-        }
+        }*/
 
         public GameObject P_ShopUI_X
         {

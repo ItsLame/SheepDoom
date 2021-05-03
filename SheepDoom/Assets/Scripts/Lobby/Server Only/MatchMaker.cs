@@ -23,7 +23,7 @@ namespace SheepDoom
         private SDSceneManager sdSceneManager;
         private LobbyUIManager lobbyUIManager;
         private CharacterSelectUIManager characterSelectUIManager;
-        private GameManager gameManager;
+        private GameScore gameScoreManager;
 
         public Match(string matchID, GameObject player, SDSceneManager sdSceneManager)
         {
@@ -91,9 +91,9 @@ namespace SheepDoom
             return matchScenes;
         }
 
-        public GameManager GetGameManager()
+        public GameScore GetGameScoreManager()
         {
-            return gameManager;
+            return gameScoreManager;
         }
 
         public SyncListGameObject GetheroList()
@@ -160,9 +160,9 @@ namespace SheepDoom
             matchScenes.Add(scene);
         }
 
-        public void SetGameManager(GameManager _gameManageer)
+        public void SetGameScoreManager(GameScore _gameScoreManageer)
         {
-            gameManager = _gameManageer;
+            gameScoreManager = _gameScoreManageer;
         }
 
         #endregion
@@ -296,7 +296,7 @@ namespace SheepDoom
                         Client ci = player.GetComponent<PlayerObj>().ci;
                         ci.GetComponent<SpawnManager>().SpawnForGame("game", player);
                         matches[_matchID].GetHeroesList().Add(ci.GetComponent<SpawnManager>().GetPlayerObj());
-                    }  
+                    }
                 }
             }
         }

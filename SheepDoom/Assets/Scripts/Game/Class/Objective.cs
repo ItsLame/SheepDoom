@@ -26,6 +26,7 @@ namespace SheepDoom
         private int numOfCapturers;
         private bool giveScoreToCapturers;
         [SerializeField] private bool isBase;
+        private bool gameEnded;
 
         public event Action<float> OnHealthPctChangedTower = delegate { };
 
@@ -142,10 +143,12 @@ namespace SheepDoom
                     RpcUpdateClients(false, true, false);
                 }
                 
-                if(P_isBase && P_inGameHP <= 0)
+                if(P_isBase && P_inGameHP <= 0 && !gameEnded)
                 {
                     Victory();
                     RpcUpdateClients(false, false, true);
+                    gameEnded = true;
+                    return;
                 }
             }
         }

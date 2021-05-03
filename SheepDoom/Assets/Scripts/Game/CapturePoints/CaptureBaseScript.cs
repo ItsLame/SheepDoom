@@ -85,7 +85,6 @@ namespace SheepDoom
 
         protected override void Victory()
         {
-            Debug.Log("Scoreboard: victory call game end");
             // blue team victory when base hp 0 (temporary, if <= 10)
             // if base owner is red team
             if (P_capturedByRed)
