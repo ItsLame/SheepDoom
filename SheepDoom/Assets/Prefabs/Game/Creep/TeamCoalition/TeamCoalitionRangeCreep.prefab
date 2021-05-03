@@ -383,7 +383,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   waypoints:
-  - {fileID: 3993287873418924031, guid: de11748f58b201c439e808eb73908285, type: 3}
   - {fileID: 1601260377792171736, guid: 22e7630655743a1489cde7c1dc505075, type: 3}
   - {fileID: 5025137307999347345, guid: 7e130f37463faac4bb5df4d2aed9a3a5, type: 3}
   StartIndex: 0
