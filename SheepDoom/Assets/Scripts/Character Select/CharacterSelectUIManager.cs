@@ -35,9 +35,9 @@ namespace SheepDoom
         [SerializeField] private GameObject mario;
         [SerializeField] private GameObject luigi;
         [SerializeField] private GameObject peach;
-        [SerializeField] private GameObject yoshi;
-        [SerializeField] private GameObject bowser;
-        private string[] heroesArr = {"Mario", "Luigi", "Peach", "Yoshi", "Bowser"};
+        //[SerializeField] private GameObject yoshi;
+        //[SerializeField] private GameObject bowser;
+        private string[] heroesArr = { "Mario", "Luigi", "Peach" };//, "Yoshi", "Bowser"};
         public SyncList<string> team1PickedHeroes = new SyncList<string>();
         public SyncList<string> team2PickedHeroes = new SyncList<string>();
         //room matchID
@@ -228,19 +228,19 @@ namespace SheepDoom
 
         private void AutoLockIn(GameObject _player)
         {
-            int i = rand.Next(0, 5);
+            int i = rand.Next(0, 3);
 
             if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
             {
                 while(team1PickedHeroes.Contains(heroesArr[i]))
-                    i = rand.Next(0, 5);
+                    i = rand.Next(0, 3);
 
                 team1PickedHeroes.Add(heroesArr[i]);
             }
             else if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 2)
             {
                 while(team2PickedHeroes.Contains(heroesArr[i]))
-                    i = rand.Next(0, 5);
+                    i = rand.Next(0, 3);
 
                 team2PickedHeroes.Add(heroesArr[i]);
             }
@@ -321,12 +321,12 @@ namespace SheepDoom
                     case "Peach":
                         hero = peach;
                         break;
-                    case "Yoshi":
+                    /*case "Yoshi":
                         hero = yoshi;
                         break;
                     case "Bowser":
                         hero = bowser;
-                        break;
+                        break;*/
                 }
 
                 hero.SendMessage("SetTaken", _lockIn);
