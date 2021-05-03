@@ -21,7 +21,6 @@ namespace SheepDoom
         // Start is called before the first frame update
         void Start()
         {
-            //GameObject gameEventText = GameObject.Find("GameEventText");
             GameObject gameEventText = FindMe.instance.P_GameEvent;
             AnnouncerText = gameEventText.GetComponent<Text>();
         }

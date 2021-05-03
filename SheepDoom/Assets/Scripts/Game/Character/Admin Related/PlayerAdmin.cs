@@ -81,7 +81,7 @@ namespace SheepDoom
 
         private void OnNameUpdate(string oldValue, string newValue)
         {
-            GetComponent<PlayerNameGame>().SetPlayerName(newValue); // don't need has auth, because u wanna set on this object for all clients, not ur own only
+            GetComponent<PlayerNameGame>().SetPlayerName(newValue); 
         }
 
         [Command]
