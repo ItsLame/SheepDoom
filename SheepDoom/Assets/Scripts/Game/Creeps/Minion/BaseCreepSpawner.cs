@@ -12,6 +12,7 @@ namespace SheepDoom
 
         [SerializeField] private GameObject Minion;
         [SerializeField] private float spawndelay;
+        [SerializeField] private GameObject SpawnPos;
 
         private void Update()
         {
@@ -29,7 +30,7 @@ namespace SheepDoom
             //GameObject creep = Instantiate(Minion, transform.position, transform.rotation);
             GameObject creep = Instantiate(Minion, transform);
             creep.transform.SetParent(null, false);
-            creep.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
+            creep.transform.SetPositionAndRotation(SpawnPos.transform.position, SpawnPos.transform.rotation);
             NetworkServer.Spawn(creep);
         }
 

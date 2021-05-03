@@ -167,15 +167,6 @@ namespace SheepDoom
         {
             if (isServer)
             {
-                //check for position relative to current waypoint
-                if (currentPoint < waypoints.Length)
-                {
-                    target = waypoints[currentPoint].position;
-                    direction = target - transform.position;
-                    if (direction.magnitude < 10)
-                        currentPoint++;
-                }
-
                 if (targetObject == null)
                 {
                     isLockedOn = false;
@@ -262,11 +253,11 @@ namespace SheepDoom
             {
                 target = waypoints[currentPoint].position;
                 direction = target - transform.position;
-                if (direction.magnitude < 1)
+                if (direction.magnitude < 30)
                     currentPoint++;
             }
 
-            transform.LookAt(target);
+    //        transform.LookAt(target);
             agent.SetDestination(target);
             agent.speed = CreepMoveSpeed;
         }
