@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        private float secondsTimer = 30;
+        private float secondsTimer = 10;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
@@ -404,8 +404,13 @@ namespace SheepDoom
         #endregion
 
         #region Debug
+
+        public void ForceStart()
+        {
+            CmdForceStart();
+        }
+
         [Command(ignoreAuthority = true)]
-        //private void CmdForceStart(GameObject _player, string _matchID)
         private void CmdForceStart()
         {
             RequestGameStart();
