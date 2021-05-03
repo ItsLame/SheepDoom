@@ -136,8 +136,13 @@ namespace SheepDoom
                 }
 
                 // regen hp if tower is not under capture
-                if (P_numOfCapturers == 0 && P_inGameHP < P_hp && !P_isBase)
+                if (P_numOfCapturers == 0 && P_inGameHP < P_hp)
                 {
+                    if (P_isBase)
+                    {
+                            OpenBaseAnim();
+                    }
+
                     ModifyingHealth(P_regenRate * Time.deltaTime);
                     RpcUpdateClients(false, true, false);
                 }
@@ -149,7 +154,14 @@ namespace SheepDoom
                     gameEnded = true;
                     return;
                 }
+
+
             }
+        }
+
+        protected virtual void OpenBaseAnim()
+        {
+
         }
 
         private void CapturedServer(bool _byBlue, bool _byRed)

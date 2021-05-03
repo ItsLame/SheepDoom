@@ -12,6 +12,11 @@ namespace SheepDoom
         //attach the score gameobject to count the score
         public GameObject ScoreGameObject;
 
+
+        [Space(15)]
+        [SerializeField] private GameObject BaseModel;
+        [SerializeField] private bool hasOpened;
+
         //Base hp counters
         [Space(20)]
         
@@ -55,6 +60,39 @@ namespace SheepDoom
             P_isBase = true;
         }
 
+        // check for player enter
+        [ServerCallback]
+        protected override void OnTriggerEnter(Collider _collider)
+        {
+            if (_collider.tag == "Player")
+            {
+                //get player's team ID
+                float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
+                if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
+                {
+                    P_numOfCapturers += 1;
+                    BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Close");
+                }
+
+            }
+        }
+
+
+        [ServerCallback]
+        // check for player exit
+        protected override void OnTriggerExit(Collider _collider)
+        {
+            if (_collider.CompareTag("Player"))
+            {
+                //get player's team ID
+                float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
+                if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
+                    P_numOfCapturers -= 1;
+            }
+        }
+
         [ServerCallback]
         protected override void OnTriggerStay(Collider _collider)
         {
@@ -85,6 +123,7 @@ namespace SheepDoom
 
         protected override void Victory()
         {
+            Debug.Log("Scoreboard: victory call game end");
             // blue team victory when base hp 0 (temporary, if <= 10)
             // if base owner is red team
             if (P_capturedByRed)
@@ -97,5 +136,13 @@ namespace SheepDoom
                 // reference the score script to END THE GAME IN RED VICTORY   <------------------------------------------------- GAME END CALL
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
         }
+
+        protected override void OpenBaseAnim()
+        {
+            Debug.Log("Opening Base Animation..");
+            BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Open");
+            Debug.Log("Opening Base Animation End...");
+        }
+
     }
 }
