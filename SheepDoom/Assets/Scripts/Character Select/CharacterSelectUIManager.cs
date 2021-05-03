@@ -321,12 +321,6 @@ namespace SheepDoom
                     case "Peach":
                         hero = peach;
                         break;
-                    /*case "Yoshi":
-                        hero = yoshi;
-                        break;
-                    case "Bowser":
-                        hero = bowser;
-                        break;*/
                 }
 
                 hero.SendMessage("SetTaken", _lockIn);

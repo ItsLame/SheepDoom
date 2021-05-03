@@ -146,9 +146,9 @@ namespace SheepDoom
                 string name = player.GetComponent<PlayerAdmin>().P_playerName;
                 float charId = player.GetComponent<PlayerAdmin>().getCharID();
                 float team = player.GetComponent<PlayerAdmin>().getTeamIndex();
-                float kills = player.GetComponent<PlayerAdmin>().PlayerKills;
-                float deaths = player.GetComponent<PlayerAdmin>().PlayerDeaths;
-                float towerCap = player.GetComponent<PlayerAdmin>().TowerCaptures;
+                float kills = player.GetComponent<PlayerAdmin>().P_playerKills;
+                float deaths = player.GetComponent<PlayerAdmin>().P_playerDeaths;
+                float towerCap = player.GetComponent<PlayerAdmin>().P_towerCaptures;
 
                 //======================= CALCULATE PLAYER SCORE (STAR PLAYER) ========================
                 double currentPlayerScore = (kills - deaths) + (towerCap * 1.5);
@@ -177,25 +177,26 @@ namespace SheepDoom
                 else if (charId == 3)
                     CharacterImage = Character3;
 
+                string playerDetails = name + "\t" + kills.ToString() + "/" + deaths.ToString() + "/" + towerCap.ToString();
                 if (team == 1)
                 {
                     //Put name & image into UI 
                     if (string.IsNullOrEmpty(BluePlayer1Name.GetComponent<Text>().text))
                     {
                         Debug.Log("I ran again and again");
-                        BluePlayer1Name.GetComponent<Text>().text = name;
+                        BluePlayer1Name.GetComponent<Text>().text = playerDetails;
                         BluePlayer1Image.GetComponent<Image>().sprite = CharacterImage;
                         BluePlayer1Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                     }
                     else if (string.IsNullOrEmpty(BluePlayer2Name.GetComponent<Text>().text))
                     {
-                        BluePlayer2Name.GetComponent<Text>().text = name;
+                        BluePlayer2Name.GetComponent<Text>().text = playerDetails;
                         BluePlayer2Image.GetComponent<Image>().sprite = CharacterImage;
                         BluePlayer2Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                     }
                     else if (string.IsNullOrEmpty(BluePlayer3Name.GetComponent<Text>().text))
                     {
-                        BluePlayer3Name.GetComponent<Text>().text = name;
+                        BluePlayer3Name.GetComponent<Text>().text = playerDetails;
                         BluePlayer3Image.GetComponent<Image>().sprite = CharacterImage;
                         BluePlayer3Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                     }
@@ -205,19 +206,19 @@ namespace SheepDoom
                     if (string.IsNullOrEmpty(RedPlayer1Name.GetComponent<Text>().text))
                     {
                         Debug.Log("I ran again and again 2");
-                        RedPlayer1Name.GetComponent<Text>().text = name;
+                        RedPlayer1Name.GetComponent<Text>().text = playerDetails;
                         RedPlayer1Image.GetComponent<Image>().sprite = CharacterImage;
                         RedPlayer1Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                     }
                     else if (string.IsNullOrEmpty(RedPlayer2Name.GetComponent<Text>().text))
                     {
-                        RedPlayer2Name.GetComponent<Text>().text = name;
+                        RedPlayer2Name.GetComponent<Text>().text = playerDetails;
                         RedPlayer2Image.GetComponent<Image>().sprite = CharacterImage;
                         RedPlayer2Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                     }
                     else if (string.IsNullOrEmpty(RedPlayer3Name.GetComponent<Text>().text))
                     {
-                        RedPlayer3Name.GetComponent<Text>().text = name;
+                        RedPlayer3Name.GetComponent<Text>().text = playerDetails;
                         RedPlayer3Image.GetComponent<Image>().sprite = CharacterImage;
                         RedPlayer3Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                     }

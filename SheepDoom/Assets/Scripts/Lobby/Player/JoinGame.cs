@@ -30,8 +30,6 @@ namespace SheepDoom
                 //move to existing lobby on server
                 SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
                 SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
-                Debug.Log("MATCHID IN JOINGAMESCRIPT: " + matchIdInput);
-                
                 MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinMatch(connectionToClient, matchIdInput);
                 Debug.Log("Server joined game successfully");
             }

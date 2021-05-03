@@ -244,7 +244,7 @@ namespace SheepDoom
 
         public bool JoinGame(string _matchID, GameObject _player)
         {
-            if(matches.ContainsKey(_matchID))
+            if(matches.ContainsKey(_matchID) && matches[_matchID].GetPlayerObjList().Count < 6)
             {
                 matches[_matchID].GetPlayerObjList().Add(_player);
 
@@ -263,7 +263,7 @@ namespace SheepDoom
             }
             else
             {
-                Debug.Log("Match ID does not exist");
+                Debug.Log("Match ID does not exist or match full");
                 return false;
             }
         }

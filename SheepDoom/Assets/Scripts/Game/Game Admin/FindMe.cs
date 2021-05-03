@@ -51,26 +51,6 @@ namespace SheepDoom
         [SerializeField] private GameObject C;
         [SerializeField] private GameObject ScoreboardBlue;
         [SerializeField] private GameObject ScoreboardRed;
-        /*[SerializeField] private GameObject BlueWinLose;
-        [SerializeField] private GameObject RedWinLose;
-        [SerializeField] private GameObject BP1Star;
-        [SerializeField] private GameObject BluePlayer1Image;
-        [SerializeField] private GameObject BluePlayer1Name;
-        [SerializeField] private GameObject BP2Star;
-        [SerializeField] private GameObject BluePlayer2Image;
-        [SerializeField] private GameObject BluePlayer2Name;
-        [SerializeField] private GameObject BP3Star;
-        [SerializeField] private GameObject BluePlayer3Image;
-        [SerializeField] private GameObject BluePlayer3Name;
-        [SerializeField] private GameObject RP1Star;
-        [SerializeField] private GameObject RedPlayer1Image;
-        [SerializeField] private GameObject RedPlayer1Name;
-        [SerializeField] private GameObject RP2Star;
-        [SerializeField] private GameObject RedPlayer2Image;
-        [SerializeField] private GameObject RedPlayer2Name;
-        [SerializeField] private GameObject RP3Star;
-        [SerializeField] private GameObject RedPlayer3Image;
-        [SerializeField] private GameObject RedPlayer3Name;*/
 
         public bool isInit { get; private set;}
 

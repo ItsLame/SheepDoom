@@ -15,11 +15,11 @@ namespace SheepDoom
         [SerializeField] [SyncVar] private int TeamIndex;
 
         [Header("Player scores")]
-        [SyncVar(hook = nameof(SyncPlayerKill))] public float PlayerKills;
+        [SyncVar(hook = nameof(SyncPlayerKill))] private float PlayerKills;
         public Text PlayerKillsText;
-        [SyncVar(hook = nameof(SyncPlayerDeath))] public float PlayerDeaths;
+        [SyncVar(hook = nameof(SyncPlayerDeath))] private float PlayerDeaths;
         public Text PlayerDeathsText;
-        [SyncVar(hook = nameof(SyncTowerCapture))] public float TowerCaptures;
+        [SyncVar(hook = nameof(SyncTowerCapture))] private float TowerCaptures;
         public Text TowerCapturesText;
         private GameObject shop;
 
@@ -44,8 +44,26 @@ namespace SheepDoom
 
         public string P_playerName
         {
-            get{return playerName;}
-            set{playerName = value;}
+            get { return playerName; }
+            set { playerName = value; }
+        }
+
+        public float P_playerKills
+        {
+            get { return PlayerKills; }
+            set { PlayerKills = value; }
+        }
+
+        public float P_playerDeaths
+        {
+            get { return PlayerDeaths; }
+            set { PlayerDeaths = value; }
+        }
+
+        public float P_towerCaptures
+        {
+            get { return TowerCaptures; }
+            set { TowerCaptures = value; }
         }
 
         #endregion
@@ -54,11 +72,11 @@ namespace SheepDoom
         public void IncreaseCount(bool _isTower, bool _isKill, bool _isDeath)
         {
             if(_isTower)
-                TowerCaptures += 1;
+                P_towerCaptures += 1;
             else if(_isKill)
-                PlayerKills += 1;
+                P_playerKills += 1;
             else if(_isDeath)
-                PlayerDeaths += 1;
+                P_playerDeaths += 1;
         }
 
         private void SyncTowerCapture(float oldValue, float newValue)
