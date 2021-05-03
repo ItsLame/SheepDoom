@@ -71,6 +71,21 @@ namespace SheepDoom
             Character3 = Resources.Load<Sprite>("Peach");
         }
 
+        public void ExitGame()
+        {
+            GameObject _player = PlayerObj.instance.gameObject;
+            if(_player.GetComponent<NetworkIdentity>().hasAuthority)
+            {
+                CmdServerExitGame(_player);
+            }
+        }
+
+        [Command]
+        void CmdServerExitGame(GameObject _player)
+        {
+            Debug.Log("am i null?" + _player);
+        }
+
         //update score display on all clients
         public void updateScoreDisplay()
         {
@@ -183,7 +198,6 @@ namespace SheepDoom
                     //Put name & image into UI 
                     if (string.IsNullOrEmpty(BluePlayer1Name.GetComponent<Text>().text))
                     {
-                        Debug.Log("I ran again and again");
                         BluePlayer1Name.GetComponent<Text>().text = playerDetails;
                         BluePlayer1Image.GetComponent<Image>().sprite = CharacterImage;
                         BluePlayer1Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
@@ -205,7 +219,6 @@ namespace SheepDoom
                 {
                     if (string.IsNullOrEmpty(RedPlayer1Name.GetComponent<Text>().text))
                     {
-                        Debug.Log("I ran again and again 2");
                         RedPlayer1Name.GetComponent<Text>().text = playerDetails;
                         RedPlayer1Image.GetComponent<Image>().sprite = CharacterImage;
                         RedPlayer1Image.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
