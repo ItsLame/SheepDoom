@@ -292,7 +292,6 @@ namespace SheepDoom
                     {
                         Client ci = player.GetComponent<PlayerObj>().ci;
                         ci.GetComponent<SpawnManager>().SpawnForGame("game", player);
-                        ci.GetComponent<SpawnManager>().GetPlayerObj().GetComponent<PlayerAdmin>().P_matchID = _matchID;
                         matches[_matchID].GetHeroesList().Add(ci.GetComponent<SpawnManager>().GetPlayerObj());
                     }
                 }
