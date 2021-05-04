@@ -138,7 +138,7 @@ namespace SheepDoom
         [Server]
         private IEnumerator UnloadScene(NetworkConnection conn, string _matchID, bool _unloadLobby, bool _unloadCharSelect)
         {
-            if(P_scenesLoaded)
+            if(P_scenesLoaded && (_unloadLobby || _unloadCharSelect))
             {
                 int sceneIndex = 0;
 
@@ -148,19 +148,22 @@ namespace SheepDoom
                     sceneIndex = 1;
 
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex].name, false);
-                yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex]);
-                
+                yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex]);            
                 yield return Resources.UnloadUnusedAssets();
             }
             else if (P_gameSceneLoaded)
             {
-                ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, false); // unload game scene on client
+ //               
                 if(MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count == 0)
                 {
                     yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2]); // unload game scene on server only when players all left
                     yield return Resources.UnloadUnusedAssets();
                     P_gameSceneLoaded = false;
                 }
+
+                else
+                    ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, false); // unload game scene on client
+
             }
         }
 

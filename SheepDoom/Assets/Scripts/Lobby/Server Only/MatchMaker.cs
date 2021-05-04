@@ -224,7 +224,7 @@ namespace SheepDoom
             if (!matches.ContainsKey(_matchID))
             {
                 GameObject sceneManager = Instantiate(SDSceneManager);
-
+                NetworkServer.Spawn(sceneManager);
                 Match newMatch = new Match(_matchID, _player, sceneManager.GetComponent<SDSceneManager>());
                 matches.Add(_matchID, newMatch);
                 newMatch.GetSDSceneManager().StartScenes(conn);
