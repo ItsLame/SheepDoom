@@ -152,21 +152,21 @@ namespace SheepDoom
                 GetComponent<PlayerLobbyUI>().P_playerCharacter.text = string.Empty;
                 GetComponent<PlayerLobbyUI>().P_playerCharacterSelectObject.SetActive(false);
                 TargetRemoveFromMatch(GetComponent<NetworkIdentity>().connectionToClient, gameObject);*/
+                MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().UnloadScenes(ci.GetComponent<NetworkIdentity>().connectionToClient, matchID, false, false); // unload on client
                 if (MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList().Contains(gameObject)) 
                     MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList().Remove(gameObject); // remove from match player list
+
                 if (MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Contains(ci.GetComponent<SpawnManager>().GetPlayerObj()))
                 {
                     MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Remove(ci.GetComponent<SpawnManager>().GetPlayerObj()); // remove from match hero list
                     NetworkServer.Destroy(ci.GetComponent<SpawnManager>().GetPlayerObj()); // destroy it
-                    ci.GetComponent<SpawnManager>().SetPlayerObj(gameObject); // change playerobj from game type back to lobby type
+                    //ci.GetComponent<SpawnManager>().SetPlayerObj(gameObject); // change playerobj from game type back to lobby type
                 }
                 else
                     Debug.Log("Heroes list for matchID: " + matchID + " does not contain this game object");
-                // move back to main menu scene
+                // move back to main menu scene on server
                 SceneManager.MoveGameObjectToScene(ci.gameObject, SceneManager.GetSceneAt(0)); 
                 SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0));
-                // unload scene on client
-                MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().UnloadScenes(ci.GetComponent<NetworkIdentity>().connectionToClient, matchID, false, false); // unload on client
             }
             else
                 Debug.Log("WARNING PLAYER IS IN THE WRONG MATCH!! matchID: " + _matchID + " player matchID: " + matchID);

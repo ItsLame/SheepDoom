@@ -78,16 +78,13 @@ namespace SheepDoom
             if(gameStatus != null)
             {
                 string _matchID = gameStatus.GetComponent<GameStatus>().P_matchID;
+                _player.GetComponent<PlayerObj>().RemoveFromMatch(_matchID);
+                NetworkConnection _playerConn = _player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>().connectionToClient;
+                NetworkServer.Destroy(_player);
+                Client.ReturnClientInstance(_playerConn).GetComponent<SpawnManager>().SpawnForGame("lobby", null);
+
                 if (MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count == 0)
                     MatchMaker.instance.ClearMatch(_matchID);
-                else
-                {
-                    _player.GetComponent<PlayerObj>().RemoveFromMatch(_matchID);
-                    NetworkConnection _playerConn = _player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>().connectionToClient;
-                    NetworkServer.Destroy(_player);
-                    Client.ReturnClientInstance(_playerConn).GetComponent<SpawnManager>().SpawnForGame("lobby", null);
-                }
-                    
             }
         }
 

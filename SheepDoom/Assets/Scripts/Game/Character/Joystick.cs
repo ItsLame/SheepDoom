@@ -66,11 +66,15 @@ namespace UnityStandardAssets.CrossPlatformInput
 			// create new axes based on axes to use
 			if (m_UseX)
 			{
+				if(CrossPlatformInputManager.AxisExists(horizontalAxisName))
+					CrossPlatformInputManager.UnRegisterVirtualAxis((horizontalAxisName));
 				m_HorizontalVirtualAxis = new CrossPlatformInputManager.VirtualAxis(horizontalAxisName);
 				CrossPlatformInputManager.RegisterVirtualAxis(m_HorizontalVirtualAxis);
 			}
 			if (m_UseY)
 			{
+				if (CrossPlatformInputManager.AxisExists(verticalAxisName))
+					CrossPlatformInputManager.UnRegisterVirtualAxis((verticalAxisName));
 				m_VerticalVirtualAxis = new CrossPlatformInputManager.VirtualAxis(verticalAxisName);
 				CrossPlatformInputManager.RegisterVirtualAxis(m_VerticalVirtualAxis);
 			}
@@ -123,10 +127,13 @@ namespace UnityStandardAssets.CrossPlatformInput
 			// remove the joysticks from the cross platform input
 			if (m_UseX)
 			{
+				
 				m_HorizontalVirtualAxis.Remove();
 			}
+
 			if (m_UseY)
 			{
+				CrossPlatformInputManager.UnRegisterVirtualAxis("Vertical");
 				m_VerticalVirtualAxis.Remove();
 			}
 		}

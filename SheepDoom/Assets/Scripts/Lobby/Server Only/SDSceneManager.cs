@@ -153,17 +153,14 @@ namespace SheepDoom
             }
             else if (P_gameSceneLoaded)
             {
- //               
-                if(MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count == 0)
+                if(MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count != 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count != 0)
+                    ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, false); // unload game scene on client
+                else
                 {
                     yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2]); // unload game scene on server only when players all left
                     yield return Resources.UnloadUnusedAssets();
                     P_gameSceneLoaded = false;
                 }
-
-                else
-                    ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, false); // unload game scene on client
-
             }
         }
 
