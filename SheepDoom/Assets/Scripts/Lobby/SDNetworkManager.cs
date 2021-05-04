@@ -169,8 +169,8 @@ namespace SheepDoom
         /// <param name="conn">Connection from client.</param>
         public override void OnServerDisconnect(NetworkConnection conn)
         {
-            LocalPlayers.Remove(conn);
             LocalPlayersNetId.Remove(conn.identity);
+            LocalPlayers.Remove(conn);
             base.OnServerDisconnect(conn);
         }
 

@@ -42,7 +42,8 @@ namespace SheepDoom
         private IEnumerator MoveToLobby(NetworkConnection conn)
         {
             while(!MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().P_scenesLoaded)
-                yield return null;           
+                yield return null;
+            Debug.Log("run count");
             SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
             SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
         }

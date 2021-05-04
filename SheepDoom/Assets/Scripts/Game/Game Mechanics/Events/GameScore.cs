@@ -74,16 +74,18 @@ namespace SheepDoom
         public void ExitGame()
         {
             GameObject _player = PlayerObj.instance.gameObject;
-            if(_player.GetComponent<NetworkIdentity>().hasAuthority)
-            {
+            if (_player.GetComponent<NetworkIdentity>().hasAuthority)
                 CmdServerExitGame(_player);
-            }
+            else
+                Debug.Log("no authority");
         }
 
-        [Command]
+        [Command(ignoreAuthority = true)]
         void CmdServerExitGame(GameObject _player)
         {
-            Debug.Log("am i null?" + _player);
+            _player.GetComponent<PlayerObj>().RemoveFromMatch(P_matchID);
+            if (MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[P_matchID].GetHeroesList().Count == 0)
+                MatchMaker.instance.ClearMatch(P_matchID);
         }
 
         //update score display on all clients

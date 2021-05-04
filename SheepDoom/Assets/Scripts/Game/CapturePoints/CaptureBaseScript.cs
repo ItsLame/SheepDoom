@@ -85,17 +85,16 @@ namespace SheepDoom
 
         protected override void Victory()
         {
-            // blue team victory when base hp 0 (temporary, if <= 10)
             // if base owner is red team
             if (P_capturedByRed)
-                //reference the score script to END THE GAME IN BLUE VICTORY   <------------------------------------------------- GAME END CALL
+            {
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(1);
-
-            // red team victory if base hp 0 (temporary, if <= 10)
+            }
             // if base owner is blue team
             if (P_capturedByBlue)
-                // reference the score script to END THE GAME IN RED VICTORY   <------------------------------------------------- GAME END CALL
+            {
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
+            } 
         }
     }
 }

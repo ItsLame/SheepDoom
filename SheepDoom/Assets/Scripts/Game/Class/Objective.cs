@@ -136,7 +136,7 @@ namespace SheepDoom
                 }
 
                 // regen hp if tower is not under capture
-                if (P_numOfCapturers == 0 && P_inGameHP < P_hp && !P_isBase)
+                if (P_numOfCapturers == 0 && P_inGameHP < P_hp)
                 {
                     ModifyingHealth(P_regenRate * Time.deltaTime);
                     RpcUpdateClients(false, true, false);

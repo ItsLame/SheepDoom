@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using Mirror;
-using System.Collections.Generic;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 namespace SheepDoom
@@ -20,7 +17,7 @@ namespace SheepDoom
         [SyncVar] private bool isHost = false;
         [SyncVar] private bool isReady = false;
         [SyncVar] private bool isLockedIn = false;
-        [SyncVar] public string heroName;
+        [SyncVar] public string heroName = string.Empty;
 
         #region Get
         public string GetPlayerName()
@@ -138,9 +135,37 @@ namespace SheepDoom
             }
         }
 
-        public string getPlayerName()
+        [Server]
+        public void RemoveFromMatch(string _matchID)
         {
-            return syncName;
+            if (_matchID == matchID)
+            {
+                if (isHost)
+                    isHost = false;
+                if (isReady)
+                    isReady = false;
+                if (isLockedIn)
+                    isLockedIn = false;
+                teamIndex = 0;
+                heroName = string.Empty;
+                if (MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList().Contains(gameObject)) 
+                    MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList().Remove(gameObject); // remove from match player list
+                if (MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Contains(ci.GetComponent<SpawnManager>().GetPlayerObj()))
+                {
+                    MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Remove(ci.GetComponent<SpawnManager>().GetPlayerObj()); // remove from match hero list
+                    NetworkServer.Destroy(ci.GetComponent<SpawnManager>().GetPlayerObj()); // destroy it
+                    ci.GetComponent<SpawnManager>().SetPlayerObj(gameObject); // set playerobj back to playerobj (the lobby type)
+                }
+                else
+                    Debug.Log("Heroes list for matchID: " + matchID + " does not contain this game object");
+                // move back to main menu scene
+                SceneManager.MoveGameObjectToScene(ci.gameObject, SceneManager.GetSceneAt(0)); 
+                SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0));
+                // unload scene on client
+                MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().UnloadScenes(ci.GetComponent<NetworkIdentity>().connectionToClient, matchID, false, false); // unload on client
+            }
+            else
+                Debug.Log("WARNING PLAYER IS IN THE WRONG MATCH!! matchID: " + _matchID + " player matchID: " + matchID);
         }
 
         #region Start & Stop Callbacks

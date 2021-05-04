@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using Mirror;
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 using UnityEngine.SceneManagement;
 
 // This script only runs on the server, not available to clients
@@ -177,7 +175,7 @@ namespace SheepDoom
     public class MatchMaker : NetworkBehaviour
     {
         public static MatchMaker instance;
-  
+
         // track matches
         private SyncDictionary<string, Match> matches = new SyncDictionary<string, Match>();
         [SerializeField] GameObject SDSceneManager;
@@ -223,10 +221,9 @@ namespace SheepDoom
 
         public bool HostGame(string _matchID, GameObject _player, NetworkConnection conn)
         {
-            if(!matches.ContainsKey(_matchID))
+            if (!matches.ContainsKey(_matchID))
             {
                 GameObject sceneManager = Instantiate(SDSceneManager);
-                NetworkServer.Spawn(sceneManager);
 
                 Match newMatch = new Match(_matchID, _player, sceneManager.GetComponent<SDSceneManager>());
                 matches.Add(_matchID, newMatch);
@@ -244,21 +241,21 @@ namespace SheepDoom
 
         public bool JoinGame(string _matchID, GameObject _player)
         {
-            if(matches.ContainsKey(_matchID) && matches[_matchID].GetPlayerObjList().Count < 6)
+            if (matches.ContainsKey(_matchID) && matches[_matchID].GetPlayerObjList().Count < 6)
             {
                 matches[_matchID].GetPlayerObjList().Add(_player);
 
-                if(matches[_matchID].GetTeam1Count() < 3)
+                if (matches[_matchID].GetTeam1Count() < 3)
                 {
                     matches[_matchID].AddTeam1Count();
                     _player.GetComponent<PlayerObj>().SetTeamIndex(1);
                 }
-                else if(matches[_matchID].GetTeam2Count() < 3)
+                else if (matches[_matchID].GetTeam2Count() < 3)
                 {
                     matches[_matchID].AddTeam2Count();
                     _player.GetComponent<PlayerObj>().SetTeamIndex(2);
                 }
-                
+
                 return true;
             }
             else
@@ -270,35 +267,56 @@ namespace SheepDoom
 
         public void StartNewScene(string _matchID, bool _charSelect, bool _game)
         {
-            if(matches.ContainsKey(_matchID))
+            if (matches.ContainsKey(_matchID))
             {
-                if(_charSelect)
+                if (_charSelect)
                 {
                     matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetScenes()[1]);
-                    foreach(GameObject player in matches[_matchID].GetPlayerObjList())
+                    foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[1], _matchID, true, false);
                     matches[_matchID].GetCharacterSelectUIManager().StartCharSelect(_matchID);
                 }
-                else if(_game)
+                else if (_game)
                 {
                     matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetScenes()[2]);
-                    foreach(GameObject player in matches[_matchID].GetPlayerObjList())
+                    foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                     {
-                        if(SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                        if (SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
                             matches[_matchID].GetSDSceneManager().JoinGame(conn, _matchID);
                     }
 
-                    foreach(GameObject player in matches[_matchID].GetPlayerObjList())
+                    foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[2], _matchID, false, true);
 
-                    foreach(GameObject player in matches[_matchID].GetPlayerObjList())
+                    foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                     {
                         Client ci = player.GetComponent<PlayerObj>().ci;
                         ci.GetComponent<SpawnManager>().SpawnForGame("game", player);
+                        ci.GetComponent<SpawnManager>().GetPlayerObj().GetComponent<PlayerAdmin>().P_matchID = _matchID;
                         matches[_matchID].GetHeroesList().Add(ci.GetComponent<SpawnManager>().GetPlayerObj());
                     }
                 }
             }
+        }
+
+        public void ClearMatch(string _matchID)
+        {
+            if(matches.ContainsKey(_matchID))
+            {
+                Match closedMatch = matches[_matchID];
+                closedMatch.GetSDSceneManager().MoveToNewScene(SceneManager.GetSceneAt(0));
+                closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, false);
+                StartCoroutine(WaitForSceneUnload(closedMatch));
+            }
+        }
+
+        private IEnumerator WaitForSceneUnload(Match _closedMatch)
+        {
+            while (_closedMatch.GetSDSceneManager().P_gameSceneLoaded)
+                yield return null;
+            _closedMatch.GetScenes().Clear();
+            NetworkServer.Destroy(_closedMatch.GetSDSceneManager().gameObject);
+            matches.Remove(_closedMatch.GetMatchID());
         }
 
         #region Start & Stop Callbacks

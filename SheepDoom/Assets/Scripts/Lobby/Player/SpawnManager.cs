@@ -110,7 +110,6 @@ namespace SheepDoom
         void CmdRequestPlayerObjSpawn(string playerType, GameObject player)
         {
             NetworkSpawnPlayer(playerType, player);
-            
         }
 
         [Server]
