@@ -114,9 +114,18 @@ namespace SheepDoom
         protected void SetTowerColor()
         {
             if (P_capturedByBlue && !P_capturedByRed)
+            {
                 GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+                GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.blue * 1.5f);
+            }
+                
             else if (P_capturedByRed && !P_capturedByBlue)
+            {
                 GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.red * 1.5f);
+
+            }
+
         }
 
         protected virtual void Victory()
