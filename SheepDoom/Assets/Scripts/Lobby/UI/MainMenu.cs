@@ -41,7 +41,11 @@ namespace SheepDoom
             string matchIdInput = matchID.text;
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
+            {
                 _player.GetComponent<JoinGame>().Join(matchIdInput.ToUpper());
+                matchID.text = string.Empty;
+            }
+                
         }
     }
 }

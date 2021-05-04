@@ -128,8 +128,8 @@ namespace SheepDoom
             {
                 yield return SceneManager.LoadSceneAsync(_gameScene, new LoadSceneParameters { loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.Physics3D });
                 newGameScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
-                MatchMaker.instance.GetMatches()[P_matchID].SetGameScoreManager(GameScore.instance);
-                MatchMaker.instance.GetMatches()[P_matchID].GetGameScoreManager().P_matchID = P_matchID;
+                MatchMaker.instance.GetMatches()[P_matchID].SetGameStatusManager(GameStatus.instance);
+                MatchMaker.instance.GetMatches()[P_matchID].GetGameStatusManager().P_matchID = P_matchID;
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
                 P_gameSceneLoaded = true;
             }

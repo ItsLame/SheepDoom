@@ -7,13 +7,11 @@ namespace SheepDoom
 {
     public class GameScore : NetworkBehaviour
     { 
-        public static GameScore instance;
-
-        [SerializeField] [SyncVar] private string matchID = string.Empty;
         [SerializeField] private string TopPlayer;
         [SerializeField] private double TempHighestScore;
         [SerializeField] private float TempTopPlayerNoOfTower;
         [SerializeField] private GameObject[] players;
+        [SerializeField] private GameObject gameStatus;
         //the display text for tower scores
         [Space(20)]
         [SerializeField]
@@ -58,12 +56,6 @@ namespace SheepDoom
         [SerializeField]
         [SyncVar] private float redCaptureScore;
 
-        public string P_matchID
-        {
-            get { return matchID; }
-            set { matchID = value; }
-        }
-
         void Start()
         {
             Character1 = Resources.Load<Sprite>("Mario");
@@ -83,9 +75,20 @@ namespace SheepDoom
         [Command(ignoreAuthority = true)]
         void CmdServerExitGame(GameObject _player)
         {
-            _player.GetComponent<PlayerObj>().RemoveFromMatch(P_matchID);
-            if (MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[P_matchID].GetHeroesList().Count == 0)
-                MatchMaker.instance.ClearMatch(P_matchID);
+            if(gameStatus != null)
+            {
+                string _matchID = gameStatus.GetComponent<GameStatus>().P_matchID;
+                if (MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count == 0)
+                    MatchMaker.instance.ClearMatch(_matchID);
+                else
+                {
+                    _player.GetComponent<PlayerObj>().RemoveFromMatch(_matchID);
+                    NetworkConnection _playerConn = _player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>().connectionToClient;
+                    NetworkServer.Destroy(_player);
+                    Client.ReturnClientInstance(_playerConn).GetComponent<SpawnManager>().SpawnForGame("lobby", null);
+                }
+                    
+            }
         }
 
         //update score display on all clients
@@ -278,7 +281,6 @@ namespace SheepDoom
 
         public override void OnStartServer()
         {
-            instance = this;
             blueCaptureScore = 2;
             redCaptureScore = 2;
             updateScoreDisplay();
@@ -286,7 +288,6 @@ namespace SheepDoom
 
         public override void OnStartClient()
         {
-            instance = this;
             updateScoreDisplay(); // when start on client, it will automatically take values from server
         }
 

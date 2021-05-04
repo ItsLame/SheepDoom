@@ -1,51 +1,31 @@
 ﻿using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.SceneManagement;
 
+/*
+	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
+	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
+*/
 namespace SheepDoom
 {
-    // for hosts only
-    public class StartGame : NetworkBehaviour
+    public class GameStatus : NetworkBehaviour
     {
-        private PlayerObj pO;
+        public static GameStatus instance;
 
-        void Awake()
+        [SyncVar] private string matchID;
+        [SyncVar] private bool gameEnded;
+
+        public string P_matchID
         {
-            pO = GetComponent<PlayerObj>();
+            get { return matchID; }
+            set { matchID = value; }
         }
 
-        [Server]
-        public void StartNewScene(string _matchID)
+        public bool P_gameEnded
         {
-            if (pO.GetMatchID() == _matchID) // check matchID
-                MatchMaker.instance.StartNewScene(_matchID, true, false);
-            else
-                Debug.Log("Match ID: " + _matchID + " does not exist");
+            get { return gameEnded; }
+            set { gameEnded = value; }
         }
-
-        [Server]
-        public void MoveToNewScene(Scene _scene, string _matchID, bool _charSelect, bool _game)
-        {
-            TargetRemoveParent(connectionToClient);
-            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
-            gameObject.transform.SetParent(null, false);
-            SceneManager.MoveGameObjectToScene(gameObject, _scene);
-
-            if (_charSelect)
-                MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, true, false);
-            else if(_game)
-                MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, false, true);
-        }
-
-        [TargetRpc]
-        void TargetRemoveParent(NetworkConnection conn)
-        {
-            gameObject.transform.SetParent(null, false);
-            SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0)); // move to main menu first, then up to u, can move to a parent under character select scene if u want
-        }
-
         #region Start & Stop Callbacks
 
         /// <summary>
@@ -53,7 +33,10 @@ namespace SheepDoom
         /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
-        public override void OnStartServer() { }
+        public override void OnStartServer()
+        {
+            instance = this;
+        }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned
@@ -65,7 +48,10 @@ namespace SheepDoom
         /// Called on every NetworkBehaviour when it is activated on a client.
         /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
         /// </summary>
-        public override void OnStartClient() { }
+        public override void OnStartClient()
+        {
+            instance = this;   
+        }
 
         /// <summary>
         /// This is invoked on clients when the server has caused this object to be destroyed.

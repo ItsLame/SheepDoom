@@ -9,6 +9,7 @@ namespace SheepDoom
     public abstract class Objective : NetworkBehaviour
     {
         private GameObject scoreGameObject;
+        [SerializeField] private GameObject gameStatus;
         
         // hp: base/tower hp
         // inGameHP: to be used in game, gonna be the one fluctuating basically
@@ -139,23 +140,22 @@ namespace SheepDoom
                 if (P_numOfCapturers == 0 && P_inGameHP < P_hp)
                 {
                     if (P_isBase)
-                    {
-                            OpenBaseAnim();
-                    }
+                         OpenBaseAnim();
 
                     ModifyingHealth(P_regenRate * Time.deltaTime);
                     RpcUpdateClients(false, true, false);
                 }
                 
-                if(P_isBase && P_inGameHP <= 0 && !gameEnded)
+                if(P_isBase && P_inGameHP <= 0 && gameStatus != null)
                 {
-                    Victory();
-                    RpcUpdateClients(false, false, true);
-                    gameEnded = true;
-                    return;
+                    if(!gameStatus.GetComponent<GameStatus>().P_gameEnded)
+                    {
+                        Victory();
+                        RpcUpdateClients(false, false, true);
+                        gameStatus.GetComponent<GameStatus>().P_gameEnded = true;
+                        return;
+                    }    
                 }
-
-
             }
         }
 

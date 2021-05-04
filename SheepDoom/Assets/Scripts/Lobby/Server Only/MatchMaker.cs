@@ -21,7 +21,7 @@ namespace SheepDoom
         private SDSceneManager sdSceneManager;
         private LobbyUIManager lobbyUIManager;
         private CharacterSelectUIManager characterSelectUIManager;
-        private GameScore gameScoreManager;
+        private GameStatus gameStatusManager;
 
         public Match(string matchID, GameObject player, SDSceneManager sdSceneManager)
         {
@@ -89,9 +89,9 @@ namespace SheepDoom
             return matchScenes;
         }
 
-        public GameScore GetGameScoreManager()
+        public GameStatus GetGameStatusManager()
         {
-            return gameScoreManager;
+            return gameStatusManager;
         }
 
         public SyncListGameObject GetheroList()
@@ -158,9 +158,9 @@ namespace SheepDoom
             matchScenes.Add(scene);
         }
 
-        public void SetGameScoreManager(GameScore _gameScoreManageer)
+        public void SetGameStatusManager(GameStatus _gameStatusManageer)
         {
-            gameScoreManager = _gameScoreManageer;
+            gameStatusManager = _gameStatusManageer;
         }
 
         #endregion
@@ -180,7 +180,7 @@ namespace SheepDoom
         private SyncDictionary<string, Match> matches = new SyncDictionary<string, Match>();
         [SerializeField] GameObject SDSceneManager;
 
-        private void Start()
+        void Start()
         {
             instance = this;
         }
@@ -325,7 +325,10 @@ namespace SheepDoom
         /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
-        public override void OnStartServer() { }
+        public override void OnStartServer() 
+        {
+            
+        }
 
         /// <summary>
         /// Invoked on the server when the object is unspawned
