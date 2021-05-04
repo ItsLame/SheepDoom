@@ -12,9 +12,14 @@ namespace SheepDoom
         //attach the score gameobject to count the score
         public GameObject ScoreGameObject;
 
+
+        [Space(15)]
+        [SerializeField] private GameObject BaseModel;
+        [SerializeField] private bool hasClosed = false;
+
         //Base hp counters
         [Space(20)]
-        
+
         //base hp
         [Tooltip("How much HP the Base has, edit this")]
         [SerializeField] private float HP;
@@ -47,12 +52,52 @@ namespace SheepDoom
 
             // set the Tower's hp based on the settings
             P_inGameHP = P_hp;
-            
+
             // no one is capturing it at start so put at 0
             //P_numOfCapturers = 0;
 
             // this is tower's script
             P_isBase = true;
+        }
+
+        // check for player enter
+        [ServerCallback]
+        protected override void OnTriggerEnter(Collider _collider)
+        {
+            if (_collider.tag == "Player")
+            {
+                //get player's team ID
+                float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
+                if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
+                {
+                    P_numOfCapturers += 1;
+
+                    //animation to close
+                    if (!hasClosed)
+                    {
+                        BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Close");
+                        hasClosed = true;
+                    }
+
+                }
+
+            }
+        }
+
+
+        [ServerCallback]
+        // check for player exit
+        protected override void OnTriggerExit(Collider _collider)
+        {
+            if (_collider.CompareTag("Player"))
+            {
+                //get player's team ID
+                float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
+                if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
+                    P_numOfCapturers -= 1;
+            }
         }
 
         [ServerCallback]
@@ -94,7 +139,21 @@ namespace SheepDoom
             if (P_capturedByBlue)
             {
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
-            } 
+            }
         }
+
+        [ServerCallback]
+        protected override void OpenBaseAnim()
+        {
+            if (hasClosed)
+            {
+                Debug.Log("Opening Base Animation..");
+                BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Open");
+                Debug.Log("Opening Base Animation End...");
+                hasClosed = false;
+            }
+
+        }
+
     }
 }
