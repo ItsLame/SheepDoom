@@ -416,7 +416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -490,7 +490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.1792453, g: 1, b: 0.18053445, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -632,7 +632,7 @@ GameObject:
   - component: {fileID: 6612573326344474612}
   - component: {fileID: 7289330321973248176}
   - component: {fileID: 1041473986788054908}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -905,7 +905,7 @@ GameObject:
   - component: {fileID: 8449280143259454606}
   - component: {fileID: 6459418408009445500}
   - component: {fileID: 2014472282729360730}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Peach (C3)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1040,11 +1040,8 @@ MonoBehaviour:
   charID: 3
   playerName: 
   TeamIndex: 0
-  PlayerKills: 0
   PlayerKillsText: {fileID: 0}
-  PlayerDeaths: 0
   PlayerDeathsText: {fileID: 0}
-  TowerCaptures: 0
   TowerCapturesText: {fileID: 0}
 --- !u!114 &3665192994374769649
 MonoBehaviour:

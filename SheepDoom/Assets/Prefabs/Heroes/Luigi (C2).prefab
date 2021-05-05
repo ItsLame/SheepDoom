@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 1088759763548799350}
   - component: {fileID: 2592283840863600004}
   - component: {fileID: 7037161822337196194}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Luigi (C2)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -278,11 +278,8 @@ MonoBehaviour:
   charID: 2
   playerName: 
   TeamIndex: 0
-  PlayerKills: 0
   PlayerKillsText: {fileID: 0}
-  PlayerDeaths: 0
   PlayerDeathsText: {fileID: 0}
-  TowerCaptures: 0
   TowerCapturesText: {fileID: 0}
 --- !u!114 &5224372523614344713
 MonoBehaviour:
@@ -624,7 +621,7 @@ GameObject:
   - component: {fileID: 2421044191389876748}
   - component: {fileID: 2266777309692185928}
   - component: {fileID: 8370465096402639492}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -877,7 +874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1066,7 +1063,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.1792453, g: 1, b: 0.18053445, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
