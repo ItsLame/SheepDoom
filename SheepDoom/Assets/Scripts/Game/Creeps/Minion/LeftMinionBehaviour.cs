@@ -13,9 +13,11 @@ namespace SheepDoom
         // Waypoint System
         public Transform[] waypoints;
         public int StartIndex = 0;
-        private int currentPoint = 0;
-        private Vector3 target;
-        private Vector3 direction;
+        [SerializeField] private float WaypointsLength;
+        [SerializeField] private int currentPoint = 0;
+        [SerializeField] private Vector3 target;
+        [SerializeField] private Vector3 direction;
+        [SerializeField] public float DirectionMagnitude;
         [Space(15)]
 
         public NavMeshAgent agent;
@@ -88,6 +90,9 @@ namespace SheepDoom
         [ServerCallback]
         private void OnTriggerEnter(Collider other)
         {
+            //dont bother with rest if locked on
+            if (isLockedOn) return;
+
             //if not locked on, search for new targets
             if (gameObject.CompareTag("TeamCoalitionRangeCreep") && !isLockedOn)
             {
@@ -247,14 +252,25 @@ namespace SheepDoom
         }
 
         [Server]
-        void StartMovingToWayPoint() // nothing updating this
+        void StartMovingToWayPoint() 
         {
+            WaypointsLength = waypoints.Length;
             if (currentPoint < waypoints.Length)
             {
-                target = waypoints[currentPoint].position;
+                target = waypoints[currentPoint].position; 
                 direction = target - transform.position;
-                if (direction.magnitude < 30)
-                    currentPoint++;
+                DirectionMagnitude = direction.magnitude;
+                if (direction.magnitude < 150)
+                {
+                    currentPoint += 1;
+                }
+
+                // for now end minion life if reach the end
+                if (currentPoint == waypoints.Length)
+                {
+                    Destroyy();
+                }
+
             }
 
     //        transform.LookAt(target);
