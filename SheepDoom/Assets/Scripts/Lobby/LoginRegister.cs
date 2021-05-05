@@ -31,7 +31,7 @@ namespace SheepDoom
             {
                 networkManager.networkAddress = "localhost";
                 networkManager.StartClient(); 
-            }
+            }   
         }
 
         public void Register() { }
