@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: ab09fa6c41bfd4e459399381ec67d5eb
+guid: 22b387cce4b4e9447b2bb09412f92195
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
-    second: Base Close
+    second: Base Close v2
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Base Close
+      name: Base Close v2
       takeName: Take 001
       internalID: 0
       firstFrame: 1
