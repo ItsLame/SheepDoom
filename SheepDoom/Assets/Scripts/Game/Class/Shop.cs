@@ -136,12 +136,12 @@ namespace SheepDoom
             //if more than one touch and at the beginning of the touch
             if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
             {
-                //get a raycast to where you are touching
-                Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
                 //store the info of hit object
                 RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit) && !P_shopPlayer)
+                //get a raycast to where you are touching
+                Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
+                
+                if (Physics.Raycast(ray, out hit) && P_shopPlayer != null)
                 {
                     //if hit something
                     if (hit.collider.CompareTag("Shop"))
