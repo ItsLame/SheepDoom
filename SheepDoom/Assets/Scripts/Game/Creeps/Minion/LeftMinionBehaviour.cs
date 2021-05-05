@@ -85,7 +85,7 @@ namespace SheepDoom
             agent.autoBraking = false;
         }
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerEnter(Collider other)
         {
             //if not locked on, search for new targets
@@ -122,7 +122,7 @@ namespace SheepDoom
             }
         }
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerStay(Collider other)
         {
             // don't bother with others thats not locked on
@@ -149,7 +149,7 @@ namespace SheepDoom
             }
         }
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerExit(Collider other) // exit happened before playerinsight range happened
         {
             //go back to travelling if target goes out of range

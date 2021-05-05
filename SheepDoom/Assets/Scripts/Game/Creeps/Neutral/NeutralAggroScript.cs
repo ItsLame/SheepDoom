@@ -41,7 +41,7 @@ namespace SheepDoom
             moveSpdInGame = moveSpd;
         }
 
-        [Server]
+        [ServerCallback]
         // Update is called once per frame
         void Update()
         {
@@ -66,7 +66,7 @@ namespace SheepDoom
             }
         }
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerEnter(Collider other)
         {
             //if no target, lock onto a new player in range
@@ -83,7 +83,7 @@ namespace SheepDoom
 
         }
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerStay(Collider other)
         {
             //1st priority: lock on to first player
@@ -152,15 +152,10 @@ namespace SheepDoom
                         }
                     }
                 }
-
-
             }
-
-
-
         }
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Player") && LockedOn)

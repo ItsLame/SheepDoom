@@ -11,7 +11,7 @@ namespace SheepDoom
         [SerializeField]
         private float HealRate = 0.2f;
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerStay(Collider other)
         {
             if(other.CompareTag("Player"))

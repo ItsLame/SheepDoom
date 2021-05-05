@@ -40,7 +40,7 @@ namespace SheepDoom
         }
 
         //when collide with player
-        [Server]
+        [ServerCallback]
         private void OnTriggerEnter(Collider col)
         {
             if (hitboxActive)
