@@ -145,26 +145,26 @@ namespace SheepDoom
                 if (!_swap && !_ready && !_start)
                 {
                     foreach (var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
-                        TargetUpdateOwner(conn, player, _swap, _ready, _start);
+                        TargetUpdateOwner(conn, player, _swap, _ready, _start, false);
 
-                    RpcUpdateOthers(_player, _swap, _ready);
+                    RpcUpdateOthers(_player, _swap, _ready, false);
                 }
                 else if (_swap)
                 {
                     RequestSwapUpdate(_matchID, _player); // update swap on the server, causes a syncvar delay
-                    TargetUpdateOwner(conn, _player, _swap, _ready, _start);
-                    RpcUpdateOthers(_player, _swap, _ready);
+                    TargetUpdateOwner(conn, _player, _swap, _ready, _start, false);
+                    RpcUpdateOthers(_player, _swap, _ready, false);
                 }
                 else if (_ready)
                 {
                     RequestReadyUpdate(_matchID, _player); // update ready on the server, causes a syncvar delay
-                    TargetUpdateOwner(conn, _player, _swap, _ready, _start);
-                    RpcUpdateOthers(_player, _swap, _ready);
+                    TargetUpdateOwner(conn, _player, _swap, _ready, _start, false);
+                    RpcUpdateOthers(_player, _swap, _ready, false);
                 }
                 else if (_start)
                 {
                     RequestCheckStart(_matchID, _player);
-                    TargetUpdateOwner(conn, _player, _swap, _ready, _start); // only need to show host player start status text
+                    TargetUpdateOwner(conn, _player, _swap, _ready, _start, false); // only need to show host player start status text
                 }
             }
             else
@@ -226,6 +226,14 @@ namespace SheepDoom
             MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_startStatusText.GetComponent<Text>().text = MatchMaker.instance.GetMatches()[_matchID].GetLobbyUIManager().P_startStatusMsg;
         }
 
+        [Server]
+        public void PlayerLeftLobby(GameObject _player)
+        {
+            SetUI_StartReadyUI(_player, false); // change on server
+            TargetUpdateOwner(_player.GetComponent<NetworkIdentity>().connectionToClient, _player, false, false, false, true);
+            RpcUpdateOthers(_player, false, false, true); // change on client
+        }
+
         #endregion
 
         #region Client Functions
@@ -236,10 +244,10 @@ namespace SheepDoom
         }
 
         [TargetRpc]
-        private void TargetUpdateOwner(NetworkConnection conn, GameObject _player, bool _swap, bool _ready, bool _start)
+        private void TargetUpdateOwner(NetworkConnection conn, GameObject _player, bool _swap, bool _ready, bool _start, bool _changeHost)
         {
             bool isOwner = true;
-            if (!_swap && !_ready && !_start) // for host/join
+            if (!_swap && !_ready && !_start && !_changeHost) // for host/join
             {
                 if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                     _player.transform.SetParent(P_team1GameObject.transform, false);
@@ -257,18 +265,18 @@ namespace SheepDoom
                     StartCoroutine(WaitForTeamUpdate(_player, 2, isOwner));
             }
             else if (_ready) // for ready
-                // deal with syncvar delay
-                StartCoroutine(WaitForReadyUpdate(_player, _player.GetComponent<PlayerObj>().GetIsReady(), isOwner));
+                StartCoroutine(WaitForReadyUpdate(_player, _player.GetComponent<PlayerObj>().GetIsReady(), isOwner)); // deal with syncvar delay
             else if (_start) // for start
-                // deal with syncvar delay
-                StartCoroutine(WaitForStartStatusUpdate(_player, P_startStatusMsg)); 
+                StartCoroutine(WaitForStartStatusUpdate(P_startStatusMsg)); // deal with syncvar delay
+            else if (_changeHost)
+                StartCoroutine(WaitForHostChangeUpdate(_player, _player.GetComponent<PlayerObj>().GetIsHost(), isOwner));
         }
 
         [ClientRpc]
-        private void RpcUpdateOthers(GameObject _player, bool _swap, bool _ready)
+        private void RpcUpdateOthers(GameObject _player, bool _swap, bool _ready, bool _hostChange)
         {
             bool isOwner = false;
-            if (!_swap && !_ready) // for host/join
+            if (!_swap && !_ready && !_hostChange) // for host/join
             {
                 if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                     _player.transform.SetParent(P_team1GameObject.transform, false);
@@ -285,8 +293,9 @@ namespace SheepDoom
                     StartCoroutine(WaitForTeamUpdate(_player, 2, isOwner));
             }
             else if (_ready) // for ready
-                // deal with syncvar delay
-                StartCoroutine(WaitForReadyUpdate(_player, _player.GetComponent<PlayerObj>().GetIsReady(), isOwner));
+                StartCoroutine(WaitForReadyUpdate(_player, _player.GetComponent<PlayerObj>().GetIsReady(), isOwner)); // deal with syncvar delay
+            else if (_hostChange)
+                StartCoroutine(WaitForHostChangeUpdate(_player, _player.GetComponent<PlayerObj>().GetIsHost(), isOwner));
         }
 
         private IEnumerator WaitForTeamUpdate(GameObject _player, int oldTeamIndex, bool isOwner)
@@ -309,11 +318,18 @@ namespace SheepDoom
             SetUI_StartReadyUI(_player, isOwner);
         }
 
-        private IEnumerator WaitForStartStatusUpdate(GameObject _player, string oldStatus)
+        private IEnumerator WaitForStartStatusUpdate(string oldStatus)
         {
             while (P_startStatusMsg == oldStatus)
                 yield return null;
             P_startStatusText.GetComponent<Text>().text = P_startStatusMsg;
+        }
+
+        private IEnumerator WaitForHostChangeUpdate(GameObject _player, bool oldHostStatus, bool _isOwner)
+        {
+            while (_player.GetComponent<PlayerObj>().GetIsHost() == oldHostStatus)
+                yield return null;
+            SetUI_StartReadyUI(_player, _isOwner);
         }
         
         [Client] // show for owner only since these buttons shouldn't be available to other clients, don't need to show on server because...there is only 1 server
@@ -440,10 +456,19 @@ namespace SheepDoom
                     g = 183;
                     b = 136;
                     if (_player.GetComponent<PlayerObj>().GetIsHost())
+                    {
+                        if (isClient)
+                            Debug.Log("client changed host");
                         _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Host";
+                    }
                     else
+                    {
+                        if (isClient)
+                        {
+                            Debug.Log("I am not host " + _player.GetComponent<PlayerObj>().GetIsHost());
+                        }
                         _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Not Ready";
-
+                    }
                     _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
                 }
                 else if (_player.GetComponent<PlayerObj>().GetIsReady())

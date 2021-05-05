@@ -298,14 +298,17 @@ namespace SheepDoom
             }
         }
 
-        public void ClearMatch(string _matchID)
+        public void ClearMatch(string _matchID, bool _isLobby, bool _isCharSelect, bool _isGame)
         {
             if(matches.ContainsKey(_matchID))
             {
                 Match closedMatch = matches[_matchID];
                 closedMatch.GetSDSceneManager().MoveToNewScene(SceneManager.GetSceneAt(0));
-                closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, false);
-                StartCoroutine(WaitForSceneUnload(closedMatch));
+                if(_isGame)
+                {
+                    closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, false);
+                    StartCoroutine(WaitForSceneUnload(closedMatch));
+                }
             }
         }
 
