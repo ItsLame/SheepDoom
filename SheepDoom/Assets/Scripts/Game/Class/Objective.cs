@@ -125,7 +125,6 @@ namespace SheepDoom
                 GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.red * 1.5f);
 
             }
-
         }
 
         protected virtual void Victory()

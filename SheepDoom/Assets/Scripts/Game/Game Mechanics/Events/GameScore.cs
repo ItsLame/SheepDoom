@@ -84,7 +84,7 @@ namespace SheepDoom
                 Client.ReturnClientInstance(_playerConn).GetComponent<SpawnManager>().SpawnForGame("lobby", null);
 
                 if (MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count == 0)
-                    MatchMaker.instance.ClearMatch(_matchID);
+                    MatchMaker.instance.ClearMatch(_matchID, false , false, true);
             }
         }
 

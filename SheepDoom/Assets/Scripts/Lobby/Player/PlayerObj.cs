@@ -159,6 +159,53 @@ namespace SheepDoom
                 Debug.Log("WARNING PLAYER IS IN THE WRONG MATCH!! matchID: " + _matchID + " player matchID: " + matchID);
         }
 
+        [Server]
+        private void RemoveFromLobby(string _matchID)
+        {
+            if(_matchID == matchID)
+            {
+                Match lobbyMatch = MatchMaker.instance.GetMatches()[_matchID];
+                // adjust team counts
+                if (teamIndex == 1)
+                    lobbyMatch.MinusTeam1Count();
+                else if (teamIndex == 2)
+                    lobbyMatch.MinusTeam2Count();
+                // check statuses
+                if(isReady) // applicable for non-hosts only
+                {
+                    isReady = false;
+                    lobbyMatch.MinusCountReady();
+                }
+
+                if(isHost) // only applicable if player is host
+                {
+                    lobbyMatch.MinusCountReady(); // need to repeat ready count here, intentional, because host by default already ++ready count
+                    isHost = false;
+                    // host is always 1st player in the list, so when leave, pass to next player, list re-numbers itself when it changes in size
+                    // next player settings
+                    GameObject nextHostPlayer = null;
+                    if (lobbyMatch.GetPlayerObjList().Count > 1)
+                    {
+                        nextHostPlayer = lobbyMatch.GetPlayerObjList()[1];
+
+                        if (nextHostPlayer.GetComponent<PlayerObj>().GetIsReady())
+                            nextHostPlayer.GetComponent<PlayerObj>().SetIsReady(false);
+
+                        nextHostPlayer.GetComponent<PlayerObj>().SetIsHost(true);
+                        lobbyMatch.AddCountReady();
+                        lobbyMatch.GetLobbyUIManager().PlayerLeftLobby(nextHostPlayer);
+                    }
+                    else
+                    {
+                        // unload the lobby scene on client and server
+                    }
+                }
+
+                if (lobbyMatch.GetPlayerObjList().Contains(gameObject))
+                    lobbyMatch.GetPlayerObjList().Remove(gameObject);
+            }
+        }
+
         #region Start & Stop Callbacks
 
         /// <summary>
@@ -178,18 +225,13 @@ namespace SheepDoom
         /// </summary>
         public override void OnStopServer()
         {
-            if (GetTeamIndex() == 1)
+            if (MatchMaker.instance.GetMatches().ContainsKey(matchID)) // meaning match is still ongoing when player disconnects
             {
-                MatchMaker.instance.GetMatches()[GetMatchID()].MinusTeam1Count();
-                SetTeamIndex(0);
+                if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[0]) // if in lobby when player disconnects
+                {
+                    RemoveFromLobby(matchID);
+                }
             }
-            else if (GetTeamIndex() == 2)
-            {
-                MatchMaker.instance.GetMatches()[GetMatchID()].MinusTeam2Count();
-                SetTeamIndex(0);
-            }
-            if (MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Contains(gameObject))
-                MatchMaker.instance.GetMatches()[GetMatchID()].GetPlayerObjList().Remove(gameObject);
         }
 
         /// <summary>
@@ -209,7 +251,10 @@ namespace SheepDoom
         /// This is invoked on clients when the server has caused this object to be destroyed.
         /// <para>This can be used as a hook to invoke effects or do client specific cleanup.</para>
         /// </summary>
-        public override void OnStopClient() { }
+        public override void OnStopClient() 
+        {
+
+        }
 
         /// <summary>
         /// Called when the local player object has been set up.
