@@ -146,7 +146,7 @@ MonoBehaviour:
   accelerationRate: 1
   deccelerationRate: 50
   accelMultiplierOn: 1
-  accelMultiplier: 1.11
+  accelMultiplier: 1.5
   hasSpeedLimit: 1
   speedLimit: 50
   SlowDebuff: 1
