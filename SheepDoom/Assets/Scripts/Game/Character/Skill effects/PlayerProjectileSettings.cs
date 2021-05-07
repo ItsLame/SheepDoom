@@ -11,7 +11,6 @@ namespace SheepDoom
         //projectileOwner
         public GameObject owner;
         [SyncVar] public float ownerTeamID;
-        [SyncVar] public bool isFromTower;
 
         [Space(15)]
         //rotation controls
@@ -88,11 +87,7 @@ namespace SheepDoom
 
         public override void OnStartServer()
         {
-            if (!isFromTower)
-            {
-                ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-            }
-
+            ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
         }
 
         [Server]

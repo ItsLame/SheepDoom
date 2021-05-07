@@ -20,7 +20,7 @@ namespace SheepDoom
         [SerializeField] private float towerAtkCD;
         [SerializeField] private float towerAtkCDinGame;
         private GameObject baseBullet;
-    //    [SerializeField] private bool towerAtk;
+        //    [SerializeField] private bool towerAtk;
         //Base hp counters
         [Space(20)]
 
@@ -43,6 +43,7 @@ namespace SheepDoom
 
         protected override bool P_capturedByBlue { get => CapturedByBlue; set => CapturedByBlue = value; }
         protected override bool P_capturedByRed { get => CapturedByRed; set => CapturedByRed = value; }
+
 
         protected override void InitObjective()
         {
@@ -136,7 +137,7 @@ namespace SheepDoom
                             towerAtkCDinGame = towerAtkCD;
                         }
 
-                        if(ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
+                        if (ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
                         {
                             ModifyingHealth(-(P_captureRate * Time.deltaTime));
                             RpcUpdateClients(false, true, false);
@@ -158,15 +159,14 @@ namespace SheepDoom
                             towerAtkCDinGame = towerAtkCD;
                         }
 
-                        if(ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
+                        if (ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
                         {
                             ModifyingHealth(-(P_captureRate * Time.deltaTime));
                             RpcUpdateClients(false, true, false);
                         }
                     }
                 }
-                else if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && isDed)
-                    P_numOfCapturers -= 1;
+
             }
         }
 
@@ -189,6 +189,30 @@ namespace SheepDoom
                 BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Open");
                 hasClosed = false;
             }
+        }
+
+
+        //accessor method to get teamID
+        public float getTeamID()
+        {
+            if (CapturedByBlue)
+            {
+                return 1;
+            }
+
+            else 
+            {
+                return 2;
+            }
+
+        }
+
+        [Server]
+        // method called by enemy player message object to reduce capturers
+        public void reduceNumOfCapturers()
+        {
+            P_numOfCapturers -= 1;
+            Debug.Log("Number Of Capturers: " + P_numOfCapturers);
         }
     }
 }
