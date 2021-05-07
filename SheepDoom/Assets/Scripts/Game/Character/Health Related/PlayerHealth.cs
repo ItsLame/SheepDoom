@@ -135,7 +135,7 @@ namespace SheepDoom
         public void revivePlayer()
         {
             //enable collider
-            this.gameObject.GetComponent<CapsuleCollider>().enabled = true;
+            Invoke("enableCollider", 1f);
             playerDead = false;
         }
 
@@ -143,6 +143,11 @@ namespace SheepDoom
         public bool isPlayerDead()
         {
             return playerDead;
+        }
+
+        public void enableCollider()
+        {
+            this.gameObject.GetComponent<CapsuleCollider>().enabled = true;
         }
     }
 }
