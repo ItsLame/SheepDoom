@@ -113,6 +113,7 @@ namespace SheepDoom
                         GameObject spawnAura = Instantiate(AuraDamageObject, transform);
                         spawnAura.transform.SetParent(null, false);
                         spawnAura.transform.SetPositionAndRotation(this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        NetworkServer.Spawn(spawnAura);
                         //reset attack timer
                         attackCooldownInGame = attackCooldown;
                     }
@@ -126,7 +127,7 @@ namespace SheepDoom
                 {
                     LockedOn = true;
                     Attacker = other.gameObject;
-                    Debug.Log("Moving towards " + Attacker.gameObject.name);
+               //     Debug.Log("Moving towards " + Attacker.gameObject.name);
 
                     if (Vector3.Distance(Attacker.transform.position, transform.position) > attackRange)
                     {
@@ -147,6 +148,7 @@ namespace SheepDoom
                             GameObject spawnAura = Instantiate(AuraDamageObject, transform);
                             spawnAura.transform.SetParent(null, false);
                             spawnAura.transform.SetPositionAndRotation(this.gameObject.transform.position, this.gameObject.transform.rotation);
+                            NetworkServer.Spawn(spawnAura);
                             //reset attack timer
                             attackCooldownInGame = attackCooldown;
                         }

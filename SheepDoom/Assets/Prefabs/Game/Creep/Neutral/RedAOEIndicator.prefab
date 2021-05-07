@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 8916650325001051172}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 211.119, y: 56.11237, z: 705.99756}
-  m_LocalScale: {x: 60, y: 60, z: 60}
+  m_LocalScale: {x: 43.8642, y: 43.8642, z: 43.8642}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -95,7 +95,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.64
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2852140112259717770
 MonoBehaviour:
@@ -111,10 +111,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  scale_speed: 1.004
-  AOE_Duration: 1.5
+  scale_speed: 1.008
+  AOE_Duration: 2
   destroyOnContact: 0
-  damage: 50
+  damage: 3
 --- !u!114 &6650225642277682166
 MonoBehaviour:
   m_ObjectHideFlags: 0

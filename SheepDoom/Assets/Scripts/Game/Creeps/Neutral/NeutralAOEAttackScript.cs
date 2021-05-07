@@ -35,12 +35,15 @@ namespace SheepDoom
         }
 
         [Server]
-        void OnTriggerEnter(Collider col)
+        private void OnTriggerStay(Collider col)
         {
+            //if hit anything???
+            Debug.Log(col.gameObject.name + " hit");
+
             //if hit player
             if (col.gameObject.CompareTag("Player"))
             {
-
+                Debug.Log(col.gameObject.name + " player hit");
                 //reduce HP of hit target
                 col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
 
