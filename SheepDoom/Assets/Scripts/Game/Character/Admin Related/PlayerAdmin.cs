@@ -124,7 +124,7 @@ namespace SheepDoom
 
             setTeamIndex(_playerTeamID);
             
-            CmdSetInfo(_playerTeamID, PlayerObj.instance.GetPlayerName());
+            CmdSetInfo(_playerTeamID, _playerName);
 
             if (getTeamIndex() == 1)
                 FindMe.instance.P_BlueShop.GetComponent<Shop>().P_shopPlayer = gameObject;

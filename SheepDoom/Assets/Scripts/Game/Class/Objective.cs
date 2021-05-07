@@ -9,7 +9,7 @@ namespace SheepDoom
     public abstract class Objective : NetworkBehaviour
     {
         private GameObject scoreGameObject;
-        [SerializeField] private GameObject gameStatus;
+        [SerializeField] protected GameObject gameStatus;
         
         // hp: base/tower hp
         // inGameHP: to be used in game, gonna be the one fluctuating basically
@@ -159,8 +159,7 @@ namespace SheepDoom
                     if(!gameStatus.GetComponent<GameStatus>().P_gameEnded)
                     {
                         Victory();
-                        RpcUpdateClients(false, false, true);
-                        gameStatus.GetComponent<GameStatus>().P_gameEnded = true;
+                        //RpcUpdateClients(false, false, true);
                         return;
                     }    
                 }
@@ -202,8 +201,8 @@ namespace SheepDoom
                 StartCoroutine(WaitForUpdate(P_capturedByBlue, P_capturedByRed)); // deals with syncvar delay
             else if (_isChangeHp)
                 ModifyingHealth(0); // 0 because value from server will sync
-            else if (_isEndGame)
-                Victory();
+            ///else if (_isEndGame)
+                //Victory();
         }
 
         private IEnumerator WaitForUpdate(bool _oldBlue, bool _oldRed)

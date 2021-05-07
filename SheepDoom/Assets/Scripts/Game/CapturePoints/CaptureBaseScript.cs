@@ -130,16 +130,13 @@ namespace SheepDoom
 
         protected override void Victory()
         {
+            gameStatus.GetComponent<GameStatus>().P_gameEnded = true;
             // if base owner is red team
             if (P_capturedByRed)
-            {
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(1);
-            }
             // if base owner is blue team
             if (P_capturedByBlue)
-            {
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
-            }
         }
 
         [ServerCallback]
@@ -147,13 +144,9 @@ namespace SheepDoom
         {
             if (hasClosed)
             {
-                Debug.Log("Opening Base Animation..");
                 BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Open");
-                Debug.Log("Opening Base Animation End...");
                 hasClosed = false;
             }
-
         }
-
     }
 }

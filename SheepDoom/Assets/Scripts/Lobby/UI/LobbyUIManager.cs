@@ -456,19 +456,9 @@ namespace SheepDoom
                     g = 183;
                     b = 136;
                     if (_player.GetComponent<PlayerObj>().GetIsHost())
-                    {
-                        if (isClient)
-                            Debug.Log("client changed host");
                         _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Host";
-                    }
                     else
-                    {
-                        if (isClient)
-                        {
-                            Debug.Log("I am not host " + _player.GetComponent<PlayerObj>().GetIsHost());
-                        }
                         _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Not Ready";
-                    }
                     _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
                 }
                 else if (_player.GetComponent<PlayerObj>().GetIsReady())
