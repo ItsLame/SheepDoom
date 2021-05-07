@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using Mirror;
 using System.Collections.Generic;
 using System;
+using System.Collections;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Components/NetworkManager.html
@@ -16,6 +17,7 @@ namespace SheepDoom
         public static Dictionary<NetworkConnection, NetworkIdentity> LocalPlayers = new Dictionary<NetworkConnection, NetworkIdentity>();
         public static Dictionary<NetworkIdentity, NetworkConnection> LocalPlayersNetId = new Dictionary<NetworkIdentity, NetworkConnection>();
         [SerializeField] private NetworkIdentity matchMaker;
+        private GameObject mm;
 
         #region Unity Callbacks
 
@@ -243,7 +245,7 @@ namespace SheepDoom
         /// </summary>
         public override void OnStartServer() 
         {
-            GameObject mm = Instantiate(matchMaker.gameObject);
+            mm = Instantiate(matchMaker.gameObject);
             DontDestroyOnLoad(mm);
         }
 
@@ -260,12 +262,34 @@ namespace SheepDoom
         /// <summary>
         /// This is called when a server is stopped - including when a host is stopped.
         /// </summary>
-        public override void OnStopServer() { }
+        public override void OnStopServer() 
+        {
+            StartCoroutine(UnloadSubScenes());
+        }
 
         /// <summary>
         /// This is called when a client is stopped.
         /// </summary>
-        public override void OnStopClient() { }
+        public override void OnStopClient() 
+        {
+            if (mode == NetworkManagerMode.ClientOnly)
+                StartCoroutine(UnloadSubScenes());
+        }
+
+        IEnumerator UnloadSubScenes()
+        {
+            for (int index = 0; index < SceneManager.sceneCount; index++)
+            {
+                if (SceneManager.GetSceneAt(index) != SceneManager.GetActiveScene())
+                    yield return SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(index));
+            }
+
+            if(mode == NetworkManagerMode.ServerOnly)
+            {
+                yield return Resources.UnloadUnusedAssets();
+                Destroy(mm);
+            }
+        }
 
         #endregion
     }

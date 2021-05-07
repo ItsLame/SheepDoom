@@ -8,7 +8,6 @@ namespace SheepDoom
     public class NeutralCreepHealthBar : HealthBar
     {
         [SerializeField] private Image foregroundimage;
-        [SerializeField] private float updatespeedseconds = 0.5f;
 
         protected override void Awake()
         {

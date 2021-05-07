@@ -10,7 +10,7 @@ namespace SheepDoom
     {
         [SerializeField] private Image heroImage;
 
-        [Client]
+        [ClientCallback]
         protected override void InitHeroInfo()
         {
             P_heroName = "Luigi";
@@ -18,13 +18,13 @@ namespace SheepDoom
             P_heroIcon = heroImage.sprite;
         }
 
-        [Client]
+        [ClientCallback]
         public override void OnClickHero()
         {
             base.OnClickHero();
         }
 
-        [Client]
+        [ClientCallback]
         public override void SetTaken(bool _isTaken)
         {
             P_isTaken = _isTaken;

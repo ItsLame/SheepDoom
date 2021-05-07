@@ -136,7 +136,7 @@ namespace SheepDoom
         }
 
         [Server]
-        public void RemoveFromMatch(string _matchID)
+        public void RemoveFromGame(string _matchID)
         {
             if (_matchID == matchID)
             {
@@ -152,8 +152,10 @@ namespace SheepDoom
                 else
                     Debug.Log("Heroes list for matchID: " + matchID + " does not contain this game object");
                 // move back to main menu scene on server
-                SceneManager.MoveGameObjectToScene(ci.gameObject, SceneManager.GetSceneAt(0)); 
-                SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0));
+                MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveToNewScene(ci.gameObject, SceneManager.GetSceneAt(0));
+                MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveToNewScene(gameObject, SceneManager.GetSceneAt(0));
+                //SceneManager.MoveGameObjectToScene(ci.gameObject, SceneManager.GetSceneAt(0)); 
+                //SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0));
             }
             else
                 Debug.Log("WARNING PLAYER IS IN THE WRONG MATCH!! matchID: " + _matchID + " player matchID: " + matchID);
@@ -162,6 +164,7 @@ namespace SheepDoom
         [Server]
         private void RemoveFromLobby(string _matchID)
         {
+            Debug.Log("Called");
             if(_matchID == matchID)
             {
                 Match lobbyMatch = MatchMaker.instance.GetMatches()[_matchID];
@@ -196,12 +199,10 @@ namespace SheepDoom
                         lobbyMatch.GetLobbyUIManager().PlayerLeftLobby(nextHostPlayer);
                     }
                     else
-                    {
-                        // unload the lobby scene on client and server
-                    }
+                        MatchMaker.instance.ClearMatch(_matchID, true, false, false);
                 }
 
-                if (lobbyMatch.GetPlayerObjList().Contains(gameObject))
+                if (lobbyMatch.GetPlayerObjList().Contains(gameObject)) // wont run for host cuz already removed, but will run for non-hosts
                     lobbyMatch.GetPlayerObjList().Remove(gameObject);
             }
         }
@@ -228,9 +229,7 @@ namespace SheepDoom
             if (MatchMaker.instance.GetMatches().ContainsKey(matchID)) // meaning match is still ongoing when player disconnects
             {
                 if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[0]) // if in lobby when player disconnects
-                {
                     RemoveFromLobby(matchID);
-                }
             }
         }
 

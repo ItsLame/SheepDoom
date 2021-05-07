@@ -12,6 +12,9 @@ namespace SheepDoom
     {
         public static GameStatus instance;
 
+        [SerializeField] private GameObject navMeshObject;
+        private GameObject navMesh;
+
         [SyncVar] private string matchID;
         [SyncVar] private bool gameEnded;
 
@@ -26,6 +29,13 @@ namespace SheepDoom
             get { return gameEnded; }
             set { gameEnded = value; }
         }
+
+        [Server]
+        public void MoveNavMesh(string _matchID)
+        {
+            MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().MoveToNewScene(navMesh, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2]);
+        }
+
         #region Start & Stop Callbacks
 
         /// <summary>
@@ -36,6 +46,7 @@ namespace SheepDoom
         public override void OnStartServer()
         {
             instance = this;
+            navMesh = Instantiate(navMeshObject, transform.position, transform.rotation);
         }
 
         /// <summary>

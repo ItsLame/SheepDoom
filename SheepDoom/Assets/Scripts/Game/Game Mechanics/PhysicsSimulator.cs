@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Mirror;
 
 namespace SheepDoom
@@ -26,8 +24,8 @@ namespace SheepDoom
         {
             if (!NetworkServer.active) return;
 
-            if (simulatePhysicsScene)
-                physicsScene.Simulate(Time.fixedDeltaTime);
+                if (simulatePhysicsScene)
+                    physicsScene.Simulate(Time.fixedDeltaTime);
         }
     }
 }

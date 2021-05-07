@@ -62,11 +62,6 @@ namespace SheepDoom
         public bool SleepDebuff;
         public float sleepDebuffDuration;
 
-
-
-        //bool for calling kill counter increase once
-        bool killCounterIncreaseCalled = false;
-
         //method to set direction of projectile
         public void setDirection(string direction)
         {
@@ -135,20 +130,11 @@ namespace SheepDoom
             }
             else if (col.gameObject.CompareTag("Tower"))
             {
-                //     col.transform.parent.gameObject.GetComponent<CapturePointScript>().ModifyingHealth(-damage);
-                //     Object.Destroy(this.gameObject);
+
             }
             //used to test gold for now
             else if (col.gameObject.CompareTag("NeutralMinion"))
             {
-                //take damage
-                //               col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
-                //               col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
-                //inform that its under atk
-                //               col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
-
-
-                //                Debug.Log(owner + " hitting neutral minion");
                 owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
 
                 if (destroyOnContact)
@@ -187,7 +173,6 @@ namespace SheepDoom
             else if (col.gameObject.CompareTag("MegaBoss"))
             {
                 col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
-                //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
                 if (destroyOnContact)
                     Destroyy();
@@ -206,25 +191,6 @@ namespace SheepDoom
                         Destroyy();
                 }
             }
-            /*
-            if (col.gameObject.layer == 9)
-            {
-
-
-                //                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
-                //                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().Murderer = owner;
-
-                //                col.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
-                //                col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().Murderer = owner;
-                //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
-
-                if (destroyOnContact)
-                {
-                    Object.Destroy(this.gameObject);
-
-                }
-
-            }*/
         }
 
         [Server]

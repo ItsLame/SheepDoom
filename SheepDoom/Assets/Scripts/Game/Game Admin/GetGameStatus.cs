@@ -18,5 +18,10 @@ namespace SheepDoom
                     gameObject.SetActive(false);
             }
         }
+
+        public GameObject GetGameStatusManager()
+        {
+            return gameStatus;
+        }
     }
 }

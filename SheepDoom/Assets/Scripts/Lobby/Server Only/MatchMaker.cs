@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using Mirror;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 // This script only runs on the server, not available to clients
@@ -92,11 +91,6 @@ namespace SheepDoom
         public GameStatus GetGameStatusManager()
         {
             return gameStatusManager;
-        }
-
-        public SyncListGameObject GetheroList()
-        {
-            return heroes;
         }
 
         #endregion
@@ -271,14 +265,14 @@ namespace SheepDoom
             {
                 if (_charSelect)
                 {
-                    matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetScenes()[1]);
+                    matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetSDSceneManager().gameObject, matches[_matchID].GetScenes()[1]);
                     foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[1], _matchID, true, false);
                     matches[_matchID].GetCharacterSelectUIManager().StartCharSelect(_matchID);
                 }
                 else if (_game)
                 {
-                    matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetScenes()[2]);
+                    matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetSDSceneManager().gameObject, matches[_matchID].GetScenes()[2]);
                     foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                     {
                         if (SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
@@ -303,19 +297,41 @@ namespace SheepDoom
             if(matches.ContainsKey(_matchID))
             {
                 Match closedMatch = matches[_matchID];
-                closedMatch.GetSDSceneManager().MoveToNewScene(SceneManager.GetSceneAt(0));
+                if(closedMatch.GetSDSceneManager().gameObject.activeInHierarchy)
+                    closedMatch.GetSDSceneManager().MoveToNewScene(closedMatch.GetSDSceneManager().gameObject, SceneManager.GetSceneAt(0));
+
                 if(_isGame)
                 {
                     closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, false);
-                    StartCoroutine(WaitForSceneUnload(closedMatch));
+                    StartCoroutine(WaitForSceneUnload(closedMatch, false, false, true));
+                }
+                else if(_isLobby)
+                {
+                    closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, true, false);
+                    closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, true);
+                    StartCoroutine(WaitForSceneUnload(closedMatch, true, false ,false));
                 }
             }
         }
 
-        private IEnumerator WaitForSceneUnload(Match _closedMatch)
+        private IEnumerator WaitForSceneUnload(Match _closedMatch, bool _isLobby, bool _isCharSelect, bool _isGame)
         {
-            while (_closedMatch.GetSDSceneManager().P_gameSceneLoaded)
-                yield return null;
+            if (_isGame)
+            {
+                while (_closedMatch.GetSDSceneManager().P_gameSceneLoaded)
+                    yield return null;
+            }
+            else if (_isLobby)
+            {
+                while (_closedMatch.GetScenes()[0].isLoaded || _closedMatch.GetScenes()[1].isLoaded)
+                    yield return null;
+            }
+            else if (_isCharSelect)
+            {
+                while (_closedMatch.GetScenes()[1].isLoaded)
+                    yield return null;
+            }
+                
             _closedMatch.GetScenes().Clear();
             NetworkServer.Destroy(_closedMatch.GetSDSceneManager().gameObject);
             matches.Remove(_closedMatch.GetMatchID());

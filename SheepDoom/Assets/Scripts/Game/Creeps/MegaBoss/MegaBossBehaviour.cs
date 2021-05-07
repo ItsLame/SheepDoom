@@ -25,7 +25,7 @@ namespace SheepDoom
         Animator charAnim;
 
         //Aggro
-        private float speed = 15.0f;
+        //private float speed = 15.0f;
         private Vector3 wayPointPos;
         // public float howclose;
         // private float dist;

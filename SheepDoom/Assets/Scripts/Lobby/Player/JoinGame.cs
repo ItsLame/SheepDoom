@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using Mirror;
-using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.SceneManagement;
 
 namespace SheepDoom
 {
@@ -26,10 +23,12 @@ namespace SheepDoom
             if (MatchMaker.instance.JoinGame(matchIdInput, gameObject))
             {
                 pO.SetMatchID(matchIdInput); // syncVared
-                
+
                 //move to existing lobby on server
-                SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
-                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
+                MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().MoveToNewScene(Client.ReturnClientInstance(GetComponent<NetworkIdentity>().connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
+                MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().MoveToNewScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
+                //SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
+                //SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
                 MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().JoinMatch(connectionToClient, matchIdInput);
                 Debug.Log("Server joined game successfully");
             }

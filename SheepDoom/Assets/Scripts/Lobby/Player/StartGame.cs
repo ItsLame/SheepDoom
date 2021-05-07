@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using Mirror;
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 namespace SheepDoom
@@ -29,9 +27,11 @@ namespace SheepDoom
         public void MoveToNewScene(Scene _scene, string _matchID, bool _charSelect, bool _game)
         {
             TargetRemoveParent(connectionToClient);
-            SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
+            MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().MoveToNewScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
+            //SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
             gameObject.transform.SetParent(null, false);
-            SceneManager.MoveGameObjectToScene(gameObject, _scene);
+            MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().MoveToNewScene(gameObject, _scene);
+            //SceneManager.MoveGameObjectToScene(gameObject, _scene);
 
             if (_charSelect)
                 MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, true, false);

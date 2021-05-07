@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Mirror;
-using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -73,9 +72,9 @@ namespace SheepDoom
         }
 
         [Server]    // move scene manager to new scene
-        public void MoveToNewScene(Scene _scene)
+        public void MoveToNewScene(GameObject _objectToMove, Scene _scene)
         {
-            SceneManager.MoveGameObjectToScene(gameObject, _scene);
+            SceneManager.MoveGameObjectToScene(_objectToMove, _scene);
         }
 
         [Server]
@@ -121,7 +120,8 @@ namespace SheepDoom
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[1].name, true); // load char select
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0].name, true); // load lobby
 
-                SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0]);
+                MoveToNewScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0]);
+                //SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0]);
                 P_scenesLoaded = true;
             }
             else if(!P_gameSceneLoaded)
@@ -131,6 +131,7 @@ namespace SheepDoom
                 MatchMaker.instance.GetMatches()[P_matchID].SetGameStatusManager(GameStatus.instance);
                 MatchMaker.instance.GetMatches()[P_matchID].GetGameStatusManager().P_matchID = P_matchID;
                 MatchMaker.instance.GetMatches()[P_matchID].SetScene(newGameScene);
+                MatchMaker.instance.GetMatches()[P_matchID].GetGameStatusManager().MoveNavMesh(P_matchID);
                 P_gameSceneLoaded = true;
             }
         }
@@ -147,7 +148,10 @@ namespace SheepDoom
                 else if (_unloadCharSelect)
                     sceneIndex = 1;
 
-                ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex].name, false);
+                
+                if(conn != null) // it will be null if i disconnected from lobby scene
+                    ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex].name, false);
+                
                 yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex]);            
                 yield return Resources.UnloadUnusedAssets();
             }

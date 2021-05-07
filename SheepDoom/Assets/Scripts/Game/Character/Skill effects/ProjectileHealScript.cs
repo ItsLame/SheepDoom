@@ -56,16 +56,13 @@ namespace SheepDoom
         public bool hasSpeedLimit;
         public float speedLimit;
 
-        //bool for calling kill counter increase once
-        bool killCounterIncreaseCalled = false;
-
         public override void OnStartServer()
         {
             ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
             HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().setTeamID(ownerTeamID);
         }
 
-        [Server]
+        [ServerCallback]
         void OnTriggerEnter(Collider col)
         {
             //if hit player
@@ -121,20 +118,11 @@ namespace SheepDoom
             }
             else if (col.gameObject.CompareTag("Tower"))
             {
-                //     col.transform.parent.gameObject.GetComponent<CapturePointScript>().ModifyingHealth(-damage);
-                //     Object.Destroy(this.gameObject);
+                
             }
             //used to test gold for now
             else if (col.gameObject.CompareTag("NeutralMinion"))
             {
-                //take damage
-                //               col.gameObject.GetComponent<NeutralCreepScript>().Attacker = owner;
-                //               col.gameObject.GetComponent<NeutralCreepScript>().neutralTakeDamage(-damage);
-                //inform that its under atk
-                //               col.gameObject.GetComponent<NeutralCreepScript>().isUnderAttack();
-
-
-                //                Debug.Log(owner + " hitting neutral minion");
                 owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
 
                 //if healing area is set by another object activate it 
@@ -191,7 +179,6 @@ namespace SheepDoom
             else if (col.gameObject.CompareTag("MegaBoss"))
             {
                 col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
-                //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
 
                 //if healing area is set by another object activate it 
                 if (hasHealingRadiusObject)
@@ -208,25 +195,6 @@ namespace SheepDoom
                 if (destroyOnContact)
                     Invoke("Destroyy", durationBeforeDestroy);
             }
-            /*
-            if (col.gameObject.layer == 9)
-            {
-
-
-                //                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().TakeDamage(-damage);
-                //                col.transform.parent.gameObject.GetComponent<TeamCoalitionLeftMinionBehaviour>().Murderer = owner;
-
-                //                col.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().TakeDamage(-damage);
-                //                col.transform.parent.gameObject.GetComponent<TeamConsortiumLeftMinionBehaviour>().Murderer = owner;
-                //  Debug.Log("health: baseMinion hit by " + m_Rigidbody);
-
-                if (destroyOnContact)
-                {
-                    Object.Destroy(this.gameObject);
-
-                }
-
-            }*/
         }
 
         [Server]

@@ -25,7 +25,7 @@ namespace SheepDoom
             owner = firer;
         }
 
-        [Server]
+        [ServerCallback]
         void OnTriggerEnter(Collider col)
         {
             if (col.CompareTag("Other"))
@@ -102,9 +102,6 @@ namespace SheepDoom
                         }
                     }
                 }
-
-
-
             }
         }
 

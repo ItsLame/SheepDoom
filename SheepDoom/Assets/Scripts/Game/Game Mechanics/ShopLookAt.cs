@@ -3,36 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class ShopLookAt : MonoBehaviour
+namespace SheepDoom
 {
-    //bool for playerinview
-    bool playerInView;
-    public GameObject playerWhoIsLookedAt;
-
-    private void Update()
+    public class ShopLookAt : MonoBehaviour
     {
-        if (playerInView)
-            transform.LookAt(playerWhoIsLookedAt.transform);
-    }
+        //bool for playerinview
+        bool playerInView;
+        public GameObject playerWhoIsLookedAt;
 
-    [Client]
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player")) 
+        private void Update()
         {
-            playerInView = true;
-            playerWhoIsLookedAt = other.gameObject;
+            if (playerInView)
+                transform.LookAt(playerWhoIsLookedAt.transform);
+        }
+
+        [ClientCallback]
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                playerInView = true;
+                playerWhoIsLookedAt = other.gameObject;
+            }
+        }
+
+        [ClientCallback]
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                playerInView = false;
+                playerWhoIsLookedAt = null;
+            }
         }
     }
-
-    [Client]
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInView = false;
-            playerWhoIsLookedAt = null;
-        }
-    }
-
 }

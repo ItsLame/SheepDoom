@@ -39,11 +39,6 @@ namespace SheepDoom
 
         //states 
         public float sightRange, attackRange;
-
-        //       public bool TeamCoalition;
-
-        //layermask
-        //       public LayerMask whatisplayer;
         [Space(15)]
         //Ranged Projectile
         public GameObject projectile;
@@ -66,6 +61,7 @@ namespace SheepDoom
         [Space(15)]
         private GameObject targetObject = null;
         private bool isLockedOn = false;
+        private GameObject firedProjectile = null;
 
         public event Action<float> OnHealthPctChanged = delegate { };
 
@@ -73,10 +69,6 @@ namespace SheepDoom
         {
             float currenthealthPct = newValue / maxHealth;
             OnHealthPctChanged(currenthealthPct);
-        }
-
-        void Start()
-        {
         }
 
         public override void OnStartServer()
@@ -138,24 +130,19 @@ namespace SheepDoom
             {
                 //attack player in range
                 if (Vector3.Distance(gameObject.transform.position, other.gameObject.transform.position) < attackRange)
-                {
                     RangedAttackPlayer();
-                }
 
                 //else chase in range
                 else
                 {
-                    //                  transform.LookAt(targetObject.transform);
                     agent.autoBraking = false;
                     agent.SetDestination(targetObject.transform.position);
                 }
-
-
             }
         }
 
         [ServerCallback]
-        private void OnTriggerExit(Collider other) // exit happened before playerinsight range happened
+        private void OnTriggerExit(Collider other) 
         {
             //go back to travelling if target goes out of range
             if (isLockedOn && other.gameObject == targetObject)
@@ -165,7 +152,6 @@ namespace SheepDoom
                 agent.autoBraking = false;
                 goBackToTravelling();
             }
-
         }
 
         void Update()
@@ -178,7 +164,6 @@ namespace SheepDoom
                     goBackToTravelling();
                     return;
                 }
-
 
                 if (currenthealth <= 0)
                     Destroyy();
@@ -205,10 +190,8 @@ namespace SheepDoom
         [Server]
         private void RangedAttackPlayer()
         {
-            //               Debug.Log("Attacking enemy");
             agent.SetDestination(transform.position);
             agent.autoBraking = true;
-            //              transform.LookAt(targetObject.transform);
 
             if (!alreadyattacked)
             {
@@ -224,22 +207,21 @@ namespace SheepDoom
         {
             if (gameObject.CompareTag("TeamCoalitionRangeCreep"))
             {
-
-                GameObject FiredProjectile = Instantiate(projectile, transform);
-                FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
-                FiredProjectile.transform.SetParent(null, false);
-                FiredProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
-                NetworkServer.Spawn(FiredProjectile);
+                firedProjectile = Instantiate(projectile, transform);
+                firedProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
+                firedProjectile.transform.SetParent(null, false);
+                firedProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
+                NetworkServer.Spawn(firedProjectile);
 
                 alreadyattacked = true;
             }
             else if (gameObject.CompareTag("TeamConsortiumRangeCreep"))
             {
-                GameObject FiredProjectile = Instantiate(projectile, transform);
-                FiredProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
-                FiredProjectile.transform.SetParent(null, false);
-                FiredProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
-                NetworkServer.Spawn(FiredProjectile);
+                firedProjectile = Instantiate(projectile, transform);
+                firedProjectile.GetComponent<RangedCreepProjectilesettings>().setOwner(gameObject);
+                firedProjectile.transform.SetParent(null, false);
+                firedProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
+                NetworkServer.Spawn(firedProjectile);
 
                 alreadyattacked = true;
             }
@@ -267,10 +249,7 @@ namespace SheepDoom
 
                 // for now end minion life if reach the end
                 if (currentPoint == waypoints.Length)
-                {
                     Destroyy();
-                }
-
             }
 
     //        transform.LookAt(target);
