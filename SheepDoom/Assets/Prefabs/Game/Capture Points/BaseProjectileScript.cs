@@ -6,12 +6,10 @@ using Mirror;
 namespace SheepDoom
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerProjectileSettings : NetworkBehaviour
+    public class BaseProjectileScript : NetworkBehaviour
     {
         //projectileOwner
-        public GameObject owner;
         [SyncVar] public float ownerTeamID;
-        [SyncVar] public bool isFromTower;
 
         [Space(15)]
         //rotation controls
@@ -34,9 +32,9 @@ namespace SheepDoom
 
         [Header("Bullet Properties")]
         [Space(15)]
-        public float m_Speed = 10f;   // default speed of projectile
-        public float m_Lifespan = 3f; // Lifespan per second
-        private float m_StartTime = 0f;
+        public float m_Speed;   // default speed of projectile
+        public float m_Lifespan; // Lifespan per second
+        private float m_StartTime;
         [Space(10)]
         public bool isAccelerating = false;
         public bool isDeccelerating = false;
@@ -63,37 +61,6 @@ namespace SheepDoom
         public bool SleepDebuff;
         public float sleepDebuffDuration;
 
-        //method to set direction of projectile
-        public void setDirection(string direction)
-        {
-
-            if (direction == "left")
-            {
-                isMovingLeft = true;
-                Debug.Log("Setting direction to " + direction + " ," + isMovingLeft);
-            }
-
-            else if (direction == "right")
-            {
-                isMovingRight = true;
-                Debug.Log("Setting direction to " + direction + " ," + isMovingRight);
-            }
-
-            else if (direction == "down")
-            {
-                isMovingDown = true;
-                Debug.Log("Setting direction to " + direction + " ," + isMovingDown);
-            }
-        }
-
-        public override void OnStartServer()
-        {
-            if (!isFromTower)
-            {
-                ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-            }
-
-        }
 
         [Server]
         void OnTriggerEnter(Collider col)
@@ -102,7 +69,7 @@ namespace SheepDoom
             if (col.gameObject.CompareTag("Player"))
             {
                 //dont hurt the owner of the projectile, dont increase score if hitting dead player
-                if (col.gameObject != owner && !col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
+                if (!col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                 {
                     //reduce HP of hit target
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
@@ -122,66 +89,16 @@ namespace SheepDoom
                     {
                         Debug.Log("Killed player, increasing score");
                         col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
-                        owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
-                        col.gameObject.GetComponent<GameEvent>().whoKilled = owner.gameObject.GetComponent<PlayerAdmin>().P_playerName;
+                        col.gameObject.GetComponent<GameEvent>().whoKilled = this.gameObject.name;
 
-                        //increase gold
-                        owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(10);
                     }
 
                     if (destroyOnContact)
                         Destroyy();
                 }
             }
-            else if (col.gameObject.CompareTag("Tower"))
-            {
 
-            }
-            //used to test gold for now
-            else if (col.gameObject.CompareTag("NeutralMinion"))
-            {
-                owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
 
-                if (destroyOnContact)
-                    Destroyy();
-            }
-            else if (col.gameObject.CompareTag("BaseMinion"))
-            {
-                if (ownerTeamID == 2)
-                {
-                    if (col.gameObject.layer == 8)
-                    {
-                        GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                        target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
-                        if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
-                            owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
-
-                        if (destroyOnContact)
-                            Destroyy();
-                    }
-                }
-                else if (ownerTeamID == 1)
-                {
-                    if (col.gameObject.layer == 9)
-
-                    {
-                        GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                        target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
-                        if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
-                            owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
-
-                        if (destroyOnContact)
-                            Destroyy();
-                    }
-                }
-            }
-            else if (col.gameObject.CompareTag("MegaBoss"))
-            {
-                col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
-
-                if (destroyOnContact)
-                    Destroyy();
-            }
             else if (col.gameObject.CompareTag("Other"))
             {
                 if (destroyOnContact)
@@ -204,15 +121,10 @@ namespace SheepDoom
             NetworkServer.Destroy(gameObject);
         }
 
-        [Server]
-        public void SetOwnerProjectile(GameObject player)
-        {
-            owner = player;
-        }
 
         void Update()
         {
-            if (isClient && hasAuthority)
+            if (isServer)
             {
                 //rotation movement
                 transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);

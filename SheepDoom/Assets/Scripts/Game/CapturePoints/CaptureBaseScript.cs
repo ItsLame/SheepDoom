@@ -15,8 +15,11 @@ namespace SheepDoom
 
         [Space(15)]
         [SerializeField] private GameObject BaseModel;
+        [SerializeField] private GameObject BaseProjectile;
         [SerializeField] private bool hasClosed = false;
-
+        [SerializeField] private float towerAtkCD;
+        [SerializeField] private float towerAtkCDinGame;
+    //    [SerializeField] private bool towerAtk;
         //Base hp counters
         [Space(20)]
 
@@ -58,6 +61,8 @@ namespace SheepDoom
 
             // this is tower's script
             P_isBase = true;
+
+            towerAtkCDinGame = towerAtkCD;
         }
 
         // check for player enter
@@ -116,13 +121,43 @@ namespace SheepDoom
                     //if no outer tower has been captured base cant be captured
                     if (P_capturedByBlue && tID == 2 && ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
                     {
+                        towerAtkCDinGame -= Time.deltaTime;
+
+                        if (towerAtkCDinGame <= 0)
+                        {
+                            Vector3 additionalDistance = new Vector3(0, 50, 0);
+                            //attack!!! rain bullets from ze sky
+                            GameObject BaseBullet = Instantiate(BaseProjectile, transform);
+                            BaseBullet.transform.SetParent(null, false);
+                            BaseBullet.transform.SetPositionAndRotation(_collider.gameObject.transform.position + additionalDistance, _collider.gameObject.transform.rotation);
+                            NetworkServer.Spawn(BaseBullet);
+
+                            towerAtkCDinGame = towerAtkCD;
+                        }
+
+
                         ModifyingHealth(-(P_captureRate * Time.deltaTime));
                         RpcUpdateClients(false, true, false);
                     }
                     else if(P_capturedByRed && tID == 1 && ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
                     {
+                        towerAtkCDinGame -= Time.deltaTime;
+
+                        if (towerAtkCDinGame <= 0)
+                        {
+                            Vector3 additionalDistance = new Vector3(0, 50, 0);
+                            //attack!!! rain bullets from ze sky
+                            GameObject BaseBullet = Instantiate(BaseProjectile, transform);
+                            BaseBullet.transform.SetParent(null, false);
+                            BaseBullet.transform.SetPositionAndRotation(_collider.gameObject.transform.position + additionalDistance, _collider.gameObject.transform.rotation);
+                            NetworkServer.Spawn(BaseBullet);
+
+                            towerAtkCDinGame = towerAtkCD;
+                        }
+
                         ModifyingHealth(-(P_captureRate * Time.deltaTime));
                         RpcUpdateClients(false, true, false);
+
                     }
                 }
             }
