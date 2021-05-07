@@ -145,7 +145,7 @@ namespace SheepDoom
                 }
 
                 // regen hp if tower is not under capture
-                if (P_numOfCapturers == 0 && P_inGameHP < P_hp)
+                if (P_numOfCapturers <= 0 && P_inGameHP < P_hp)
                 {
                     if (P_isBase)
                          OpenBaseAnim();
@@ -159,7 +159,6 @@ namespace SheepDoom
                     if(!gameStatus.GetComponent<GameStatus>().P_gameEnded)
                     {
                         Victory();
-                        //RpcUpdateClients(false, false, true);
                         return;
                     }    
                 }
@@ -201,8 +200,6 @@ namespace SheepDoom
                 StartCoroutine(WaitForUpdate(P_capturedByBlue, P_capturedByRed)); // deals with syncvar delay
             else if (_isChangeHp)
                 ModifyingHealth(0); // 0 because value from server will sync
-            ///else if (_isEndGame)
-                //Victory();
         }
 
         private IEnumerator WaitForUpdate(bool _oldBlue, bool _oldRed)

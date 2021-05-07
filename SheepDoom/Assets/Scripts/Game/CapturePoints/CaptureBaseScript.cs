@@ -19,6 +19,7 @@ namespace SheepDoom
         [SerializeField] private bool hasClosed = false;
         [SerializeField] private float towerAtkCD;
         [SerializeField] private float towerAtkCDinGame;
+        private GameObject baseBullet;
     //    [SerializeField] private bool towerAtk;
         //Base hp counters
         [Space(20)]
@@ -111,15 +112,15 @@ namespace SheepDoom
             if (_collider.CompareTag("Player"))
             {
                 // get player teamID
-                float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+                float tID = _collider.GetComponent<PlayerAdmin>().getTeamIndex();
                 // get info of is player dead or alive
-                bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
+                bool isDed = _collider.GetComponent<PlayerHealth>().isPlayerDead();
 
-                if(!isDed)
+                if (!isDed)
                 {
                     //have another condition to check whether base can be captured
                     //if no outer tower has been captured base cant be captured
-                    if (P_capturedByBlue && tID == 2 && ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
+                    if (P_capturedByBlue && tID == 2)
                     {
                         towerAtkCDinGame -= Time.deltaTime;
 
@@ -127,19 +128,21 @@ namespace SheepDoom
                         {
                             Vector3 additionalDistance = new Vector3(0, 50, 0);
                             //attack!!! rain bullets from ze sky
-                            GameObject BaseBullet = Instantiate(BaseProjectile, transform);
-                            BaseBullet.transform.SetParent(null, false);
-                            BaseBullet.transform.SetPositionAndRotation(_collider.gameObject.transform.position + additionalDistance, _collider.gameObject.transform.rotation);
-                            NetworkServer.Spawn(BaseBullet);
+                            baseBullet = Instantiate(BaseProjectile, transform);
+                            baseBullet.transform.SetParent(null, false);
+                            baseBullet.transform.SetPositionAndRotation(_collider.transform.position + additionalDistance, _collider.transform.rotation);
+                            NetworkServer.Spawn(baseBullet);
 
                             towerAtkCDinGame = towerAtkCD;
                         }
 
-
-                        ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                        RpcUpdateClients(false, true, false);
+                        if(ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
+                        {
+                            ModifyingHealth(-(P_captureRate * Time.deltaTime));
+                            RpcUpdateClients(false, true, false);
+                        }
                     }
-                    else if(P_capturedByRed && tID == 1 && ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
+                    else if (P_capturedByRed && tID == 1)
                     {
                         towerAtkCDinGame -= Time.deltaTime;
 
@@ -147,19 +150,23 @@ namespace SheepDoom
                         {
                             Vector3 additionalDistance = new Vector3(0, 50, 0);
                             //attack!!! rain bullets from ze sky
-                            GameObject BaseBullet = Instantiate(BaseProjectile, transform);
-                            BaseBullet.transform.SetParent(null, false);
-                            BaseBullet.transform.SetPositionAndRotation(_collider.gameObject.transform.position + additionalDistance, _collider.gameObject.transform.rotation);
-                            NetworkServer.Spawn(BaseBullet);
+                            baseBullet = Instantiate(BaseProjectile, transform);
+                            baseBullet.transform.SetParent(null, false);
+                            baseBullet.transform.SetPositionAndRotation(_collider.transform.position + additionalDistance, _collider.transform.rotation);
+                            NetworkServer.Spawn(baseBullet);
 
                             towerAtkCDinGame = towerAtkCD;
                         }
 
-                        ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                        RpcUpdateClients(false, true, false);
-
+                        if(ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
+                        {
+                            ModifyingHealth(-(P_captureRate * Time.deltaTime));
+                            RpcUpdateClients(false, true, false);
+                        }
                     }
                 }
+                else if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && isDed)
+                    P_numOfCapturers -= 1;
             }
         }
 
