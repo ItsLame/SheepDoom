@@ -8,6 +8,8 @@ namespace SheepDoom
 {
     public class PlayerHealth : NetworkBehaviour
     {
+        [SerializeField] private GameObject messageToBaseObject;
+
         [SerializeField]
         private float maxHealth = 100.0f;
 
@@ -63,7 +65,21 @@ namespace SheepDoom
                     //increase death by 1
                     if (!deathCounterCalled)
                     {
+                        // instantiate gameobject to send a message to base if in range 
+                        // to reduce capturers by 1
+                        GameObject firedMsg = Instantiate(messageToBaseObject, transform);
+                        firedMsg.GetComponent<MessageProjectileScript>().SetOwnerProjectile(gameObject);
+                        firedMsg.transform.SetParent(null, false);
+                        firedMsg.transform.SetPositionAndRotation(this.gameObject.transform.position, this.gameObject.transform.rotation);
+
+                        NetworkServer.Spawn(firedMsg, connectionToClient);
+
+                        // increase death count
                         GetComponent<PlayerAdmin>().IncreaseCount(false, false, true);
+
+                        //disable collider
+                        this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+
                         deathCounterCalled = true;
                     }
                 }
@@ -78,6 +94,7 @@ namespace SheepDoom
                     isFullHealth = false;
             }
         }
+
 
         void HealthBarUpdate(float oldValue, float newValue)
         {
@@ -117,6 +134,8 @@ namespace SheepDoom
         //to set playerdead to false when player is respawned
         public void revivePlayer()
         {
+            //enable collider
+            Invoke("enableCollider", 1f);
             playerDead = false;
         }
 
@@ -124,6 +143,11 @@ namespace SheepDoom
         public bool isPlayerDead()
         {
             return playerDead;
+        }
+
+        public void enableCollider()
+        {
+            this.gameObject.GetComponent<CapsuleCollider>().enabled = true;
         }
     }
 }

@@ -8,19 +8,18 @@ namespace SheepDoom
     public class OnStayHealth : NetworkBehaviour
     {
         [Header("Object name to be used for announcer")]
-        public string objectName;
+        [SerializeField] private string objectName;
+        [SerializeField] private bool isFallZone;
 
         [Header("Amount of health to change on contact")]
-        [SerializeField]
-        private float healthChangeAmount;
+        [SerializeField] private float healthChangeAmount;
 
         [Header("What does it interact with")]
-        public bool willContactPlayer;
-        public bool willContactMinion;
+        [SerializeField] private bool willContactPlayer;
+        [SerializeField] private bool willContactMinion;
 
         [Header("When to interact with bool")]
-        [SerializeField]
-        private bool hitboxActive;
+        [SerializeField] private bool hitboxActive;
 
 
         public void SetHitBox(bool _status)
@@ -33,13 +32,35 @@ namespace SheepDoom
 
         }
 
+        //only for insta kill zone
+        [Server]
+        private void OnTriggerEnter(Collider col)
+        {
+            if (isFallZone)
+            {
+                //if hit other player
+                if (col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
+                {
+   //                 Debug.Log("Player Hit");
+                    //change the hit player's HP
+                    col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
+
+                    col.GetComponent<PlayerHealth>().SetPlayerDead();
+                    //give announcer info
+                    col.GetComponent<GameEvent>().whoKilled = objectName;
+                }
+
+
+            }
+        }
+
         //when collide with player
         [Server]
         private void OnTriggerStay(Collider col)
         {
+            if (isFallZone) return;
             if (hitboxActive)
             {
-                //             Debug.Log("Contacted With " + col.gameObject.name);
                 if (willContactPlayer)
                 {
                     //if hit other player
@@ -112,8 +133,6 @@ namespace SheepDoom
         {
             NetworkServer.Destroy(gameObject);
         }
-
-
 
     }
 }

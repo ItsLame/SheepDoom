@@ -224,7 +224,11 @@ namespace SheepDoom
                 float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
                 bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
                 if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
+                {
                     P_numOfCapturers += 1;
+                    Debug.Log("Number Of Capturers: " + P_numOfCapturers);
+                }
+                    
             }
         }
 
