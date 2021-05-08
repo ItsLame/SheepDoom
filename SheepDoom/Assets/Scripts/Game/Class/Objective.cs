@@ -145,7 +145,7 @@ namespace SheepDoom
                 }
 
                 // regen hp if tower is not under capture
-                if (P_numOfCapturers <= 0 && P_inGameHP < P_hp)
+                if (P_numOfCapturers == 0 && P_inGameHP < P_hp)
                 {
                     if (P_isBase)
                          OpenBaseAnim();
@@ -162,6 +162,9 @@ namespace SheepDoom
                         return;
                     }    
                 }
+
+                if (P_isBase)
+                    Debug.Log("number of capturers: " + P_numOfCapturers);
             }
         }
 
