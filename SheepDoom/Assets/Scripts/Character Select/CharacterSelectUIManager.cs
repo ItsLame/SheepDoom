@@ -35,9 +35,7 @@ namespace SheepDoom
         [SerializeField] private GameObject mario;
         [SerializeField] private GameObject luigi;
         [SerializeField] private GameObject peach;
-        //[SerializeField] private GameObject yoshi;
-        //[SerializeField] private GameObject bowser;
-        private string[] heroesArr = { "Mario", "Luigi", "Peach" };//, "Yoshi", "Bowser"};
+        private string[] heroesArr = { "Mario", "Luigi", "Peach" };
         public SyncList<string> team1PickedHeroes = new SyncList<string>();
         public SyncList<string> team2PickedHeroes = new SyncList<string>();
         //room matchID
@@ -143,7 +141,8 @@ namespace SheepDoom
         [Command(ignoreAuthority = true)]
         private void CmdRequestCharSelectUpdate(GameObject _player, string _heroName, int _teamIndex, bool _init, bool _lockIn, bool _isGameStart)
         {
-            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+            NetworkConnection conn = _player.GetComponent<NetworkIdentity>().connectionToClient;
+            if(conn != null) //SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
             {
                 if(_init)
                 {
@@ -170,7 +169,8 @@ namespace SheepDoom
                             else
                                 _isOwner = false;
 
-                            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection _conn))
+                            NetworkConnection _conn = player.GetComponent<NetworkIdentity>().connectionToClient;
+                            if(_conn != null) //SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection _conn))
                                 TargetUpdateOwner(_conn, player, _heroName, _isOwner, _init, _lockIn);  // 4th parameter determines if it's owner
                         }
                     }
@@ -249,7 +249,8 @@ namespace SheepDoom
             _player.GetComponent<PlayerObj>().SetIsLockedIn(true);
             MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();
 
-            if(SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+            NetworkConnection conn = _player.GetComponent<NetworkIdentity>().connectionToClient;
+            if(conn != null) //SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
                 TargetUpdateOwner(conn, _player, _player.GetComponent<PlayerObj>().GetHeroName(), true, false, true);
             
             RpcUpdateOthers(_player, _player.GetComponent<PlayerObj>().GetHeroName(), _player.GetComponent<PlayerObj>().GetTeamIndex(), false, true);

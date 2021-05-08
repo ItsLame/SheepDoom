@@ -140,7 +140,8 @@ namespace SheepDoom
         [Command(ignoreAuthority = true)]
         private void CmdRequestLobbyUpdate(string _matchID, GameObject _player, bool _swap, bool _ready, bool _start)
         {
-            if (SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+            NetworkConnection conn = _player.GetComponent<NetworkIdentity>().connectionToClient;
+            if (conn != null)
             {
                 if (!_swap && !_ready && !_start)
                 {

@@ -275,7 +275,8 @@ namespace SheepDoom
                     matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetSDSceneManager().gameObject, matches[_matchID].GetScenes()[2]);
                     foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                     {
-                        if (SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                        NetworkConnection conn = player.GetComponent<NetworkIdentity>().connectionToClient;
+                        if (conn != null) //SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
                             matches[_matchID].GetSDSceneManager().JoinGame(conn, _matchID);
                     }
 
@@ -316,12 +317,7 @@ namespace SheepDoom
 
         private IEnumerator WaitForSceneUnload(Match _closedMatch, bool _isLobby, bool _isCharSelect, bool _isGame)
         {
-            if (_isGame)
-            {
-                while (_closedMatch.GetSDSceneManager().P_gameSceneLoaded)
-                    yield return null;
-            }
-            else if (_isLobby)
+            if (_isLobby)
             {
                 while (_closedMatch.GetScenes()[0].isLoaded || _closedMatch.GetScenes()[1].isLoaded)
                     yield return null;
@@ -331,7 +327,12 @@ namespace SheepDoom
                 while (_closedMatch.GetScenes()[1].isLoaded)
                     yield return null;
             }
-                
+            else if (_isGame)
+            {
+                while (_closedMatch.GetSDSceneManager().P_gameSceneLoaded)
+                    yield return null;
+            }
+
             _closedMatch.GetScenes().Clear();
             NetworkServer.Destroy(_closedMatch.GetSDSceneManager().gameObject);
             matches.Remove(_closedMatch.GetMatchID());

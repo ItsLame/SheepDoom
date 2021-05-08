@@ -136,7 +136,7 @@ namespace SheepDoom
         }
 
         [Server]
-        public void RemoveFromGame(string _matchID)
+        public void RemoveFromGame(string _matchID, bool _isExitGame)
         {
             if (_matchID == matchID)
             {
@@ -147,15 +147,17 @@ namespace SheepDoom
                 if (MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Contains(ci.GetComponent<SpawnManager>().GetPlayerObj()))
                 {
                     MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Remove(ci.GetComponent<SpawnManager>().GetPlayerObj()); // remove from match hero list
-                    NetworkServer.Destroy(ci.GetComponent<SpawnManager>().GetPlayerObj()); // destroy it
+                    if(_isExitGame)
+                        NetworkServer.Destroy(ci.GetComponent<SpawnManager>().GetPlayerObj()); // destroy it if it exits cleanly, else dont need to destroy
                 }
                 else
                     Debug.Log("Heroes list for matchID: " + matchID + " does not contain this game object");
                 // move back to main menu scene on server
-                MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveToNewScene(ci.gameObject, SceneManager.GetSceneAt(0));
-                MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveToNewScene(gameObject, SceneManager.GetSceneAt(0));
-                //SceneManager.MoveGameObjectToScene(ci.gameObject, SceneManager.GetSceneAt(0)); 
-                //SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneAt(0));
+                if(_isExitGame) // only need to move if it exits cleanly
+                {
+                    MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveToNewScene(ci.gameObject, SceneManager.GetSceneAt(0));
+                    MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveToNewScene(gameObject, SceneManager.GetSceneAt(0));
+                }
             }
             else
                 Debug.Log("WARNING PLAYER IS IN THE WRONG MATCH!! matchID: " + _matchID + " player matchID: " + matchID);
@@ -164,7 +166,6 @@ namespace SheepDoom
         [Server]
         private void RemoveFromLobby(string _matchID)
         {
-            Debug.Log("Called");
             if(_matchID == matchID)
             {
                 Match lobbyMatch = MatchMaker.instance.GetMatches()[_matchID];
@@ -202,7 +203,7 @@ namespace SheepDoom
                         MatchMaker.instance.ClearMatch(_matchID, true, false, false);
                 }
 
-                if (lobbyMatch.GetPlayerObjList().Contains(gameObject)) // wont run for host cuz already removed, but will run for non-hosts
+                if (lobbyMatch.GetPlayerObjList().Contains(gameObject)) 
                     lobbyMatch.GetPlayerObjList().Remove(gameObject);
             }
         }
@@ -230,6 +231,17 @@ namespace SheepDoom
             {
                 if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[0]) // if in lobby when player disconnects
                     RemoveFromLobby(matchID);
+                else if(gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[1])
+                {
+
+                }
+                else if(gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[2])
+                {
+                    RemoveFromGame(matchID, false); // sudden disconnect, not clean exit
+
+                    if (MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Count == 0)
+                        MatchMaker.instance.ClearMatch(matchID, false, false, true);
+                }
             }
         }
 

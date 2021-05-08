@@ -76,7 +76,7 @@ namespace SheepDoom
             if(gameStatus != null)
             {
                 string _matchID = gameStatus.GetComponent<GameStatus>().P_matchID;
-                _player.GetComponent<PlayerObj>().RemoveFromGame(_matchID);
+                _player.GetComponent<PlayerObj>().RemoveFromGame(_matchID, true);
                 NetworkConnection _playerConn = _player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>().connectionToClient;
                 NetworkServer.Destroy(_player);
                 Client.ReturnClientInstance(_playerConn).GetComponent<SpawnManager>().SpawnForGame("lobby", null);

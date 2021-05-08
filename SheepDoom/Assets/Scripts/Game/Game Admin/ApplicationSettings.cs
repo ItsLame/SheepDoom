@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ApplicationSettings : MonoBehaviour
+namespace SheepDoom
 {
-    private void Awake()
+    public class ApplicationSettings : MonoBehaviour
     {
-        Application.targetFrameRate = 60;
+        private void Awake()
+        {
+            Application.targetFrameRate = 60;
+        }
     }
 }

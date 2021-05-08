@@ -15,7 +15,7 @@ namespace SheepDoom
     {
         // Like an associative array - key client conns, value = their network identities
         public static Dictionary<NetworkConnection, NetworkIdentity> LocalPlayers = new Dictionary<NetworkConnection, NetworkIdentity>();
-        public static Dictionary<NetworkIdentity, NetworkConnection> LocalPlayersNetId = new Dictionary<NetworkIdentity, NetworkConnection>();
+        //public static Dictionary<NetworkIdentity, NetworkConnection> LocalPlayersNetId = new Dictionary<NetworkIdentity, NetworkConnection>();
         [SerializeField] private NetworkIdentity matchMaker;
         private GameObject mm;
 
@@ -160,7 +160,7 @@ namespace SheepDoom
                 ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
                 : Instantiate(playerPrefab);
             LocalPlayers[conn] = player.GetComponent<NetworkIdentity>(); // adds client's network identity into the dictionary
-            LocalPlayersNetId[player.GetComponent<NetworkIdentity>()] = conn; // add client's networkconnection into the dictionary
+            //LocalPlayersNetId[player.GetComponent<NetworkIdentity>()] = conn; // add client's networkconnection into the dictionary
             NetworkServer.AddPlayerForConnection(conn, player); // spawns client prefab
         }
 
@@ -171,7 +171,7 @@ namespace SheepDoom
         /// <param name="conn">Connection from client.</param>
         public override void OnServerDisconnect(NetworkConnection conn)
         {
-            LocalPlayersNetId.Remove(conn.identity);
+            //LocalPlayersNetId.Remove(conn.identity);
             LocalPlayers.Remove(conn);
             base.OnServerDisconnect(conn);
         }

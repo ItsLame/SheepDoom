@@ -71,7 +71,7 @@ namespace SheepDoom
             StartCoroutine(LoadScene(P_lobbyScene, P_characterSelectScene, P_gameScene, conn));
         }
 
-        [Server]    // move scene manager to new scene
+        [Server] 
         public void MoveToNewScene(GameObject _objectToMove, Scene _scene)
         {
             SceneManager.MoveGameObjectToScene(_objectToMove, _scene);
@@ -90,6 +90,7 @@ namespace SheepDoom
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[0].name, true); // load lobby
         }
 
+        [Server]
         public void JoinGame(NetworkConnection conn, string _matchID)
         {
             ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, true);
@@ -121,7 +122,6 @@ namespace SheepDoom
                 ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0].name, true); // load lobby
 
                 MoveToNewScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0]);
-                //SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[P_matchID].GetScenes()[0]);
                 P_scenesLoaded = true;
             }
             else if(!P_gameSceneLoaded)

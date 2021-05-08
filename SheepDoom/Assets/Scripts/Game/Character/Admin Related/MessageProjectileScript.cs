@@ -22,7 +22,7 @@ namespace SheepDoom
         }
 
 
-        [Server]
+        [ServerCallback]
         void OnTriggerEnter(Collider col)
         {
             if (col.gameObject.CompareTag("Base"))
