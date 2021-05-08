@@ -91,7 +91,7 @@ namespace SheepDoom
             {
                 if (other.gameObject != Attacker.gameObject) return;
 
-                Debug.Log("Moving towards " + Attacker.gameObject.name);
+      //          Debug.Log("Moving towards " + Attacker.gameObject.name);
 
                 //chase if not in attack range
                 if (Vector3.Distance(Attacker.transform.position, transform.position) > attackRange)
