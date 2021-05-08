@@ -39,7 +39,7 @@ namespace SheepDoom
                     else if (isMinion)
                         RpcAnnouncers(gotKilled + " has been slain by a minion");
                     else
-                        RpcAnnouncers(whoKilled + " obliterated " + gotKilled);
+                        RpcAnnouncers(whoKilled + " killed " + gotKilled);
                 }
             }
         }
