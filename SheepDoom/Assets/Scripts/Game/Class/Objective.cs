@@ -162,6 +162,9 @@ namespace SheepDoom
                         return;
                     }    
                 }
+
+                if (P_isBase)
+                    Debug.Log("number of capturers: " + P_numOfCapturers);
             }
         }
 

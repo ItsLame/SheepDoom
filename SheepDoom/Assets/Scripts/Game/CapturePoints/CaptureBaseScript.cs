@@ -86,9 +86,7 @@ namespace SheepDoom
                         BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Close");
                         hasClosed = true;
                     }
-
                 }
-
             }
         }
 
@@ -166,7 +164,6 @@ namespace SheepDoom
                         }
                     }
                 }
-
             }
         }
 
@@ -200,7 +197,7 @@ namespace SheepDoom
                 return 1;
             }
 
-            else 
+            else
             {
                 return 2;
             }
