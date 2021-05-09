@@ -209,7 +209,7 @@ namespace SheepDoom
         public void reduceNumOfCapturers()
         {
             P_numOfCapturers -= 1;
-            Debug.Log("Number Of Capturers: " + P_numOfCapturers);
+     //       Debug.Log("Number Of Capturers: " + P_numOfCapturers);
         }
     }
 }

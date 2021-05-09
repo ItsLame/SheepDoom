@@ -172,7 +172,8 @@ namespace SheepDoom
             }
             else if (col.gameObject.CompareTag("MegaBoss"))
             {
-                col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
+                GameObject bossParent = col.gameObject.GetComponent<GetParents>().getParent();
+                bossParent.GetComponent<MegaBossNewScript>().TakeDamage(-damage);
 
                 if (destroyOnContact)
                     Destroyy();

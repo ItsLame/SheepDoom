@@ -3,10 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class StartAnimatingScript : NetworkBehaviour
+namespace SheepDoom
 {
-    public override void OnStartServer()
+    public class StartAnimatingScript : NetworkBehaviour
     {
-        gameObject.GetComponent<NetworkAnimator>().SetTrigger("StartMoving");
+        [Header("Movement configurations")]
+        [SerializeField] private bool moveDown;
+        [SerializeField] private bool moveUp;
+
+        [SerializeField] private float moveDuration;
+        [SerializeField] private float moveDurationInGame;
+
+        [SerializeField] private float moveSpd;
+
+        //on start settings
+        void Start()
+        {
+            moveDurationInGame = moveDuration;
+        }
+
+        [Server]
+        private void Update()
+        {
+            if (moveDown)
+            {
+                moveDurationInGame -= Time.deltaTime;
+                gameObject.transform.position += transform.TransformDirection(Vector3.right) * moveSpd * Time.deltaTime;
+
+                if (moveDurationInGame <= 0)
+                {
+                    moveUp = true;
+                    moveDurationInGame = moveDuration;
+                    moveDown = false;
+                }
+            }
+
+            if (moveUp)
+            {
+                moveDurationInGame -= Time.deltaTime;
+                gameObject.transform.position += transform.TransformDirection(Vector3.left) * moveSpd * Time.deltaTime;
+
+                if (moveDurationInGame <= 0)
+                {
+                    moveDown = true;
+                    moveDurationInGame = moveDuration;
+                    moveUp = false;
+                }
+            }
+        }
     }
 }
+
