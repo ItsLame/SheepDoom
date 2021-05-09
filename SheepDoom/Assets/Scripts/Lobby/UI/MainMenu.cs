@@ -45,7 +45,6 @@ namespace SheepDoom
                 _player.GetComponent<JoinGame>().Join(matchIdInput.ToUpper());
                 matchID.text = string.Empty;
             }
-                
         }
     }
 }

@@ -61,13 +61,11 @@ namespace SheepDoom
             Character3 = Resources.Load<Sprite>("Peach");
         }
 
-        public void ExitGame()
+        /*public void ExitGame()
         {
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
                 CmdServerExitGame(_player);
-            else
-                Debug.Log("no authority");
         }
 
         [Command(ignoreAuthority = true)]
@@ -83,7 +81,7 @@ namespace SheepDoom
                 if (MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count == 0)
                     MatchMaker.instance.ClearMatch(_matchID, false , false, true);
             }
-        }
+        }*/
 
         //update score display on all clients
         public void updateScoreDisplay()
@@ -133,14 +131,17 @@ namespace SheepDoom
         [Server]
         public void GameEnd(int TeamID)
         {
-            foreach (GameObject _player in MatchMaker.instance.GetMatches()[gameStatus.GetComponent<GameStatus>().P_matchID].GetHeroesList())
+            if(gameStatus != null)
             {
-                CalculateEndGame(_player, TeamID);
-                RpcUpdateClientScoreDisplay(false, true, false, _player, TeamID);
-            }
+                foreach (GameObject _player in MatchMaker.instance.GetMatches()[gameStatus.GetComponent<GameStatus>().P_matchID].GetHeroesList())
+                {
+                    CalculateEndGame(_player, TeamID);
+                    RpcUpdateClientScoreDisplay(false, true, false, _player, TeamID);
+                }
 
-            DisplayScoreBoard(TeamID);
-            RpcUpdateClientScoreDisplay(false, false, true, null, TeamID);
+                DisplayScoreBoard(TeamID);
+                RpcUpdateClientScoreDisplay(false, false, true, null, TeamID);
+            }
         }
 
         private void DisplayScoreBoard(int TeamID)

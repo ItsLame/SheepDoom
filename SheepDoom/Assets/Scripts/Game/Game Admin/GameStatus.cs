@@ -36,6 +36,24 @@ namespace SheepDoom
             MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().MoveToNewScene(navMesh, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2]);
         }
 
+        [Client]
+        public void ExitGame()
+        {
+            GameObject _player = PlayerObj.instance.gameObject;
+            if (_player.GetComponent<PlayerObj>().hasAuthority)
+                CmdServerExitGame(_player);
+        }
+
+        [Command(ignoreAuthority = true)]
+        void CmdServerExitGame(GameObject _player)
+        {
+            _player.GetComponent<LeaveGame>().Exit(P_matchID, false, false, true, true);
+            Client ci = _player.GetComponent<PlayerObj>().ci;
+            ci.GetComponent<SpawnManager>().ResetPlayer(ci.GetComponent<NetworkIdentity>().connectionToClient, _player);
+            if (MatchMaker.instance.GetMatches()[P_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[P_matchID].GetHeroesList().Count == 0)
+                MatchMaker.instance.ClearMatch(P_matchID, false, false, true);
+        }
+        
         #region Start & Stop Callbacks
 
         /// <summary>
