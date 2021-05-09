@@ -276,7 +276,7 @@ namespace SheepDoom
                     foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                     {
                         NetworkConnection conn = player.GetComponent<NetworkIdentity>().connectionToClient;
-                        if (conn != null) //SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+                        if (conn != null)
                             matches[_matchID].GetSDSceneManager().JoinGame(conn, _matchID);
                     }
 
@@ -301,16 +301,21 @@ namespace SheepDoom
                 if(closedMatch.GetSDSceneManager().gameObject.activeInHierarchy)
                     closedMatch.GetSDSceneManager().MoveToNewScene(closedMatch.GetSDSceneManager().gameObject, SceneManager.GetSceneAt(0));
 
-                if(_isGame)
+                if (_isLobby)
+                {
+                    closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, true, false);
+                    closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, true);
+                    StartCoroutine(WaitForSceneUnload(closedMatch, true, false, false));
+                }
+                else if(_isGame)
                 {
                     closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, false);
                     StartCoroutine(WaitForSceneUnload(closedMatch, false, false, true));
                 }
-                else if(_isLobby)
+                else if(_isCharSelect)
                 {
-                    closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, true, false);
                     closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, true);
-                    StartCoroutine(WaitForSceneUnload(closedMatch, true, false ,false));
+                    StartCoroutine(WaitForSceneUnload(closedMatch, false, true, false));
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace SheepDoom
         [SerializeField] private GameObject team2GameObject;
         [SerializeField] private Text timerText;
         private TimeSpan timePlaying;
-        [SerializeField] private float secondsTimer = 10;
+        private float secondsTimer = 30;
         private bool playersInScene = false;
 
         [Header("Inputs For Client")]
@@ -92,6 +92,12 @@ namespace SheepDoom
             set{statusPanel = value;}
         }
 
+        public bool P_gameStarted
+        {
+            get { return gameStarted; }
+            set { gameStarted = value; }
+        }
+
         #endregion
         
         [Server]
@@ -118,11 +124,10 @@ namespace SheepDoom
                 timePlayingStr = timePlaying.ToString("%s");
                 timerText.text = timePlayingStr;
 
-               if (secondsTimer <= 0 && !gameStarted)
+               if (secondsTimer <= 0 && !P_gameStarted)
                {
                     RequestGameStart();
                     return;
-                    // random lockin for players who havent locked in, then start game
                }
             }
 
@@ -134,7 +139,6 @@ namespace SheepDoom
 
         private void ServerStartSetting()
         {
-            //P_matchID = _matchID;
             lockInButton.SetActive(false);  // so that server won't have lock in button
         }
 
@@ -142,7 +146,7 @@ namespace SheepDoom
         private void CmdRequestCharSelectUpdate(GameObject _player, string _heroName, int _teamIndex, bool _init, bool _lockIn, bool _isGameStart)
         {
             NetworkConnection conn = _player.GetComponent<NetworkIdentity>().connectionToClient;
-            if(conn != null) //SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.gameObject.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+            if(conn != null) 
             {
                 if(_init)
                 {
@@ -154,7 +158,6 @@ namespace SheepDoom
                 }
                 else if(_lockIn)
                 {
-                    //Debug.Log("CMD LOCK IN");
                     bool _isOwner = false;
 
                     MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();   // lock in true, count lock in ++
@@ -170,7 +173,7 @@ namespace SheepDoom
                                 _isOwner = false;
 
                             NetworkConnection _conn = player.GetComponent<NetworkIdentity>().connectionToClient;
-                            if(_conn != null) //SDNetworkManager.LocalPlayersNetId.TryGetValue(player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection _conn))
+                            if(_conn != null) 
                                 TargetUpdateOwner(_conn, player, _heroName, _isOwner, _init, _lockIn);  // 4th parameter determines if it's owner
                         }
                     }
@@ -223,7 +226,7 @@ namespace SheepDoom
             while (!MatchMaker.instance.GetMatches()[P_matchID].GetSDSceneManager().P_gameSceneLoaded)
                 yield return null;
             MatchMaker.instance.StartNewScene(P_matchID, false, true);
-            gameStarted = true;
+            P_gameStarted = true;
         }
 
         private void AutoLockIn(GameObject _player)
@@ -250,10 +253,19 @@ namespace SheepDoom
             MatchMaker.instance.GetMatches()[P_matchID].AddCountLockIn();
 
             NetworkConnection conn = _player.GetComponent<NetworkIdentity>().connectionToClient;
-            if(conn != null) //SDNetworkManager.LocalPlayersNetId.TryGetValue(_player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>(), out NetworkConnection conn))
+            if(conn != null) 
                 TargetUpdateOwner(conn, _player, _player.GetComponent<PlayerObj>().GetHeroName(), true, false, true);
             
             RpcUpdateOthers(_player, _player.GetComponent<PlayerObj>().GetHeroName(), _player.GetComponent<PlayerObj>().GetTeamIndex(), false, true);
+        }
+
+        [Server]
+        public void PlayerLeftCharSelect(GameObject _player)
+        {
+            Debug.Log("DD");
+            NetworkConnection conn = _player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>().connectionToClient;
+            NetworkServer.Destroy(_player);
+            Client.ReturnClientInstance(conn).GetComponent<SpawnManager>().SpawnForGame("lobby", null);
         }
 
         #endregion
@@ -409,7 +421,6 @@ namespace SheepDoom
         private void CmdForceStart()
         {
             RequestGameStart();
-            //_player.GetComponent<StartGame>().StartNewScene(_matchID, false, true);
         }
 
         #endregion

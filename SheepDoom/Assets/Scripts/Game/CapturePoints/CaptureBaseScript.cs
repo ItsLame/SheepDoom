@@ -58,9 +58,6 @@ namespace SheepDoom
             // set the Tower's hp based on the settings
             P_inGameHP = P_hp;
 
-            // no one is capturing it at start so put at 0
-            //P_numOfCapturers = 0;
-
             // this is tower's script
             P_isBase = true;
 
@@ -193,15 +190,9 @@ namespace SheepDoom
         public float getTeamID()
         {
             if (CapturedByBlue)
-            {
                 return 1;
-            }
-
             else
-            {
                 return 2;
-            }
-
         }
 
         [Server]
@@ -209,7 +200,6 @@ namespace SheepDoom
         public void reduceNumOfCapturers()
         {
             P_numOfCapturers -= 1;
-            Debug.Log("Number Of Capturers: " + P_numOfCapturers);
         }
     }
 }

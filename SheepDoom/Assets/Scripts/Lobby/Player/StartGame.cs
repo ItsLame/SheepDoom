@@ -28,10 +28,8 @@ namespace SheepDoom
         {
             TargetRemoveParent(connectionToClient);
             MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().MoveToNewScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
-            //SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(connectionToClient).gameObject, _scene);
             gameObject.transform.SetParent(null, false);
             MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().MoveToNewScene(gameObject, _scene);
-            //SceneManager.MoveGameObjectToScene(gameObject, _scene);
 
             if (_charSelect)
                 MatchMaker.instance.GetMatches()[_matchID].GetSDSceneManager().UnloadScenes(connectionToClient, _matchID, true, false);

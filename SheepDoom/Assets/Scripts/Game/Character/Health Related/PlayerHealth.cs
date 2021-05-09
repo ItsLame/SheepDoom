@@ -46,9 +46,7 @@ namespace SheepDoom
             if (amount < 0)
             {
                 if (this.gameObject.GetComponent<CharacterMovement>().isSleeped)
-                {
                     this.gameObject.GetComponent<CharacterMovement>().changeSpeed("stop", 0.1f, 0);
-                }
             }
 
         }
@@ -106,13 +104,6 @@ namespace SheepDoom
         {
             playerDead = true;
             GetComponent<GameEvent>().gotKilled = this.GetComponent<PlayerAdmin>().P_playerName;
-        }
-
-        IEnumerator TimeBeforeDeath()
-        {
-            // should be sync with death animation
-            yield return new WaitForSeconds(2);
-            Destroy(gameObject);
         }
 
         public void RefillHealth()

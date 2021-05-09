@@ -148,16 +148,16 @@ namespace SheepDoom
                 else if (_unloadCharSelect)
                     sceneIndex = 1;
 
-                
-                if(conn != null) // it will be null if i disconnected from lobby scene
-                    ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex].name, false);
-                
-                yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex]);            
+                if(conn != null)
+                    ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex].name, false); // explore breaking here if connection is not null
+
+                // incorrect because, scene already starting to unload on the server BEFORE ALL playerobjects on the server have been moved to next scene
+                yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex]);
                 yield return Resources.UnloadUnusedAssets();
             }
             else if (P_gameSceneLoaded)
             {
-                if(MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count != 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count != 0)
+                if(MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count != 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count != 0 && conn != null)
                     ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[2].name, false); // unload game scene on client
                 else
                 {

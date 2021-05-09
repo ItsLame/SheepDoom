@@ -136,27 +136,29 @@ namespace SheepDoom
         }
 
         [Server]
-        public void RemoveFromGame(string _matchID, bool _isExitGame)
+        public void RemoveFromGame(string _matchID, bool _isExitGame) // adjusted for sudden dc and clean exit
         {
             if (_matchID == matchID)
             {
-                MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().UnloadScenes(ci.GetComponent<NetworkIdentity>().connectionToClient, matchID, false, false); // unload on client
-                if (MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList().Contains(gameObject)) 
-                    MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList().Remove(gameObject); // remove from match player list
+                Match gameMatch = MatchMaker.instance.GetMatches()[_matchID];
+                if(_isExitGame)
+                    gameMatch.GetSDSceneManager().UnloadScenes(ci.GetComponent<NetworkIdentity>().connectionToClient, matchID, false, false); // unload on client
 
-                if (MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Contains(ci.GetComponent<SpawnManager>().GetPlayerObj()))
+                if (gameMatch.GetPlayerObjList().Contains(gameObject))
+                    gameMatch.GetPlayerObjList().Remove(gameObject); // remove from match player list
+
+                if (gameMatch.GetHeroesList().Contains(ci.GetComponent<SpawnManager>().GetPlayerObj()))
                 {
-                    MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Remove(ci.GetComponent<SpawnManager>().GetPlayerObj()); // remove from match hero list
+                    gameMatch.GetHeroesList().Remove(ci.GetComponent<SpawnManager>().GetPlayerObj()); // remove from match hero list
                     if(_isExitGame)
                         NetworkServer.Destroy(ci.GetComponent<SpawnManager>().GetPlayerObj()); // destroy it if it exits cleanly, else dont need to destroy
                 }
-                else
-                    Debug.Log("Heroes list for matchID: " + matchID + " does not contain this game object");
+
                 // move back to main menu scene on server
                 if(_isExitGame) // only need to move if it exits cleanly
                 {
-                    MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveToNewScene(ci.gameObject, SceneManager.GetSceneAt(0));
-                    MatchMaker.instance.GetMatches()[matchID].GetSDSceneManager().MoveToNewScene(gameObject, SceneManager.GetSceneAt(0));
+                    gameMatch.GetSDSceneManager().MoveToNewScene(ci.gameObject, SceneManager.GetSceneAt(0));
+                    gameMatch.GetSDSceneManager().MoveToNewScene(gameObject, SceneManager.GetSceneAt(0));
                 }
             }
             else
@@ -164,7 +166,32 @@ namespace SheepDoom
         }
 
         [Server]
-        private void RemoveFromLobby(string _matchID)
+        private void RemoveFromCharSelect(string _matchID) // only for sudden dc, no exit button for char select scene as theres only 30s
+        {
+            if(_matchID == matchID)
+            {
+                Debug.Log("BB");
+                Match charSelectMatch = MatchMaker.instance.GetMatches()[_matchID];
+                charSelectMatch.GetCharacterSelectUIManager().P_gameStarted = true; // so match wont start
+
+                if (charSelectMatch.GetPlayerObjList().Contains(gameObject))
+                    charSelectMatch.GetPlayerObjList().Remove(gameObject);
+
+                foreach (GameObject _player in charSelectMatch.GetPlayerObjList())
+                {
+                    Debug.Log("CC");
+                    charSelectMatch.GetSDSceneManager().UnloadScenes(ci.GetComponent<NetworkIdentity>().connectionToClient, _matchID, false, true);
+                    charSelectMatch.GetSDSceneManager().MoveToNewScene(_player.GetComponent<PlayerObj>().ci.gameObject, SceneManager.GetSceneAt(0));
+                    charSelectMatch.GetCharacterSelectUIManager().PlayerLeftCharSelect(_player); 
+                }
+
+                MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Clear();
+                MatchMaker.instance.ClearMatch(_matchID, false, true, false);
+            }
+        }
+
+        [Server]
+        private void RemoveFromLobby(string _matchID) // only for sudden dc so far
         {
             if(_matchID == matchID)
             {
@@ -229,11 +256,12 @@ namespace SheepDoom
         {
             if (MatchMaker.instance.GetMatches().ContainsKey(matchID)) // meaning match is still ongoing when player disconnects
             {
-                if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[0]) // if in lobby when player disconnects
+                if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[0]) 
                     RemoveFromLobby(matchID);
                 else if(gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[1])
                 {
-
+                    Debug.Log("AA");
+                    RemoveFromCharSelect(matchID);
                 }
                 else if(gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[2])
                 {
