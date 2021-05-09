@@ -90,7 +90,7 @@ namespace SheepDoom
             ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
         }
 
-        [Server]
+        [ServerCallback]
         void OnTriggerEnter(Collider col)
         {
             //if hit player

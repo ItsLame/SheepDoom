@@ -10,7 +10,7 @@ namespace SheepDoom
         //transform of where the original spot is to be 
         //    [SerializeField] private Transform oriSpot;
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerExit(Collider other)
         {
             //      Debug.Log(other.gameObject.name + (" has left the zone"));

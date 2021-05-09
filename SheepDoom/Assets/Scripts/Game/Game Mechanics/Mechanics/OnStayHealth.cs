@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Mirror;
 
 namespace SheepDoom
@@ -27,13 +25,8 @@ namespace SheepDoom
             hitboxActive = _status;
         }
 
-        void Start()
-        {
-
-        }
-
         //only for insta kill zone
-        [Server]
+        [ServerCallback]
         private void OnTriggerEnter(Collider col)
         {
             if (isFallZone)
@@ -49,13 +42,11 @@ namespace SheepDoom
                     //give announcer info
                     col.GetComponent<GameEvent>().whoKilled = objectName;
                 }
-
-
             }
         }
 
         //when collide with player
-        [Server]
+        [ServerCallback]
         private void OnTriggerStay(Collider col)
         {
             if (isFallZone) return;
@@ -127,13 +118,6 @@ namespace SheepDoom
                 }
             }
         }
-
-        [Server]
-        private void Destroyy()
-        {
-            NetworkServer.Destroy(gameObject);
-        }
-
     }
 }
 

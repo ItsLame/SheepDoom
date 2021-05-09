@@ -208,8 +208,6 @@ namespace SheepDoom
                     }
 
                 }
-
-
                 //else chase in range
                 else
                 {

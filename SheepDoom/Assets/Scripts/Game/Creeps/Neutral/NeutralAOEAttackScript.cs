@@ -20,8 +20,7 @@ namespace SheepDoom
         [Header("How much damage it does")]
         public float damage;
 
-        // Start is called before the first frame update
-        void Start()
+        public override void OnStartServer()
         {
             //Destroy after set time
             Destroy(gameObject, AOE_Duration);
@@ -31,10 +30,11 @@ namespace SheepDoom
         void Update()
         {
             //expand over time
-            this.gameObject.transform.localScale = this.gameObject.transform.localScale * scale_speed;
+            if(isServer)
+                this.gameObject.transform.localScale = this.gameObject.transform.localScale * scale_speed;
         }
 
-        [Server]
+        [ServerCallback]
         private void OnTriggerStay(Collider col)
         {
             //if hit anything???

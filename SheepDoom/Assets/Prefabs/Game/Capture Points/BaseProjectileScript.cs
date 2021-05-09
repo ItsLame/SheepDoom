@@ -62,7 +62,7 @@ namespace SheepDoom
         public float sleepDebuffDuration;
 
 
-        [Server]
+        [ServerCallback]
         void OnTriggerEnter(Collider col)
         {
             //if hit player

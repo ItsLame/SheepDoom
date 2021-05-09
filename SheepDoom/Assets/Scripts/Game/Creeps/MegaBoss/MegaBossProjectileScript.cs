@@ -33,10 +33,7 @@ namespace SheepDoom
         [SerializeField] private float detonateTimer;
         [SerializeField] [SyncVar] public float detonateTimerInGame;
 
-
-
-        //initialize start position
-        public void Start()
+        public override void OnStartServer()
         {
             detonateTimerInGame = detonateTimer;
         }

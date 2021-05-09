@@ -31,8 +31,7 @@ namespace SheepDoom
         public float attackDuration;
         public float attackDurationInGame;
 
-        // Start is called before the first frame update
-        void Start()
+        public override void OnStartServer()
         {
             //initialize attacking timers
             attackCooldownInGame = attackCooldown;
@@ -41,28 +40,30 @@ namespace SheepDoom
             moveSpdInGame = moveSpd;
         }
 
-        [ServerCallback]
         // Update is called once per frame
         void Update()
         {
-            if (attackCooldownInGame >= 0)
+            if (isServer)
             {
-                attackCooldownInGame -= Time.deltaTime;
-            }
+                if (attackCooldownInGame >= 0)
+                {
+                    attackCooldownInGame -= Time.deltaTime;
+                }
 
-            //dont move when attacking
-            if (attackDurationInGame >= 0 && isAttacking)
-            {
-                moveSpdInGame = 0;
-                attackDurationInGame -= Time.deltaTime;
-            }
+                //dont move when attacking
+                if (attackDurationInGame >= 0 && isAttacking)
+                {
+                    moveSpdInGame = 0;
+                    attackDurationInGame -= Time.deltaTime;
+                }
 
-            //not attacking when timer up
-            else
-            {
-                //start moving again
-                moveSpdInGame = moveSpd;
-                isAttacking = false;
+                //not attacking when timer up
+                else
+                {
+                    //start moving again
+                    moveSpdInGame = moveSpd;
+                    isAttacking = false;
+                }
             }
         }
 
@@ -109,7 +110,6 @@ namespace SheepDoom
                         attackDurationInGame = attackDuration;
                         isAttacking = true;
                         Debug.Log("Death ball attacking");
-                        //Instantiate(AuraDamageObject, this.gameObject.transform.position, this.gameObject.transform.rotation);
                         GameObject spawnAura = Instantiate(AuraDamageObject, transform);
                         spawnAura.transform.SetParent(null, false);
                         spawnAura.transform.SetPositionAndRotation(this.gameObject.transform.position, this.gameObject.transform.rotation);
@@ -167,8 +167,6 @@ namespace SheepDoom
                 LockedOn = false;
             }
         }
-
-
     }
 
 }

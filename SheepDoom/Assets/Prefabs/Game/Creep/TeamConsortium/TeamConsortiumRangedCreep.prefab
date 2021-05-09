@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 613583272188186916}
   m_Layer: 0
   m_Name: Player_HealthBarCanvas
-  m_TagString: Untagged
+  m_TagString: TeamConsortiumRangeCreep
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

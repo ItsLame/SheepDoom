@@ -13,7 +13,10 @@ namespace SheepDoom
         protected override void Awake()
         {
             base.Awake();
-            GetComponentInParent<LeftMinionBehaviour>().OnHealthPctChanged += HandleHealthChanged;
+            if(gameObject.CompareTag("TeamCoalitionRangeCreep") || gameObject.CompareTag("TeamConsortiumRangeCreep"))
+                GetComponentInParent<LeftMinionBehaviour>().OnHealthPctChanged += HandleHealthChanged;
+            else if(gameObject.CompareTag("MegaBoss"))
+                GetComponentInParent<MegaBossNewScript>().OnHealthPctChanged += HandleHealthChanged;
         }
 
         protected override void InitHealthBar()
