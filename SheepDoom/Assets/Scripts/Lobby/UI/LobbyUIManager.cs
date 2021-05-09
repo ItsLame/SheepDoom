@@ -138,12 +138,12 @@ namespace SheepDoom
         }
 
         [Command(ignoreAuthority = true)]
-        private void CmdRequestLobbyUpdate(string _matchID, GameObject _player, bool _swap, bool _ready, bool _start)
+        private void CmdRequestLobbyUpdate(string _matchID, GameObject _player, bool _swap, bool _ready, bool _start, bool _exit)
         {
             NetworkConnection conn = _player.GetComponent<NetworkIdentity>().connectionToClient;
             if (conn != null)
             {
-                if (!_swap && !_ready && !_start)
+                if (!_swap && !_ready && !_start && !_exit)
                 {
                     foreach (var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
                         TargetUpdateOwner(conn, player, _swap, _ready, _start, false);
@@ -167,6 +167,9 @@ namespace SheepDoom
                     RequestCheckStart(_matchID, _player);
                     TargetUpdateOwner(conn, _player, _swap, _ready, _start, false); // only need to show host player start status text
                 }
+                else if (_exit)
+                    _player.GetComponent<LeaveGame>().Exit(_matchID, true, false, false, true);
+
             }
             else
             {
@@ -228,7 +231,7 @@ namespace SheepDoom
         }
 
         [Server]
-        public void PlayerLeftLobby(GameObject _player)
+        public void HostLeftLobby(GameObject _player)
         {
             SetUI_StartReadyUI(_player, false); // change on server
             TargetUpdateOwner(_player.GetComponent<NetworkIdentity>().connectionToClient, _player, false, false, false, true);
@@ -245,10 +248,10 @@ namespace SheepDoom
         }
 
         [TargetRpc]
-        private void TargetUpdateOwner(NetworkConnection conn, GameObject _player, bool _swap, bool _ready, bool _start, bool _changeHost)
+        private void TargetUpdateOwner(NetworkConnection conn, GameObject _player, bool _swap, bool _ready, bool _start, bool _hostChange)
         {
             bool isOwner = true;
-            if (!_swap && !_ready && !_start && !_changeHost) // for host/join
+            if (!_swap && !_ready && !_start && !_hostChange) // for host/join
             {
                 if (_player.GetComponent<PlayerObj>().GetTeamIndex() == 1)
                     _player.transform.SetParent(P_team1GameObject.transform, false);
@@ -269,7 +272,7 @@ namespace SheepDoom
                 StartCoroutine(WaitForReadyUpdate(_player, _player.GetComponent<PlayerObj>().GetIsReady(), isOwner)); // deal with syncvar delay
             else if (_start) // for start
                 StartCoroutine(WaitForStartStatusUpdate(P_startStatusMsg)); // deal with syncvar delay
-            else if (_changeHost)
+            else if (_hostChange)
                 StartCoroutine(WaitForHostChangeUpdate(_player, _player.GetComponent<PlayerObj>().GetIsHost(), isOwner));
         }
 
@@ -354,14 +357,14 @@ namespace SheepDoom
         {
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, true, false, false);
+                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, true, false, false, false);
         }
 
         public void GoTeam2()
         {
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, true, false, false);
+                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, true, false, false, false);
         }
 
         #endregion
@@ -371,7 +374,7 @@ namespace SheepDoom
         {
             GameObject _player = PlayerObj.instance.gameObject;
             if(_player.GetComponent<NetworkIdentity>().hasAuthority && _player.GetComponent<PlayerObj>().GetIsHost())
-                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false, false, true);
+                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false, false, true, false);
         }
         #endregion
 
@@ -380,7 +383,16 @@ namespace SheepDoom
         {
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false, true, false);
+                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false, true, false, false);
+        }
+        #endregion
+
+        #region Leave
+        public void GoLeave()
+        {
+            GameObject _player = PlayerObj.instance.gameObject;
+            if(_player.GetComponent<NetworkIdentity>().hasAuthority)
+                CmdRequestLobbyUpdate(_player.GetComponent<PlayerObj>().GetMatchID(), _player, false, false, false, true);
         }
         #endregion
 
@@ -398,7 +410,7 @@ namespace SheepDoom
                 if (_player.GetComponent<NetworkIdentity>().hasAuthority)
                 {
                     P_matchIDText.GetComponent<Text>().text = _matchID;
-                    CmdRequestLobbyUpdate(_matchID, _player, false, false, false);
+                    CmdRequestLobbyUpdate(_matchID, _player, false, false, false, false);
                 }
             }
 

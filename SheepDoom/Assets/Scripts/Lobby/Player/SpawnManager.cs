@@ -11,10 +11,6 @@ namespace SheepDoom
 {
     public class SpawnManager : NetworkBehaviour
     {
-        /*
-        [Space(15)]
-        public static SpawnManager instance;*/
-
         [Header("Setting up player")]
         [SerializeField] private NetworkIdentity playerPrefab = null;
 
@@ -99,6 +95,19 @@ namespace SheepDoom
             SpawnPlayer("lobby", null);
         }
 
+        [Server]
+        public void ResetPlayer(NetworkConnection conn, GameObject _player)
+        {
+            if (conn == connectionToClient)
+            {
+                NetworkServer.Destroy(_player);
+                NetworkSpawnPlayer("lobby", null);
+            }
+            else
+                Debug.Log("WRONG CONNECTION WTF");
+        }
+
+        [Client]
         public void SpawnPlayer(string playerType, GameObject player)
         {
             CmdRequestPlayerObjSpawn(playerType, player);

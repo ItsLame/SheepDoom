@@ -135,106 +135,6 @@ namespace SheepDoom
             }
         }
 
-        [Server]
-        public void RemoveFromGame(string _matchID, bool _isExitGame) // adjusted for sudden dc and clean exit
-        {
-            if (_matchID == matchID)
-            {
-                Match gameMatch = MatchMaker.instance.GetMatches()[_matchID];
-                if(_isExitGame)
-                    gameMatch.GetSDSceneManager().UnloadScenes(ci.GetComponent<NetworkIdentity>().connectionToClient, matchID, false, false); // unload on client
-
-                if (gameMatch.GetPlayerObjList().Contains(gameObject))
-                    gameMatch.GetPlayerObjList().Remove(gameObject); // remove from match player list
-
-                if (gameMatch.GetHeroesList().Contains(ci.GetComponent<SpawnManager>().GetPlayerObj()))
-                {
-                    gameMatch.GetHeroesList().Remove(ci.GetComponent<SpawnManager>().GetPlayerObj()); // remove from match hero list
-                    if(_isExitGame)
-                        NetworkServer.Destroy(ci.GetComponent<SpawnManager>().GetPlayerObj()); // destroy it if it exits cleanly, else dont need to destroy
-                }
-
-                // move back to main menu scene on server
-                if(_isExitGame) // only need to move if it exits cleanly
-                {
-                    gameMatch.GetSDSceneManager().MoveToNewScene(ci.gameObject, SceneManager.GetSceneAt(0));
-                    gameMatch.GetSDSceneManager().MoveToNewScene(gameObject, SceneManager.GetSceneAt(0));
-                }
-            }
-            else
-                Debug.Log("WARNING PLAYER IS IN THE WRONG MATCH!! matchID: " + _matchID + " player matchID: " + matchID);
-        }
-
-        [Server]
-        private void RemoveFromCharSelect(string _matchID) // only for sudden dc, no exit button for char select scene as theres only 30s
-        {
-            if(_matchID == matchID)
-            {
-                Debug.Log("BB");
-                Match charSelectMatch = MatchMaker.instance.GetMatches()[_matchID];
-                charSelectMatch.GetCharacterSelectUIManager().P_gameStarted = true; // so match wont start
-
-                if (charSelectMatch.GetPlayerObjList().Contains(gameObject))
-                    charSelectMatch.GetPlayerObjList().Remove(gameObject);
-
-                foreach (GameObject _player in charSelectMatch.GetPlayerObjList())
-                {
-                    Debug.Log("CC");
-                    charSelectMatch.GetSDSceneManager().UnloadScenes(_player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>().connectionToClient, _matchID, false, true);
-                    charSelectMatch.GetSDSceneManager().MoveToNewScene(_player.GetComponent<PlayerObj>().ci.gameObject, SceneManager.GetSceneAt(0));
-                    charSelectMatch.GetCharacterSelectUIManager().PlayerLeftCharSelect(_player); 
-                }
-
-                charSelectMatch.GetPlayerObjList().Clear();
-                MatchMaker.instance.ClearMatch(_matchID, false, true, false);
-            }
-        }
-
-        [Server]
-        private void RemoveFromLobby(string _matchID) // only for sudden dc so far
-        {
-            if(_matchID == matchID)
-            {
-                Match lobbyMatch = MatchMaker.instance.GetMatches()[_matchID];
-                // adjust team counts
-                if (teamIndex == 1)
-                    lobbyMatch.MinusTeam1Count();
-                else if (teamIndex == 2)
-                    lobbyMatch.MinusTeam2Count();
-                // check statuses
-                if(isReady) // applicable for non-hosts only
-                {
-                    isReady = false;
-                    lobbyMatch.MinusCountReady();
-                }
-
-                if(isHost) // only applicable if player is host
-                {
-                    lobbyMatch.MinusCountReady(); // need to repeat ready count here, intentional, because host by default already ++ready count
-                    isHost = false;
-                    // host is always 1st player in the list, so when leave, pass to next player, list re-numbers itself when it changes in size
-                    // next player settings
-                    GameObject nextHostPlayer = null;
-                    if (lobbyMatch.GetPlayerObjList().Count > 1)
-                    {
-                        nextHostPlayer = lobbyMatch.GetPlayerObjList()[1];
-
-                        if (nextHostPlayer.GetComponent<PlayerObj>().GetIsReady())
-                            nextHostPlayer.GetComponent<PlayerObj>().SetIsReady(false);
-
-                        nextHostPlayer.GetComponent<PlayerObj>().SetIsHost(true);
-                        lobbyMatch.AddCountReady();
-                        lobbyMatch.GetLobbyUIManager().PlayerLeftLobby(nextHostPlayer);
-                    }
-                    else
-                        MatchMaker.instance.ClearMatch(_matchID, true, false, false);
-                }
-
-                if (lobbyMatch.GetPlayerObjList().Contains(gameObject)) 
-                    lobbyMatch.GetPlayerObjList().Remove(gameObject);
-            }
-        }
-
         #region Start & Stop Callbacks
 
         /// <summary>
@@ -256,16 +156,13 @@ namespace SheepDoom
         {
             if (MatchMaker.instance.GetMatches().ContainsKey(matchID)) // meaning match is still ongoing when player disconnects
             {
-                if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[0]) 
-                    RemoveFromLobby(matchID);
-                else if(gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[1])
+                if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[0])
+                    GetComponent<LeaveGame>().Exit(matchID, true, false, false, false);
+                else if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[1])
+                    GetComponent<LeaveGame>().Exit(matchID, false, true, false, false);
+                else if (gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[2])
                 {
-                    Debug.Log("AA");
-                    RemoveFromCharSelect(matchID);
-                }
-                else if(gameObject.scene == MatchMaker.instance.GetMatches()[matchID].GetScenes()[2])
-                {
-                    RemoveFromGame(matchID, false); // sudden disconnect, not clean exit
+                    GetComponent<LeaveGame>().Exit(matchID, false, false, true, false); // sudden disconnect, not clean exit
 
                     if (MatchMaker.instance.GetMatches()[matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[matchID].GetHeroesList().Count == 0)
                         MatchMaker.instance.ClearMatch(matchID, false, false, true);

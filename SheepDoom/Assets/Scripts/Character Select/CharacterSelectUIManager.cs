@@ -258,15 +258,6 @@ namespace SheepDoom
             RpcUpdateOthers(_player, _player.GetComponent<PlayerObj>().GetHeroName(), _player.GetComponent<PlayerObj>().GetTeamIndex(), false, true);
         }
 
-        [Server]
-        public void PlayerLeftCharSelect(GameObject _player)
-        {
-            Debug.Log("DD");
-            NetworkConnection conn = _player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>().connectionToClient;
-            NetworkServer.Destroy(_player);
-            Client.ReturnClientInstance(conn).GetComponent<SpawnManager>().SpawnForGame("lobby", null);
-        }
-
         #endregion
 
         #region Client Functions
