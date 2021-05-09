@@ -35,7 +35,7 @@ namespace SheepDoom
                     if (isNeutral)
                         RpcAnnouncers(gotKilled + " has been slain by a neutral");
                     else if(isBoss)
-                        RpcAnnouncers(gotKilled + " has been slain by a boss");
+                        RpcAnnouncers("The mega boss has taken " + gotKilled + "'s life");
                     else if (isMinion)
                         RpcAnnouncers(gotKilled + " has been slain by a minion");
                     else
