@@ -150,7 +150,6 @@ namespace SheepDoom
             {
                 if(_init)
                 {
-                    Debug.Log("CMD INIT");
                     SetUI_Player(_player);  // server view
                     SetUI_Team(_player, _teamIndex);    // server view
                     SetUI_Hero(_player, _heroName, _lockIn);    // server view

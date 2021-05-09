@@ -149,11 +149,12 @@ namespace SheepDoom
                     sceneIndex = 1;
 
                 if(conn != null)
-                    ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex].name, false); // explore breaking here if connection is not null
-
-                // incorrect because, scene already starting to unload on the server BEFORE ALL playerobjects on the server have been moved to next scene
-                yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex]);
-                yield return Resources.UnloadUnusedAssets();
+                    ClientSceneMsg(conn, MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex].name, false); 
+                else
+                {
+                    yield return SceneManager.UnloadSceneAsync(MatchMaker.instance.GetMatches()[_matchID].GetScenes()[sceneIndex]);
+                    yield return Resources.UnloadUnusedAssets();
+                }
             }
             else if (P_gameSceneLoaded)
             {

@@ -268,6 +268,7 @@ namespace SheepDoom
                     matches[_matchID].GetSDSceneManager().MoveToNewScene(matches[_matchID].GetSDSceneManager().gameObject, matches[_matchID].GetScenes()[1]);
                     foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[1], _matchID, true, false);
+                    matches[_matchID].GetSDSceneManager().UnloadScenes(null, _matchID, true, false);
                     matches[_matchID].GetCharacterSelectUIManager().StartCharSelect(_matchID);
                 }
                 else if (_game)
@@ -282,6 +283,7 @@ namespace SheepDoom
 
                     foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                         player.GetComponent<StartGame>().MoveToNewScene(matches[_matchID].GetScenes()[2], _matchID, false, true);
+                    matches[_matchID].GetSDSceneManager().UnloadScenes(null, _matchID, false, true);
 
                     foreach (GameObject player in matches[_matchID].GetPlayerObjList())
                     {
@@ -307,15 +309,15 @@ namespace SheepDoom
                     closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, true);
                     StartCoroutine(WaitForSceneUnload(closedMatch, true, false, false));
                 }
+                else if (_isCharSelect)
+                {
+                    closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, true);
+                    StartCoroutine(WaitForSceneUnload(closedMatch, false, true, false));
+                }
                 else if(_isGame)
                 {
                     closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, false);
                     StartCoroutine(WaitForSceneUnload(closedMatch, false, false, true));
-                }
-                else if(_isCharSelect)
-                {
-                    closedMatch.GetSDSceneManager().UnloadScenes(null, _matchID, false, true);
-                    StartCoroutine(WaitForSceneUnload(closedMatch, false, true, false));
                 }
             }
         }

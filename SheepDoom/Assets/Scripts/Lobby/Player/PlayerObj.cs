@@ -180,12 +180,12 @@ namespace SheepDoom
                 foreach (GameObject _player in charSelectMatch.GetPlayerObjList())
                 {
                     Debug.Log("CC");
-                    charSelectMatch.GetSDSceneManager().UnloadScenes(ci.GetComponent<NetworkIdentity>().connectionToClient, _matchID, false, true);
+                    charSelectMatch.GetSDSceneManager().UnloadScenes(_player.GetComponent<PlayerObj>().ci.GetComponent<NetworkIdentity>().connectionToClient, _matchID, false, true);
                     charSelectMatch.GetSDSceneManager().MoveToNewScene(_player.GetComponent<PlayerObj>().ci.gameObject, SceneManager.GetSceneAt(0));
                     charSelectMatch.GetCharacterSelectUIManager().PlayerLeftCharSelect(_player); 
                 }
 
-                MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Clear();
+                charSelectMatch.GetPlayerObjList().Clear();
                 MatchMaker.instance.ClearMatch(_matchID, false, true, false);
             }
         }
