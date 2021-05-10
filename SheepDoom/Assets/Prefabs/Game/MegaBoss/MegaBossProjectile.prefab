@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 7182027942437437442}
   - component: {fileID: 25574858892114136}
   - component: {fileID: 7306697570054750148}
-  - component: {fileID: 7980184683035807111}
   - component: {fileID: 617768940007668849}
   - component: {fileID: -5464149660847732807}
   - component: {fileID: 600843355084880221}
   - component: {fileID: 2981385119451128838}
   - component: {fileID: 4424252215017304812}
-  m_Layer: 0
+  - component: {fileID: 1234892743932217871}
+  m_Layer: 13
   m_Name: MegaBossProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,19 +85,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &7980184683035807111
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3321324340310797477}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &617768940007668849
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -178,13 +165,30 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   owner: {fileID: 0}
-  targetted: 0
+  detonates: 0
   hasTarget: 0
   targetObject: {fileID: 0}
   damage: 2
-  m_Speed: 40
-  m_Lifespan: 10
+  m_Speed: 60
+  m_Lifespan: 5
   m_startTime: 0
   startPosDone: 0
   startPos: {x: 0, y: 0, z: 0}
+  destroyOnContact: 0
   m_Rigidbody: {fileID: 0}
+  detonateTimer: 0
+  detonateTimerInGame: 0
+--- !u!136 &1234892743932217871
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3321324340310797477}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 6
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

@@ -12,6 +12,7 @@ namespace SheepDoom
         public GameObject owner;
         [SyncVar] public float ownerTeamID;
 
+
         [Space(15)]
         //rotation controls
         public float x_rotaspeed;
@@ -132,6 +133,7 @@ namespace SheepDoom
             {
 
             }
+
             //used to test gold for now
             else if (col.gameObject.CompareTag("NeutralMinion"))
             {
@@ -149,7 +151,7 @@ namespace SheepDoom
                         GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
-                            owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
+                            owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(2);
 
                         if (destroyOnContact)
                             Destroyy();
@@ -163,20 +165,29 @@ namespace SheepDoom
                         GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
                         target.gameObject.GetComponent<LeftMinionBehaviour>().TakeDamage(-damage);
                         if (target.gameObject.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
-                            owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
+                            owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(2);
 
                         if (destroyOnContact)
                             Destroyy();
                     }
                 }
             }
+
             else if (col.gameObject.CompareTag("MegaBoss"))
             {
                 GameObject bossParent = col.gameObject.GetComponent<GetParents>().getParent();
                 bossParent.GetComponent<MegaBossNewScript>().TakeDamage(-damage);
+                bossParent.GetComponent<MegaBossNewScript>().setKillerTeamID(ownerTeamID);
+
+                //announce killing of big boss
+                if (bossParent.GetComponent<MegaBossNewScript>().getHealth() <= 0)
+                {
+                    this.gameObject.GetComponent<GameEvent>().AnnounceBossDeath(owner, ownerTeamID);
+                }
 
                 if (destroyOnContact)
                     Destroyy();
+
             }
             else if (col.gameObject.CompareTag("Other"))
             {

@@ -42,6 +42,12 @@ namespace SheepDoom
                         RpcAnnouncers(whoKilled + " killed " + gotKilled);
                 }
             }
+
+        }
+        [Server]
+        public void AnnounceBossDeath(GameObject defeater, float teamID)
+        {
+            RpcAnnouncers(defeater + " from team " + teamID + " has slain the mega boss!");
         }
 
         [ClientRpc]

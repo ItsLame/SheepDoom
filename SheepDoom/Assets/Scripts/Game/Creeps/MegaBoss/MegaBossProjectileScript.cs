@@ -123,12 +123,12 @@ namespace SheepDoom
                 //linear movement
                 if (!hasTarget && !detonates)
                 {
-                    //target
+                    /*target
                     if (!targetted)
                     {
                         transform.LookAt(targetObject.transform);
                         targetted = true;
-                    }
+                    }*/
 
                     //then go straight
                     m_startTime += Time.deltaTime;

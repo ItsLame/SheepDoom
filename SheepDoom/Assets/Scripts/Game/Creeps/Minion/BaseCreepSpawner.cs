@@ -10,9 +10,12 @@ namespace SheepDoom
     {
         private float nextspawntime = 20;
 
+        [SerializeField] private float teamID;
         [SerializeField] private GameObject Minion;
+        [SerializeField] private GameObject ConvertedBoss;
         [SerializeField] private float spawndelay;
         [SerializeField] private GameObject SpawnPos;
+
 
         private void Update()
         {
@@ -31,6 +34,15 @@ namespace SheepDoom
             creep.transform.SetParent(null, false);
             creep.transform.SetPositionAndRotation(SpawnPos.transform.position, SpawnPos.transform.rotation);
             NetworkServer.Spawn(creep);
+        }
+
+        [Server]
+        public void spawnConvertedBoss()
+        {
+            GameObject boss = Instantiate(ConvertedBoss, SpawnPos.transform);
+            boss.transform.SetParent(null, false);
+            boss.transform.SetPositionAndRotation(SpawnPos.transform.position, SpawnPos.transform.rotation);
+            NetworkServer.Spawn(boss);
         }
 
         private bool ShouldSpawn()
