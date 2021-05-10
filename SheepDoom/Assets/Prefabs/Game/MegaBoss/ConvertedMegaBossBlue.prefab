@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8481885711579155653}
   m_Layer: 0
   m_Name: Boss_HealthBarCanvas
-  m_TagString: MegaBoss
+  m_TagString: TeamCoalitionRangeCreep
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -274,9 +274,9 @@ GameObject:
   - component: {fileID: 8481885712554898689}
   - component: {fileID: 8481885712554898691}
   - component: {fileID: 8481885712554898688}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BossCollider
-  m_TagString: MegaBoss
+  m_TagString: BaseMinion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -289,7 +289,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8481885712554898694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.24, z: 0}
   m_LocalScale: {x: 5, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8481885713182369594}
@@ -305,10 +305,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.11
-  m_Height: 1
+  m_Radius: 0.1
+  m_Height: 2.3
   m_Direction: 1
-  m_Center: {x: 0, y: -0.2, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8481885712554898688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,8 +368,8 @@ GameObject:
   - component: {fileID: 8481885713182369591}
   - component: {fileID: 8481885713182369588}
   - component: {fileID: 8481885713182369589}
-  - component: {fileID: 4791313539877987302}
   - component: {fileID: 5460972597988941693}
+  - component: {fileID: 5419549289158756943}
   m_Layer: 13
   m_Name: ConvertedMegaBossBlue
   m_TagString: TeamCoalitionRangeCreep
@@ -385,7 +385,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8481885713182369595}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 34.207542, y: 34.207527, z: 34.207542}
   m_Children:
   - {fileID: 8481885712554898689}
@@ -533,20 +533,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8481885713182369595}
   m_Mesh: {fileID: -3900029684577160926, guid: 0b50dc58e1e892a418f696249ff7317a, type: 3}
---- !u!136 &4791313539877987302
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8481885713182369595}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.50944024
-  m_Height: 1.7893726
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5460972597988941693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,10 +565,23 @@ MonoBehaviour:
   projectile: {fileID: 1684223936274731579, guid: 42a6bc3a5bb17c24d9b46c7771f7cbbf,
     type: 3}
   animator: {fileID: 0}
-  attackPoint: {fileID: 0}
+  attackPoint: {fileID: 8481885712906665324}
   enemyLayers:
     serializedVersion: 2
     m_Bits: 512
   meleedamage: 50
   maxHealth: 500
   goldValue: 2
+--- !u!135 &5419549289158756943
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8481885713182369595}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3.5
+  m_Center: {x: 0, y: 0, z: 0}
