@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraRoaming : MonoBehaviour
-{
+{   
     public float camspeed = 30;
 
     //for left, right , up n down margins
@@ -27,10 +27,12 @@ public class CameraRoaming : MonoBehaviour
 
     private IEnumerator VictoryRoamStart(Transform _destination)
     {
-        while((transform.position - _destination.position).sqrMagnitude > 1)
+        while((transform.position - _destination.position).sqrMagnitude > 0.01)
         {
+            Vector3 targetPos = _destination.position;
+
             // adjust positioning here
-            this.gameObject.transform.position = Vector3.Lerp(transform.position, _destination.position, Time.unscaledDeltaTime);
+            this.gameObject.transform.position = Vector3.Lerp(transform.position, targetPos, Time.unscaledDeltaTime);
             this.gameObject.transform.rotation = Quaternion.Lerp(transform.rotation, _destination.rotation, Time.unscaledDeltaTime);
 
             yield return null;

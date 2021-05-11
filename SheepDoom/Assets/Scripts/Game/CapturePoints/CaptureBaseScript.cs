@@ -11,7 +11,8 @@ namespace SheepDoom
     {
         //attach the score gameobject to count the score
         public GameObject ScoreGameObject;
-
+        public GameObject blueEndCam;
+        public GameObject redEndCam;
 
         [Space(15)]
         [SerializeField] private GameObject BaseModel;
@@ -205,9 +206,18 @@ namespace SheepDoom
             Transform _destination = this.gameObject.transform;
 
             if(isBlue)
-                _destination = FindMe.instance.P_BlueBaseCamPosition.transform;
-            if(isRed)
-                _destination = FindMe.instance.P_RedBaseCamPosition.transform;
+            {
+                _destination = blueEndCam.transform;
+                //  _destination = FindMe.instance.P_BlueBaseCamPosition.transform;
+            }
+
+
+            if (isRed)
+            {
+                _destination = redEndCam.transform;
+                //  _destination = FindMe.instance.P_RedBaseCamPosition.transform;
+            }
+
 
             FindMe.instance.P_MyPlayer.GetComponent<PlayerCameraSetup>().P_createdCam.GetComponent<CameraRoaming>().VictoryRoam(_destination);
         }
