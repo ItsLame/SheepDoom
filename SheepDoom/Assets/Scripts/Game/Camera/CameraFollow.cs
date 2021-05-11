@@ -15,6 +15,10 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // to ignore update when victory
+        if(this.gameObject.GetComponent<CamSwitchManager>().isVictory)
+            return;
+
         //if player is still alive
         if (player != null)
         {

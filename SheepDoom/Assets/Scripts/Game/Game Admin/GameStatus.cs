@@ -16,7 +16,7 @@ namespace SheepDoom
         private GameObject navMesh;
 
         [SyncVar] private string matchID;
-        [SyncVar] private bool gameEnded;
+        [SyncVar (hook = nameof(OnGameEnd))] private bool gameEnded;
 
         public string P_matchID
         {
@@ -28,6 +28,14 @@ namespace SheepDoom
         {
             get { return gameEnded; }
             set { gameEnded = value; }
+        }
+
+        // when game end
+        private void OnGameEnd(bool oldBool, bool newBool)
+        {
+            // disable player game canvas
+            if(newBool == true)
+                gameObject.GetComponent<GetGameStatus>().Disable_GameCanvas();
         }
 
         [Server]

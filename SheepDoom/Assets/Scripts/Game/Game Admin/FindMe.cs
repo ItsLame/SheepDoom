@@ -11,6 +11,12 @@ namespace SheepDoom
         public static FindMe instance;
 
         #region Variables
+        [Header("--- Player & Misc ---")]
+        [Space(5)]
+        [SerializeField] private GameObject MyPlayer;
+        [SerializeField] private GameObject GameStatusManager;
+        [SerializeField] private GameObject RedBaseCamPosition;
+        [SerializeField] private GameObject BlueBaseCamPosition;
 
         [Header("--- Player Controls ---")]
         [Space(5)]
@@ -193,6 +199,30 @@ namespace SheepDoom
         {
             get { return ShopUI_X; }
             set { ShopUI_X = value; }
+        }
+
+        public GameObject P_GameStatusManager
+        {
+            get{return GameStatusManager;}
+            set{GameStatusManager = value;}
+        }
+
+        public GameObject P_RedBaseCamPosition
+        {
+            get{return RedBaseCamPosition;}
+            set{RedBaseCamPosition = value;}
+        }
+
+        public GameObject P_BlueBaseCamPosition
+        {
+            get{return BlueBaseCamPosition;}
+            set{BlueBaseCamPosition = value;}
+        }
+
+        public GameObject P_MyPlayer
+        {
+            get{return MyPlayer;}
+            set{MyPlayer = value;}
         }
 
         #endregion
