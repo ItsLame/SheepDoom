@@ -167,6 +167,7 @@ namespace SheepDoom
 
         protected override void Victory()
         {
+            BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Destroy");
             StartCoroutine(VictoryStart());
         }
 
