@@ -7,7 +7,7 @@ public class CamSwitchManager : MonoBehaviour
     public CameraFollow camFollowscript;
     public CameraRoaming camRoamscript;
 
-    bool camViewChanged = false;
+    public bool camViewChanged = false;
 
 
     //to check whether sides are touched
@@ -17,6 +17,8 @@ public class CamSwitchManager : MonoBehaviour
     public bool rightScreenClicked = false;
 
     public bool snapBackToPlayer = true;
+
+    public bool isVictory = false;
 
     public void touchTop()
     {
@@ -76,46 +78,50 @@ public class CamSwitchManager : MonoBehaviour
         snapBackToPlayer = true;
     }
 
-        // Update is called once per frame
-        void Update()
+    // Update is called once per frame
+    void Update()
+    {
+         // to ignore update when victory
+        if(isVictory)
+            return;
+
+        if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
+        {
+
+        //     Debug.Log("Stop camera tracking");
+            camFollowscript.enabled = false;
+        }
+
+        else
+        {
+            //   Debug.Log("Enable camera tracking");
+            camFollowscript.enabled = true;
+        }
+
+
+        if (camViewChanged == false)
         {
             if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
             {
-
-           //     Debug.Log("Stop camera tracking");
+                Debug.Log("Camera roaming engaged");
+                snapBackToPlayer = false;
+                camViewChanged = true;
+        //        camRoamscript.enabled = true;
                 camFollowscript.enabled = false;
             }
+        }
 
-            else
+        else if (camViewChanged == true)
+        {
+            if (snapBackToPlayer)
             {
-             //   Debug.Log("Enable camera tracking");
+        //        Debug.Log("Snapping back to character");
+                camViewChanged = false;
+
+                //  camRoamscript.enabled = false;
                 camFollowscript.enabled = true;
             }
-
-
-            if (camViewChanged == false)
-            {
-                if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
-                {
-                    Debug.Log("Camera roaming engaged");
-                    snapBackToPlayer = false;
-                    camViewChanged = true;
-            //        camRoamscript.enabled = true;
-                    camFollowscript.enabled = false;
-                }
-            }
-
-            else if (camViewChanged == true)
-            {
-                if (snapBackToPlayer)
-                {
-            //        Debug.Log("Snapping back to character");
-                    camViewChanged = false;
-
-                  //  camRoamscript.enabled = false;
-                    camFollowscript.enabled = true;
-                }
-            }
-      //  Debug.Log("SnapToPlayer: " + snapBackToPlayer);
+        }
+    //  Debug.Log("SnapToPlayer: " + snapBackToPlayer);
     }
 }
