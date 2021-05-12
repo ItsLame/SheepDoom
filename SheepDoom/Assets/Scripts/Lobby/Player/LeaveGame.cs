@@ -30,7 +30,7 @@ namespace SheepDoom
         }
 
         [Server]
-        private void RemoveFromLobby(string _matchID, bool _isClean) // only for sudden dc so far
+        private void RemoveFromLobby(string _matchID, bool _isClean) 
         {
             if (_matchID == pO.GetMatchID())
             {
@@ -90,7 +90,7 @@ namespace SheepDoom
         }
 
         [Server]
-        private void RemoveFromCharSelect(string _matchID) // only for sudden dc, no exit button for char select scene as theres only 30s
+        private void RemoveFromCharSelect(string _matchID) 
         {
             if (_matchID == pO.GetMatchID())
             {
@@ -114,7 +114,7 @@ namespace SheepDoom
         }
 
         [Server]
-        private void RemoveFromGame(string _matchID, bool _isClean) // adjusted for sudden dc and clean exit after endgame only
+        private void RemoveFromGame(string _matchID, bool _isClean) 
         {
             if (_matchID == pO.GetMatchID())
             {

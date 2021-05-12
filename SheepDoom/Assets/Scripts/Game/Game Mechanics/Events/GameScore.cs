@@ -61,28 +61,6 @@ namespace SheepDoom
             Character3 = Resources.Load<Sprite>("Peach");
         }
 
-        /*public void ExitGame()
-        {
-            GameObject _player = PlayerObj.instance.gameObject;
-            if (_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdServerExitGame(_player);
-        }
-
-        [Command(ignoreAuthority = true)]
-        void CmdServerExitGame(GameObject _player)
-        {
-            if(gameStatus != null)
-            {
-                string _matchID = gameStatus.GetComponent<GameStatus>().P_matchID;
-                _player.GetComponent<LeaveGame>().Exit(_matchID, false, false, true, true);
-                Client ci = _player.GetComponent<PlayerObj>().ci;
-                ci.GetComponent<SpawnManager>().ResetPlayer(ci.GetComponent<NetworkIdentity>().connectionToClient, _player);
-
-                if (MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList().Count == 0 && MatchMaker.instance.GetMatches()[_matchID].GetHeroesList().Count == 0)
-                    MatchMaker.instance.ClearMatch(_matchID, false , false, true);
-            }
-        }*/
-
         //update score display on all clients
         public void updateScoreDisplay()
         {
