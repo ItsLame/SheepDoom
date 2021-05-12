@@ -281,7 +281,6 @@ Transform:
   m_Children:
   - {fileID: 2784338876853972710}
   - {fileID: 823097819036786292}
-  - {fileID: 5651305364058932833}
   m_Father: {fileID: 8865935305822375174}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1693,11 +1692,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855211153463236064}
-  m_LocalRotation: {x: -0.49895743, y: -0.42525047, z: -0.614048, w: -0.4394867}
-  m_LocalPosition: {x: 0.00854, y: 0.00014, z: -0.00008}
-  m_LocalScale: {x: 0.006921035, y: 0.0069210404, z: 0.006921039}
+  m_LocalRotation: {x: -0.050708316, y: 0.048671316, z: 0.124832116, w: 0.9896852}
+  m_LocalPosition: {x: 0.004, y: 0.678, z: 0.846}
+  m_LocalScale: {x: 0.7613132, y: 0.7613138, z: 0.7613137}
   m_Children: []
-  m_Father: {fileID: 8550106588055214262}
+  m_Father: {fileID: 3099953079081114625}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -175.2, y: -98.1, z: -75.350006}
 --- !u!1 &1869495255523403273
@@ -2111,6 +2110,7 @@ Transform:
   m_Children:
   - {fileID: 6320216811579755679}
   - {fileID: 1538718531256906192}
+  - {fileID: 5651305364058932833}
   - {fileID: 5508886563154043360}
   - {fileID: 4652231106413936948}
   m_Father: {fileID: 0}
@@ -2238,9 +2238,7 @@ MonoBehaviour:
   cooldown3: 3
   cooldown1Multiplier: 0
   cooldown1MultiplerTimer: 0
-  animator: {fileID: 9071677031279740539}
   networkAnimator: {fileID: -5735952091139750248}
-  Isplayerattacking: 0
 --- !u!114 &-7642480759244800359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2264,9 +2262,7 @@ MonoBehaviour:
   isStopped: 0
   isSleeped: 0
   isSpeedUp: 0
-  networkAnimator: {fileID: -5735952091139750248}
   animator: {fileID: 9071677031279740539}
-  GetIsplayerattacking: 0
 --- !u!114 &4781807860689052536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2283,6 +2279,7 @@ MonoBehaviour:
   syncInterval: 0.1
   PlayerCamera: {fileID: 7944493282106236459, guid: 899dd7c84f4affb49a6f93e8b4445574,
     type: 3}
+  createdCam: {fileID: 0}
 --- !u!114 &4387982625440882290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5805,7 +5802,7 @@ RectTransform:
   - {fileID: 6905495230787806831}
   - {fileID: 5782236153977259211}
   m_Father: {fileID: 3099953079081114625}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7466,7 +7463,7 @@ RectTransform:
   m_Children:
   - {fileID: 209906071305702557}
   m_Father: {fileID: 3099953079081114625}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
