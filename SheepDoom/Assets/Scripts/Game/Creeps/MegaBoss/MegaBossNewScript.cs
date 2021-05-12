@@ -13,6 +13,7 @@ namespace SheepDoom
         public float angle1;
         public float angle2;
         public bool spawnedConvertedBoss = false;
+        public GameObject deadBossModel;
 
         [Header("Killer teamID")]
         [SerializeField] private float killerTeamID;
@@ -311,6 +312,10 @@ namespace SheepDoom
                         spawnedConvertedBoss = true;
                     }
 
+                    firedProjectile = Instantiate(deadBossModel, transform);
+                    firedProjectile.transform.SetParent(null, false);
+                    firedProjectile.transform.SetPositionAndRotation(this.transform.position + new Vector3(0, -38, 0), this.transform.rotation);
+                    NetworkServer.Spawn(firedProjectile);
 
                     Destroyy();
                 }

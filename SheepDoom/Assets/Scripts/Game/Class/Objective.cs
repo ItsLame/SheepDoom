@@ -24,7 +24,7 @@ namespace SheepDoom
         [SyncVar] protected bool capturedByRed;
 
         //logging number to check if base/tower is under capture or not
-        private int numOfCapturers;
+        [SerializeField] private int numOfCapturers;
         private bool giveScoreToCapturers;
         [SerializeField] private bool isBase;
         private bool gameEnded;

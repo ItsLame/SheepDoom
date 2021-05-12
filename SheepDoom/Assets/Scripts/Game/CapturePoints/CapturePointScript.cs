@@ -71,6 +71,11 @@ namespace SheepDoom
                 }
             }
         }
+
+        public float getNumOfCapturers()
+        {
+            return P_numOfCapturers;
+        }
     }
 }
 
