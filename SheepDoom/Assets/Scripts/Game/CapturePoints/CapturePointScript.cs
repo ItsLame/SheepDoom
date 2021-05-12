@@ -74,7 +74,8 @@ namespace SheepDoom
 
         public float getNumOfCapturers()
         {
-            return P_numOfCapturers;
+            float x =  P_numOfCapturers;
+            return x;
         }
     }
 }

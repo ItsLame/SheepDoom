@@ -6,8 +6,8 @@ namespace SheepDoom
 {
     public class rotation_script : MonoBehaviour
     {
-        public bool hasCapturers;
-
+        public GameObject owner;
+        public float num;
 
         //rotation controls
         public float x_rotaspeed;
@@ -19,13 +19,14 @@ namespace SheepDoom
         // Update is called once per frame
         void Update()
         {
+        //    num = gameObject.GetComponent<CapturePointScript>().getNumOfCapturers();
 
-            if (!hasCapturers)
+            if (num == 0)
             {
                 transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
             }
 
-            if (hasCapturers)
+            if (num != 0)
             {
                 transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed * 10, 1.0f * z_rotaspeed);
             }
