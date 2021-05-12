@@ -17,7 +17,7 @@ namespace SheepDoom
         [SerializeField] private float z_rotaspeed;
         // Start is called before the first frame update
 
-        [Server]
+        [ServerCallback]
         // Update is called once per frame
         void Update()
         {

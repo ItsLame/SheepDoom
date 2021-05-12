@@ -7,6 +7,8 @@ namespace SheepDoom
 {
     public class Character3 : NetworkBehaviour
     {
+        //debugging
+        public float dist;
         // Attack/skill related prefabs
         [SerializeField]
         private GameObject normalAtkProjectile, normalSpecial, altSpecial, normalUlti, altUlti;
@@ -164,12 +166,13 @@ namespace SheepDoom
                 //start the casting 
                 if (isCasting)
                 {
+                    dist = Vector3.Distance(lastPos, transform.position);
                     Debug.Log("Casting......");
                     castTimeInGame -= Time.deltaTime;
                     Debug.Log("Cast time left: " + castTimeInGame);
 
                     //check for movement
-                    if (lastPos != transform.position)
+                    if (dist > 5)
                     {
                         Debug.Log("Player Moved, stopping incantation");
                         isCasting = false;
@@ -210,12 +213,13 @@ namespace SheepDoom
                 // ================================ calculation for channeling timers ===================================
                 if (isChanneling)
                 {
+                    dist = Vector3.Distance(lastPos, transform.position);
                     Debug.Log("Channeling ult 2...");
                     channelTimeInGame -= Time.deltaTime;
                     Debug.Log("Channeling time left: " + channelTimeInGame);
 
                     //check for movement
-                    if (lastPos != transform.position)
+                    if (dist > 5)
                     {
                         Debug.Log("Player Moved, stopping channeling");
                         isChanneling = false;

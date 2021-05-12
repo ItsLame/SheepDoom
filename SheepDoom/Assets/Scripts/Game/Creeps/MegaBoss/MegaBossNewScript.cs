@@ -313,7 +313,7 @@ namespace SheepDoom
                         spawnedConvertedBoss = true;
                     }
 
-                    firedProjectile = Instantiate(deadBossModel, this.transform.position + new Vector3(0, -38, 0), firePosition.transform.rotation);
+                    firedProjectile = Instantiate(deadBossModel, transform);
                     firedProjectile.transform.SetParent(null, false);
                     firedProjectile.transform.SetPositionAndRotation(this.transform.position + new Vector3(0, -38, 0), firePosition.transform.rotation);
                     NetworkServer.Spawn(firedProjectile);

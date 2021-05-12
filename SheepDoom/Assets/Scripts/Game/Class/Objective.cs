@@ -79,7 +79,7 @@ namespace SheepDoom
             set{capturedByRed = value;}
         }
 
-        protected int P_numOfCapturers
+        public int P_numOfCapturers
         {
             get{return numOfCapturers;}
             set{numOfCapturers = value;}
