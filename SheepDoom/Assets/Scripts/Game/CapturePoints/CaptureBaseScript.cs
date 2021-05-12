@@ -168,6 +168,9 @@ namespace SheepDoom
             // if base owner is blue team
             if (P_capturedByBlue)
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
+
+            // un-freeze the game
+            Time.timeScale = 1;
         }
 
         [ClientRpc]
