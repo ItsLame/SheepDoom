@@ -14,7 +14,7 @@ namespace SheepDoom
         private float maxHealth = 100.0f;
 
         [SyncVar(hook = nameof(HealthBarUpdate))]
-        private float currenthealth;
+        [SerializeField] private float currenthealth;
 
         public event Action<float> OnHealthPctChanged = delegate { };
 

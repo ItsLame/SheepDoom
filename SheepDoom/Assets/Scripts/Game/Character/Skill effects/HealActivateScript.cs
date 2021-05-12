@@ -40,7 +40,7 @@ namespace SheepDoom
                     //heal ally in range
                     if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == teamID)
                     {
-                        Debug.Log("Healing Player " + other.gameObject.name + " with teamID of " + teamID);
+                //        Debug.Log("Healing Player " + other.gameObject.name + " with teamID of " + teamID);
                         other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(healAmount);
                     }
 
@@ -49,7 +49,7 @@ namespace SheepDoom
                         //damage enemy in range
                         if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() != teamID)
                         {
-                            Debug.Log("Damaging player " + other.gameObject.name + " with teamID of " + teamID);
+               //             Debug.Log("Damaging player " + other.gameObject.name + " with teamID of " + teamID);
 
                             // increase killer's kill count if target is killed
                             // non lethal dmg

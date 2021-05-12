@@ -3378,6 +3378,7 @@ MonoBehaviour:
   messageToBaseObject: {fileID: 5276780869706628407, guid: 3f942d863baaa9b45938474021235ba9,
     type: 3}
   maxHealth: 100
+  currenthealth: 0
 --- !u!114 &5759055838470933253
 MonoBehaviour:
   m_ObjectHideFlags: 0
