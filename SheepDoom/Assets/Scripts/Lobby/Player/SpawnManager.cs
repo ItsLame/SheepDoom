@@ -16,9 +16,9 @@ namespace SheepDoom
 
         [Space(15)]
         [Header("Characters")]
-        [SerializeField] private NetworkIdentity marioPrefab = null;
+        [SerializeField] private NetworkIdentity almaPrefab = null;
         [SerializeField] private NetworkIdentity luigiPrefab = null;
-        [SerializeField] private NetworkIdentity peachPrefab = null;
+        [SerializeField] private NetworkIdentity isabellaPrefab = null;
         private GameObject currentPlayerObj = null;
         private ClientName _cn;
         [SyncVar(hook = nameof(OnTeamUpdate))] private int teamIndex;
@@ -145,9 +145,9 @@ namespace SheepDoom
 
                 switch(heroName)
                 {
-                    case "Mario" : hero = marioPrefab; break;
+                    case "Alma" : hero = almaPrefab; break;
                     case "Luigi" : hero = luigiPrefab; break;
-                    case "Peach" : hero = peachPrefab; break;
+                    case "Isabella" : hero = isabellaPrefab; break;
                 }
 
                 if(hero != null)

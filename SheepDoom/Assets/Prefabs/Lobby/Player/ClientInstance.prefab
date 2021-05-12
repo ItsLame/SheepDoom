@@ -110,11 +110,11 @@ MonoBehaviour:
   syncInterval: 0.1
   playerPrefab: {fileID: 8812519712293616597, guid: 887d73d39868dd74684111b8284d4913,
     type: 3}
-  marioPrefab: {fileID: -1934338159962048741, guid: bd4be9121efeb4c4f939c9ee3fdae425,
+  almaPrefab: {fileID: -1934338159962048741, guid: bd4be9121efeb4c4f939c9ee3fdae425,
     type: 3}
   luigiPrefab: {fileID: 1088759763548799350, guid: a0617a5f1f5794446b539ba8354aba9b,
     type: 3}
-  peachPrefab: {fileID: 6930888262510971493, guid: 3d472f9a85f81ec41883c47011ee5eb2,
+  isabellaPrefab: {fileID: 6930888262510971493, guid: 3d472f9a85f81ec41883c47011ee5eb2,
     type: 3}
   playerSpawnPoint: {fileID: 0}
   team1SpawnPoint: {fileID: 3580123260074344118, guid: 93e41b64510bf6e4f88f6ba284cc6991,

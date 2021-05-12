@@ -32,10 +32,10 @@ namespace SheepDoom
         [SerializeField] private GameObject statusPanel;
 
         [Header("Characters")]
-        [SerializeField] private GameObject mario;
+        [SerializeField] private GameObject alma;
         [SerializeField] private GameObject luigi;
-        [SerializeField] private GameObject peach;
-        private string[] heroesArr = { "Mario", "Luigi", "Peach" };
+        [SerializeField] private GameObject isabella;
+        private string[] heroesArr = { "Alma", "Luigi", "Isabella" };
         public SyncList<string> team1PickedHeroes = new SyncList<string>();
         public SyncList<string> team2PickedHeroes = new SyncList<string>();
         //room matchID
@@ -315,14 +315,14 @@ namespace SheepDoom
                 GameObject hero = null;
                 switch (_heroName)
                 {
-                    case "Mario":
-                        hero = mario;
+                    case "Alma":
+                        hero = alma;
                         break;
                     case "Luigi":
                         hero = luigi;
                         break;
-                    case "Peach":
-                        hero = peach;
+                    case "Isabella":
+                        hero = isabella;
                         break;
                 }
 
