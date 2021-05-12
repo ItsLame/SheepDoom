@@ -187,6 +187,8 @@ namespace SheepDoom
             }
             SetTowerColor();
 
+            P_numOfCapturers = 0;
+
             if (!P_isBase)
             {
                 P_giveScoreToCapturers = true;

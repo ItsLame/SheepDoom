@@ -265,6 +265,7 @@ namespace SheepDoom
                     //aim fireposition at target
                     firePosition.transform.LookAt(targetObject.transform);
 
+             //       this.transform.LookAt(targetObject.transform);
                     //rotate boss object horizontally only
                     Quaternion lookOnLook = Quaternion.LookRotation(targetObject.transform.position - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime);
@@ -312,9 +313,9 @@ namespace SheepDoom
                         spawnedConvertedBoss = true;
                     }
 
-                    firedProjectile = Instantiate(deadBossModel, transform);
+                    firedProjectile = Instantiate(deadBossModel, this.transform.position + new Vector3(0, -38, 0), firePosition.transform.rotation);
                     firedProjectile.transform.SetParent(null, false);
-                    firedProjectile.transform.SetPositionAndRotation(this.transform.position + new Vector3(0, -38, 0), this.transform.rotation);
+                    firedProjectile.transform.SetPositionAndRotation(this.transform.position + new Vector3(0, -38, 0), firePosition.transform.rotation);
                     NetworkServer.Spawn(firedProjectile);
 
                     Destroyy();
