@@ -22,9 +22,9 @@ namespace SheepDoom
         
         public void activateHeal()
         {
-            Debug.Log("BoxCollider Activated?: " + this.gameObject.GetComponent<BoxCollider>().enabled);
+   //         Debug.Log("BoxCollider Activated?: " + this.gameObject.GetComponent<BoxCollider>().enabled);
             this.gameObject.GetComponent<BoxCollider>().enabled = true;
-            Debug.Log("BoxCollider Activated?: " + this.gameObject.GetComponent<BoxCollider>().enabled);
+    //        Debug.Log("BoxCollider Activated?: " + this.gameObject.GetComponent<BoxCollider>().enabled);
             healActivated = true;
         }
 
@@ -34,7 +34,7 @@ namespace SheepDoom
             {
                 if (other.gameObject.CompareTag("Player"))
                 {
-                    Debug.Log("Player " + other.gameObject.name + " found");
+          //          Debug.Log("Player " + other.gameObject.name + " found");
                     Debug.Log("Heal Activated");
 
                     //heal ally in range

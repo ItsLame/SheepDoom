@@ -144,6 +144,7 @@ namespace SheepDoom
                 firedProjectile.transform.SetParent(null, false);
                 firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
 
+                Debug.Log("Setting owner to channel: " + this.gameObject.name);
                 //setting channeling conditions (if owner moves, destroy)
                 firedProjectile.GetComponent<ChannelingScript>().setOwner(this.gameObject);
 
@@ -216,7 +217,7 @@ namespace SheepDoom
                     dist = Vector3.Distance(lastPos, transform.position);
                     Debug.Log("Channeling ult 2...");
                     channelTimeInGame -= Time.deltaTime;
-                    Debug.Log("Channeling time left: " + channelTimeInGame);
+//                    Debug.Log("Channeling time left: " + channelTimeInGame);
 
                     //check for movement
                     if (dist > 5)
