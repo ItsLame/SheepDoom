@@ -25,6 +25,10 @@ namespace SheepDoom
         [SyncVar] public bool isSleeped;
         [SyncVar] public bool isSpeedUp;
 
+
+        //Animation
+        [SerializeField] private Animator animator;
+
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
@@ -122,10 +126,23 @@ namespace SheepDoom
                 Vector3 moveMe = new Vector3(CrossPlatformInputManager.GetAxisRaw("Vertical"), 0.0f,
                                              -CrossPlatformInputManager.GetAxisRaw("Horizontal")) * speed;
 
-                if ((moveMe.x != 0) || (moveMe.z != 0))
+               /* if ((moveMe.x != 0) || (moveMe.z != 0))
                     this.transform.rotation = Quaternion.LookRotation(moveMe);
 
-                this.transform.position += moveMe;
+                this.transform.position += moveMe;*/
+
+                if ((moveMe.x != 0) || (moveMe.z != 0))
+                {
+                    animator.SetBool("Iswalking", true);
+                    //networkAnimator.SetTrigger("Run");
+                    this.transform.rotation = Quaternion.LookRotation(moveMe);
+                    this.transform.position += moveMe;
+                }
+                if ((moveMe.x == 0) && (moveMe.z == 0))
+                {
+                    animator.SetBool("Iswalking", false);
+                    //networkAnimator.SetTrigger("Stop");
+                }
             }
         }
 

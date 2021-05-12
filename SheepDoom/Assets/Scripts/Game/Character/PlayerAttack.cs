@@ -43,7 +43,7 @@ namespace SheepDoom
 
         [Space(15)]
         //Melee
-        public Animator animator;
+        [SerializeField] public NetworkAnimator networkAnimator;
 
         public override void OnStartClient()
         {
@@ -73,9 +73,8 @@ namespace SheepDoom
             {
                 if (charID == 1)
                 {
-                    Character1 comp = GetComponent<Character1>();
-                    comp.normalAtk();
-                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
+                    networkAnimator.SetTrigger("Attack");
+                    StartCoroutine(Character1Attack());
                 }
                 else if (charID == 2)
                 {
@@ -86,6 +85,19 @@ namespace SheepDoom
 
                 else if (charID == 3)
                 {
+                    networkAnimator.SetTrigger("IsabellaAttack");
+                    StartCoroutine(Character3Attack());
+                }
+                IEnumerator Character1Attack()
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    Character1 comp = GetComponent<Character1>();
+                    comp.normalAtk();
+                    cooldown1_inGame = cooldown1 * cooldown1Multiplier;
+                }
+                IEnumerator Character3Attack()
+                {
+                    yield return new WaitForSeconds(0.1f);
                     Character3 comp = GetComponent<Character3>();
                     comp.normalAtk();
                     cooldown1_inGame = cooldown1;
