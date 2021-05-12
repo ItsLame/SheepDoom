@@ -118,6 +118,7 @@ namespace SheepDoom
             PlayerKillsText.text = PlayerKills.ToString();
             PlayerDeathsText.text = PlayerDeaths.ToString();
             TowerCapturesText.text = TowerCaptures.ToString();
+            FindMe.instance.P_MyPlayer = this.gameObject;
             
             int _playerTeamID = PlayerObj.instance.GetTeamIndex();
             string _playerName = PlayerObj.instance.GetPlayerName();

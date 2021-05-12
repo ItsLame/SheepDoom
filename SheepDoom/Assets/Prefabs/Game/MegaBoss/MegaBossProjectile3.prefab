@@ -181,7 +181,7 @@ MonoBehaviour:
   detonates: 0
   hasTarget: 0
   targetObject: {fileID: 0}
-  damage: 20
+  damage: 30
   m_Speed: 40
   m_Lifespan: 5
   m_startTime: 0

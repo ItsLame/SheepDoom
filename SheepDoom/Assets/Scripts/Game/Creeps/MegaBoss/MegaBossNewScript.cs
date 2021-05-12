@@ -9,6 +9,16 @@ namespace SheepDoom
 {
     public class MegaBossNewScript : NetworkBehaviour
     {
+        [Header("Debug")]
+        public float angle1;
+        public float angle2;
+        public bool spawnedConvertedBoss = false;
+
+        [Header("Killer teamID")]
+        [SerializeField] private float killerTeamID;
+        [SerializeField] private GameObject blueTeamPos;
+        [SerializeField] private GameObject redTeamPos;
+
         public Material color;
         [Header("NavMeshAgent to attach")]
         [SerializeField] private NavMeshAgent agent;
@@ -44,10 +54,13 @@ namespace SheepDoom
         [Header("Projectiles to fire")]
         [Space(15)]
         //Ranged Projectile
+        [SerializeField] private GameObject firePosition;
         [SerializeField] private GameObject projectile;
         [SerializeField] private GameObject projectile2;
         [SerializeField] private GameObject projectile3;
         private GameObject firedProjectile = null;
+        private GameObject firedProjectile2 = null;
+        private GameObject firedProjectile3 = null;
 
         [Header("Health variable setting")]
         [Space(15)]
@@ -161,7 +174,7 @@ namespace SheepDoom
                             firedProjectile.GetComponent<MegaBossProjectileScript>().setOwner(gameObject);
                             firedProjectile.GetComponent<MegaBossProjectileScript>().setTarget(targetObject);
                             firedProjectile.transform.SetParent(null, false);
-                            firedProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
+                            firedProjectile.transform.SetPositionAndRotation(firePosition.transform.position, firePosition.transform.rotation);
                             NetworkServer.Spawn(firedProjectile);
 
                             //add 1 to firing counter
@@ -248,8 +261,12 @@ namespace SheepDoom
                 //look at target if locked on
                 if (isLockedOn)
                 {
+                    //aim fireposition at target
+                    firePosition.transform.LookAt(targetObject.transform);
+
+                    //rotate boss object horizontally only
                     Quaternion lookOnLook = Quaternion.LookRotation(targetObject.transform.position - transform.position);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 2);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime);
                 }
 
                 if (targetObject == null)
@@ -276,7 +293,28 @@ namespace SheepDoom
 
                 //if boss 0% hp, bye bye
                 if (currenthealth <= 0)
+                {
+                    if (!spawnedConvertedBoss)
+                    {
+                        if (killerTeamID == 1)
+                        {
+                            Debug.Log("Spawning boss from blue team");
+                            blueTeamPos.GetComponent<BaseCreepSpawner>().spawnConvertedBoss();
+                        }
+
+                        else if (killerTeamID == 2)
+                        {
+                            Debug.Log("Spawning boss from red team");
+                            redTeamPos.GetComponent<BaseCreepSpawner>().spawnConvertedBoss();
+                        }
+
+                        spawnedConvertedBoss = true;
+                    }
+
+
                     Destroyy();
+                }
+
             }
         }
 
@@ -370,8 +408,30 @@ namespace SheepDoom
             firedProjectile.GetComponent<MegaBossProjectileScript>().setOwner(gameObject);
             firedProjectile.GetComponent<MegaBossProjectileScript>().setTarget(targetObject);
             firedProjectile.transform.SetParent(null, false);
-            firedProjectile.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
+            firedProjectile.transform.SetPositionAndRotation(firePosition.transform.position, firePosition.transform.rotation);
             NetworkServer.Spawn(firedProjectile);
+
+            // 2 more bullets diagonally when enraged
+            // 2hu modo
+            if (enraged)
+            {
+                var firedProjectile2 = Instantiate(projectile, transform);
+                firedProjectile2.GetComponent<MegaBossProjectileScript>().setOwner(gameObject);
+                firedProjectile2.GetComponent<MegaBossProjectileScript>().setTarget(targetObject);
+                firedProjectile2.transform.SetParent(null, false);
+                firedProjectile2.transform.SetPositionAndRotation(firePosition.transform.position, 
+                    firePosition.transform.rotation * (Quaternion.Euler(0, angle1, 0)));
+                NetworkServer.Spawn(firedProjectile2);
+
+
+                var firedProjectile3 = Instantiate(projectile, transform);
+                firedProjectile3.GetComponent<MegaBossProjectileScript>().setOwner(gameObject);
+                firedProjectile3.GetComponent<MegaBossProjectileScript>().setTarget(targetObject);
+                firedProjectile3.transform.SetParent(null, false);
+                firedProjectile3.transform.SetPositionAndRotation(firePosition.transform.position,
+                    firePosition.transform.rotation * (Quaternion.Euler(0, angle2, 0)));
+                NetworkServer.Spawn(firedProjectile3);
+            }
 
             //add 1 to firing counter
             FirstAttackCounter += 1;
@@ -433,6 +493,11 @@ namespace SheepDoom
         private void Destroyy()
         {
             NetworkServer.Destroy(this.gameObject);
+        }
+
+        public void setKillerTeamID(float ID)
+        {
+            killerTeamID = ID;
         }
 
         public float getHealth()

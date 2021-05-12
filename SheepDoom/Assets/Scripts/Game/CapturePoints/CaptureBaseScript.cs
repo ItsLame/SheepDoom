@@ -11,7 +11,8 @@ namespace SheepDoom
     {
         //attach the score gameobject to count the score
         public GameObject ScoreGameObject;
-
+        public GameObject blueEndCam;
+        public GameObject redEndCam;
 
         [Space(15)]
         [SerializeField] private GameObject BaseModel;
@@ -166,13 +167,60 @@ namespace SheepDoom
 
         protected override void Victory()
         {
+            BaseModel.GetComponent<NetworkAnimator>().SetTrigger("Destroy");
+            StartCoroutine(VictoryStart());
+        }
+
+        private IEnumerator VictoryStart()
+        {
+            // freeze the game
+            Time.timeScale = 0;
+
+            // FOR CLIENT
+            // set game end status to true (this will disable game canvas)
             gameStatus.GetComponent<GameStatus>().P_gameEnded = true;
+
+            // tell client to pan camera
+            if (P_capturedByRed)
+                RpcPanToBase(false, true);
+            if (P_capturedByBlue)
+                RpcPanToBase(true, false);
+
+            // wait 5 seconds
+            yield return new WaitForSecondsRealtime(5);
+
+            // FOR SERVER
+            // disable map objects
+            FindMe.instance.P_GameStatusManager.GetComponent<GetGameStatus>().Disable_MapObjects();
+
             // if base owner is red team
             if (P_capturedByRed)
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(1);
             // if base owner is blue team
             if (P_capturedByBlue)
                 P_scoreGameObject.GetComponent<GameScore>().GameEnd(2);
+        }
+
+        [ClientRpc]
+        private void RpcPanToBase(bool isBlue, bool isRed)
+        {
+            Transform _destination = this.gameObject.transform;
+
+            if(isBlue)
+            {
+                _destination = blueEndCam.transform;
+                //  _destination = FindMe.instance.P_BlueBaseCamPosition.transform;
+            }
+
+
+            if (isRed)
+            {
+                _destination = redEndCam.transform;
+                //  _destination = FindMe.instance.P_RedBaseCamPosition.transform;
+            }
+
+
+            FindMe.instance.P_MyPlayer.GetComponent<PlayerCameraSetup>().P_createdCam.GetComponent<CameraRoaming>().VictoryRoam(_destination);
         }
 
         [ServerCallback]
@@ -184,7 +232,6 @@ namespace SheepDoom
                 hasClosed = false;
             }
         }
-
 
         //accessor method to get teamID
         public float getTeamID()

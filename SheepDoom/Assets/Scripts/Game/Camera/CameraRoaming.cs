@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraRoaming : MonoBehaviour
-{
+{   
     public float camspeed = 30;
 
     //for left, right , up n down margins
@@ -13,12 +13,39 @@ public class CameraRoaming : MonoBehaviour
     public float UpMargin = Screen.height / 15;
     public float DownMargin = Screen.height / 20;
 
-
     public bool screenTouched = false;
+
    // public Text m_Text;
+
+    // camera transform upon victory
+    public void VictoryRoam(Transform _destination)
+    {
+        this.gameObject.GetComponent<CamSwitchManager>().isVictory = true;
+
+        StartCoroutine(VictoryRoamStart(_destination));
+    }
+
+    private IEnumerator VictoryRoamStart(Transform _destination)
+    {
+        while((transform.position - _destination.position).sqrMagnitude > 0.01)
+        {
+            Vector3 targetPos = _destination.position;
+
+            // adjust positioning here
+            this.gameObject.transform.position = Vector3.Lerp(transform.position, targetPos, Time.unscaledDeltaTime);
+            this.gameObject.transform.rotation = Quaternion.Lerp(transform.rotation, _destination.rotation, Time.unscaledDeltaTime);
+
+            yield return null;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        // to ignore update when victory
+        if(this.gameObject.GetComponent<CamSwitchManager>().isVictory)
+            return;
+            
         //to check position
         if (Input.touchCount > 0)
         {
@@ -27,9 +54,7 @@ public class CameraRoaming : MonoBehaviour
       //      Debug.Log("Screen has been touched");
       //      Debug.Log("Position X:" + Input.GetTouch(0).position.x);
      //       Debug.Log("Position Y:" + Input.GetTouch(0).position.y);
-
         }
-
         else
         {
            // m_Text.text = "No touch contacts";
@@ -45,7 +70,6 @@ public class CameraRoaming : MonoBehaviour
                 this.gameObject.GetComponent<CamSwitchManager>().snapBackFunction();
                 screenTouched = false;
             }
-
         }
         Vector3 pos = transform.position;
 

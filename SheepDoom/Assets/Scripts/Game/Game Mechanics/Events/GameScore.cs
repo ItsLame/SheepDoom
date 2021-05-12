@@ -92,7 +92,12 @@ namespace SheepDoom
             if (_isOngoing)
                 StartCoroutine(WaitForUpdate(blueCaptureScore, redCaptureScore));
             else if (_isEnd)
+            {
                 CalculateEndGame(_player, _teamID);
+                
+                // disable map objects
+                FindMe.instance.P_GameStatusManager.GetComponent<GetGameStatus>().Disable_MapObjects();
+            }
             else if (_displayScoreBoard)
                 DisplayScoreBoard(_teamID);
         }
