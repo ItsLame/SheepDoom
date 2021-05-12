@@ -9,31 +9,9 @@ namespace SheepDoom
 {
     public class CapturePointScript : Objective
     {
-        //attach the score gameobject to count the score
-        public GameObject ScoreGameObject;
-
-        //tower hp counters
-        [Space(20)]
-        
-        //base hp
-        [Tooltip("How much HP the tower has, edit this")]
-        [SerializeField] private float HP;
-        [SyncVar] [SerializeField] private float InGameHP; //to be used in game, gonna be the one fluctuating basically
-
-        //rate of capture
-        [SerializeField] private float CaptureRate;
-
-        //regeneration rate if not under capture
-        [SerializeField] private float RegenRate;
-
-        //captured bools
-        [Space(20)]
-        [SyncVar] [SerializeField] private bool CapturedByBlue;
-        [SyncVar] [SerializeField] private bool CapturedByRed;
-        [SerializeField] private int NumOfCapturers; //logging number to check if tower is under capture or not
-
-        //scoring bools
-        [SerializeField] private bool GiveScoreToCapturers = false;
+        [Header("--- Which Team? ---")]
+        [SerializeField] [SyncVar] private bool CapturedByBlue;
+        [SerializeField] [SyncVar] private bool CapturedByRed;
 
         protected override bool P_capturedByBlue { get => CapturedByBlue; set => CapturedByBlue = value; }
         protected override bool P_capturedByRed { get => CapturedByRed; set => CapturedByRed = value; }
@@ -41,22 +19,14 @@ namespace SheepDoom
 
         protected override void InitObjective()
         {
-            P_scoreGameObject = ScoreGameObject;
-            P_hp = HP;
-            P_inGameHP = InGameHP;
-            P_captureRate = CaptureRate;
-            P_regenRate = RegenRate;
-            P_numOfCapturers = NumOfCapturers;
-            P_giveScoreToCapturers = GiveScoreToCapturers;
-
             // set the Tower's hp based on the settings
             P_inGameHP = P_hp;
-            
+
             // no one is capturing it at start so put at 0
-            //P_numOfCapturers = 0;
+            P_numOfCapturers = 0;
 
             // this is tower's script
-            P_isBase = false;
+            P_isBase = false;   
         }
 
         protected override void OnStay(Collider other, float tID)
@@ -81,6 +51,47 @@ namespace SheepDoom
 }
 
 #region archive
+
+/*
+P_scoreGameObject = ScoreGameObject;
+P_hp = HP;
+P_inGameHP = InGameHP;
+P_captureRate = CaptureRate;
+P_regenRate = RegenRate;
+P_numOfCapturers = NumOfCapturers;
+P_giveScoreToCapturers = GiveScoreToCapturers;
+
+// set the Tower's hp based on the settings
+P_inGameHP = P_hp;
+*/
+
+//attach the score gameobject to count the score
+//[Header("Scoreboard")]
+//public GameObject ScoreGameObject;
+
+//[Header("Capture Point Stats")]
+//tower hp counters
+//[Space(20)]
+//base hp
+// [Tooltip("How much HP the tower has, edit this")]
+//[SerializeField] private float HP;
+//[SyncVar] [SerializeField] private float InGameHP; //to be used in game, gonna be the one fluctuating basically
+
+//rate of capture
+//[SerializeField] private float CaptureRate;
+
+//regeneration rate if not under capture
+//[SerializeField] private float RegenRate;
+
+//[Header("Capture Point Capture and Scoring Bools")]
+//captured bools
+//[Space(20)]
+
+//private int NumOfCapturers; //logging number to check if tower is under capture or not
+
+//scoring bools
+//[SerializeField] 
+//private bool GiveScoreToCapturers = false;
 
 //P_inGameHP = P_hp; // set the tower's hp based on the settings
 //P_numOfCapturers = 0; // no one is capturing it at start so put at 0

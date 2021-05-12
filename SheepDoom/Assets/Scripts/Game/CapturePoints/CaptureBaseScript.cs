@@ -9,53 +9,23 @@ namespace SheepDoom
 {
     public class CaptureBaseScript : Objective
     {
-        //attach the score gameobject to count the score
-        public GameObject ScoreGameObject;
-        public GameObject blueEndCam;
-        public GameObject redEndCam;
-
-        [Space(15)]
+        [Header("--- Base Extra Stats ---")]
         [SerializeField] private GameObject BaseModel;
         [SerializeField] private GameObject BaseProjectile;
         [SerializeField] private bool hasClosed = false;
         [SerializeField] private float towerAtkCD;
         [SerializeField] private float towerAtkCDinGame;
         private GameObject baseBullet;
-        //    [SerializeField] private bool towerAtk;
-        //Base hp counters
-        [Space(20)]
-
-        //base hp
-        [Tooltip("How much HP the Base has, edit this")]
-        [SerializeField] private float HP;
-        [SyncVar] [SerializeField] private float InGameHP; //to be used in game, gonna be the one fluctuating basically
-
-        //rate of capture
-        [SerializeField] private float CaptureRate;
-
-        //regeneration rate if not under capture
-        [SerializeField] private float RegenRate;
-
-        //captured bools
-        [Space(20)]
+       
+        [Header("--- Which Team? ---")]
         [SyncVar] [SerializeField] private bool CapturedByBlue;
         [SyncVar] [SerializeField] private bool CapturedByRed;
-        [SerializeField] private int NumOfCapturers; //logging number to check if Base is under capture or not
-
+        
         protected override bool P_capturedByBlue { get => CapturedByBlue; set => CapturedByBlue = value; }
         protected override bool P_capturedByRed { get => CapturedByRed; set => CapturedByRed = value; }
 
-
         protected override void InitObjective()
         {
-            P_scoreGameObject = ScoreGameObject;
-            P_hp = HP;
-            P_inGameHP = InGameHP;
-            P_captureRate = CaptureRate;
-            P_regenRate = RegenRate;
-            P_numOfCapturers = NumOfCapturers;
-            P_giveScoreToCapturers = false;
-
             // set the Tower's hp based on the settings
             P_inGameHP = P_hp;
 
@@ -76,7 +46,7 @@ namespace SheepDoom
                 bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
                 if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
                 {
-                    P_numOfCapturers += 1;
+                    P_numOfCapturers = P_numOfCapturers + 1;
 
                     //animation to close
                     if (!hasClosed)
@@ -88,7 +58,6 @@ namespace SheepDoom
             }
         }
 
-
         [ServerCallback]
         // check for player exit
         protected override void OnTriggerExit(Collider _collider)
@@ -99,7 +68,7 @@ namespace SheepDoom
                 float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
                 bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
                 if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
-                    P_numOfCapturers -= 1;
+                    P_numOfCapturers = P_numOfCapturers - 1;
             }
         }
 
@@ -133,7 +102,7 @@ namespace SheepDoom
                             towerAtkCDinGame = towerAtkCD;
                         }
 
-                        if (ScoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
+                        if (P_scoreGameObject.GetComponent<GameScore>().getBlueScore() < 2)
                         {
                             ModifyingHealth(-(P_captureRate * Time.deltaTime));
                             RpcUpdateClients(false, true, false);
@@ -155,7 +124,7 @@ namespace SheepDoom
                             towerAtkCDinGame = towerAtkCD;
                         }
 
-                        if (ScoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
+                        if (P_scoreGameObject.GetComponent<GameScore>().getRedScore() < 2)
                         {
                             ModifyingHealth(-(P_captureRate * Time.deltaTime));
                             RpcUpdateClients(false, true, false);
@@ -207,18 +176,10 @@ namespace SheepDoom
             Transform _destination = this.gameObject.transform;
 
             if(isBlue)
-            {
-                _destination = blueEndCam.transform;
-                //  _destination = FindMe.instance.P_BlueBaseCamPosition.transform;
-            }
-
+                _destination = FindMe.instance.P_BlueBaseCamPosition.transform;
 
             if (isRed)
-            {
-                _destination = redEndCam.transform;
-                //  _destination = FindMe.instance.P_RedBaseCamPosition.transform;
-            }
-
+                _destination = FindMe.instance.P_RedBaseCamPosition.transform;
 
             FindMe.instance.P_MyPlayer.GetComponent<PlayerCameraSetup>().P_createdCam.GetComponent<CameraRoaming>().VictoryRoam(_destination);
         }
@@ -236,7 +197,7 @@ namespace SheepDoom
         //accessor method to get teamID
         public float getTeamID()
         {
-            if (CapturedByBlue)
+            if (P_capturedByBlue)
                 return 1;
             else
                 return 2;
@@ -250,3 +211,51 @@ namespace SheepDoom
         }
     }
 }
+
+#region archive
+/*
+{
+    _destination = blueEndCam.transform;
+    //  _destination = FindMe.instance.P_BlueBaseCamPosition.transform;
+}
+*/
+/*
+{
+    _destination = redEndCam.transform;
+    //  _destination = FindMe.instance.P_RedBaseCamPosition.transform;
+}
+*/
+//[Header("--- Base End Cams ---")]
+        //[SerializeField] private GameObject blueEndCam;
+        //[SerializeField] private GameObject redEndCam;
+
+//[SerializeField] private int NumOfCapturers; //logging number to check if Base is under capture or not
+//attach the score gameobject to count the score
+//public GameObject ScoreGameObject;
+
+//P_scoreGameObject = ScoreGameObject;
+//P_hp = HP;
+//P_inGameHP = InGameHP;
+//P_captureRate = CaptureRate;
+//P_regenRate = RegenRate;
+//P_numOfCapturers = NumOfCapturers;
+//P_giveScoreToCapturers = false;
+
+//[SerializeField] private bool towerAtk;
+//Base hp counters
+//[Space(20)]
+
+//base hp
+//[Tooltip("How much HP the Base has, edit this")]
+//[SerializeField] private float HP;
+//[SyncVar] [SerializeField] private float InGameHP; //to be used in game, gonna be the one fluctuating basically
+
+//rate of capture
+//[SerializeField] private float CaptureRate;
+
+//regeneration rate if not under capture
+//[SerializeField] private float RegenRate;
+
+//captured bools
+//[Space(20)]
+#endregion

@@ -8,25 +8,29 @@ namespace SheepDoom
 {
     public abstract class Objective : NetworkBehaviour
     {
-        private GameObject scoreGameObject;
+        [Header("--- Reference Objects ---")]
+        [SerializeField] private GameObject scoreGameObject;
         [SerializeField] protected GameObject gameStatus;
+        [SerializeField] private bool isBase;
+
+        [Header("--- Capture Point/Base Stats ---")]
+        [SerializeField] private float hp;
+        [SerializeField] private float captureRate;
+        [SerializeField] private float regenRate;
+
+        //logging number to check if base/tower is under capture or not
+        [Header("--- Capture Point/Base Tracker ---")]
+        [SerializeField] [SyncVar] private float inGameHP;
+        [SerializeField] private int numOfCapturers;
+        //captured bools
+        [SyncVar] protected bool capturedByBlue;
+        [SyncVar] protected bool capturedByRed;
         
         // hp: base/tower hp
         // inGameHP: to be used in game, gonna be the one fluctuating basically
         // captureRate: rate of capture
         // regenRate: regeneration rate if not under capture
-        private float hp, captureRate, regenRate;
-
-        [SyncVar] private float inGameHP;
-
-        //captured bools
-        [SyncVar] protected bool capturedByBlue;
-        [SyncVar] protected bool capturedByRed;
-
-        //logging number to check if base/tower is under capture or not
-        [SerializeField] private int numOfCapturers;
         private bool giveScoreToCapturers;
-        [SerializeField] private bool isBase;
         private bool gameEnded;
 
         public event Action<float> OnHealthPctChangedTower = delegate { };
@@ -123,7 +127,6 @@ namespace SheepDoom
             {
                 GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                 GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.red * 1.5f);
-
             }
         }
 
@@ -167,7 +170,7 @@ namespace SheepDoom
 
         protected virtual void OpenBaseAnim()
         {
-
+            // empty
         }
 
         private void CapturedServer(bool _byBlue, bool _byRed)
@@ -221,7 +224,7 @@ namespace SheepDoom
                 float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
                 bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
                 if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
-                    P_numOfCapturers += 1;   
+                    P_numOfCapturers = P_numOfCapturers + 1;   
             }
         }
 
@@ -261,7 +264,7 @@ namespace SheepDoom
                 float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
                 bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
                 if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
-                    P_numOfCapturers -= 1;
+                    P_numOfCapturers = P_numOfCapturers - 1;
             }
         }
 

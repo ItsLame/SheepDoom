@@ -43,7 +43,7 @@ namespace SheepDoom
         private IEnumerator ChangedToPct(float pct)
         {
             float preChangedPct = P_foregroundImage.fillAmount;
-            float elasped1 = 0f;
+            float elasped1 = 0.0f;
 
             while (elasped1 < P_updateSpeedSeconds)
             {
