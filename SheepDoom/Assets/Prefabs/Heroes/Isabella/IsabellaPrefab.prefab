@@ -2089,6 +2089,7 @@ GameObject:
   - component: {fileID: -6655176209038339737}
   - component: {fileID: 6692717396017738801}
   - component: {fileID: 7709732266149721181}
+  - component: {fileID: 4940055168606706142}
   m_Layer: 18
   m_Name: IsabellaPrefab
   m_TagString: Player
@@ -2187,7 +2188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 3d472f9a85f81ec41883c47011ee5eb2
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &1130714906478032342
 MonoBehaviour:
@@ -2367,6 +2368,7 @@ MonoBehaviour:
   messageToBaseObject: {fileID: 5276780869706628407, guid: 3f942d863baaa9b45938474021235ba9,
     type: 3}
   maxHealth: 100
+  currenthealth: 0
 --- !u!114 &2983943329993944982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2450,6 +2452,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: {fileID: 8517938842139942208}
+--- !u!114 &4940055168606706142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2328060059691665083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2409ef1b5ec1d9c42ab0855102c37f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  AnnouncerText: {fileID: 0}
+  whoKilled: 
+  gotKilled: 
+  isNeutral: 0
+  isBoss: 0
+  isMinion: 0
 --- !u!1 &2375654727659260536
 GameObject:
   m_ObjectHideFlags: 0

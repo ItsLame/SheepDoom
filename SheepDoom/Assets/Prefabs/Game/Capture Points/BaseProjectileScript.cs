@@ -71,9 +71,9 @@ namespace SheepDoom
                 //dont hurt the owner of the projectile, dont increase score if hitting dead player
                 if (!col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                 {
-                    Debug.Log("How many times i hit player?");
+                    Debug.Log("How many times i hit player?" + (damage * Time.deltaTime));
                     //reduce HP of hit target
-                    col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
+                    col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-(damage * Time.deltaTime));
 
                     //debuff player depending on bullet properties in inspector
                     if (SlowDebuff)

@@ -115,7 +115,7 @@ MonoBehaviour:
   scale_speed: 1.015
   AOE_Duration: 2
   destroyOnContact: 0
-  damage: 2
+  damage: 5
 --- !u!114 &6650225642277682166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 49e05a75e96b9a64aaab6d60fc56695c
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &-4869422884062338206
 MonoBehaviour:
