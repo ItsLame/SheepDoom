@@ -9,6 +9,7 @@ namespace SheepDoom
     public class Alma : Hero
     {
         [SerializeField] private Image heroImage;
+        [SerializeField] private GameObject SkillsPanel;
 
         [ClientCallback]
         protected override void InitHeroInfo()
@@ -18,11 +19,13 @@ namespace SheepDoom
             P_heroIcon = heroImage.sprite;
         }
 
+
         [ClientCallback]
         public override void OnClickHero()
         {
             base.OnClickHero();
         }
+
 
         [ClientCallback]
         public override void SetTaken(bool _isTaken)

@@ -9,6 +9,7 @@ namespace SheepDoom
     public class Isabella : Hero
     {
         [SerializeField] private Image heroImage;
+        [SerializeField] private GameObject SkillsPanel;
 
         [ClientCallback]
         protected override void InitHeroInfo()
