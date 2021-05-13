@@ -6,6 +6,11 @@ using UnityEngine.UI;
 public class DisplaySkillsScript : MonoBehaviour
 {
     [SerializeField] private GameObject SkillsText;
+
+    public void clearText()
+    {
+        SkillsText.GetComponent<Text>().text = "";
+    }
     // ----------------------- alma --------------------------
     public void AlmaS1()
     {
@@ -59,21 +64,25 @@ public class DisplaySkillsScript : MonoBehaviour
     // ------------------------------- isa ---------------------------
     public void IsaS1()
     {
+        Debug.Log("Is1 clicked");
         SkillsText.GetComponent<Text>().text = "Isabelle sends out a ray of god's judgement that radiates on enemy contact, dealing damage to hit enemies and healing surrounding allies.";
     }
 
     public void IsaS2()
     {
+        Debug.Log("Is2 clicked");
         SkillsText.GetComponent<Text>().text = "Focusing holy magic into a ball, Isabelle fires a healing projectile that heals allies on contact.";
     }
 
     public void IsaU1()
     {
+        Debug.Log("Is3 clicked");
         SkillsText.GetComponent<Text>().text = "Isabelle starts incanting prayers. After a casting duration, Isabelle heals allies in a large AOE around her.";
     }
 
     public void IsaU2()
     {
+        Debug.Log("Is4 clicked");
         SkillsText.GetComponent<Text>().text = "The Goddess is both merciful and cruel. Isabelle channels a holy zone around her, " +
             "healing allies & damaging surrounding enemies over time. The channeling is stopped when Isabelle moves.";
     }
