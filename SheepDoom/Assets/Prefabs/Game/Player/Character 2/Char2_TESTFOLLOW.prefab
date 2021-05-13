@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -7296495513448223525}
   - component: {fileID: -757328924779519994}
   m_Layer: 0
-  m_Name: Char3_UP_v3
+  m_Name: Char2_TESTFOLLOW
   m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.1
   clientAuthority: 1
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
@@ -177,7 +177,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  owner: {fileID: 0}
-  ownerTransform: {x: 0, y: 0, z: 0}
   duration: 0
   durationInGame: 0
+  owner: {fileID: 0}
+  ownerTransform: {fileID: 0}
+  teamID: 0

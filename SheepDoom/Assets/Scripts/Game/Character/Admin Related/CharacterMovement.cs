@@ -98,8 +98,7 @@ namespace SheepDoom
         private void DebuffTimerCountdown()
         {
             //reduce timer per second
-            speedAlterDuration -= Time.deltaTime;
-            //            Debug.Log("Speed Alter Duration: " + speedAlterDuration);
+            speedAlterDuration -= Time.fixedDeltaTime;
 
             //remove debuff when duration is up
             if (speedAlterDuration <= 0)
@@ -126,22 +125,15 @@ namespace SheepDoom
                 Vector3 moveMe = new Vector3(CrossPlatformInputManager.GetAxisRaw("Vertical"), 0.0f,
                                              -CrossPlatformInputManager.GetAxisRaw("Horizontal")) * speed;
 
-               /* if ((moveMe.x != 0) || (moveMe.z != 0))
-                    this.transform.rotation = Quaternion.LookRotation(moveMe);
-
-                this.transform.position += moveMe;*/
-
                 if ((moveMe.x != 0) || (moveMe.z != 0))
                 {
                     animator.SetBool("Iswalking", true);
-                    //networkAnimator.SetTrigger("Run");
                     this.transform.rotation = Quaternion.LookRotation(moveMe);
                     this.transform.position += moveMe;
                 }
                 if ((moveMe.x == 0) && (moveMe.z == 0))
                 {
                     animator.SetBool("Iswalking", false);
-                    //networkAnimator.SetTrigger("Stop");
                 }
             }
         }

@@ -92,15 +92,12 @@ namespace SheepDoom
             {
                 if (other.gameObject != Attacker.gameObject) return;
 
-      //          Debug.Log("Moving towards " + Attacker.gameObject.name);
-
                 //chase if not in attack range
                 if (Vector3.Distance(Attacker.transform.position, transform.position) > attackRange)
                 {
                     transform.LookAt(Attacker.transform);
                     this.gameObject.transform.position += transform.forward * moveSpdInGame * Time.deltaTime;
                 }
-
                 //if in attack range
                 else
                 {
@@ -119,7 +116,6 @@ namespace SheepDoom
                     }
                 }
             }
-
             //2nd priority: if 1st player out of range, change attacker to any other in range
             else if (!LockedOn)
             {
@@ -144,7 +140,6 @@ namespace SheepDoom
                             attackDurationInGame = attackDuration;
                             Debug.Log("Death ball attacking");
                             isAttacking = true;
-                            //Instantiate(AuraDamageObject, this.gameObject.transform.position, this.gameObject.transform.rotation);
                             GameObject spawnAura = Instantiate(AuraDamageObject, transform);
                             spawnAura.transform.SetParent(null, false);
                             spawnAura.transform.SetPositionAndRotation(this.gameObject.transform.position, this.gameObject.transform.rotation);

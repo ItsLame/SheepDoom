@@ -5,7 +5,7 @@ using Mirror;
 
 namespace SheepDoom
 {
-    public class leashScript : NetworkBehaviour
+    public class leashScript : MonoBehaviour
     {
         [Header("Starting position")]
         [SerializeField] private Transform startPos;

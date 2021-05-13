@@ -96,6 +96,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   healAmount: 5
+  damagesEnemy: 0
 --- !u!65 &1468711348947311975
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -253,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.1
   clientAuthority: 1
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
@@ -296,6 +297,7 @@ MonoBehaviour:
   isMovingLeft: 0
   isMovingRight: 0
   healsAllies: 0
+  healsSelf: 0
   damage: 20
   destroyOnContact: 1
   m_Rigidbody: {fileID: 0}

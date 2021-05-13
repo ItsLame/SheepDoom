@@ -71,6 +71,7 @@ namespace SheepDoom
                 //dont hurt the owner of the projectile, dont increase score if hitting dead player
                 if (!col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                 {
+                    Debug.Log("How many times i hit player?");
                     //reduce HP of hit target
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
 
@@ -87,14 +88,17 @@ namespace SheepDoom
                     //increase killer's kill count if target is killed
                     if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
                     {
-                        Debug.Log("Killed player, increasing score");
                         col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
                         col.gameObject.GetComponent<GameEvent>().whoKilled = this.gameObject.name;
 
                     }
 
                     if (destroyOnContact)
+                    {
+                        Debug.Log("How many times was i destroyed?");
                         Destroyy();
+                    }
+                        
                 }
             }
 
@@ -158,10 +162,7 @@ namespace SheepDoom
                     if (m_Speed <= speedLimit) return;
                     accelerationRate *= accelMultiplier;
                 }
-            }
 
-            if (isServer)
-            {
                 m_StartTime += Time.deltaTime;
                 if (m_StartTime >= m_Lifespan)
                     Destroyy();

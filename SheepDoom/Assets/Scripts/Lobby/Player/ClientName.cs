@@ -21,8 +21,13 @@ namespace SheepDoom
         public static bool ClientLogin(string user)
         {
             // validate with database here..
-            userInput = user;
-            return true; // for now la..
+            if (string.IsNullOrEmpty(user) || string.IsNullOrWhiteSpace(user))
+                return false;
+            else
+            {
+                userInput = user;
+                return true; // for now la..
+            }
         }
 
         public void SetClientName()

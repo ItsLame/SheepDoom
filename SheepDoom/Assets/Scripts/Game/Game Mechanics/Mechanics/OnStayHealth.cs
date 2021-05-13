@@ -3,7 +3,7 @@ using Mirror;
 
 namespace SheepDoom
 {
-    public class OnStayHealth : NetworkBehaviour
+    public class OnStayHealth : MonoBehaviour
     {
         [Header("Object name to be used for announcer")]
         [SerializeField] private string objectName;
@@ -34,7 +34,8 @@ namespace SheepDoom
                 //if hit other player
                 if (col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
                 {
-   //                 Debug.Log("Player Hit");
+                    Debug.Log("Times called"); 
+                    //Debug.Log("Player Hit");
                     //change the hit player's HP
                     col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
 
@@ -59,7 +60,7 @@ namespace SheepDoom
                     {
                         Debug.Log("Player Hit");
                         //change the hit player's HP
-                        col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
+                        col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount * Time.deltaTime);
 
                         //kill target if target hp <= 0
                         if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
@@ -84,7 +85,7 @@ namespace SheepDoom
                         {
                             Debug.Log("Coalation Minion Hit");
                             GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                            target.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount);
+                            target.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount * Time.deltaTime);
 
                             if (target.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                             {
@@ -98,7 +99,7 @@ namespace SheepDoom
                         {
                             Debug.Log("Consortium Minion Hit");
                             GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
-                            target.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount);
+                            target.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount * Time.deltaTime);
                             if (target.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)
                             {
                                 GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();

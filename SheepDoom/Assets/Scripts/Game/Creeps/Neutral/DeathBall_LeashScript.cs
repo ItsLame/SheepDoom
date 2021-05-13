@@ -5,7 +5,7 @@ using Mirror;
 
 namespace SheepDoom
 {
-    public class DeathBall_LeashScript : NetworkBehaviour
+    public class DeathBall_LeashScript : MonoBehaviour
     {
         //transform of where the original spot is to be 
         //    [SerializeField] private Transform oriSpot;

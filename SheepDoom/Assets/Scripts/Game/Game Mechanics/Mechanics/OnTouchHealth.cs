@@ -5,7 +5,7 @@ using Mirror;
 
 namespace SheepDoom
 {
-    public class OnTouchHealth : NetworkBehaviour
+    public class OnTouchHealth : MonoBehaviour
     {
         [Header("Amount of health to change on contact")]
         [SerializeField]
@@ -27,16 +27,11 @@ namespace SheepDoom
         private bool hasParent;
         public GameObject parent;
         [SerializeField]
-        [SyncVar] private float parentTeamID;
+        private float parentTeamID;
 
         public void SetHitBox(bool _status)
         {
             hitboxActive = _status;
-        }
-
-        void Start()
-        {
-
         }
 
         //when collide with player
@@ -132,13 +127,6 @@ namespace SheepDoom
         private void Destroyy()
         {
             NetworkServer.Destroy(gameObject);
-        }
-
-        [Command]
-        void CmdSetTeamIndex(GameObject _parent)
-        {
-            Debug.Log("Ran command");
-            parentTeamID = _parent.GetComponent<PlayerAdmin>().getTeamIndex();
         }
 
         void Update()

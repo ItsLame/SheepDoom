@@ -17,28 +17,27 @@ namespace SheepDoom
         [SerializeField] private float z_rotaspeed;
         // Start is called before the first frame update
 
-
-        [ServerCallback]
         // Update is called once per frame
         void Update()
         {
-            if (!isHealth)
+            if (isServer)
             {
-                num = owner.GetComponent<CapturePointScript>().getNumOfCapturers();
-            }
-                    //    num = gameObject.GetComponent<CapturePointScript>().getNumOfCapturers();
+                if (!isHealth)
+                {
+                    num = owner.GetComponent<CapturePointScript>().getNumOfCapturers();
+                }
+                //    num = gameObject.GetComponent<CapturePointScript>().getNumOfCapturers();
 
-            if (num == 0)
-            {
-                transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
-            }
+                if (num == 0)
+                {
+                    transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed, 1.0f * z_rotaspeed);
+                }
 
-            if (num != 0)
-            {
-                transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed * 30, 1.0f * z_rotaspeed);
+                if (num != 0)
+                {
+                    transform.Rotate(1.0f * x_rotaspeed, 1.0f * y_rotaspeed * 30, 1.0f * z_rotaspeed);
+                }
             }
-
         }
     }
-
 }

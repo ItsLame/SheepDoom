@@ -136,11 +136,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camFollowscript: {fileID: 8694533476953732669}
   camRoamscript: {fileID: 8694533476953732670}
+  camViewChanged: 0
   topScreenClicked: 0
   bottomScreenClicked: 0
   leftScreenClicked: 0
   rightScreenClicked: 0
   snapBackToPlayer: 1
+  isVictory: 0
 --- !u!114 &3688807248675843808
 MonoBehaviour:
   m_ObjectHideFlags: 0

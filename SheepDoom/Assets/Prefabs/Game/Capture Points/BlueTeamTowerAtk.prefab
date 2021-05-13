@@ -143,8 +143,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0
-  clientAuthority: 1
+  syncInterval: 0.1
+  clientAuthority: 0
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
@@ -185,7 +185,7 @@ MonoBehaviour:
   isMovingLeft: 0
   isMovingRight: 0
   damage: 20
-  destroyOnContact: 1
+  destroyOnContact: 0
   m_Rigidbody: {fileID: 0}
   m_Speed: 35
   m_Lifespan: 5

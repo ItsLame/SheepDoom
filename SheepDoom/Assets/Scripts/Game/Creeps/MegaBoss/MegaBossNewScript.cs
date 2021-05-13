@@ -327,17 +327,14 @@ namespace SheepDoom
 
         //enrage values
         //increases attack patterns + introduce new atk pattern
-        [ServerCallback]
         void increaseAttackTimes()
         {
             FirstAttackNumber += 2;
             SecondAttackNumber += 1;
             cooldown1 -= 0.2f;
             cooldown2 -= 0.5f;
-
         }
 
-        [ServerCallback]
         void increaseAttackTimes2()
         {
             FirstAttackNumber += 2;
@@ -346,13 +343,6 @@ namespace SheepDoom
 
             //change color to red
             GetComponent<MeshRenderer>().materials = new Material[2] { GetComponent<MeshRenderer>().materials[2], color};
-        }
-
-
-        [Server]
-        void ChaseTarget()
-        {
-            agent.SetDestination(targetObject.transform.position);
         }
 
 

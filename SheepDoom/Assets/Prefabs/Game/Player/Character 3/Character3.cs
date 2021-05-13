@@ -108,14 +108,6 @@ namespace SheepDoom
             {
                 startCasting();
                 Debug.Log("isCastingComplete 1: " + isCastingComplete);
-
-                /*
-                if (isCastingComplete)
-                {
-                    Debug.Log("isCastingComplete 2: " + isCastingComplete);
-                    CmdUltiAtk(_isAltUlti);
-                    isCastingComplete = false;
-                }*/
             }
             else if (_isAltUlti)
                 startChanneling();

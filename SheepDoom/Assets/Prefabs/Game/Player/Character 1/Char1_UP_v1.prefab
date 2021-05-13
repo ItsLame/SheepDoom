@@ -133,6 +133,9 @@ MonoBehaviour:
   x_rotaspeed: 0
   y_rotaspeed: 0
   z_rotaspeed: 0
+  isMovingDown: 0
+  isMovingLeft: 0
+  isMovingRight: 0
   damage: 60
   destroyOnContact: 0
   m_Rigidbody: {fileID: 4989458215710167782}
@@ -151,6 +154,8 @@ MonoBehaviour:
   slowDebuffDuration: 0
   StopDebuff: 0
   stopDebuffDuration: 0
+  SleepDebuff: 0
+  sleepDebuffDuration: 0
 --- !u!114 &1933974116085354088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.1
   clientAuthority: 1
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01

@@ -31,7 +31,6 @@ namespace SheepDoom
         // captureRate: rate of capture
         // regenRate: regeneration rate if not under capture
         private bool giveScoreToCapturers;
-        private bool gameEnded;
 
         public event Action<float> OnHealthPctChangedTower = delegate { };
 

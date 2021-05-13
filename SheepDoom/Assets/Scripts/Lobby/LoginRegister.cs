@@ -9,8 +9,10 @@ namespace SheepDoom
     public class LoginRegister : MonoBehaviour
     {
         [SerializeField] NetworkManager networkManager;
-        public InputField username;
-        public InputField password;
+        [SerializeField] private InputField username;
+        [SerializeField] private InputField password;
+
+        public static string SessionTicket;
 
         // Start is called before the first frame update
         void Start()
@@ -34,6 +36,9 @@ namespace SheepDoom
             }   
         }
 
-        public void Register() { }
+        public void Register() 
+        {
+            
+        }
     }
 }

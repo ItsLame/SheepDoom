@@ -276,12 +276,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 2
+  playerName: 
   TeamIndex: 2
-  PlayerKills: 0
   PlayerKillsText: {fileID: 0}
-  PlayerDeaths: 0
   PlayerDeathsText: {fileID: 0}
-  TowerCaptures: 0
   TowerCapturesText: {fileID: 0}
 --- !u!114 &5224372523614344713
 MonoBehaviour:
@@ -307,7 +305,7 @@ MonoBehaviour:
   cooldown3: 4
   cooldown1Multiplier: 0.5
   cooldown1MultiplerTimer: 5
-  animator: {fileID: 0}
+  networkAnimator: {fileID: 0}
 --- !u!114 &3805828758684287360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,6 +329,7 @@ MonoBehaviour:
   isStopped: 0
   isSleeped: 0
   isSpeedUp: 0
+  animator: {fileID: 0}
 --- !u!114 &5599442812974198205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,6 +360,7 @@ MonoBehaviour:
   syncInterval: 0.1
   PlayerCamera: {fileID: 7944493282106236459, guid: 899dd7c84f4affb49a6f93e8b4445574,
     type: 3}
+  createdCam: {fileID: 0}
 --- !u!114 &2165727331150645964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,7 +392,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  messageToBaseObject: {fileID: 0}
   maxHealth: 100
+  currenthealth: 0
 --- !u!114 &6869177918369833713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,6 +470,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   normalAtkMelee: {fileID: 0}
+  normalAtkMelee2: {fileID: 0}
   normalSpecial: {fileID: 4134774580701406288}
   normalUlti: {fileID: 7103345307366881107, guid: 00d9bcd2adf695c4f8b6bf49988c366a,
     type: 3}
@@ -538,7 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.1
   clientAuthority: 1
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01

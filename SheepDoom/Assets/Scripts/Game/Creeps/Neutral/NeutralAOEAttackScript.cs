@@ -27,10 +27,10 @@ namespace SheepDoom
         }
 
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             //expand over time
-            if(isServer)
+            if (isServer)
                 this.gameObject.transform.localScale = this.gameObject.transform.localScale * scale_speed;
         }
 
@@ -45,7 +45,7 @@ namespace SheepDoom
             {
                 Debug.Log(col.gameObject.name + " player hit");
                 //reduce HP of hit target
-                col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-damage);
+                col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-(damage * Time.deltaTime));
 
                 //increase killer's kill count if target is killed
                 if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 namespace SheepDoom
 {
@@ -17,6 +18,7 @@ namespace SheepDoom
         [SerializeField] private float cooldownInGame;
 
         //teleports only blue team on blue side n vice versa
+        [ClientCallback]
         private void OnTriggerEnter(Collider other)
         {
             //only tele if off cd
