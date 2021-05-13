@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 9944ce00d86aa2f42acca38086b0bf70
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &-890021208737536043
 MonoBehaviour:
@@ -112,7 +112,7 @@ MonoBehaviour:
     type: 3}
   almaPrefab: {fileID: -1934338159962048741, guid: bd4be9121efeb4c4f939c9ee3fdae425,
     type: 3}
-  luigiPrefab: {fileID: 1088759763548799350, guid: a0617a5f1f5794446b539ba8354aba9b,
+  AstharothPrefab: {fileID: 4721920068743815794, guid: 6726cf0eda43c404ba635ce43f98856a,
     type: 3}
   isabellaPrefab: {fileID: 6930888262510971493, guid: 3d472f9a85f81ec41883c47011ee5eb2,
     type: 3}

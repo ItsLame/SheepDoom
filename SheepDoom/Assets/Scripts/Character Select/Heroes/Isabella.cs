@@ -14,8 +14,8 @@ namespace SheepDoom
         [ClientCallback]
         protected override void InitHeroInfo()
         {
-            P_heroName = "Isabella";
-            P_heroDesc = "Saint plumber";
+            P_heroName = "Isabella Licht";
+            P_heroDesc = "Holy Saint ";
             P_heroIcon = heroImage.sprite;
         }
 

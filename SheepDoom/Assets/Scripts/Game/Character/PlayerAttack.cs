@@ -78,9 +78,8 @@ namespace SheepDoom
                 }
                 else if (charID == 2)
                 {
-                    Character2 comp = GetComponent<Character2>();
-                    comp.normalAtk(cooldown1MultiplierActive);
-                    cooldown1_inGame = cooldown1;
+                    networkAnimator.SetTrigger("AstrarothAttack");
+                    StartCoroutine(Character2Attack());
                 }
 
                 else if (charID == 3)
@@ -94,6 +93,13 @@ namespace SheepDoom
                     Character1 comp = GetComponent<Character1>();
                     comp.normalAtk();
                     cooldown1_inGame = cooldown1 * cooldown1Multiplier;
+                }
+                IEnumerator Character2Attack()
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    Character2 comp = GetComponent<Character2>();
+                    comp.normalAtk(cooldown1MultiplierActive);
+                    cooldown1_inGame = cooldown1;
                 }
                 IEnumerator Character3Attack()
                 {

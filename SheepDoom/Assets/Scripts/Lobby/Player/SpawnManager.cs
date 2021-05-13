@@ -17,7 +17,7 @@ namespace SheepDoom
         [Space(15)]
         [Header("Characters")]
         [SerializeField] private NetworkIdentity almaPrefab = null;
-        [SerializeField] private NetworkIdentity luigiPrefab = null;
+        [SerializeField] private NetworkIdentity AstharothPrefab = null;
         [SerializeField] private NetworkIdentity isabellaPrefab = null;
         private GameObject currentPlayerObj = null;
         private ClientName _cn;
@@ -145,9 +145,9 @@ namespace SheepDoom
 
                 switch(heroName)
                 {
-                    case "Alma" : hero = almaPrefab; break;
-                    case "Luigi" : hero = luigiPrefab; break;
-                    case "Isabella" : hero = isabellaPrefab; break;
+                    case "Alma Blanc": hero = almaPrefab; break;
+                    case "Astharoth Schwarz": hero = AstharothPrefab; break;
+                    case "Isabella Licht": hero = isabellaPrefab; break;
                 }
 
                 if(hero != null)

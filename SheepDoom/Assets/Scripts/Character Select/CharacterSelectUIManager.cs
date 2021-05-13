@@ -33,9 +33,9 @@ namespace SheepDoom
 
         [Header("Characters")]
         [SerializeField] private GameObject alma;
-        [SerializeField] private GameObject luigi;
+        [SerializeField] private GameObject Astharoth;
         [SerializeField] private GameObject isabella;
-        private string[] heroesArr = { "Alma", "Luigi", "Isabella" };
+        private string[] heroesArr = { "Alma Blanc", "Astharoth Schwarz", "Isabella Licht" };
         public SyncList<string> team1PickedHeroes = new SyncList<string>();
         public SyncList<string> team2PickedHeroes = new SyncList<string>();
         //room matchID
@@ -315,13 +315,13 @@ namespace SheepDoom
                 GameObject hero = null;
                 switch (_heroName)
                 {
-                    case "Alma":
+                    case "Alma Blanc":
                         hero = alma;
                         break;
-                    case "Luigi":
-                        hero = luigi;
+                    case "Astharoth Schwarz":
+                        hero = Astharoth;
                         break;
-                    case "Isabella":
+                    case "Isabella Licht":
                         hero = isabella;
                         break;
                 }
