@@ -31,7 +31,7 @@ namespace SheepDoom
             string user = username.text;
             if(ClientName.ClientLogin(user)) // server is inactive, so this is only assigned on client at first
             {
-                networkManager.networkAddress = "192.168.1.25";
+                networkManager.networkAddress = "localhost";
                 networkManager.StartClient(); 
             }   
         }
