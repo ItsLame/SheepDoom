@@ -33,32 +33,32 @@ public class DisplaySkillsScript : MonoBehaviour
     public void AlmaU2()
     {
         Debug.Log("a4 clicked");
-        SkillsText.GetComponent<Text>().text = "Modifying her rifle, Alma fires a wider but slower laser that accelerates over time. Deals moderate damage to hit enemies & has global range";
+        SkillsText.GetComponent<Text>().text = "Modifying her rifle, Alma fires a wider but slower laser that accelerates over time. Deals moderate damage to hit enemies & has global range.";
     }
 
     // ------------------------- luigi ----------------------
     public void LuigiS1()
     {
         Debug.Log("l1 clicked");
-        SkillsText.GetComponent<Text>().text = "Luigi deploys a shield that blocks enemy projectile attacks. Piercing attacks can't be blocked.";
+        SkillsText.GetComponent<Text>().text = "Astaroth deploys a shield that blocks enemy projectile attacks. Piercing attacks can't be blocked.";
     }
 
     public void LuigiS2()
     {
         Debug.Log("l2 clicked");
-        SkillsText.GetComponent<Text>().text = "Fueled by rage, Luigi's attack speed increases for a short duration.";
+        SkillsText.GetComponent<Text>().text = "Fueled by rage, Astaroth's attack speed increases for a short duration.";
     }
 
     public void LuigiU1()
     {
         Debug.Log("l3 clicked");
-        SkillsText.GetComponent<Text>().text = "Luigi wells up his inner fury, shocking frontal enemies with fear after a set duration. Shock status is removed after enemy takes damage.";
+        SkillsText.GetComponent<Text>().text = "Astaroth wells up his inner fury, shocking frontal enemies with fear after a set duration. Fear status is removed after enemy takes damage.";
     }
 
     public void LuigiU2()
     {
         Debug.Log("l4 clicked");
-        SkillsText.GetComponent<Text>().text = "Luigi goes into a frenzy, greatly increasing movement speed for a long duration.";
+        SkillsText.GetComponent<Text>().text = "Astaroth goes into a frenzy, greatly increasing movement speed for a long duration.";
     }
 
     // ------------------------------- isa ---------------------------

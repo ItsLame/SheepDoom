@@ -9,6 +9,7 @@ namespace SheepDoom
     {
         //linking to player
         private GameObject shopPlayer;
+        [SerializeField] private GameObject skillIconSetter;
         private float playerGold;
         private int shopTeamIndex;
 
@@ -193,6 +194,11 @@ namespace SheepDoom
         //opening shop
         private void OpenShopUI()
         {
+            if (skillIconSetter.GetComponent<ShopSkillsIconScript>().hasSet == false)
+            {
+                skillIconSetter.GetComponent<ShopSkillsIconScript>().setIcons();
+            }
+
             Debug.Log("Player Gold: " + P_playerGold);
             //get player's current gold
             P_playerGold = P_shopPlayer.GetComponent<CharacterGold>().GetCurrentGold();
