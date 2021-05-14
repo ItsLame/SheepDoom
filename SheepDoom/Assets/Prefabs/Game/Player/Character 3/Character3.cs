@@ -160,9 +160,9 @@ namespace SheepDoom
                 if (isCasting)
                 {
                     dist = Vector3.Distance(lastPos, transform.position);
-                    Debug.Log("Casting......");
+       //             Debug.Log("Casting......");
                     castTimeInGame -= Time.deltaTime;
-                    Debug.Log("Cast time left: " + castTimeInGame);
+      //              Debug.Log("Cast time left: " + castTimeInGame);
 
                     //check for movement
                     if (dist > 5)
@@ -207,7 +207,7 @@ namespace SheepDoom
                 if (isChanneling)
                 {
                     dist = Vector3.Distance(lastPos, transform.position);
-                    Debug.Log("Channeling ult 2...");
+  //                  Debug.Log("Channeling ult 2...");
                     channelTimeInGame -= Time.deltaTime;
 //                    Debug.Log("Channeling time left: " + channelTimeInGame);
 
