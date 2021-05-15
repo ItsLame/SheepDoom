@@ -2874,7 +2874,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1538718531256906192}
   - component: {fileID: 4192350944744810168}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8328,6 +8328,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: IsabellaStaff
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 729de49ad224ba346b5de710d7433efa,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 729de49ad224ba346b5de710d7433efa, type: 3}
