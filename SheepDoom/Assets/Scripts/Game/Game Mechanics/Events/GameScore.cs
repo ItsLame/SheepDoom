@@ -148,12 +148,12 @@ namespace SheepDoom
                     RP3Star.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
             }
             else
-                Debug.Log("Im empty");
+           //     Debug.Log("Im empty");
             //======================= DISPLAY SCOREBOARD AND SET TEAM'S WIN/LOSE ========================
             //if blue team wins
             if (TeamID == 1)
             {
-                Debug.Log("Blue Team Wins!");
+        //        Debug.Log("Blue Team Wins!");
                 BlueWinLose.GetComponent<Text>().text = "Victory";
                 RedWinLose.GetComponent<Text>().text = "Defeat";
                 completeGameUI.SetActive(true);
@@ -161,7 +161,7 @@ namespace SheepDoom
             }
             else if (TeamID == 2) //if red team wins, not gonna use else for precision
             {
-                Debug.Log("Red Team Wins!");
+         //       Debug.Log("Red Team Wins!");
                 BlueWinLose.GetComponent<Text>().text = "Defeat";
                 RedWinLose.GetComponent<Text>().text = "Victory";
                 completeGameUI.SetActive(true);

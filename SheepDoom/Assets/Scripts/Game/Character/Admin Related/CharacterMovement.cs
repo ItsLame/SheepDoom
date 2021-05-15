@@ -56,28 +56,28 @@ namespace SheepDoom
             speedAlterDuration = duration;
             if (type == "slow")
             {
-                Debug.Log("Inflicted with slow debuff");
+            //    Debug.Log("Inflicted with slow debuff");
                 CmdSetBuffStatus("slow", true);
                 speedAlterStrength = strength;
                 speed *= speedAlterStrength;
             }
             else if (type == "stop")
             {
-                Debug.Log("Inflicted with stop debuff");
+           //     Debug.Log("Inflicted with stop debuff");
                 CmdSetBuffStatus("stop", true);
                 speed = 0;
             }
 
             else if (type == "sleep")
             {
-                Debug.Log("Inflicted with sleep debuff");
+           //     Debug.Log("Inflicted with sleep debuff");
                 CmdSetBuffStatus("sleep", true);
                 speed = 0;
             }
 
             else if (type == "speedUp")
             {
-                Debug.Log("Speeding up..");
+        //        Debug.Log("Speeding up..");
                 CmdSetBuffStatus("speedUp", true);
                 speedAlterStrength = strength;
                 speed *= speedAlterStrength;
@@ -105,7 +105,7 @@ namespace SheepDoom
             {
                 speedAlterStrength = 1;
                 speed = baseSpeed;
-                Debug.Log("Speed Over:" + speedAlterStrength + ", " + speed);
+           //     Debug.Log("Speed Over:" + speedAlterStrength + ", " + speed);
                 isSpeedAltered = false;
 
                 //falsify all movespd effects on target

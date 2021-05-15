@@ -32,7 +32,7 @@ namespace SheepDoom
         //gold call function
         public float GetCurrentGold()
         {
-            Debug.Log("Getting " + this.gameObject.name + "'s gold..");
+       //    Debug.Log("Getting " + this.gameObject.name + "'s gold..");
             return CurrentGold;
         }
 
@@ -40,18 +40,18 @@ namespace SheepDoom
         [Command]
         public void CmdVaryGold(float goldValueChange)
         {
-            Debug.Log("Current Gold: " + CurrentGold);
-            Debug.Log("Gold increased by " + goldValueChange);
+      //      Debug.Log("Current Gold: " + CurrentGold);
+       //     Debug.Log("Gold increased by " + goldValueChange);
             CurrentGold += goldValueChange;
-            Debug.Log("Current Gold after: " + CurrentGold);
+      //      Debug.Log("Current Gold after: " + CurrentGold);
         }
 
         public void ServerVaryGold(float goldValueChange)
         {
-            Debug.Log("Current Gold: " + CurrentGold);
-            Debug.Log("Gold increased by " + goldValueChange);
+      //      Debug.Log("Current Gold: " + CurrentGold);
+      //      Debug.Log("Gold increased by " + goldValueChange);
             CurrentGold += goldValueChange;
-            Debug.Log("Current Gold after: " + CurrentGold);
+      //      Debug.Log("Current Gold after: " + CurrentGold);
         }
 
         public override void OnStartClient()

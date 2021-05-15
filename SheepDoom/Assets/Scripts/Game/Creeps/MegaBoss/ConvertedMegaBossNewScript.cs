@@ -196,7 +196,7 @@ namespace SheepDoom
 
             if (!alreadyattacked)
             {
-                Debug.Log("C.Boss firing at " + targetObject.gameObject.name);
+      //          Debug.Log("C.Boss firing at " + targetObject.gameObject.name);
                 transform.LookAt(targetObject.transform);
                 FireProjectile();//Attack
                 Invoke("ResetAttack", cooldown1);

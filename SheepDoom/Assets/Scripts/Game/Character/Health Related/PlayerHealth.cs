@@ -76,7 +76,7 @@ namespace SheepDoom
                         GetComponent<PlayerAdmin>().IncreaseCount(false, false, true);
 
                         //disable collider
-                        this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+                        this.gameObject.GetComponent<BoxCollider>().enabled = false;
 
                         deathCounterCalled = true;
                     }
@@ -138,7 +138,7 @@ namespace SheepDoom
 
         public void enableCollider()
         {
-            this.gameObject.GetComponent<CapsuleCollider>().enabled = true;
+            this.gameObject.GetComponent<BoxCollider>().enabled = true;
         }
     }
 }

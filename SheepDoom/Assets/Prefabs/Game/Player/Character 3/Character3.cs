@@ -80,7 +80,7 @@ namespace SheepDoom
         void startCasting()
         {
             isCasting = true;
-            Debug.Log("Start Casting");
+    //        Debug.Log("Start Casting");
             castTimeInGame = castTime;
 
             //set transform
@@ -92,7 +92,7 @@ namespace SheepDoom
         {
             isChanneling = true;
             CmdUltiAtk(true);
-            Debug.Log("Start Channeling");
+     //       Debug.Log("Start Channeling");
 
             //set transform
             lastPos = transform.position;
@@ -107,7 +107,7 @@ namespace SheepDoom
             if (!_isAltUlti)
             {
                 startCasting();
-                Debug.Log("isCastingComplete 1: " + isCastingComplete);
+    //            Debug.Log("isCastingComplete 1: " + isCastingComplete);
             }
             else if (_isAltUlti)
                 startChanneling();
@@ -118,7 +118,7 @@ namespace SheepDoom
         [Command]
         void CmdUltiAtk(bool _isAltUlti)
         {
-            Debug.Log("CmdUltiAtk-ing");
+    //        Debug.Log("CmdUltiAtk-ing");
             if (!_isAltUlti)
             {
                 firedProjectile = Instantiate(normalUlti, transform);
@@ -136,7 +136,7 @@ namespace SheepDoom
                 firedProjectile.transform.SetParent(null, false);
                 firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
 
-                Debug.Log("Setting owner to channel: " + this.gameObject.name);
+    //            Debug.Log("Setting owner to channel: " + this.gameObject.name);
                 //setting channeling conditions (if owner moves, destroy)
                 firedProjectile.GetComponent<ChannelingScript>().setOwner(this.gameObject);
 
@@ -167,7 +167,7 @@ namespace SheepDoom
                     //check for movement
                     if (dist > 5)
                     {
-                        Debug.Log("Player Moved, stopping incantation");
+        //                Debug.Log("Player Moved, stopping incantation");
                         isCasting = false;
                     }
 
@@ -176,7 +176,7 @@ namespace SheepDoom
                 //when casting is complete
                 if (isCasting && castTimeInGame <= 0)
                 {
-                    Debug.Log("Casting complete");
+             //       Debug.Log("Casting complete");
                     isCastingComplete = true;
                     isCasting = false;
                 }
@@ -184,7 +184,7 @@ namespace SheepDoom
 
                 if (isCastingComplete)
                 {
-                    Debug.Log("isCastingComplete 2: " + isCastingComplete);
+         //           Debug.Log("isCastingComplete 2: " + isCastingComplete);
                     CmdUltiAtk(false);
                     isCastingComplete = false;
                 }
@@ -192,14 +192,14 @@ namespace SheepDoom
                 //if interrupted by cc (stun)
                 if (isCasting && gameObject.GetComponent<CharacterMovement>().isStopped)
                 {
-                    Debug.Log("Casting failed");
+         //           Debug.Log("Casting failed");
                     isCasting = false;
                 }
 
                 //if interrupted by cc (sleep)
                 if (isCasting && gameObject.GetComponent<CharacterMovement>().isSleeped)
                 {
-                    Debug.Log("Casting failed");
+            //        Debug.Log("Casting failed");
                     isCasting = false;
                 }
 
@@ -214,7 +214,7 @@ namespace SheepDoom
                     //check for movement
                     if (dist > 5)
                     {
-                        Debug.Log("Player Moved, stopping channeling");
+            //            Debug.Log("Player Moved, stopping channeling");
                         isChanneling = false;
                     }
                 }
@@ -229,14 +229,14 @@ namespace SheepDoom
                 //if interrupted by cc (stun)
                 if (isChanneling && gameObject.GetComponent<CharacterMovement>().isStopped)
                 {
-                    Debug.Log("Channeling stopped");
+       //             Debug.Log("Channeling stopped");
                     isChanneling = false;
                 }
 
                 //if interrupted by cc (sleep)
                 if (isChanneling && gameObject.GetComponent<CharacterMovement>().isSleeped)
                 {
-                    Debug.Log("Channeling stopped");
+        //            Debug.Log("Channeling stopped");
                     isChanneling = false;
                 }
 

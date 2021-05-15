@@ -75,7 +75,7 @@ namespace SheepDoom
             {
                 if (other.CompareTag("Player"))
                 {
-                    Debug.Log("Player" + other.gameObject.name + " spotted");
+           //         Debug.Log("Player" + other.gameObject.name + " spotted");
                     Attacker = other.gameObject;
                     LockedOn = true;
 
@@ -106,7 +106,7 @@ namespace SheepDoom
                     {
                         attackDurationInGame = attackDuration;
                         isAttacking = true;
-                        Debug.Log("Death ball attacking");
+                 //       Debug.Log("Death ball attacking");
                         GameObject spawnAura = Instantiate(AuraDamageObject, transform);
                         spawnAura.transform.SetParent(null, false);
                         spawnAura.transform.SetPositionAndRotation(this.gameObject.transform.position, this.gameObject.transform.rotation);
@@ -138,7 +138,7 @@ namespace SheepDoom
                         if (attackCooldownInGame <= 0)
                         {
                             attackDurationInGame = attackDuration;
-                            Debug.Log("Death ball attacking");
+                 //           Debug.Log("Death ball attacking");
                             isAttacking = true;
                             GameObject spawnAura = Instantiate(AuraDamageObject, transform);
                             spawnAura.transform.SetParent(null, false);
@@ -157,7 +157,7 @@ namespace SheepDoom
         {
             if (other.CompareTag("Player") && LockedOn)
             {
-                Debug.Log("Stopped following " + Attacker.gameObject.name);
+        //        Debug.Log("Stopped following " + Attacker.gameObject.name);
                 Attacker = null;
                 LockedOn = false;
             }

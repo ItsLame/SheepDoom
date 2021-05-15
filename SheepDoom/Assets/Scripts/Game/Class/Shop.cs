@@ -199,12 +199,12 @@ namespace SheepDoom
                 skillIconSetter.GetComponent<ShopSkillsIconScript>().setIcons();
             }
 
-            Debug.Log("Player Gold: " + P_playerGold);
+      //      Debug.Log("Player Gold: " + P_playerGold);
             //get player's current gold
             P_playerGold = P_shopPlayer.GetComponent<CharacterGold>().GetCurrentGold();
 
-            Debug.Log("Opening Shop UI");
-            Debug.Log("Player Gold: " + P_playerGold);
+       //     Debug.Log("Opening Shop UI");
+    //        Debug.Log("Player Gold: " + P_playerGold);
 
             //disable the controlling UI
             P_gameUI.GetComponent<Canvas>().enabled = false;
@@ -225,20 +225,20 @@ namespace SheepDoom
         //first special selection button
         public void SelectFirstSpecial()
         {
-            Debug.Log("First Special In Shop Selected");
+   //         Debug.Log("First Special In Shop Selected");
             //can purchase only if havent purchased and u have enough gold
 
             if (!hasPurchasedSpecial)
             {
-                Debug.Log("Havent purchased special");
+     //           Debug.Log("Havent purchased special");
             }
 
             if (P_playerGold - P_specialCost >= 0)
             {
-                Debug.Log("Gold is enough");
+     //           Debug.Log("Gold is enough");
             }
 
-            else { Debug.Log("Not enough Player Gold: " + P_playerGold + ", Special Cost: " + P_specialCost); }
+     //       else { Debug.Log("Not enough Player Gold: " + P_playerGold + ", Special Cost: " + P_specialCost); }
 
             if (!hasPurchasedSpecial && (P_playerGold - P_specialCost >= 0))
             {
@@ -254,12 +254,12 @@ namespace SheepDoom
                 //set player bool 'haspurchasedspecial' to true
                 P_shopPlayer.GetComponent<PlayerAttack>().PlayerHasPurchasedSpecial(false);
 
-                Debug.Log("First Special Purchased");
+     //           Debug.Log("First Special Purchased");
             }
 
             else
             {
-                Debug.Log("unable to buy first special");
+      //          Debug.Log("unable to buy first special");
             }
 
             //update player gold
@@ -286,7 +286,7 @@ namespace SheepDoom
                 //set player bool 'haspurchasedspecial' to true
                 //Player.GetComponent<PlayerAttack>().PlayerHasPurchasedSpecial();
 
-                Debug.Log("Second Special Purchased");
+    //            Debug.Log("Second Special Purchased");
 
                 //update player gold
                 P_playerGold = P_shopPlayer.GetComponent<CharacterGold>().GetCurrentGold();
@@ -308,7 +308,7 @@ namespace SheepDoom
 //                PlayerUltiButton.GetComponent<Button>().interactable = true;
                 hasPurchasedUlti = true;
 
-                Debug.Log("First Ulti Purchased");
+     //           Debug.Log("First Ulti Purchased");
                 //update player gold
                 P_playerGold = P_shopPlayer.GetComponent<CharacterGold>().GetCurrentGold();
             }
@@ -328,7 +328,7 @@ namespace SheepDoom
                 //set player bool 'haspurchasedulti' to true
                 P_shopPlayer.GetComponent<PlayerAttack>().PlayerHasPurchasedUlti(true);
 
-                Debug.Log("Second Ulti Purchased");
+      //          Debug.Log("Second Ulti Purchased");
 
                 //update player gold
                 P_playerGold = P_shopPlayer.GetComponent<CharacterGold>().GetCurrentGold();

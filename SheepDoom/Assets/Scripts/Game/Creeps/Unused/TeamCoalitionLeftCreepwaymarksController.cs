@@ -50,7 +50,7 @@ public class TeamCoalitionLeftCreepwaymarksController : MonoBehaviour
         else
         {
             agent.autoBraking = true;
-            Debug.Log("Creep reached ");
+        //    Debug.Log("Creep reached ");
         }
     }
 }

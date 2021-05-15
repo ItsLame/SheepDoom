@@ -280,7 +280,7 @@ namespace SheepDoom
                 //if boss below 50% HP, activate enrage
                 if ((currenthealth / maxHealth < 0.5) && callEnraged1 == false)
                 {
-                    Debug.Log("Call Boss Enrage v1");
+              //      Debug.Log("Call Boss Enrage v1");
                     increaseAttackTimes();
                     callEnraged1 = true;
                 }
@@ -288,7 +288,7 @@ namespace SheepDoom
                 //if boss below 20% HP, activate enrage #2
                 if ((currenthealth / maxHealth < 0.3) && callEnraged2 == false)
                 {
-                    Debug.Log("Call Boss Enrage v2");
+            //        Debug.Log("Call Boss Enrage v2");
                     increaseAttackTimes2();
                     callEnraged2 = true;
                 }
@@ -300,13 +300,13 @@ namespace SheepDoom
                     {
                         if (killerTeamID == 1)
                         {
-                            Debug.Log("Spawning boss from blue team");
+               //             Debug.Log("Spawning boss from blue team");
                             blueTeamPos.GetComponent<BaseCreepSpawner>().spawnConvertedBoss();
                         }
 
                         else if (killerTeamID == 2)
                         {
-                            Debug.Log("Spawning boss from red team");
+                 //           Debug.Log("Spawning boss from red team");
                             redTeamPos.GetComponent<BaseCreepSpawner>().spawnConvertedBoss();
                         }
 

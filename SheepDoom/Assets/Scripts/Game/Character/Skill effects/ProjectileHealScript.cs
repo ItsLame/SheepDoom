@@ -191,7 +191,7 @@ namespace SheepDoom
             }
             else if (col.gameObject.CompareTag("Other"))
             {
-                Debug.Log(gameObject.name + "touched other" + col.gameObject.name); ;
+     //           Debug.Log(gameObject.name + "touched other" + col.gameObject.name); ;
                 if (destroyOnContact)
                     Invoke("Destroyy", durationBeforeDestroy);
             }

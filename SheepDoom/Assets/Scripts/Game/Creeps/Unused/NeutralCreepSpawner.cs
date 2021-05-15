@@ -36,7 +36,7 @@ public class NeutralCreepSpawner : MonoBehaviour
         //if respawn time is up and neutral is killed
         if (spawnTimerInGame <= 0 && isNeutralKilled)
         {
-            Debug.Log("Neutral respawning");
+   //         Debug.Log("Neutral respawning");
             spawnNeutral();
             spawnTimerInGame = spawnTimer;
             isNeutralKilled = false;

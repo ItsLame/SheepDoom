@@ -70,19 +70,19 @@ namespace SheepDoom
             if (direction == "left")
             {
                 isMovingLeft = true;
-                Debug.Log("Setting direction to " + direction + " ," + isMovingLeft);
+      //          Debug.Log("Setting direction to " + direction + " ," + isMovingLeft);
             }
 
             else if (direction == "right")
             {
                 isMovingRight = true;
-                Debug.Log("Setting direction to " + direction + " ," + isMovingRight);
+      //          Debug.Log("Setting direction to " + direction + " ," + isMovingRight);
             }
 
             else if (direction == "down")
             {
                 isMovingDown = true;
-                Debug.Log("Setting direction to " + direction + " ," + isMovingDown);
+     //           Debug.Log("Setting direction to " + direction + " ," + isMovingDown);
             }
         }
 
@@ -116,7 +116,7 @@ namespace SheepDoom
                     //increase killer's kill count if target is killed
                     if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
                     {
-                        Debug.Log("Killed player, increasing score");
+           //             Debug.Log("Killed player, increasing score");
                         col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
                         owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
                         col.gameObject.GetComponent<GameEvent>().whoKilled = owner.gameObject.GetComponent<PlayerAdmin>().P_playerName;

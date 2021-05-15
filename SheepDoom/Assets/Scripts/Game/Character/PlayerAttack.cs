@@ -249,7 +249,7 @@ namespace SheepDoom
         {
             cooldown1MultiplierActive = false;
             cooldown1 = (cooldown1 - 0.05f) / cooldown1Multiplier;
-            Debug.Log("Atk Spd Buff ended");
+     //       Debug.Log("Atk Spd Buff ended");
         }
     }
 }

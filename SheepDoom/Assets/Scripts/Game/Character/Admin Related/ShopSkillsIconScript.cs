@@ -55,7 +55,7 @@ namespace SheepDoom
         public void setIcons()
         {
             characterID = FindMe.instance.P_MyPlayer.GetComponent<PlayerAdmin>().getCharID();
-            Debug.Log("Char ID: " + characterID);
+      //      Debug.Log("Char ID: " + characterID);
  
             if (characterID == 1)
             {
@@ -70,7 +70,7 @@ namespace SheepDoom
                 U1_renderer.sprite = AlmaU1;
                 U2_renderer.sprite = AlmaU2;*/
 
-                Debug.Log("Setting for Alma");
+           //     Debug.Log("Setting for Alma");
             }
 
             else if (characterID == 2)
@@ -85,7 +85,7 @@ namespace SheepDoom
                 U1_renderer.sprite = AstaU1;
                 U2_renderer.sprite = AstaU2;*/
 
-                Debug.Log("Setting for Asta");
+         //       Debug.Log("Setting for Asta");
             }
 
             else if (characterID == 3)
@@ -101,10 +101,10 @@ namespace SheepDoom
                 U1_renderer.sprite = IsaU1;
                 U2_renderer.sprite = IsaU2;*/
 
-                Debug.Log("Setting for Isa");
+         //       Debug.Log("Setting for Isa");
             }
 
-            Debug.Log("Setting skill icons complete");
+      //      Debug.Log("Setting skill icons complete");
             hasSet = true;
         }
 

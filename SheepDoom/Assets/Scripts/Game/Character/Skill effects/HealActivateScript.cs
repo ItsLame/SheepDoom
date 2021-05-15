@@ -35,7 +35,7 @@ namespace SheepDoom
                 if (other.gameObject.CompareTag("Player"))
                 {
           //          Debug.Log("Player " + other.gameObject.name + " found");
-                    Debug.Log("Heal Activated");
+          //          Debug.Log("Heal Activated");
 
                     //heal ally in range
                     if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == teamID)

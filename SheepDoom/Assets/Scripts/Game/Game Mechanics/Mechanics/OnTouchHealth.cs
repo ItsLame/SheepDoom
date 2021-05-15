@@ -46,7 +46,7 @@ namespace SheepDoom
                     //if hit other player
                     if (col.CompareTag("Player"))
                     {
-                        Debug.Log("Player Hit");
+                   //     Debug.Log("Player Hit");
                         //change the hit player's HP
                         col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
 
@@ -74,13 +74,13 @@ namespace SheepDoom
                 {
                     if (col.gameObject.CompareTag("BaseMinion"))
                     {
-                        Debug.Log("Base Minion Hit");
+                    //    Debug.Log("Base Minion Hit");
                         
                         if (parentTeamID == 2)
                         {
                             if (col.gameObject.layer == 8)
                             {
-                                Debug.Log("Coalation Minion Hit");
+                    //            Debug.Log("Coalation Minion Hit");
                                 GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
                                 target.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount);
 
@@ -95,7 +95,7 @@ namespace SheepDoom
                         {
                             if (col.gameObject.layer == 9)
                             {
-                                Debug.Log("Consortium Minion Hit");
+                  //              Debug.Log("Consortium Minion Hit");
                                 GameObject target = col.gameObject.GetComponent<GetParents>().getParent();
                                 target.GetComponent<LeftMinionBehaviour>().TakeDamage(healthChangeAmount);
                                 if (target.GetComponent<LeftMinionBehaviour>().getHealth() <= 0)

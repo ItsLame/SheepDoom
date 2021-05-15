@@ -14,7 +14,7 @@ namespace SheepDoom
         //set method
         public void setOwner(GameObject theOwner)
         {
-            Debug.Log(theOwner.name + " set to channel's owner");
+       //     Debug.Log(theOwner.name + " set to channel's owner");
             owner = theOwner;
         }
 

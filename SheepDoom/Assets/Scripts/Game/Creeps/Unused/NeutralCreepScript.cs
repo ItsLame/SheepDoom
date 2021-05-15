@@ -39,7 +39,7 @@ public class NeutralCreepScript : MonoBehaviour
     {
         isAttacked = true;
        // Attacker = playerWhoAttacked;
-        Debug.Log("Creature " + gameObject.name + " is under attack by " + Attacker.gameObject.name);
+   //     Debug.Log("Creature " + gameObject.name + " is under attack by " + Attacker.gameObject.name);
     }
 
     public void neutralTakeDamage(float damageAmount)
@@ -59,7 +59,7 @@ public class NeutralCreepScript : MonoBehaviour
         //reset aggro
         isAttacked = false;
         //debug
-        Debug.Log(gameObject.name + " stopped chasing " + Attacker.name);
+    //    Debug.Log(gameObject.name + " stopped chasing " + Attacker.name);
         //ResetHP
         NeutralHPInGame = NeutralHP;
      //   float currenthealthPct = (float)NeutralHPInGame / (float)NeutralHP;

@@ -88,13 +88,13 @@ namespace SheepDoom
                     //if no outer tower has been captured base cant be captured
                     if (P_capturedByBlue && tID == 2)
                     {
-                        Debug.Log("Run count for team player 2");
+     //                   Debug.Log("Run count for team player 2");
                         towerAtkCDinGame -= Time.deltaTime;
-                        Debug.Log("cd" + towerAtkCDinGame);
+      //                  Debug.Log("cd" + towerAtkCDinGame);
 
                         if (towerAtkCDinGame <= 0)
                         {
-                            Debug.Log("Run count for tower attack 1");
+              //              Debug.Log("Run count for tower attack 1");
                             Vector3 additionalDistance = new Vector3(0, 50, 0);
                             //attack!!! rain bullets from ze sky
                             baseBullet = Instantiate(BaseProjectile, transform);
@@ -113,13 +113,13 @@ namespace SheepDoom
                     }
                     else if (P_capturedByRed && tID == 1)
                     {
-                        Debug.Log("Run count for team player 1");
+             //           Debug.Log("Run count for team player 1");
                         towerAtkCDinGame -= Time.deltaTime;
-                        Debug.Log("cd" + towerAtkCDinGame);
+            //            Debug.Log("cd" + towerAtkCDinGame);
 
                         if (towerAtkCDinGame <= 0)
                         {
-                            Debug.Log("Run count for tower attack 2");
+               //             Debug.Log("Run count for tower attack 2");
                             Vector3 additionalDistance = new Vector3(0, 50, 0);
                             //attack!!! rain bullets from ze sky
                             baseBullet = Instantiate(BaseProjectile, transform);

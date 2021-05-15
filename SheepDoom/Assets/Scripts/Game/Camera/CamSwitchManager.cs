@@ -103,7 +103,7 @@ public class CamSwitchManager : MonoBehaviour
         {
             if (topScreenClicked || bottomScreenClicked || leftScreenClicked || rightScreenClicked)
             {
-                Debug.Log("Camera roaming engaged");
+            //    Debug.Log("Camera roaming engaged");
                 snapBackToPlayer = false;
                 camViewChanged = true;
         //        camRoamscript.enabled = true;

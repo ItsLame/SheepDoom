@@ -168,7 +168,7 @@ namespace SheepDoom
                     //activate collider once times up to 'explode'
                     if (detonateTimer <= 0)
                     {
-                        Debug.Log("Detonating boss attack");
+       //                 Debug.Log("Detonating boss attack");
                         this.gameObject.GetComponent<SphereCollider>().enabled = true;
                         Invoke("Destroyy", 1f);
                     }
@@ -181,7 +181,7 @@ namespace SheepDoom
                     //start counting
                     if (detonateTimerInGame >= 0)
                     {
-                        Debug.Log("Detonating in: " + detonateTimer);
+          //              Debug.Log("Detonating in: " + detonateTimer);
                         detonateTimerInGame -= Time.deltaTime;
                     }
 
@@ -196,7 +196,7 @@ namespace SheepDoom
                     //activate collider once times up to 'explode'
                     if (detonateTimerInGame <= 0)
                     {
-                        Debug.Log("Detonating boss attack");
+      //                  Debug.Log("Detonating boss attack");
                         this.gameObject.GetComponent<SphereCollider>().enabled = true;
                         Invoke("Destroyy", 1f);
                     }
