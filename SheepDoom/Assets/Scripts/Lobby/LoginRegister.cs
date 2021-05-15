@@ -29,16 +29,11 @@ namespace SheepDoom
         public void Login()
         {
             string user = username.text;
-            if(ClientName.ClientLogin(user)) // server is inactive, so this is only assigned on client at first
+            if (ClientName.ClientLogin(user)) // server is inactive, so this is only assigned on client at first
             {
                 networkManager.networkAddress = "localhost";
-                networkManager.StartClient(); 
-            }   
-        }
-
-        public void Register() 
-        {
-            
+                networkManager.StartClient();
+            }
         }
     }
 }
