@@ -15,8 +15,6 @@ namespace SheepDoom
         public Text AnnouncerText;
         private const string TwentySeconds = "Game will begin in 10 seconds!";
         private const string ThirtySeconds = "Go forth and be victorious!";
-        private const string TwoMinutes = "The Boss Creep MegaBox have arrived!";
-        private const string ThreeMinutes = "The Boss Creep MegaBox have begun patroling";
 
         [Space(15)]
         //the time we will use
@@ -30,13 +28,13 @@ namespace SheepDoom
         public GameObject CreepSpawner1;
         public GameObject CreepSpawner2;
         public GameObject BaseWall;
-        public GameObject BossSpawner;
+        public GameObject BaseWall2;
 
         [Space(15)]
         [SyncVar] private bool TwentySecMarkPassed = false;
         [SyncVar] private bool ThirtySecMarkPassed = false;
         [SyncVar] private bool OnehundredTwentysecondSecMarkPassed = false;
-        [SyncVar] private bool OnehundredEightysecondSecMarkPassed = false;
+
 
         // Start is called before the first frame update
         void Start()
@@ -67,25 +65,16 @@ namespace SheepDoom
                 //start spawning creeps when 30s
                 if (SecondsTimer >= 30 && ThirtySecMarkPassed == false)
                 {
-                    //     CreepSpawner1.gameObject.SetActive(true);
-                    //    CreepSpawner2.gameObject.SetActive(true);
-                    //BaseWall.gameObject.SetActive(false);
+                    CreepSpawner1.GetComponent<BaseCreepSpawner>().setSpawn();
+                    CreepSpawner2.GetComponent<BaseCreepSpawner>().setSpawn();
+                    NetworkServer.Destroy(BaseWall);
+                    NetworkServer.Destroy(BaseWall2);
                     ThirtySecMarkPassed = true;
                     RpcAnnouncers(ThirtySeconds);
                 }
 
-                if (SecondsTimer >= 120 && OnehundredTwentysecondSecMarkPassed == false)
-                {
-                    //      BossSpawner.gameObject.SetActive(true);
-                    OnehundredTwentysecondSecMarkPassed = true;
-                    RpcAnnouncers(TwoMinutes);
-                }
 
-                if (SecondsTimer >= 180 && OnehundredEightysecondSecMarkPassed == false)
-                {
-                    OnehundredEightysecondSecMarkPassed = true;
-                    RpcAnnouncers(ThreeMinutes);
-                }
+
             }
 
             if (isClient)

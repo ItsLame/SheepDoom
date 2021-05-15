@@ -8,7 +8,9 @@ namespace SheepDoom
 {
     public class BaseCreepSpawner : NetworkBehaviour
     {
-        private float nextspawntime = 20;
+        [SerializeField]private float nextspawntime = 30;
+
+        [SerializeField] private bool firstSpawn = false;
 
         [SerializeField] private float teamID;
         [SerializeField] private GameObject Minion;
@@ -21,9 +23,18 @@ namespace SheepDoom
         {
             if(isServer)
             {
-                if(ShouldSpawn())
-                    spawn();
+                if (firstSpawn)
+                {
+                    if (ShouldSpawn())
+                        spawn();
+                }
+
             }
+        }
+
+        public void setSpawn()
+        {
+            firstSpawn = true;
         }
 
         [Server]
