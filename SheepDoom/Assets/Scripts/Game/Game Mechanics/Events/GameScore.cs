@@ -121,7 +121,6 @@ namespace SheepDoom
                     CalculateEndGame(_player, TeamID);
                     RpcUpdateClientScoreDisplay(false, true, false, _player, TeamID);
                 }
-                Debug.Log("winning team ID: " + TeamID);
                 DisplayScoreBoard(TeamID);
                 RpcUpdateClientScoreDisplay(false, false, true, null, TeamID);
             }
@@ -129,7 +128,6 @@ namespace SheepDoom
 
         private void DisplayScoreBoard(int TeamID)
         {
-            Debug.Log("Did scoreboard set active run?");
             ScoreboardBlue.GetComponent<Text>().text = blueCaptureScore.ToString();
             ScoreboardRed.GetComponent<Text>().text = redCaptureScore.ToString();
 
