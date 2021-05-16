@@ -10,19 +10,6 @@ namespace SheepDoom
         [SerializeField] private GameObject MapObjects;
         [SerializeField] private GameObject GameCanvas;
 
-        // Update is called once per frame
-        
-        /*
-        void Update()
-        {
-            if (gameStatus != null)
-            {
-                if (gameStatus.GetComponent<GameStatus>().P_gameEnded)
-                    gameObject.SetActive(false);
-            }
-        }
-        */
-
         public void Disable_MapObjects()
         {
             MapObjects.SetActive(false);
@@ -32,12 +19,5 @@ namespace SheepDoom
         {
             GameCanvas.SetActive(false);
         }
-
-        /*
-        public GameObject GetGameStatusManager()
-        {
-            return gameStatus;
-        }
-        */
     }
 }

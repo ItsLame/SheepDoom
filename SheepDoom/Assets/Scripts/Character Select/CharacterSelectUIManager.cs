@@ -143,7 +143,7 @@ namespace SheepDoom
         }
 
         [Command(ignoreAuthority = true)]
-        private void CmdRequestCharSelectUpdate(GameObject _player, string _heroName, int _teamIndex, bool _init, bool _lockIn, bool _isGameStart)
+        private void CmdRequestCharSelectUpdate(GameObject _player, string _heroName, int _teamIndex, bool _init, bool _lockIn)
         {
             NetworkConnection conn = _player.GetComponent<NetworkIdentity>().connectionToClient;
             if(conn != null) 
@@ -269,7 +269,7 @@ namespace SheepDoom
             lockInButton.GetComponent<Button>().interactable = false;   // false since haven't setup hero UI yet (prevent null lock in)
 
             if(_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestCharSelectUpdate(_player, string.Empty, _teamIndex, true, false, false);  // 4th parameter set to true to set initial settings
+                CmdRequestCharSelectUpdate(_player, string.Empty, _teamIndex, true, false);  // 4th parameter set to true to set initial settings
         }
 
         [Client]
@@ -279,7 +279,7 @@ namespace SheepDoom
             int _teamIndex = _player.GetComponent<PlayerObj>().GetTeamIndex();
 
             if(_player.GetComponent<NetworkIdentity>().hasAuthority)
-                CmdRequestCharSelectUpdate(_player, _heroName, _teamIndex, false, _lockIn, false); // 5th parameter set to true to start lock in request
+                CmdRequestCharSelectUpdate(_player, _heroName, _teamIndex, false, _lockIn); // 5th parameter set to true to start lock in request
         }
 
         public void LockInHero()

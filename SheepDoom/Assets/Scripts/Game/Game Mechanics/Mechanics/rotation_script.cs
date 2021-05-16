@@ -26,7 +26,6 @@ namespace SheepDoom
                 {
                     num = owner.GetComponent<CapturePointScript>().getNumOfCapturers();
                 }
-                //    num = gameObject.GetComponent<CapturePointScript>().getNumOfCapturers();
 
                 if (num == 0)
                 {

@@ -121,7 +121,7 @@ namespace SheepDoom
                     CalculateEndGame(_player, TeamID);
                     RpcUpdateClientScoreDisplay(false, true, false, _player, TeamID);
                 }
-
+                Debug.Log("winning team ID: " + TeamID);
                 DisplayScoreBoard(TeamID);
                 RpcUpdateClientScoreDisplay(false, false, true, null, TeamID);
             }
@@ -129,6 +129,7 @@ namespace SheepDoom
 
         private void DisplayScoreBoard(int TeamID)
         {
+            Debug.Log("Did scoreboard set active run?");
             ScoreboardBlue.GetComponent<Text>().text = blueCaptureScore.ToString();
             ScoreboardRed.GetComponent<Text>().text = redCaptureScore.ToString();
 
@@ -147,13 +148,9 @@ namespace SheepDoom
                 else if (!string.IsNullOrEmpty(RedPlayer3Name.GetComponent<Text>().text) && RedPlayer3Name.GetComponent<Text>().text.Substring(0, TopPlayer.Length) == TopPlayer)
                     RP3Star.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
             }
-            else
-           //     Debug.Log("Im empty");
-            //======================= DISPLAY SCOREBOARD AND SET TEAM'S WIN/LOSE ========================
-            //if blue team wins
+                //if blue team wins
             if (TeamID == 1)
             {
-        //        Debug.Log("Blue Team Wins!");
                 BlueWinLose.GetComponent<Text>().text = "Victory";
                 RedWinLose.GetComponent<Text>().text = "Defeat";
                 completeGameUI.SetActive(true);
@@ -161,7 +158,6 @@ namespace SheepDoom
             }
             else if (TeamID == 2) //if red team wins, not gonna use else for precision
             {
-         //       Debug.Log("Red Team Wins!");
                 BlueWinLose.GetComponent<Text>().text = "Defeat";
                 RedWinLose.GetComponent<Text>().text = "Victory";
                 completeGameUI.SetActive(true);
@@ -171,8 +167,6 @@ namespace SheepDoom
 
         private void CalculateEndGame(GameObject player, int TeamID)
         {
-        //foreach (GameObject player in players)
-        //{
             //======================= GET CURRENT PLAYER INFORMATION ========================
             string name = player.GetComponent<PlayerAdmin>().P_playerName;
             float charId = player.GetComponent<PlayerAdmin>().getCharID();

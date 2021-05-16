@@ -40,11 +40,8 @@ namespace SheepDoom
         {
             while(!MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().P_scenesLoaded)
                 yield return null;
-            Debug.Log("run count");
             MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().MoveToNewScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
             MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetSDSceneManager().MoveToNewScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
-            //SceneManager.MoveGameObjectToScene(Client.ReturnClientInstance(conn).gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
-            //SceneManager.MoveGameObjectToScene(gameObject, MatchMaker.instance.GetMatches()[pO.GetMatchID()].GetScenes()[0]);
         }
 
         #region Start & Stop Callbacks

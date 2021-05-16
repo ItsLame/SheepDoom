@@ -145,6 +145,7 @@ namespace SheepDoom
             {
                 if (!_swap && !_ready && !_start && !_exit)
                 {
+                    StartCoroutine(SetUI_Lobby(_matchID));
                     foreach (var player in MatchMaker.instance.GetMatches()[_matchID].GetPlayerObjList())
                         TargetUpdateOwner(conn, player, _swap, _ready, _start, false);
 
@@ -469,18 +470,18 @@ namespace SheepDoom
                     g = 183;
                     b = 136;
                     if (_player.GetComponent<PlayerObj>().GetIsHost())
-                        _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Host";
+                        _player.GetComponent<PlayerLobbyUI>().P_playerReady.text = "Host";
                     else
-                        _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Not Ready";
-                    _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
+                        _player.GetComponent<PlayerLobbyUI>().P_playerReady.text = "Not Ready";
+                    _player.GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
                 }
                 else if (_player.GetComponent<PlayerObj>().GetIsReady())
                 {
                     r = 211;
                     g = 255;
                     b = 136;
-                    _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.text = "Ready!";
-                    _player.GetComponent<PlayerObj>().GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
+                    _player.GetComponent<PlayerLobbyUI>().P_playerReady.text = "Ready!";
+                    _player.GetComponent<PlayerLobbyUI>().P_playerReady.color = new Color32(r, g, b, 255);
                 }
             }
         }

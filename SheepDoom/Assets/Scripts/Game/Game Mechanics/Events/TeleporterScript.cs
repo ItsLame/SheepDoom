@@ -29,17 +29,12 @@ namespace SheepDoom
                 if (isBlueSide)
                 {
                     if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1)
-                    {
                         other.gameObject.transform.position = EndPositionObject.transform.position;
-                    }
-            }
-
+                }
                 else if (isRedSide)
                 {
                     if (other.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2)
-                    {
                         other.gameObject.transform.position = EndPositionObject.transform.position;
-                    }
                 }
             }
         }

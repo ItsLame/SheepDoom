@@ -14,11 +14,6 @@ namespace SheepDoom
         [SerializeField] private Button S2;
         [SerializeField] private Button U1;
         [SerializeField] private Button U2;
-  //      [SerializeField] private SpriteRenderer S1_renderer;
- //       [SerializeField] private SpriteRenderer S2_renderer;
- //       [SerializeField] private SpriteRenderer U1_renderer;
-  //      [SerializeField] private SpriteRenderer U2_renderer;
-
 
         [Header("Identifying player")]
         [Space(15)]
@@ -44,18 +39,9 @@ namespace SheepDoom
         [SerializeField] private Sprite IsaU1;
         [SerializeField] private Sprite IsaU2;
 
-        public void Start()
-        {
-   //         S1_renderer = S1.GetComponent<SpriteRenderer>();
-   //         S2_renderer = S2.GetComponent<SpriteRenderer>();
-   //         U1_renderer = U1.GetComponent<SpriteRenderer>();
-    //        U2_renderer = U2.GetComponent<SpriteRenderer>();
-        }
-
         public void setIcons()
         {
             characterID = FindMe.instance.P_MyPlayer.GetComponent<PlayerAdmin>().getCharID();
-      //      Debug.Log("Char ID: " + characterID);
  
             if (characterID == 1)
             {
@@ -63,14 +49,6 @@ namespace SheepDoom
                 S2.GetComponent<Image>().sprite = AlmaS2;
                 U1.GetComponent<Image>().sprite = AlmaU1;
                 U2.GetComponent<Image>().sprite = AlmaU2;
-
-                /*
-                S1_renderer.sprite = AlmaS1;
-                S2_renderer.sprite = AlmaS2;
-                U1_renderer.sprite = AlmaU1;
-                U2_renderer.sprite = AlmaU2;*/
-
-           //     Debug.Log("Setting for Alma");
             }
 
             else if (characterID == 2)
@@ -79,13 +57,6 @@ namespace SheepDoom
                 S2.GetComponent<Image>().sprite = AstaS2;
                 U1.GetComponent<Image>().sprite = AstaU1;
                 U2.GetComponent<Image>().sprite = AstaU2;
-                /*
-                S1_renderer.sprite = AstaS1;
-                S2_renderer.sprite = AstaS2;
-                U1_renderer.sprite = AstaU1;
-                U2_renderer.sprite = AstaU2;*/
-
-         //       Debug.Log("Setting for Asta");
             }
 
             else if (characterID == 3)
@@ -94,22 +65,9 @@ namespace SheepDoom
                 S2.GetComponent<Image>().sprite = IsaS2;
                 U1.GetComponent<Image>().sprite = IsaU1;
                 U2.GetComponent<Image>().sprite = IsaU2;
-
-                /*
-                S1_renderer.sprite = IsaS1;
-                S2_renderer.sprite = IsaS2;
-                U1_renderer.sprite = IsaU1;
-                U2_renderer.sprite = IsaU2;*/
-
-         //       Debug.Log("Setting for Isa");
             }
 
-      //      Debug.Log("Setting skill icons complete");
             hasSet = true;
         }
-
-
-
     }
-
 }

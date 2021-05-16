@@ -53,7 +53,6 @@ namespace SheepDoom
                 timePlaying = TimeSpan.FromSeconds(SecondsTimer);
                 timePlayingStr = timePlaying.ToString("mm':'ss");
                 TimerText.text = timePlayingStr;
-                //RpcUpdateClientTimer(timePlayingStr);
 
                 if (SecondsTimer >= 20 && TwentySecMarkPassed == false)
                 //Announce that 10 seconds to start
@@ -72,20 +71,11 @@ namespace SheepDoom
                     ThirtySecMarkPassed = true;
                     RpcAnnouncers(ThirtySeconds);
                 }
-
-
-
             }
 
             if (isClient)
                 TimerText.text = timePlayingStr;
         }
-
-        /* [ClientRpc] currently obsolete but might be needed when running multiple matches
-        void RpcUpdateClientTimer(string time)
-        {
-            TimerText.text = time;
-        }*/
 
         [ClientRpc]
         void RpcAnnouncers(string announcement)

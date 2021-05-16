@@ -148,6 +148,7 @@ namespace SheepDoom
 
         private IEnumerator VictoryStart()
         {
+            Debug.Log("Did VictoryStart run?");
             // freeze the game
             Time.timeScale = 0;
 
