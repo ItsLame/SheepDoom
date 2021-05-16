@@ -25,6 +25,7 @@ TagManager:
   - Stage
   - Shield
   - DeathBall
+  - Music
   layers:
   - Default
   - TransparentFX
