@@ -63,6 +63,7 @@ namespace SheepDoom
         [Client]
         void startCasting()
         {
+            networkAnimator.ResetTrigger("Attack");
             networkAnimator.SetTrigger("AlmaPlantingMine");
             isCasting = true;
             castTimeInGame = castTime;
@@ -114,6 +115,7 @@ namespace SheepDoom
         [Client]
         void StartCastingUltimate()
         {
+            networkAnimator.ResetTrigger("Attack");
             networkAnimator.SetTrigger("AlmaUltimate");
             timeRemaining = 2;
             isCastingUltimate = true;
@@ -147,14 +149,14 @@ namespace SheepDoom
                 if (isCasting)
                 {
                     dist = Vector3.Distance(lastPos, transform.position);
-                    Debug.Log("Casting......");
+       //             Debug.Log("Casting......");
                     castTimeInGame -= Time.deltaTime;
-                    Debug.Log("Cast time left: " + castTimeInGame);
+    //                Debug.Log("Cast time left: " + castTimeInGame);
 
                     if (dist > 0.01)
                     {
                         networkAnimator.SetTrigger("CastCancelToRun");
-                        Debug.Log("Player Moved, stopping incantation");
+         //               Debug.Log("Player Moved, stopping incantation");
                         isCasting = false;
 
                     }
@@ -164,8 +166,9 @@ namespace SheepDoom
                 //when casting is complete
                 if (isCasting && castTimeInGame <= 0)
                 {
+                    networkAnimator.ResetTrigger("Attack");
                     networkAnimator.SetTrigger("CastCancel");
-                    Debug.Log("Casting complete");
+        //            Debug.Log("Casting complete");
                     isCastingComplete = true;
                     isCasting = false;
 
@@ -174,7 +177,7 @@ namespace SheepDoom
 
                 if (isCastingComplete)
                 {
-                    Debug.Log("isCastingComplete 2: " + isCastingComplete);
+         //           Debug.Log("isCastingComplete 2: " + isCastingComplete);
                     CmdSpecialAtk(true);
                     isCastingComplete = false;
                 }
@@ -182,8 +185,9 @@ namespace SheepDoom
                 //if interrupted by cc (stun)
                 if (isCasting && gameObject.GetComponent<CharacterMovement>().isStopped)
                 {
+                    networkAnimator.ResetTrigger("Attack");
                     networkAnimator.SetTrigger("CastCancel");
-                    Debug.Log("Casting failed");
+      //              Debug.Log("Casting failed");
                     isCasting = false;
                 }
 
@@ -191,7 +195,7 @@ namespace SheepDoom
                 if (isCasting && gameObject.GetComponent<CharacterMovement>().isSleeped)
                 {
         //            networkAnimator.SetTrigger("CastCancel");
-                    Debug.Log("Casting failed");
+      //              Debug.Log("Casting failed");
                     isCasting = false;
                 }
                 // ======================================== for casting timer calculations for Ultimate ================================== 
@@ -229,7 +233,7 @@ namespace SheepDoom
                 if (isCastingUltimateComplete)
                 {
                     dist = Vector3.Distance(lastPos, transform.position);
-                    Debug.Log("Time remaining" + timeRemaining);
+        //            Debug.Log("Time remaining" + timeRemaining);
                     timeRemaining -= Time.deltaTime;
                     if (timeRemaining <= 0)
                     {
@@ -240,8 +244,8 @@ namespace SheepDoom
                     {
                         if (dist > 1)
                         {
-                            Debug.Log("i moved");
-                            networkAnimator.SetTrigger("CastCancelToRun");
+      //                      Debug.Log("i moved");
+             //               networkAnimator.SetTrigger("CastCancelToRun");
                             isCastingUltimateComplete = false;
 
                         }
@@ -254,6 +258,7 @@ namespace SheepDoom
                 //if interrupted by cc (stun)
                 if (isCastingUltimate && gameObject.GetComponent<CharacterMovement>().isStopped)
                 {
+                    networkAnimator.ResetTrigger("Attack");
                     networkAnimator.SetTrigger("CastCancel");
                     isCastingUltimate = false;
                 }
@@ -261,6 +266,7 @@ namespace SheepDoom
                 //if interrupted by cc (sleep)
                 if (isCastingUltimate && gameObject.GetComponent<CharacterMovement>().isSleeped)
                 {
+                    networkAnimator.ResetTrigger("Attack");
                     networkAnimator.SetTrigger("CastCancel");
                     isCastingUltimate = false;
                 }

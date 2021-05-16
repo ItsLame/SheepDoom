@@ -50,19 +50,19 @@ MonoBehaviour:
   sounds:
   - name: Click
     clip: {fileID: 8300000, guid: d2b8532166a7bc8448f3e1d609598ff3, type: 3}
-    volume: 1
+    volume: 0.7
     pitch: 0.8
     loop: 0
     source: {fileID: 0}
   - name: Back
     clip: {fileID: 8300000, guid: b7c3d6c839560474fa28e766e311d46a, type: 3}
-    volume: 1
+    volume: 0.7
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Start
     clip: {fileID: 8300000, guid: b6a54169361f36d48b6b6f3eb806524f, type: 3}
-    volume: 0.3
+    volume: 0.5
     pitch: 1.07
     loop: 0
     source: {fileID: 0}

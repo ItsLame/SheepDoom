@@ -64,7 +64,7 @@ namespace SheepDoom
             {
                 if (!_multiplier)
                 {
-                    Debug.Log("Firing melee from left to right");
+                    Debug.Log("Firing melee from right to left");
                     firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                     firedProjectile.transform.SetParent(null, false);
@@ -72,7 +72,7 @@ namespace SheepDoom
 
                     //set direction
                     //                 setProjectileDirection(firedProjectile, "right");
-                    firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingRight = true;
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingLeft = true;
 
                     NetworkServer.Spawn(firedProjectile, connectionToClient);
                     //                   comp.SetMoveSpeed(120);
@@ -80,7 +80,7 @@ namespace SheepDoom
                 }
                 else if (_multiplier)
                 {
-                    Debug.Log("Firing melee from left to right v2");
+                    Debug.Log("Firing melee from right to left v2");
                     firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
 
@@ -89,7 +89,7 @@ namespace SheepDoom
                     firedProjectile.GetComponent<PlayerProjectileSettings>().m_Speed *= meleeAttackSpeedMultiplier;
 
                     //set direction
-                    setProjectileDirection(firedProjectile, "right");
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingLeft = true;
                     //                    firedProjectile.GetComponent<PlayerProjectileSettings>().setDirection("right");
 
                     firedProjectile.transform.SetParent(null, false);
@@ -106,15 +106,15 @@ namespace SheepDoom
             {
                 if (!_multiplier)
                 {
-                    Debug.Log("Firing melee from right to left");
-                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn2);
+                    Debug.Log("Firing melee from left to right");
+                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                     firedProjectile.transform.SetParent(null, false);
-                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn2.position, meleeAtkSpawn2.rotation);
+                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
 
                     //set direction
                     //                    setProjectileDirection(firedProjectile, "left");
-                    firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingLeft = true;
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingRight = true;
 
                     NetworkServer.Spawn(firedProjectile, connectionToClient);
                     //                   comp.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
@@ -122,8 +122,8 @@ namespace SheepDoom
                 }
                 else if (_multiplier)
                 {
-                    Debug.Log("Firing melee from right to left v2");
-                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn2);
+                    Debug.Log("Firing melee from left to right v2");
+                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
 
                     //change speed and lifetime
@@ -131,11 +131,11 @@ namespace SheepDoom
                     firedProjectile.GetComponent<PlayerProjectileSettings>().m_Speed *= meleeAttackSpeedMultiplier;
 
                     //set direction
-                    setProjectileDirection(firedProjectile, "left");
+                    firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingRight = true;
                     //                    firedProjectile.GetComponent<PlayerProjectileSettings>().setDirection("left");
 
                     firedProjectile.transform.SetParent(null, false);
-                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn2.position, meleeAtkSpawn2.rotation);
+                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
 
                     NetworkServer.Spawn(firedProjectile, connectionToClient);
                     //                   comp.SetMoveSpeed(120 * meleeAttackSpeedMultiplier);

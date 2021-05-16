@@ -45,7 +45,6 @@ namespace SheepDoom
         //Melee
         [SerializeField] public NetworkAnimator networkAnimator;
         [SerializeField] public Animator animator;
-
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
@@ -242,7 +241,10 @@ namespace SheepDoom
                     cooldown1_inGame -= Time.deltaTime;
                 }
                 else if (cooldown1_inGame <= 0)
+                {
                     cooldown1Happening = false;
+                }
+
                 // --------------------------------------------------------------------//
 
                 if (cooldown1MultiplierActive)

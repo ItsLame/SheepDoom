@@ -883,10 +883,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 2
-  hasPurchasedSpecial: 1
-  hasPurchasedUlti: 1
-  AlternateSpecial: 1
-  AlternateUlti: 1
+  hasPurchasedSpecial: 0
+  hasPurchasedUlti: 0
+  AlternateSpecial: 0
+  AlternateUlti: 0
   cooldown1: 0.75
   cooldown2: 10
   cooldown3: 4
@@ -4078,7 +4078,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5365988204876028394}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.95, y: -7.39, z: 4.47}
+  m_LocalPosition: {x: -7.95, y: -0.41, z: 5.79}
   m_LocalScale: {x: 5.86835, y: 3.6603599, z: 11.35688}
   m_Children: []
   m_Father: {fileID: 1075146533602815809}
@@ -5665,7 +5665,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8078996129729287884}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.04, y: -7.39, z: 4.47}
+  m_LocalPosition: {x: 7.04, y: -0.41000032, z: 5.79}
   m_LocalScale: {x: 5.86835, y: 3.6603599, z: 11.35688}
   m_Children: []
   m_Father: {fileID: 1075146533602815809}

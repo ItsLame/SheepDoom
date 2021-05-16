@@ -2280,10 +2280,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 3
-  hasPurchasedSpecial: 1
-  hasPurchasedUlti: 1
-  AlternateSpecial: 1
-  AlternateUlti: 1
+  hasPurchasedSpecial: 0
+  hasPurchasedUlti: 0
+  AlternateSpecial: 0
+  AlternateUlti: 0
   cooldown1: 1
   cooldown2: 3
   cooldown3: 3

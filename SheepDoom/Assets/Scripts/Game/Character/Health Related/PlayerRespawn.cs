@@ -26,6 +26,7 @@ namespace SheepDoom
         [SerializeField] private GameObject respawninginObject;
         [SerializeField] private GameObject PlayerRespawnTimerObject;
 
+        [SyncVar] bool playedDead = false;
         void Start()
         {
             if(isClient)
@@ -50,9 +51,6 @@ namespace SheepDoom
 
                 if (isServer)
                 {
-                    Rigidbody myRigidBody = GetComponent<Rigidbody>();
-                    Vector3 moveMe = new Vector3(0, 1, 0);
-                    myRigidBody.rotation = Quaternion.LookRotation(moveMe);
                     RpcPlayerDead();
                 }
             }
@@ -80,10 +78,12 @@ namespace SheepDoom
         [ClientRpc]
         void RpcPlayerDead() // Show everyone that u died
         {
-            //splat body
-            Rigidbody myRigidBody = GetComponent<Rigidbody>();
-            Vector3 moveMe = new Vector3(0, 1, 0);
-            myRigidBody.rotation = Quaternion.LookRotation(moveMe);
+            if (playedDead == false)
+            {
+                this.gameObject.GetComponent<NetworkAnimator>().SetTrigger("Dead");
+                playedDead = true;
+            }
+
         }
 
         private void RespawnPlayer()
@@ -105,6 +105,7 @@ namespace SheepDoom
             GetComponent<PlayerHealth>().RefillHealth();
             GetComponent<PlayerHealth>().revivePlayer();
             RpcPlayerAlive();
+
         }
 
         [ClientRpc]
@@ -112,10 +113,8 @@ namespace SheepDoom
         {
             //move player to respawn position
             gameObject.transform.position = respawnLocation.transform.position;
-            //flip body right up
-            Rigidbody myRigidBody = GetComponent<Rigidbody>();
-            Vector3 moveMe = new Vector3(0, 0, 0);
-            myRigidBody.rotation = Quaternion.LookRotation(moveMe);
+            this.gameObject.GetComponent<NetworkAnimator>().SetTrigger("Revive");
+            playedDead = false;
         }
 
         //reset death timer

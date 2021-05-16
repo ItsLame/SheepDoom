@@ -3285,17 +3285,18 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 1
-  hasPurchasedSpecial: 1
-  hasPurchasedUlti: 1
+  hasPurchasedSpecial: 0
+  hasPurchasedUlti: 0
   AlternateSpecial: 0
   AlternateUlti: 0
-  cooldown1: 0
+  cooldown1: 0.3
   cooldown2: 3
   cooldown3: 10
   cooldown1Multiplier: 0
   cooldown1MultiplerTimer: 0
   networkAnimator: {fileID: 1045137285053641272}
   animator: {fileID: 50900814200196693}
+  AttackBool: 0
 --- !u!114 &7267764280458142013
 MonoBehaviour:
   m_ObjectHideFlags: 0

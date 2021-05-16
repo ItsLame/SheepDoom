@@ -104,6 +104,7 @@ namespace SheepDoom
         {
             playerDead = true;
             GetComponent<GameEvent>().gotKilled = this.GetComponent<PlayerAdmin>().P_playerName;
+
         }
 
         public void RefillHealth()
@@ -128,6 +129,7 @@ namespace SheepDoom
             //enable collider
             Invoke("enableCollider", 1f);
             playerDead = false;
+
         }
 
         //accessor method for playerdead
