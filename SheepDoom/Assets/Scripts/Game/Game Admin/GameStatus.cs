@@ -47,6 +47,8 @@ namespace SheepDoom
         [Client]
         public void ExitGame()
         {
+            AudioManager.instance.sendToLobby();
+
             GameObject _player = PlayerObj.instance.gameObject;
             if (_player.GetComponent<PlayerObj>().hasAuthority)
                 CmdServerExitGame(_player);

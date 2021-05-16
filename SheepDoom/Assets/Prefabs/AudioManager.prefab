@@ -66,9 +66,9 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
   - name: BGMLobby
-    clip: {fileID: 8300000, guid: 4bc4926a7bb9a4e45a74d0d359288038, type: 3}
-    volume: 0.5
-    pitch: 1
+    clip: {fileID: 8300000, guid: a99cc95c579c6cd4dafb8ac7419336c3, type: 3}
+    volume: 0.3
+    pitch: 1.1
     loop: 1
     source: {fileID: 0}
   - name: BGMGame

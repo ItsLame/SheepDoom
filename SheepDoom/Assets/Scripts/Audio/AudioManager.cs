@@ -7,28 +7,30 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
+    public bool isBGMPlaying = false;
     public string SceneName;
     public bool listenerEnabled;
     public Sound[] sounds;
 
     //singleton
- //   public static AudioManager instance;
+    public static AudioManager instance;
 
     private void Awake()
     {
-        /*
+        
         if (instance == null)
         {
             instance = this;
         }
 
+        /*
         else
         {
             Destroy(gameObject);
             return;
-        }
+        }*/
 
-        DontDestroyOnLoad(gameObject);*/
+   //     DontDestroyOnLoad(gameObject);
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -41,8 +43,11 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        //play bgm
-        Play("BGMLobby");
+        if (AudioManager.instance.isBGMPlaying == false)
+        {
+            Play("BGMLobby");
+            AudioManager.instance.isBGMPlaying = true;
+        }
     }
 
     public void Play(string name)
@@ -56,6 +61,7 @@ public class AudioManager : MonoBehaviour
 
         else
         {
+       //     s.source.Play();
             Debug.Log("Playing : " + name);
             s.source.PlayOneShot(s.clip, s.volume);
         }
@@ -71,13 +77,21 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        s.source.Stop();
+        else
+        {
+            s.source.Stop();
+        }
+
     }
 
     public void enableAudioListener(string scenename)
     {
+
+
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName(scenename))
         {
+            if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Game Networking Scene 1.0")) return;
+
             Debug.Log("Enabling sound listener in ");
             Debug.Log("Current scene: " + SceneManager.GetActiveScene().name + " VS " + scenename);
             this.gameObject.GetComponent<AudioListener>().enabled = true;
@@ -99,9 +113,23 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void checkIfInGame()
-    {
 
+
+    public void sendToGame()
+    {
+        StopPlay("BGMLobby");
+        Debug.Log("Disabling sound listener in " + SceneManager.GetActiveScene().name);
+        AudioManager.instance.gameObject.GetComponent<AudioListener>().enabled = false;
+        listenerEnabled = false;
+    }
+
+
+    public void sendToLobby()
+    {
+        Play("BGMLobby");
+        Debug.Log("Enabling sound listener in " + SceneManager.GetActiveScene().name);
+        AudioManager.instance.gameObject.GetComponent<AudioListener>().enabled = true;
+        listenerEnabled = true;
     }
 
     private void Update()
@@ -116,7 +144,9 @@ public class AudioManager : MonoBehaviour
             disableAudioListener(SceneName);
         }
 
-        checkIfInGame();
-
+        if (this.gameObject.GetComponent<AudioListener>().enabled == true)
+        {
+            Debug.Log("Audio Listener in " + "Current scene: " + SceneManager.GetActiveScene().name);
+        }
     }
 }
