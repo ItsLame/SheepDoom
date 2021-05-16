@@ -15,7 +15,7 @@ namespace SheepDoom
         private GameObject firedProjectile;
 
         [SerializeField]
-        private Transform spawnPoint;
+        private Transform spawnPoint, aoespawnPoint;
 
         [Header("Cast timer calculations")]
         [SerializeField]
@@ -33,10 +33,15 @@ namespace SheepDoom
         [Header("Transform checks for movement for casting & Channeling")]
         [SerializeField] private Vector3 lastPos;
 
+        //Animation
+        [SerializeField] public NetworkAnimator networkAnimator;
+        [SerializeField] private Animator animator;
+
 
         [Client]
         public void normalAtk()
         {
+            networkAnimator.SetTrigger("IsabellaAttack");
             CmdNormalAtk();
         }
 
@@ -80,7 +85,8 @@ namespace SheepDoom
         void startCasting()
         {
             isCasting = true;
-    //        Debug.Log("Start Casting");
+            Debug.Log("Start Casting");
+            networkAnimator.SetTrigger("Channeling");
             castTimeInGame = castTime;
 
             //set transform
@@ -92,7 +98,8 @@ namespace SheepDoom
         {
             isChanneling = true;
             CmdUltiAtk(true);
-     //       Debug.Log("Start Channeling");
+            Debug.Log("Start Channeling");
+            networkAnimator.SetTrigger("Channeling");
 
             //set transform
             lastPos = transform.position;
@@ -107,7 +114,7 @@ namespace SheepDoom
             if (!_isAltUlti)
             {
                 startCasting();
-    //            Debug.Log("isCastingComplete 1: " + isCastingComplete);
+                Debug.Log("isCastingComplete 1: " + isCastingComplete);
             }
             else if (_isAltUlti)
                 startChanneling();
@@ -118,13 +125,12 @@ namespace SheepDoom
         [Command]
         void CmdUltiAtk(bool _isAltUlti)
         {
-    //        Debug.Log("CmdUltiAtk-ing");
             if (!_isAltUlti)
             {
                 firedProjectile = Instantiate(normalUlti, transform);
                 firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
                 firedProjectile.transform.SetParent(null, false);
-                firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+                firedProjectile.transform.SetPositionAndRotation(aoespawnPoint.position, aoespawnPoint.rotation);
 
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
             }
@@ -134,9 +140,9 @@ namespace SheepDoom
                 firedProjectile = Instantiate(altUlti, transform);
                 firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
                 firedProjectile.transform.SetParent(null, false);
-                firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+                firedProjectile.transform.SetPositionAndRotation(aoespawnPoint.position, aoespawnPoint.rotation);
 
-    //            Debug.Log("Setting owner to channel: " + this.gameObject.name);
+                Debug.Log("Setting owner to channel: " + this.gameObject.name);
                 //setting channeling conditions (if owner moves, destroy)
                 firedProjectile.GetComponent<ChannelingScript>().setOwner(this.gameObject);
 
@@ -160,15 +166,13 @@ namespace SheepDoom
                 if (isCasting)
                 {
                     dist = Vector3.Distance(lastPos, transform.position);
-       //             Debug.Log("Casting......");
                     castTimeInGame -= Time.deltaTime;
-      //              Debug.Log("Cast time left: " + castTimeInGame);
 
-                    //check for movement
-                    if (dist > 5)
+                    if (dist > 1)
                     {
-        //                Debug.Log("Player Moved, stopping incantation");
+                        networkAnimator.SetTrigger("CastCancelToRun");
                         isCasting = false;
+
                     }
 
                 }
@@ -176,15 +180,13 @@ namespace SheepDoom
                 //when casting is complete
                 if (isCasting && castTimeInGame <= 0)
                 {
-             //       Debug.Log("Casting complete");
+                    networkAnimator.SetTrigger("CastCancel");
                     isCastingComplete = true;
                     isCasting = false;
+
                 }
-
-
                 if (isCastingComplete)
                 {
-         //           Debug.Log("isCastingComplete 2: " + isCastingComplete);
                     CmdUltiAtk(false);
                     isCastingComplete = false;
                 }
@@ -192,14 +194,14 @@ namespace SheepDoom
                 //if interrupted by cc (stun)
                 if (isCasting && gameObject.GetComponent<CharacterMovement>().isStopped)
                 {
-         //           Debug.Log("Casting failed");
+                    networkAnimator.SetTrigger("CastCancel");
                     isCasting = false;
                 }
 
                 //if interrupted by cc (sleep)
                 if (isCasting && gameObject.GetComponent<CharacterMovement>().isSleeped)
                 {
-            //        Debug.Log("Casting failed");
+                    networkAnimator.SetTrigger("CastCancel");
                     isCasting = false;
                 }
 
@@ -207,14 +209,10 @@ namespace SheepDoom
                 if (isChanneling)
                 {
                     dist = Vector3.Distance(lastPos, transform.position);
-  //                  Debug.Log("Channeling ult 2...");
                     channelTimeInGame -= Time.deltaTime;
-//                    Debug.Log("Channeling time left: " + channelTimeInGame);
-
-                    //check for movement
                     if (dist > 5)
                     {
-            //            Debug.Log("Player Moved, stopping channeling");
+                        networkAnimator.SetTrigger("CastCancelToRun");
                         isChanneling = false;
                     }
                 }
@@ -222,21 +220,22 @@ namespace SheepDoom
                 //end channeling when time is up
                 if (isChanneling && channelTimeInGame <= 0)
                 {
- //                   Destroyy(firedProjectile);
+                    //Destroyy(firedProjectile);
                     isChanneling = false;
+                    networkAnimator.SetTrigger("CastCancel");
                 }
 
                 //if interrupted by cc (stun)
                 if (isChanneling && gameObject.GetComponent<CharacterMovement>().isStopped)
                 {
-       //             Debug.Log("Channeling stopped");
+                    networkAnimator.SetTrigger("CastCancel");
                     isChanneling = false;
                 }
 
                 //if interrupted by cc (sleep)
                 if (isChanneling && gameObject.GetComponent<CharacterMovement>().isSleeped)
                 {
-        //            Debug.Log("Channeling stopped");
+                    networkAnimator.SetTrigger("CastCancel");
                     isChanneling = false;
                 }
 
@@ -244,7 +243,6 @@ namespace SheepDoom
 
 
 
-            //    }
         }
 
     }

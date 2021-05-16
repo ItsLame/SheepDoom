@@ -2113,6 +2113,7 @@ Transform:
   - {fileID: 5651305364058932833}
   - {fileID: 5508886563154043360}
   - {fileID: 4652231106413936948}
+  - {fileID: 7230355141215015404}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2280,14 +2281,15 @@ MonoBehaviour:
   charID: 3
   hasPurchasedSpecial: 1
   hasPurchasedUlti: 1
-  AlternateSpecial: 0
-  AlternateUlti: 0
+  AlternateSpecial: 1
+  AlternateUlti: 1
   cooldown1: 1
   cooldown2: 3
   cooldown3: 3
   cooldown1Multiplier: 0
   cooldown1MultiplerTimer: 0
   networkAnimator: {fileID: -5735952091139750248}
+  animator: {fileID: 0}
 --- !u!114 &-7642480759244800359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2424,14 +2426,13 @@ MonoBehaviour:
   dist: 0
   normalAtkProjectile: {fileID: 1311559214229084, guid: 2c46ddebb254a1f47803be05e38476c4,
     type: 3}
-  normalSpecial: {fileID: 5276780869706628407, guid: 89158681b65bd8c4abfa8115705b73e9,
+  normalSpecial: {fileID: 1878987882032996, guid: 90b685dd555e0c848806f1fb6209e1e9,
     type: 3}
-  altSpecial: {fileID: 5276780869706628407, guid: 8510bbcdbca796549a38d80cafb04016,
-    type: 3}
-  normalUlti: {fileID: 5276780869706628407, guid: f31c77e8d542ab447b8679df5650216a,
-    type: 3}
-  altUlti: {fileID: 5276780869706628407, guid: e04d5f08cb7b67a45a7a34c294e32c4d, type: 3}
+  altSpecial: {fileID: 1878987882032996, guid: 346bfd7036a670c4e992e074f33b9702, type: 3}
+  normalUlti: {fileID: 1838261207787406, guid: 3ea611bdfd929ed43b82b1c81070fc74, type: 3}
+  altUlti: {fileID: 1444219754028486, guid: 286626babb85d5c4eb23271c128cb8be, type: 3}
   spawnPoint: {fileID: 5651305364058932833}
+  aoespawnPoint: {fileID: 7230355141215015404}
   isCasting: 0
   isCastingComplete: 0
   castTime: 1.5
@@ -2439,6 +2440,8 @@ MonoBehaviour:
   isChannelingComplete: 0
   channelTime: 5
   lastPos: {x: 0, y: 0, z: 0}
+  networkAnimator: {fileID: -5735952091139750248}
+  animator: {fileID: 9071677031279740539}
 --- !u!114 &7709732266149721181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2693,6 +2696,36 @@ Transform:
   m_Father: {fileID: 6693258351994111607}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2525554056809689341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7230355141215015404}
+  m_Layer: 0
+  m_Name: UltiSpawnpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7230355141215015404
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2525554056809689341}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.013, y: -0.389, z: 0.146}
+  m_LocalScale: {x: 0.083333336, y: 0.083333336, z: 0.083333336}
+  m_Children: []
+  m_Father: {fileID: 3099953079081114625}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &2590645063427727864
 GameObject:
   m_ObjectHideFlags: 0

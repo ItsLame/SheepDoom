@@ -1569,6 +1569,36 @@ Transform:
   m_Father: {fileID: 7696438637127614322}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4317933661062943873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2046572703898683142}
+  m_Layer: 0
+  m_Name: MineSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2046572703898683142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4317933661062943873}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.0185, y: 0.137, z: 0.3286}
+  m_LocalScale: {x: 0.083333336, y: 0.083333336, z: 0.083333336}
+  m_Children: []
+  m_Father: {fileID: 7460936231824973587}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &4426793888240352443
 GameObject:
   m_ObjectHideFlags: 0
@@ -3088,6 +3118,7 @@ Transform:
   - {fileID: 1961956092853292941}
   - {fileID: 3579185818848326172}
   - {fileID: 1474958996311105177}
+  - {fileID: 2046572703898683142}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3253,8 +3284,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   charID: 1
-  hasPurchasedSpecial: 0
-  hasPurchasedUlti: 0
+  hasPurchasedSpecial: 1
+  hasPurchasedUlti: 1
   AlternateSpecial: 0
   AlternateUlti: 0
   cooldown1: 0
@@ -3263,6 +3294,7 @@ MonoBehaviour:
   cooldown1Multiplier: 0
   cooldown1MultiplerTimer: 0
   networkAnimator: {fileID: 1045137285053641272}
+  animator: {fileID: 50900814200196693}
 --- !u!114 &7267764280458142013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3418,14 +3450,19 @@ MonoBehaviour:
   syncInterval: 0.1
   normalAtkProjectile: {fileID: 1481587283673810, guid: 14858837f53355d4da384553fc019a5c,
     type: 3}
-  normalSpecial: {fileID: 7103345307366881107, guid: 63ad7e8d351cb30449195c4c6a160a2b,
+  normalSpecial: {fileID: 1381080491605798, guid: 4ece5ddd79579204f99eae242a0dbf9d,
     type: 3}
-  altSpecial: {fileID: 7103345307366881107, guid: 9169903b2e6934d4b939fd60a2468a78,
+  altSpecial: {fileID: 7103345307366881107, guid: d30bc669604300e4988c19b04ac653fa,
     type: 3}
-  normalUlti: {fileID: 3543547152907490667, guid: 2ccd3ae1f3b84704f8d3ce10d513d664,
-    type: 3}
-  altUlti: {fileID: 3543547152907490667, guid: f1eaf3061d966ec4499d5258118c148e, type: 3}
+  normalUlti: {fileID: 1699459221867030, guid: 19793904f54353746ae61e649cb095aa, type: 3}
+  altUlti: {fileID: 1012013889074000, guid: 75323ca930aebf8459c69abd04d2482b, type: 3}
   spawnPoint: {fileID: 4222786746495562229}
+  aoespawnPoint: {fileID: 2046572703898683142}
+  castTime: 1.5
+  castTimeUltimate: 0.01
+  lastPos: {x: 0, y: 0, z: 0}
+  dist: 0
+  networkAnimator: {fileID: 1045137285053641272}
 --- !u!114 &5531547791466284125
 MonoBehaviour:
   m_ObjectHideFlags: 0

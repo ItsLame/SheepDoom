@@ -44,6 +44,7 @@ namespace SheepDoom
         [Space(15)]
         //Melee
         [SerializeField] public NetworkAnimator networkAnimator;
+        [SerializeField] public Animator animator;
 
         public override void OnStartClient()
         {
@@ -78,14 +79,16 @@ namespace SheepDoom
                 }
                 else if (charID == 2)
                 {
-                    networkAnimator.SetTrigger("AstrarothAttack");
-                    StartCoroutine(Character2Attack());
+                    Character2 comp = GetComponent<Character2>();
+                    comp.normalAtk(cooldown1MultiplierActive);
+                    cooldown1_inGame = cooldown1;
                 }
 
                 else if (charID == 3)
                 {
-                    networkAnimator.SetTrigger("IsabellaAttack");
-                    StartCoroutine(Character3Attack());
+                    Character3 comp = GetComponent<Character3>();
+                    comp.normalAtk();
+                    cooldown1_inGame = cooldown1;
                 }
                 IEnumerator Character1Attack()
                 {
@@ -93,20 +96,6 @@ namespace SheepDoom
                     Character1 comp = GetComponent<Character1>();
                     comp.normalAtk();
                     cooldown1_inGame = cooldown1 * cooldown1Multiplier;
-                }
-                IEnumerator Character2Attack()
-                {
-                    yield return new WaitForSeconds(0.1f);
-                    Character2 comp = GetComponent<Character2>();
-                    comp.normalAtk(cooldown1MultiplierActive);
-                    cooldown1_inGame = cooldown1;
-                }
-                IEnumerator Character3Attack()
-                {
-                    yield return new WaitForSeconds(0.1f);
-                    Character3 comp = GetComponent<Character3>();
-                    comp.normalAtk();
-                    cooldown1_inGame = cooldown1;
                 }
             }
         }
@@ -125,32 +114,64 @@ namespace SheepDoom
             {
                 if(charID == 1)
                 {
-                    Character1 comp = GetComponent<Character1>();
-                    if (hasPurchasedSpecial)
+                    if (hasPurchasedSpecial && AlternateSpecial == false)
+                    {
+                        networkAnimator.SetTrigger("Attack");
+                        StartCoroutine(Character1SpecialAttack());
+                    }
+                    else if (hasPurchasedSpecial && AlternateSpecial == true)
+                    {
+                        Character1 comp = GetComponent<Character1>();
                         comp.SpecialAtk(AlternateSpecial);
+                    }
+                    IEnumerator Character1SpecialAttack()
+                    {
+                        yield return new WaitForSeconds(0.1f);
+                        Character1 comp = GetComponent<Character1>();
+                        comp.SpecialAtk(AlternateSpecial);
+                    }
                 }
 
                 else if(charID == 2)
                 {
                     Character2 comp = GetComponent<Character2>();
-                    if(hasPurchasedSpecial)
+                    if (hasPurchasedSpecial)
                     {
                         if (!AlternateSpecial)
-                            comp.SpecialAtk();
+                        {
+                            comp.SpecialAtk(AlternateSpecial);
+                        }
                         else if (AlternateSpecial && !cooldown1Happening)
                         {
+                            animator.SetFloat("AttackSpeedMutiplier", 5f);
                             cooldown1MultiplierTimerInGame = cooldown1MultiplerTimer;
                             cooldown1MultiplierActive = true;
                             cooldown1 = (cooldown1 * cooldown1Multiplier) + 0.05f;
+                            comp.SpecialAtk(AlternateSpecial);
+                            StartCoroutine(AstarothBuffDuration());
                         }
+                    }
+                    IEnumerator AstarothBuffDuration()
+                    {
+                        //For Debuff To wear off
+                        yield return new WaitForSeconds(5f);
+                        animator.SetFloat("AttackSpeedMutiplier", 1f);
                     }
                 }
 
                 else if (charID == 3)
                 {
-                    Character3 comp = GetComponent<Character3>();
                     if (hasPurchasedSpecial)
+                    {
+                        networkAnimator.SetTrigger("IsabellaSpecialAttack");
+                        StartCoroutine(Character3SpecialAttack());
+                    }
+                    IEnumerator Character3SpecialAttack()
+                    {
+                        yield return new WaitForSeconds(0.4f);
+                        Character3 comp = GetComponent<Character3>();
                         comp.SpecialAtk(AlternateSpecial);
+                    }
                 }
                 cooldown2_inGame = cooldown2;
             }

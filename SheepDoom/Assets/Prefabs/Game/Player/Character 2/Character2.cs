@@ -8,24 +8,47 @@ namespace SheepDoom
     public class Character2 : NetworkBehaviour
     {
         [SerializeField]
-        private GameObject normalAtkMelee, normalAtkMelee2, normalSpecial, normalUlti;
+        private GameObject normalAtkMelee, normalAtkMelee2, normalSpecial, normalUlti, AltSpecialBuff, AltUlti;
         private GameObject firedProjectile;
 
 
 
 
         [SerializeField]
-        private Transform spawnPoint, meleeAtkSpawn1, meleeAtkSpawn2;
+        private Transform spawnPoint, meleeAtkSpawn1, meleeAtkSpawn2, buffspawnpoint, UltiAltSpawnpoint;
 
 
         [SerializeField]
         private float meleeAttackDuration1, meleeAttackSpeedMultiplier;
         private int meleeCombo = 1;
+        [SerializeField] public NetworkAnimator networkAnimator;
 
         [Client]
         public void normalAtk(bool _multiplier)
         {
+            if (meleeCombo == 1)
+            {
+                networkAnimator.SetTrigger("AstarothAttack");
+            }
+            else if (meleeCombo == 2)
+            {
+                networkAnimator.SetTrigger("AstarothAttack2");
+
+            }
+            StartCoroutine(Character2Attack());
             CmdNormalAtk(_multiplier);
+        }
+        IEnumerator Character2Attack()
+        {
+            yield return new WaitForSeconds(0.2f);
+            if (meleeCombo == 1)
+            {
+                meleeCombo = 2;
+            }
+            else if (meleeCombo == 2)
+            {
+                meleeCombo = 1;
+            }
         }
 
         [Client]
@@ -136,51 +159,54 @@ namespace SheepDoom
         }
 
         [Client]
-        public void SpecialAtk()
+        public void SpecialAtk(bool _isAltSpecial)
         {
-            CmdSpecialAtk();
+            CmdSpecialAtk(_isAltSpecial);
         }
 
         [Command]
-        void CmdSpecialAtk()
+        void CmdSpecialAtk(bool _isAltSpecial)
         {
-            /* 
-                             firedProjectile = Instantiate(altUlti, transform);
-                firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
+            if (!_isAltSpecial)
+            {
+
+                firedProjectile = Instantiate(normalSpecial, transform);
                 firedProjectile.transform.SetParent(null, false);
                 firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
 
-                //setting channeling conditions (if owner moves, destroy)
-                firedProjectile.GetComponent<ChannelingScript>().setOwner(this.gameObject);
-
-                //setting healing over time conditions (heal allies, damage enemies)
-                firedProjectile.GetComponent<HealActivateScript>().setTeamID(this.gameObject.GetComponent<PlayerAdmin>().getTeamIndex());
-                firedProjectile.GetComponent<HealActivateScript>().activateHeal();
-
+                //set owner
+                firedProjectile.GetComponent<ObjectFollowScript>().owner = this.gameObject;
 
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
-             */
+            }
+            if (_isAltSpecial)
+            {
+                //For Buff Effect Only
+                firedProjectile = Instantiate(AltSpecialBuff, transform);
+                firedProjectile.transform.SetParent(null, false);
+                firedProjectile.transform.SetPositionAndRotation(buffspawnpoint.position, buffspawnpoint.rotation);
 
-            firedProjectile = Instantiate(normalSpecial, transform);
-            firedProjectile.transform.SetParent(null, false);
-            firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+                //set owner
+                firedProjectile.GetComponent<BuffFollowScript>().owner = this.gameObject;
 
-            //set owner
-            firedProjectile.GetComponent<ObjectFollowScript>().owner = this.gameObject;
-
-            NetworkServer.Spawn(firedProjectile, connectionToClient);
+                NetworkServer.Spawn(firedProjectile, connectionToClient);
+            }
         }
 
         [Client]
         public void UltiAtk(bool _isAltUlti)
         {
-            Vector3 additionalDistance = new Vector3(0, 40, 0);
-            additionalDistance += (transform.forward * 30);
-            CmdUltiAtk(additionalDistance, _isAltUlti);
+            /*Vector3 additionalDistance = new Vector3(0, 40, 0);
+            additionalDistance += (transform.forward * 30);*/
+            if (!_isAltUlti)
+            {
+                networkAnimator.SetTrigger("AstarothUlti1");
+            }
+            CmdUltiAtk(_isAltUlti);
         }
 
         [Command]
-        void CmdUltiAtk(Vector3 _distance, bool _isAltUlti)
+        void CmdUltiAtk(bool _isAltUlti)
         {
             if (!_isAltUlti)
             {
@@ -188,12 +214,20 @@ namespace SheepDoom
                 firedProjectile = Instantiate(normalUlti, transform);
                 firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                 firedProjectile.transform.SetParent(null, false);
-                firedProjectile.transform.SetPositionAndRotation(spawnPoint.position + _distance, spawnPoint.rotation);
+                firedProjectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
 
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
             }
             else if (_isAltUlti)
+            {
+                firedProjectile = Instantiate(AltUlti, transform);
+                firedProjectile.GetComponent<SelfBuffScript>().owner = this.gameObject;
+                firedProjectile.transform.SetParent(null, false);
+                firedProjectile.transform.SetPositionAndRotation(UltiAltSpawnpoint.position, UltiAltSpawnpoint.rotation);
+
                 GetComponent<CharacterMovement>().changeSpeed("speedUp", 5, 1.5f);
+                NetworkServer.Spawn(firedProjectile, connectionToClient);
+            }
         }
 
         /*
@@ -207,5 +241,5 @@ namespace SheepDoom
                 normalSpecial.GetComponent<PlayerChild>().refreshDuration();
             }
         } */
-        }
+    }
     }
