@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: e237935973540a54f86fcb325efbe1eb
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &600843355084880221
 MonoBehaviour:
@@ -239,7 +239,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.85
+      value: 0.95
       inSlope: 0
       outSlope: 0
       tangentMode: 0

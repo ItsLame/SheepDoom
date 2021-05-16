@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbe145639f0ed85459c4f7ddb2a72be6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBGMPlaying: 0
   SceneName: 
   listenerEnabled: 0
   sounds:
@@ -61,8 +62,8 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Start
     clip: {fileID: 8300000, guid: b6a54169361f36d48b6b6f3eb806524f, type: 3}
-    volume: 1
-    pitch: 1
+    volume: 0.3
+    pitch: 1.07
     loop: 0
     source: {fileID: 0}
   - name: BGMLobby

@@ -528,6 +528,7 @@ GameObject:
   - component: {fileID: 1027564578816654100}
   - component: {fileID: 7604883146323404846}
   - component: {fileID: 7140592165555459841}
+  - component: {fileID: -8744709239590517710}
   m_Layer: 18
   m_Name: Astaroth(WithGM)
   m_TagString: Player
@@ -915,6 +916,14 @@ MonoBehaviour:
   _ShopUltiButton1: {fileID: 0}
   _ShopUltiButton2: {fileID: 0}
   _ShopX: {fileID: 0}
+--- !u!81 &-8744709239590517710
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405430343849686523}
+  m_Enabled: 1
 --- !u!1 &440612793689559736
 GameObject:
   m_ObjectHideFlags: 0

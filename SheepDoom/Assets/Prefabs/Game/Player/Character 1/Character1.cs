@@ -190,7 +190,7 @@ namespace SheepDoom
                 //if interrupted by cc (sleep)
                 if (isCasting && gameObject.GetComponent<CharacterMovement>().isSleeped)
                 {
-                    networkAnimator.SetTrigger("CastCancel");
+        //            networkAnimator.SetTrigger("CastCancel");
                     Debug.Log("Casting failed");
                     isCasting = false;
                 }
@@ -203,7 +203,7 @@ namespace SheepDoom
 
                     if (dist > 1)
                     {
-                        networkAnimator.SetTrigger("CastCancelToRun");
+              //          networkAnimator.SetTrigger("CastCancelToRun");
                         isCastingUltimate = false;
 
                     }
@@ -233,7 +233,7 @@ namespace SheepDoom
                     timeRemaining -= Time.deltaTime;
                     if (timeRemaining <= 0)
                     {
-                        networkAnimator.SetTrigger("CastCancel");
+              //          networkAnimator.SetTrigger("CastCancel");
                         isCastingUltimateComplete = false;
                     }
                     if (timeRemaining > 0)

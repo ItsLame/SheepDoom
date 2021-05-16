@@ -118,11 +118,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camFollowscript: {fileID: 7880487378744475096}
   camRoamscript: {fileID: 9049040337576406410}
+  camViewChanged: 0
   topScreenClicked: 0
   bottomScreenClicked: 0
   leftScreenClicked: 0
   rightScreenClicked: 0
   snapBackToPlayer: 1
+  isVictory: 0
 --- !u!114 &7880487378744475096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,7 +229,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7944493282106236459}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &7944493282106236452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,11 +262,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camFollowscript: {fileID: 7378136028729980246}
   camRoamscript: {fileID: 7944493282106236452}
+  camViewChanged: 0
   topScreenClicked: 0
   bottomScreenClicked: 0
   leftScreenClicked: 0
   rightScreenClicked: 0
   snapBackToPlayer: 1
+  isVictory: 0
 --- !u!114 &7378136028729980246
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2090,6 +2090,7 @@ GameObject:
   - component: {fileID: 6692717396017738801}
   - component: {fileID: 7709732266149721181}
   - component: {fileID: 4940055168606706142}
+  - component: {fileID: 7411676481165590815}
   m_Layer: 18
   m_Name: IsabellaPrefab
   m_TagString: Player
@@ -2475,6 +2476,14 @@ MonoBehaviour:
   isNeutral: 0
   isBoss: 0
   isMinion: 0
+--- !u!81 &7411676481165590815
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2328060059691665083}
+  m_Enabled: 1
 --- !u!1 &2375654727659260536
 GameObject:
   m_ObjectHideFlags: 0
