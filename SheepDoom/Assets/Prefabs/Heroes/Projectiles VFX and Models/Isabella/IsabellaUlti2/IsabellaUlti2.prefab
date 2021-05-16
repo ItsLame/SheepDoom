@@ -19570,7 +19570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 286626babb85d5c4eb23271c128cb8be
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &-2050515575489444811
 MonoBehaviour:
@@ -19604,7 +19604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  healAmount: 0.5
+  healAmount: 10
   damagesEnemy: 1
 --- !u!114 &2203047753045599882
 MonoBehaviour:
