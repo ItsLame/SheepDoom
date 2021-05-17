@@ -56,9 +56,9 @@ namespace SheepDoom
 
         void Start()
         {
-            Character1 = Resources.Load<Sprite>("Mario");
-            Character2 = Resources.Load<Sprite>("Luigi");
-            Character3 = Resources.Load<Sprite>("Peach");
+            Character1 = Resources.Load<Sprite>("AlmaCS");
+            Character2 = Resources.Load<Sprite>("AstarothCS");
+            Character3 = Resources.Load<Sprite>("IsabellaCS");
         }
 
         //update score display on all clients
