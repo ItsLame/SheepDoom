@@ -2072,6 +2072,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3099953079081114625}
   - component: {fileID: -2869506899236679512}
+  - component: {fileID: 5529504839409933602}
   - component: {fileID: 6682360654627658193}
   - component: {fileID: -5858832270038182223}
   - component: {fileID: 6930888262510971493}
@@ -2090,7 +2091,6 @@ GameObject:
   - component: {fileID: 7709732266149721181}
   - component: {fileID: 4940055168606706142}
   - component: {fileID: 7411676481165590815}
-  - component: {fileID: 5529504839409933602}
   m_Layer: 18
   m_Name: IsabellaPrefab
   m_TagString: Player
@@ -2134,6 +2134,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!136 &5529504839409933602
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2328060059691665083}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.33
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.59, z: 0.16}
 --- !u!65 &6682360654627658193
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2470,20 +2484,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2328060059691665083}
   m_Enabled: 1
---- !u!136 &5529504839409933602
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2328060059691665083}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2.33
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.59, z: 0.16}
 --- !u!1 &2375654727659260536
 GameObject:
   m_ObjectHideFlags: 0
@@ -6793,7 +6793,7 @@ BoxCollider:
   m_GameObject: {fileID: 7037326225792261241}
   m_Material: {fileID: 13400000, guid: 7704be76a60fb6e46bff37d58f20f6bd, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

@@ -301,6 +301,7 @@ namespace SheepDoom
                         if (killerTeamID == 1)
                         {
                //             Debug.Log("Spawning boss from blue team");
+
                             blueTeamPos.GetComponent<BaseCreepSpawner>().spawnConvertedBoss();
                         }
 
