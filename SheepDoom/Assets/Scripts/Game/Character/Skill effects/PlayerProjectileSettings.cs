@@ -182,7 +182,8 @@ namespace SheepDoom
                 //announce killing of big boss
                 if (bossParent.GetComponent<MegaBossNewScript>().getHealth() <= 0)
                 {
-                    this.gameObject.GetComponent<GameEvent>().AnnounceBossDeath(owner, ownerTeamID);
+                    string defeater = owner.gameObject.GetComponent<PlayerAdmin>().P_playerName;
+                    bossParent.GetComponent<GameEvent>().AnnounceBossDeath(defeater, ownerTeamID);
                 }
 
                 if (destroyOnContact)
