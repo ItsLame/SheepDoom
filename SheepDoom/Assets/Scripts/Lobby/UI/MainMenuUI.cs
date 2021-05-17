@@ -1,17 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class MainMenuUI : MonoBehaviour
+namespace SheepDoom
 {
-    public Animator transition;
-    public void QuitGame()
+    public class MainMenuUI : NetworkBehaviour
     {
-        Application.Quit(); 
-    }
+        public Animator transition;
+        public void QuitGame()
+        {
+            Application.Quit(); 
+        }
 
-    public void FadeOut()
-    {
-        transition.SetTrigger("FadeOut");
-    }
+        public void QuitMainMenu()
+        {
+            NetworkClient.Disconnect();
+        }
+
+        public void FadeOut()
+        {
+            transition.SetTrigger("FadeOut");
+        }
+}
 }
