@@ -131,6 +131,8 @@ namespace SheepDoom
                 FindMe.instance.P_BlueShop.GetComponent<Shop>().P_shopPlayer = gameObject;
             else if (getTeamIndex() == 2)
                 FindMe.instance.P_RedShop.GetComponent<Shop>().P_shopPlayer = gameObject;
+
+            gameObject.GetComponent<AudioListener>().enabled = true;
         }
 
         public override void OnStartServer()

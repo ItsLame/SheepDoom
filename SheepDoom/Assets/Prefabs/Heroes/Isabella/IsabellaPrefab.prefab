@@ -2090,6 +2090,7 @@ GameObject:
   - component: {fileID: 6692717396017738801}
   - component: {fileID: 7709732266149721181}
   - component: {fileID: 4940055168606706142}
+  - component: {fileID: 7123637428582596720}
   m_Layer: 18
   m_Name: IsabellaPrefab
   m_TagString: Player
@@ -2371,6 +2372,7 @@ MonoBehaviour:
     type: 3}
   maxHealth: 125
   currenthealth: 0
+  playerDead: 0
 --- !u!114 &2983943329993944982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2392,6 +2394,7 @@ MonoBehaviour:
   deadTextObject: {fileID: 0}
   respawninginObject: {fileID: 0}
   PlayerRespawnTimerObject: {fileID: 0}
+  playedDead: 0
 --- !u!114 &-6655176209038339737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2475,6 +2478,14 @@ MonoBehaviour:
   isNeutral: 0
   isBoss: 0
   isMinion: 0
+--- !u!81 &7123637428582596720
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2328060059691665083}
+  m_Enabled: 0
 --- !u!1 &2375654727659260536
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,8 +12,11 @@ namespace SheepDoom
         public AudioClip Sound2;
         public AudioClip Sound3;
         public AudioSource ObjectiveSound;
+        /*
+        public bool capturing = false;
+        public bool hasPlayedSound = false;
         public float SoundInterval;
-        public float SoundTimer;
+        [SyncVar] public float SoundTimer;*/
 
         [Header("--- Reference Objects ---")]
         [SerializeField] private GameObject scoreGameObject;
@@ -32,7 +35,7 @@ namespace SheepDoom
         //captured bools
         [SyncVar] protected bool capturedByBlue;
         [SyncVar] protected bool capturedByRed;
-        
+
         // hp: base/tower hp
         // inGameHP: to be used in game, gonna be the one fluctuating basically
         // captureRate: rate of capture
@@ -45,62 +48,62 @@ namespace SheepDoom
 
         protected GameObject P_scoreGameObject
         {
-            get{return scoreGameObject;}
-            set{scoreGameObject = value;}
+            get { return scoreGameObject; }
+            set { scoreGameObject = value; }
         }
 
         protected float P_hp
         {
-            get{return hp;}
-            set{hp = value;}
+            get { return hp; }
+            set { hp = value; }
         }
-        
+
         protected virtual float P_inGameHP
         {
-            get{return inGameHP;}
-            set{inGameHP = value;}
+            get { return inGameHP; }
+            set { inGameHP = value; }
         }
 
         protected float P_captureRate
         {
-            get{return captureRate;}
-            set{captureRate = value;}
+            get { return captureRate; }
+            set { captureRate = value; }
         }
 
         protected float P_regenRate
         {
-            get{return regenRate;}
-            set{regenRate = value;}
+            get { return regenRate; }
+            set { regenRate = value; }
         }
 
         protected virtual bool P_capturedByBlue
         {
-            get{return capturedByBlue;}
-            set{capturedByRed = value;}
+            get { return capturedByBlue; }
+            set { capturedByRed = value; }
         }
 
         protected virtual bool P_capturedByRed
         {
-            get{return capturedByRed;}
-            set{capturedByRed = value;}
+            get { return capturedByRed; }
+            set { capturedByRed = value; }
         }
 
         public int P_numOfCapturers
         {
-            get{return numOfCapturers;}
-            set{numOfCapturers = value;}
+            get { return numOfCapturers; }
+            set { numOfCapturers = value; }
         }
 
         protected bool P_giveScoreToCapturers
         {
-            get{return giveScoreToCapturers;}
-            set{giveScoreToCapturers = value;}
+            get { return giveScoreToCapturers; }
+            set { giveScoreToCapturers = value; }
         }
 
         protected bool P_isBase
         {
-            get{return isBase;}
-            set{isBase = value;}
+            get { return isBase; }
+            set { isBase = value; }
         }
 
         #endregion
@@ -128,7 +131,7 @@ namespace SheepDoom
                 GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
                 GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.blue * 1.5f);
             }
-                
+
             else if (P_capturedByRed && !P_capturedByBlue)
             {
                 GetComponent<Renderer>().material.SetColor("_Color", Color.red);
@@ -147,27 +150,31 @@ namespace SheepDoom
             ObjectiveSound.clip = Sound2;
             ObjectiveSound.PlayOneShot(ObjectiveSound.clip, ObjectiveSound.volume);
         }
-
+        /*
         [ClientRpc]
         public void playCapturingSound()
         {
             ObjectiveSound.clip = Sound1;
             ObjectiveSound.PlayOneShot(ObjectiveSound.clip, ObjectiveSound.volume);
-            /*
-            SoundTimer += Time.deltaTime;
-
-            if (SoundTimer >= SoundInterval)
-            {
-                ObjectiveSound.clip = Sound1;
-                ObjectiveSound.PlayOneShot(ObjectiveSound.clip, ObjectiveSound.volume);
-            }*/
-
+            Invoke("SetPlayFalse", 3f);
         }
+
+        public void setPlayFalse()
+        {
+            hasPlayedSound = false;
+        }*/
 
         protected virtual void Update()
         {
             if (isServer)
             {
+                /*
+                if (capturing && hasPlayedSound == false)
+                {
+                    playCapturingSound();
+                    hasPlayedSound = true;
+                }*/
+
                 // once HP = 0, notify the scoring and convert the tower
                 if (P_inGameHP <= 0 && (!P_capturedByBlue || !P_capturedByRed) && !P_isBase)
                 {
@@ -182,20 +189,21 @@ namespace SheepDoom
                 if (P_numOfCapturers == 0 && P_inGameHP < P_hp)
                 {
                     if (P_isBase)
-                         OpenBaseAnim();
+                        OpenBaseAnim();
 
+                  //  capturing = false;
                     ModifyingHealth(P_regenRate * Time.deltaTime);
                     RpcUpdateClients(false, true, false);
                 }
-                
-                if(P_isBase && P_inGameHP <= 0 && gameStatus != null)
+
+                if (P_isBase && P_inGameHP <= 0 && gameStatus != null)
                 {
-                    if(!gameStatus.GetComponent<GameStatus>().P_gameEnded)
+                    if (!gameStatus.GetComponent<GameStatus>().P_gameEnded)
                     {
                         playCapturedSound();
                         Victory();
                         return;
-                    }    
+                    }
                 }
             }
         }
@@ -243,7 +251,7 @@ namespace SheepDoom
         {
             while (P_capturedByBlue == _oldBlue && P_capturedByRed == _oldRed)
                 yield return null;
-            
+
             SetTowerColor();
             ModifyingHealth(0); // 0 because value from server will sync
         }
@@ -258,7 +266,7 @@ namespace SheepDoom
                 float tID = _collider.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
                 bool isDed = _collider.gameObject.GetComponent<PlayerHealth>().isPlayerDead();
                 if (((P_capturedByRed && tID == 1) || (P_capturedByBlue && tID == 2)) && !isDed)
-                    P_numOfCapturers = P_numOfCapturers + 1;   
+                    P_numOfCapturers = P_numOfCapturers + 1;
             }
         }
 
@@ -278,9 +286,9 @@ namespace SheepDoom
                 {
                     //decrease point normally if not base
                     ModifyingHealth(-(P_captureRate * Time.deltaTime));
-                    RpcUpdateClients(false, true, false );
+                    RpcUpdateClients(false, true, false);
 
-                    playCapturingSound();
+                  //  capturing = true;
                 }
             }
         }

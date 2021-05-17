@@ -1,2 +1,10 @@
 "Portal" Mysterious Space Background Music No Copyright
 https://www.youtube.com/watch?v=ziFxpjRbfJc
+
+SFX done in https://musiclab.chromeexperiments.com/Song-Maker by jh
+alma: synth
+asta: strings
+alma: marimba
+
+BGM on main character
+AudioListener on all chars -> player admin activate if has authority

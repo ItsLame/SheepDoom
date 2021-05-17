@@ -33,13 +33,13 @@ namespace SheepDoom
                 if (isServer)
                 {
                     if (isNeutral)
-                        RpcAnnouncers(gotKilled + " has been slain by a neutral");
+                        RpcAnnouncers(gotKilled + " has been slain by a neutral!");
                     else if (isBoss)
-                        RpcAnnouncers("The mega boss has taken " + gotKilled + "'s life");
+                        RpcAnnouncers("The mega boss has taken " + gotKilled + "'s life!");
                     else if (isMinion)
-                        RpcAnnouncers(gotKilled + " has been slain by a minion");
+                        RpcAnnouncers(gotKilled + " has been slain by a minion!");
                     else
-                        RpcAnnouncers(whoKilled + " killed " + gotKilled);
+                        RpcAnnouncers(whoKilled + " has slain " + gotKilled);
                 }
             }
         }
@@ -47,9 +47,9 @@ namespace SheepDoom
         public void AnnounceBossDeath(string defeater, float teamID)
         {
             if (teamID == 1)
-                RpcAnnouncers("Consortium's: " + defeater + " has slain the mega boss");
+                RpcAnnouncers("Blue's: " + defeater + " has slain the boss!");
             else
-                RpcAnnouncers("Coalation's: " + defeater + " has slain the mega boss");
+                RpcAnnouncers("Red's: " + defeater + " has slain the boss!");
         }
 
         [ClientRpc]
