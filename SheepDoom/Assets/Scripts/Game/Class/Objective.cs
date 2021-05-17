@@ -151,13 +151,16 @@ namespace SheepDoom
         [ClientRpc]
         public void playCapturingSound()
         {
+            ObjectiveSound.clip = Sound1;
+            ObjectiveSound.PlayOneShot(ObjectiveSound.clip, ObjectiveSound.volume);
+            /*
             SoundTimer += Time.deltaTime;
 
             if (SoundTimer >= SoundInterval)
             {
                 ObjectiveSound.clip = Sound1;
                 ObjectiveSound.PlayOneShot(ObjectiveSound.clip, ObjectiveSound.volume);
-            }
+            }*/
 
         }
 
