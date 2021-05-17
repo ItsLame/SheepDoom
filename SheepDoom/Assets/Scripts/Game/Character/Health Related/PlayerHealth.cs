@@ -25,7 +25,7 @@ namespace SheepDoom
 
         //is character dead?
         [SyncVar]
-        bool playerDead = false;
+        [SerializeField]bool playerDead = false;
 
         private void Start()
         {

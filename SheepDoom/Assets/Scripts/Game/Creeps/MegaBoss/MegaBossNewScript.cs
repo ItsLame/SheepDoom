@@ -140,6 +140,7 @@ namespace SheepDoom
                     isLockedOn = false;
                     targetObject = null;
                     agent.autoBraking = false;
+                    agent.SetDestination(transform.position);
                 }
 
                 //attack player in range
@@ -274,6 +275,7 @@ namespace SheepDoom
                 if (targetObject == null)
                 {
                     isLockedOn = false;
+                    agent.SetDestination(transform.position);
                     return;
                 }
 
