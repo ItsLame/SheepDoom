@@ -21,7 +21,6 @@ namespace SheepDoom
 
         public void setOwner(GameObject firer)
         {
-            //if (!hasAuthority) return; // not needed i think
             owner = firer;
         }
 

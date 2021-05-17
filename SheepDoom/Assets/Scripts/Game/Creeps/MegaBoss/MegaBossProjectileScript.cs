@@ -123,18 +123,9 @@ namespace SheepDoom
                 //linear movement
                 if (!hasTarget && !detonates)
                 {
-                    /*target
-                    if (!targetted)
-                    {
-                        transform.LookAt(targetObject.transform);
-                        targetted = true;
-                    }*/
-
                     //then go straight
                     m_startTime += Time.deltaTime;
                     transform.Translate(Vector3.forward * m_Speed * Time.deltaTime);
-
-
 
                     //lifespan up
                     if (m_startTime > m_Lifespan)
@@ -168,7 +159,6 @@ namespace SheepDoom
                     //activate collider once times up to 'explode'
                     if (detonateTimer <= 0)
                     {
-       //                 Debug.Log("Detonating boss attack");
                         this.gameObject.GetComponent<SphereCollider>().enabled = true;
                         Invoke("Destroyy", 1f);
                     }
@@ -181,7 +171,6 @@ namespace SheepDoom
                     //start counting
                     if (detonateTimerInGame >= 0)
                     {
-          //              Debug.Log("Detonating in: " + detonateTimer);
                         detonateTimerInGame -= Time.deltaTime;
                     }
 
@@ -196,15 +185,11 @@ namespace SheepDoom
                     //activate collider once times up to 'explode'
                     if (detonateTimerInGame <= 0)
                     {
-      //                  Debug.Log("Detonating boss attack");
                         this.gameObject.GetComponent<SphereCollider>().enabled = true;
                         Invoke("Destroyy", 1f);
                     }
-
                 }
-
             }
         }
     }
-
 }

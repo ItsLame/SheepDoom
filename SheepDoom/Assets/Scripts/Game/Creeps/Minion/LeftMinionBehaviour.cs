@@ -23,13 +23,9 @@ namespace SheepDoom
         public NavMeshAgent agent;
         [Space(15)]
         public bool ismeleeattack = false;
-        //       Animator charAnim;
 
         //Aggro
-        //private float speed = 15.0f;
         private Vector3 wayPointPos;
-        // public float howclose;
-        // private float dist;
         [SerializeField]
         private float CreepMoveSpeed;
 
@@ -261,7 +257,6 @@ namespace SheepDoom
         public void TakeDamage(float damage)
         {
             currenthealth += damage;
-            //              RpcUpdateMinionHp();
             float currenthealthPct = currenthealth / maxHealth;
             OnHealthPctChanged(currenthealthPct);
         }
