@@ -12,26 +12,37 @@ namespace SheepDoom
         [SerializeField] private Vector3 ownerTransform;
 
         //set method
+        [Server]
         public void setOwner(GameObject theOwner)
         {
-       //     Debug.Log(theOwner.name + " set to channel's owner");
             owner = theOwner;
         }
 
         void Start()
         {
-            ownerTransform = owner.gameObject.transform.position;
+            if(isClient && hasAuthority)
+                ownerTransform = owner.gameObject.transform.position;
         }
 
+        [Command]
+        void CmdDestroy()
+        {
+            Debug.Log("Did i run in command?");
+            NetworkServer.Destroy(gameObject);
+        }
 
-        [ServerCallback]
         void Update()
         {
             //destroy object if owner position change
-            if ((Vector3.Distance(ownerTransform, owner.gameObject.transform.position) > 5))
-            {
-                Destroy(this.gameObject);
-            }
+           if(isClient && hasAuthority)
+           {
+                if ((Vector3.Distance(ownerTransform, owner.gameObject.transform.position) > 5))
+                {
+                    Debug.Log("Did i run in update?");
+                    CmdDestroy();
+                    //Destroy(this.gameObject);
+                }
+           }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace SheepDoom
 
         [Header("Healing AOE / object)")]
         [Space(15)]
-        public GameObject HealingRadiusObject = null;
+        public GameObject HealingRadiusObject;
         [SerializeField] private bool hasHealingRadiusObject;
 
         [Header("Bullet Properties")]
@@ -59,7 +59,7 @@ namespace SheepDoom
         public override void OnStartServer()
         {
             ownerTeamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-            HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().setTeamID(ownerTeamID);
+            if(HealingRadiusObject != null) HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().setTeamID(ownerTeamID);
         }
 
         [ServerCallback]
@@ -116,11 +116,6 @@ namespace SheepDoom
                         Invoke("Destroyy", durationBeforeDestroy);
                 }
             }
-            else if (col.gameObject.CompareTag("Tower"))
-            {
-                
-            }
-          
             else if (col.gameObject.CompareTag("BaseMinion"))
             {
                 if (ownerTeamID == 2)
