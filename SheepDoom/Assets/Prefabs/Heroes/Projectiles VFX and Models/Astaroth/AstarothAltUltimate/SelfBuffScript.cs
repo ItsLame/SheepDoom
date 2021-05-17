@@ -22,9 +22,14 @@ namespace SheepDoom
 
         private void Start()
         {
-            ownerTransform = owner.transform;
-            durationInGame = duration;
-            teamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+            if (isServer)
+            {
+                durationInGame = duration;
+                teamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
+            }
+
+            if (isClient && hasAuthority)
+                ownerTransform = owner.transform;
         }
 
         [ServerCallback]
@@ -34,25 +39,27 @@ namespace SheepDoom
             if (col.gameObject.CompareTag("Player"))
             {
                 if (col.gameObject == owner)
-                {
                     col.gameObject.GetComponent<PlayerHealth>().modifyinghealth(HealPerSecond);
-                }
             }
         }
 
         private void Update()
         {
-            relativePosition = ownerTransform.TransformPoint(wantedPosition);
-
-            this.gameObject.transform.position = relativePosition;
-            this.gameObject.transform.LookAt(ownerTransform);
-
-            //timers
-            durationInGame -= Time.deltaTime;
-
-            if (durationInGame <= 0)
+            if(isClient && hasAuthority)
             {
-                Destroy(this.gameObject);
+                relativePosition = ownerTransform.TransformPoint(wantedPosition);
+
+                this.gameObject.transform.position = relativePosition;
+                this.gameObject.transform.LookAt(ownerTransform);
+            }
+            
+            if(isServer)
+            {
+                //timers
+                durationInGame -= Time.deltaTime;
+
+                if (durationInGame <= 0)
+                    NetworkServer.Destroy(gameObject);
             }
         }
     }

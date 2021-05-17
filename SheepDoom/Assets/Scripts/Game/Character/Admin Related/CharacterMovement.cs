@@ -11,7 +11,6 @@ namespace SheepDoom
         //original speed
         public float baseSpeed;
         //speed to be used in game
-        //[SyncVar(hook = nameof(SyncPlayerSpeed))]
         public float speed;
 
         public bool isSpeedAltered;

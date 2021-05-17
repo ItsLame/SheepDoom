@@ -166,7 +166,6 @@ namespace SheepDoom
 
                 //set owner
                 firedProjectile.GetComponent<ObjectFollowScript>().owner = this.gameObject;
-                //firedProjectile.GetComponent<BuffFollowScript>().owner = this.gameObject;
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
             }
         }
