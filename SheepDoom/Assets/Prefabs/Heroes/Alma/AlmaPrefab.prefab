@@ -3289,7 +3289,7 @@ MonoBehaviour:
   AlternateSpecial: 0
   AlternateUlti: 0
   cooldown1: 0.3
-  cooldown2: 3
+  cooldown2: 5
   cooldown3: 10
   cooldown1Multiplier: 0
   cooldown1MultiplerTimer: 0
@@ -3379,6 +3379,7 @@ MonoBehaviour:
   deadTextObject: {fileID: 0}
   respawninginObject: {fileID: 0}
   PlayerRespawnTimerObject: {fileID: 0}
+  playedDead: 0
 --- !u!114 &5520957899820057777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3397,6 +3398,7 @@ MonoBehaviour:
     type: 3}
   maxHealth: 100
   currenthealth: 0
+  playerDead: 0
 --- !u!114 &5759055838470933253
 MonoBehaviour:
   m_ObjectHideFlags: 0
