@@ -115,7 +115,7 @@ MonoBehaviour:
   scale_speed: 1.015
   AOE_Duration: 2
   destroyOnContact: 0
-  damage: 5
+  damage: 8
 --- !u!114 &6650225642277682166
 MonoBehaviour:
   m_ObjectHideFlags: 0
