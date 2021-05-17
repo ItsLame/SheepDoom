@@ -120,20 +120,7 @@ namespace SheepDoom
             {
                 
             }
-            //used to test gold for now
-            else if (col.gameObject.CompareTag("NeutralMinion"))
-            {
-                owner.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
-
-                //if healing area is set by another object activate it 
-                if (hasHealingRadiusObject)
-                {
-                    HealingRadiusObject.gameObject.GetComponent<HealActivateScript>().activateHeal();
-                }
-
-                if (destroyOnContact)
-                    Invoke("Destroyy", durationBeforeDestroy);
-            }
+          
             else if (col.gameObject.CompareTag("BaseMinion"))
             {
                 if (ownerTeamID == 2)
