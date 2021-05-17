@@ -66,24 +66,12 @@ namespace SheepDoom
         //method to set direction of projectile
         public void setDirection(string direction)
         {
-
             if (direction == "left")
-            {
                 isMovingLeft = true;
-      //          Debug.Log("Setting direction to " + direction + " ," + isMovingLeft);
-            }
-
             else if (direction == "right")
-            {
                 isMovingRight = true;
-      //          Debug.Log("Setting direction to " + direction + " ," + isMovingRight);
-            }
-
             else if (direction == "down")
-            {
                 isMovingDown = true;
-     //           Debug.Log("Setting direction to " + direction + " ," + isMovingDown);
-            }
         }
 
         public override void OnStartServer()
@@ -116,7 +104,6 @@ namespace SheepDoom
                     //increase killer's kill count if target is killed
                     if (col.gameObject.GetComponent<PlayerHealth>().getHealth() <= 0)
                     {
-           //             Debug.Log("Killed player, increasing score");
                         col.gameObject.GetComponent<PlayerHealth>().SetPlayerDead();
                         owner.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
                         col.gameObject.GetComponent<GameEvent>().whoKilled = owner.gameObject.GetComponent<PlayerAdmin>().P_playerName;
@@ -129,11 +116,6 @@ namespace SheepDoom
                         Destroyy();
                 }
             }
-            else if (col.gameObject.CompareTag("Tower"))
-            {
-
-            }
-
             //used to test gold for now
             else if (col.gameObject.CompareTag("NeutralMinion"))
             {
@@ -201,7 +183,7 @@ namespace SheepDoom
                 if (col.gameObject.GetComponent<ObjectFollowScript>().teamID != ownerTeamID)
                 {
                     if (destroyOnContact)
-                        Destroyy();
+                        Destroyy(); 
                 }
             }
         }

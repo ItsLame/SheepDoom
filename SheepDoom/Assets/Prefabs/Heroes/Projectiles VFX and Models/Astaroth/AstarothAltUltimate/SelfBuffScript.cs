@@ -17,7 +17,6 @@ namespace SheepDoom
         private Vector3 wantedPosition = new Vector3(0, 8, 1.5f);
         [SyncVar] public GameObject owner;
         public Transform ownerTransform;
-        /*[SerializeField] private Rigidbody m_Rigidbody;*/
         [SyncVar] public float teamID;
         [SerializeField] public int HealPerSecond;
 
@@ -26,7 +25,6 @@ namespace SheepDoom
             ownerTransform = owner.transform;
             durationInGame = duration;
             teamID = owner.gameObject.GetComponent<PlayerAdmin>().getTeamIndex();
-
         }
 
         [ServerCallback]

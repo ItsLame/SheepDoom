@@ -48,8 +48,6 @@ namespace SheepDoom
         [Command]
         void CmdNormalAtk()
         {
-            //firedProjectile = Instantiate(normalAtkProjectile, spawnPoint.position, spawnPoint.rotation);
-
             firedProjectile = Instantiate(normalAtkProjectile, transform);
             firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
             firedProjectile.transform.SetParent(null, false);
@@ -68,10 +66,8 @@ namespace SheepDoom
         void CmdSpecialAtk(bool _isAltSpecial)
         {
             if (!_isAltSpecial)
-                //firedProjectile = Instantiate(normalSpecial, spawnPoint.position, spawnPoint.rotation);
                 firedProjectile = Instantiate(normalSpecial, transform);
             else if (_isAltSpecial)
-                //firedProjectile = Instantiate(altSpecial, spawnPoint.position, spawnPoint.rotation);
                 firedProjectile = Instantiate(altSpecial, transform);
 
             firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
@@ -238,13 +234,7 @@ namespace SheepDoom
                     networkAnimator.SetTrigger("CastCancel");
                     isChanneling = false;
                 }
-
             }
-
-
-
         }
-
     }
-
 }

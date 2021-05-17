@@ -43,8 +43,8 @@ namespace SheepDoom
 
         [Space(15)]
         //Melee
-        [SerializeField] public NetworkAnimator networkAnimator;
-        [SerializeField] public Animator animator;
+        public NetworkAnimator networkAnimator;
+        public Animator animator;
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
@@ -272,7 +272,6 @@ namespace SheepDoom
         {
             cooldown1MultiplierActive = false;
             cooldown1 = (cooldown1 - 0.05f) / cooldown1Multiplier;
-     //       Debug.Log("Atk Spd Buff ended");
         }
     }
 }

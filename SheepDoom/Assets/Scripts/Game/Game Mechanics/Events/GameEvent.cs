@@ -28,7 +28,7 @@ namespace SheepDoom
         // Update is called once per frame
         void Update()
         {
-            if (GetComponent<PlayerHealth>().isPlayerDead())
+            if (CompareTag("Player") && GetComponent<PlayerHealth>().isPlayerDead())
             {
                 if (isServer)
                 {

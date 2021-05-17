@@ -20,19 +20,18 @@ namespace SheepDoom
         private Text CurrentGoldInShopUI;
 
         //to sync player gold ui
-        public void SyncPlayerGold(float oldValue, float newValue)
+        void SyncPlayerGold(float oldValue, float newValue)
         {
             if (hasAuthority)
             {
-                CurrentGoldUI.text = CurrentGold.ToString();
-                CurrentGoldInShopUI.text = CurrentGold.ToString();
+                CurrentGoldUI.text = newValue.ToString();
+                CurrentGoldInShopUI.text = newValue.ToString();
             }
         }
 
         //gold call function
         public float GetCurrentGold()
         {
-       //    Debug.Log("Getting " + this.gameObject.name + "'s gold..");
             return CurrentGold;
         }
 
@@ -40,18 +39,12 @@ namespace SheepDoom
         [Command]
         public void CmdVaryGold(float goldValueChange)
         {
-      //      Debug.Log("Current Gold: " + CurrentGold);
-       //     Debug.Log("Gold increased by " + goldValueChange);
             CurrentGold += goldValueChange;
-      //      Debug.Log("Current Gold after: " + CurrentGold);
         }
 
         public void ServerVaryGold(float goldValueChange)
         {
-      //      Debug.Log("Current Gold: " + CurrentGold);
-      //      Debug.Log("Gold increased by " + goldValueChange);
             CurrentGold += goldValueChange;
-      //      Debug.Log("Current Gold after: " + CurrentGold);
         }
 
         public override void OnStartClient()

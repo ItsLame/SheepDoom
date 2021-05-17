@@ -8,15 +8,11 @@ namespace SheepDoom
     public class Character2 : NetworkBehaviour
     {
         [SerializeField]
-        private GameObject normalAtkMelee, normalAtkMelee2, normalSpecial, normalUlti, AltSpecialBuff, AltUlti;
+        private GameObject normalAtkMelee, normalSpecial, normalUlti, AltSpecialBuff, AltUlti;
         private GameObject firedProjectile;
-
-
-
 
         [SerializeField]
         private Transform spawnPoint, meleeAtkSpawn1, meleeAtkSpawn2, buffspawnpoint, UltiAltSpawnpoint;
-
 
         [SerializeField]
         private float meleeAttackDuration1, meleeAttackSpeedMultiplier;
@@ -64,23 +60,16 @@ namespace SheepDoom
             {
                 if (!_multiplier)
                 {
-                    Debug.Log("Firing melee from right to left");
                     firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                     firedProjectile.transform.SetParent(null, false);
                     firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
-
-                    //set direction
-                    //                 setProjectileDirection(firedProjectile, "right");
                     firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingLeft = true;
 
                     NetworkServer.Spawn(firedProjectile, connectionToClient);
-                    //                   comp.SetMoveSpeed(120);
-                    //                   comp.move(meleeAttackDuration1, "right");
                 }
                 else if (_multiplier)
                 {
-                    Debug.Log("Firing melee from right to left v2");
                     firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
 
@@ -90,15 +79,12 @@ namespace SheepDoom
 
                     //set direction
                     firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingLeft = true;
-                    //                    firedProjectile.GetComponent<PlayerProjectileSettings>().setDirection("right");
+                    
 
                     firedProjectile.transform.SetParent(null, false);
                     firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
 
                     NetworkServer.Spawn(firedProjectile, connectionToClient);
-
-                    //                   comp.SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
-                    //                   comp.move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "right");
                 }
                 meleeCombo = 2;
             }
@@ -106,23 +92,18 @@ namespace SheepDoom
             {
                 if (!_multiplier)
                 {
-                    Debug.Log("Firing melee from left to right");
                     firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                     firedProjectile.transform.SetParent(null, false);
                     firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
 
                     //set direction
-                    //                    setProjectileDirection(firedProjectile, "left");
                     firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingRight = true;
 
                     NetworkServer.Spawn(firedProjectile, connectionToClient);
-                    //                   comp.GetComponent<ObjectMovementScript>().SetMoveSpeed(120);
-                    //                   comp.GetComponent<ObjectMovementScript>().move(meleeAttackDuration1, "left");
                 }
                 else if (_multiplier)
                 {
-                    Debug.Log("Firing melee from left to right v2");
                     firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
 
@@ -132,14 +113,11 @@ namespace SheepDoom
 
                     //set direction
                     firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingRight = true;
-                    //                    firedProjectile.GetComponent<PlayerProjectileSettings>().setDirection("left");
 
                     firedProjectile.transform.SetParent(null, false);
                     firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
 
                     NetworkServer.Spawn(firedProjectile, connectionToClient);
-                    //                   comp.SetMoveSpeed(120 * meleeAttackSpeedMultiplier);
-                    //                   comp.move((meleeAttackDuration1 / meleeAttackSpeedMultiplier), "left");
                 }
                 meleeCombo = 1;
             }
@@ -187,8 +165,8 @@ namespace SheepDoom
                 firedProjectile.transform.SetPositionAndRotation(buffspawnpoint.position, buffspawnpoint.rotation);
 
                 //set owner
-                firedProjectile.GetComponent<BuffFollowScript>().owner = this.gameObject;
-
+                firedProjectile.GetComponent<ObjectFollowScript>().owner = this.gameObject;
+                //firedProjectile.GetComponent<BuffFollowScript>().owner = this.gameObject;
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
             }
         }
@@ -196,8 +174,6 @@ namespace SheepDoom
         [Client]
         public void UltiAtk(bool _isAltUlti)
         {
-            /*Vector3 additionalDistance = new Vector3(0, 40, 0);
-            additionalDistance += (transform.forward * 30);*/
             if (!_isAltUlti)
             {
                 networkAnimator.SetTrigger("AstarothUlti1");
@@ -210,7 +186,6 @@ namespace SheepDoom
         {
             if (!_isAltUlti)
             {
-                //firedProjectile = Instantiate(normalUlti, spawnPoint.position + _distance, spawnPoint.rotation);
                 firedProjectile = Instantiate(normalUlti, transform);
                 firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                 firedProjectile.transform.SetParent(null, false);
@@ -229,17 +204,5 @@ namespace SheepDoom
                 NetworkServer.Spawn(firedProjectile, connectionToClient);
             }
         }
-
-        /*
-        [ClientRpc]
-        void RpcEnableSkill()
-        {
-            if (normalSpecial != null)
-            {
-                normalSpecial.GetComponent<MeshRenderer>().enabled = true;
-                normalSpecial.GetComponent<BoxCollider>().enabled = true;
-                normalSpecial.GetComponent<PlayerChild>().refreshDuration();
-            }
-        } */
     }
-    }
+}

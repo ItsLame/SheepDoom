@@ -50,9 +50,7 @@ namespace SheepDoom
                 }
 
                 if (isServer)
-                {
                     RpcPlayerDead();
-                }
             }
         }
 
@@ -81,17 +79,9 @@ namespace SheepDoom
             if (playedDead == false)
             {
                 this.gameObject.GetComponent<NetworkAnimator>().ResetTrigger("Revive");
-       //         Debug.Log("playedDead = " + playedDead);
                 this.gameObject.GetComponent<NetworkAnimator>().SetTrigger("Dead");
-        //        Debug.Log("Playing death anim for " + this.gameObject.name);
                 playedDead = true;
             }
-
-            else
-            {
-     //           Debug.Log("Already played dead anim");
-            }
-
         }
 
         private void RespawnPlayer()

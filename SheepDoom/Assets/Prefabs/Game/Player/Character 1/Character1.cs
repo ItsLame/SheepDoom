@@ -37,9 +37,6 @@ namespace SheepDoom
         [Command]
         void CmdNormalAtk()
         {
-            //firedProjectile = Instantiate(normalAtkProjectile, spawnPoint.position, spawnPoint.rotation);
-            //firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
-
             firedProjectile = Instantiate(normalAtkProjectile, transform);
             firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
             firedProjectile.transform.SetParent(null, false);
@@ -76,7 +73,6 @@ namespace SheepDoom
         {
             if (!_isAltSpecial)
             {
-                //firedProjectile = Instantiate(normalSpecial, spawnPoint.position, spawnPoint.rotation);
                 firedProjectile = Instantiate(normalSpecial, transform);
                 firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                 firedProjectile.transform.SetParent(null, false);
@@ -86,7 +82,6 @@ namespace SheepDoom
             }
             else if (_isAltSpecial)
             {
-                //firedProjectile = Instantiate(altSpecial, spawnPoint.position, spawnPoint.rotation);
                 firedProjectile = Instantiate(altSpecial, transform);
                 firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                 firedProjectile.transform.SetParent(null, false);
@@ -128,10 +123,8 @@ namespace SheepDoom
         void CmdUltiAtk(bool _isAltUlti)
         {
             if (!_isAltUlti)
-                //firedProjectile = Instantiate(normalUlti, spawnPoint.position, spawnPoint.rotation);
                 firedProjectile = Instantiate(normalUlti, transform);
             else if (_isAltUlti)
-                //firedProjectile = Instantiate(altUlti, spawnPoint.position, spawnPoint.rotation);
                 firedProjectile = Instantiate(altUlti, transform);
 
             firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
@@ -149,16 +142,12 @@ namespace SheepDoom
                 if (isCasting)
                 {
                     dist = Vector3.Distance(lastPos, transform.position);
-       //             Debug.Log("Casting......");
                     castTimeInGame -= Time.deltaTime;
-    //                Debug.Log("Cast time left: " + castTimeInGame);
 
                     if (dist > 0.01)
                     {
                         networkAnimator.SetTrigger("CastCancelToRun");
-         //               Debug.Log("Player Moved, stopping incantation");
                         isCasting = false;
-
                     }
 
                 }
@@ -168,16 +157,13 @@ namespace SheepDoom
                 {
                     networkAnimator.ResetTrigger("Attack");
                     networkAnimator.SetTrigger("CastCancel");
-        //            Debug.Log("Casting complete");
                     isCastingComplete = true;
                     isCasting = false;
-
                 }
 
 
                 if (isCastingComplete)
                 {
-         //           Debug.Log("isCastingComplete 2: " + isCastingComplete);
                     CmdSpecialAtk(true);
                     isCastingComplete = false;
                 }
@@ -187,17 +173,12 @@ namespace SheepDoom
                 {
                     networkAnimator.ResetTrigger("Attack");
                     networkAnimator.SetTrigger("CastCancel");
-      //              Debug.Log("Casting failed");
                     isCasting = false;
                 }
 
                 //if interrupted by cc (sleep)
                 if (isCasting && gameObject.GetComponent<CharacterMovement>().isSleeped)
-                {
-        //            networkAnimator.SetTrigger("CastCancel");
-      //              Debug.Log("Casting failed");
                     isCasting = false;
-                }
                 // ======================================== for casting timer calculations for Ultimate ================================== 
                 //start the casting 
                 if (isCastingUltimate)
@@ -206,53 +187,31 @@ namespace SheepDoom
                     castTimeInGame -= Time.deltaTime;
 
                     if (dist > 1)
-                    {
-              //          networkAnimator.SetTrigger("CastCancelToRun");
                         isCastingUltimate = false;
-
-                    }
 
                 }
 
                 //when casting is complete
                 if (isCastingUltimate && castTimeInGame <= 0)
                 {
-                    if (whichulti == true)
-                    {
+                    if (whichulti)
                         CmdUltiAtk(true);
-                    }
-                    else if (whichulti == false)
-                    {
+                    else if (!whichulti)
                         CmdUltiAtk(false);
-                    }
                     isCastingUltimate = false;
                     isCastingUltimateComplete = true;
-
-
                 }
                 if (isCastingUltimateComplete)
                 {
                     dist = Vector3.Distance(lastPos, transform.position);
-        //            Debug.Log("Time remaining" + timeRemaining);
                     timeRemaining -= Time.deltaTime;
                     if (timeRemaining <= 0)
-                    {
-              //          networkAnimator.SetTrigger("CastCancel");
                         isCastingUltimateComplete = false;
-                    }
                     if (timeRemaining > 0)
                     {
                         if (dist > 1)
-                        {
-      //                      Debug.Log("i moved");
-             //               networkAnimator.SetTrigger("CastCancelToRun");
                             isCastingUltimateComplete = false;
-
-                        }
-
                     }
-
-
                 }
 
                 //if interrupted by cc (stun)
