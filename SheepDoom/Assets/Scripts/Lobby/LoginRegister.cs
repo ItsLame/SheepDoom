@@ -8,15 +8,17 @@ namespace SheepDoom
 {
     public class LoginRegister : MonoBehaviour
     {
-        [SerializeField] NetworkManager networkManager;
+        [SerializeField] private NetworkManager networkManager;
         [SerializeField] private InputField username;
-        [SerializeField] private InputField password;
 
         public static string SessionTicket;
 
         // Start is called before the first frame update
         void Start()
         {
+            if(!networkManager)
+                networkManager = SDNetworkManager.singleton.gameObject.GetComponent<NetworkManager>();
+
             if (!Application.isBatchMode) //Headless build
                 Debug.Log($"=== Client Build ===");
             else
