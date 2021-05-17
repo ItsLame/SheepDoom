@@ -27,7 +27,6 @@ namespace SheepDoom
         [Command]
         void CmdDestroy()
         {
-            Debug.Log("Did i run in command?");
             NetworkServer.Destroy(gameObject);
         }
 
@@ -37,11 +36,7 @@ namespace SheepDoom
            if(isClient && hasAuthority)
            {
                 if ((Vector3.Distance(ownerTransform, owner.gameObject.transform.position) > 5))
-                {
-                    Debug.Log("Did i run in update?");
                     CmdDestroy();
-                    //Destroy(this.gameObject);
-                }
            }
         }
     }
