@@ -84,6 +84,12 @@ MonoBehaviour:
     pitch: 1
     loop: 1
     source: {fileID: 0}
+  - name: Beep2
+    clip: {fileID: 8300000, guid: 2b86d57392db04142974008c452be664, type: 3}
+    volume: 0.7
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
 --- !u!81 &-1498576764727879285
 AudioListener:
   m_ObjectHideFlags: 0

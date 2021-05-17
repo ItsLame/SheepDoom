@@ -43350,7 +43350,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: -0.014760816}
 --- !u!54 &-2655420655986278077
 Rigidbody:
@@ -43382,7 +43382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 3ea611bdfd929ed43b82b1c81070fc74
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &-7983408153647573369
 MonoBehaviour:

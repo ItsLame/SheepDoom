@@ -14452,7 +14452,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4712672407335628}
   - component: {fileID: 198137071761331392}
-  - component: {fileID: 114638671294854202}
   - component: {fileID: 199059629376678626}
   - component: {fileID: -2153290365232926353}
   - component: {fileID: 5185417222715931931}
@@ -19201,27 +19200,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &114638671294854202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1878987882032996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a959a1b0b8414d4fb8a68bdc12d69ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectsOnCollision:
-  - {fileID: 1153730961705006, guid: f1aeeba2f9003904da5c0a24ba150198, type: 3}
-  DestroyTimeDelay: 1
-  UseWorldSpacePosition: 1
-  Offset: 0.15
-  rotationOffset: {x: 0, y: 0, z: 0}
-  useOnlyRotationOffset: 1
-  UseFirePointRotation: 0
-  DestoyMainEffect: 1
 --- !u!199 &199059629376678626
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -19297,7 +19275,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 3.467886, z: 1.9337561}
+  m_Size: {x: 2.11, y: 3.467886, z: 1.9337561}
   m_Center: {x: 0, y: 0.76605767, z: -0.014760798}
 --- !u!54 &5185417222715931931
 Rigidbody:

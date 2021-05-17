@@ -9915,7 +9915,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.15
+      scalar: 0.3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -24075,7 +24075,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4565549304361444}
   - component: {fileID: 198509539353394584}
-  - component: {fileID: 114517934570304128}
   - component: {fileID: 199214229298909674}
   - component: {fileID: -7088403648469616482}
   - component: {fileID: 5729536990247196296}
@@ -24120,7 +24119,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -28826,26 +28825,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &114517934570304128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1699459221867030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a959a1b0b8414d4fb8a68bdc12d69ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  EffectsOnCollision:
-  - {fileID: 1029544359644514, guid: aab2daf1fd2b23f4a9bdbbb38fc95704, type: 3}
-  Offset: 0.1
-  DestroyTimeDelay: 1
-  UseWorldSpacePosition: 1
-  UseFirePointRotation: 0
 --- !u!199 &199214229298909674
 ParticleSystemRenderer:
   serializedVersion: 6

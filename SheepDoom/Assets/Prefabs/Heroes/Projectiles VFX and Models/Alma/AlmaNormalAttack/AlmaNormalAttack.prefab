@@ -9583,7 +9583,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4412749077821204}
   - component: {fileID: 198789892598184418}
-  - component: {fileID: 114324166204473758}
   - component: {fileID: 199683473807085166}
   - component: {fileID: -7604313916840123855}
   - component: {fileID: -667435261030594048}
@@ -9591,7 +9590,6 @@ GameObject:
   - component: {fileID: 5451748049361977184}
   - component: {fileID: -345985942984620896}
   - component: {fileID: -3202240903119226022}
-  - component: {fileID: -4409313995334812330}
   m_Layer: 0
   m_Name: AlmaNormalAttack
   m_TagString: Attack
@@ -9631,7 +9629,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -14370,27 +14368,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &114324166204473758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1481587283673810}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a959a1b0b8414d4fb8a68bdc12d69ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectsOnCollision:
-  - {fileID: 1120835270511274, guid: 33cfc2755a55b7e4c86c9d7018efbaaa, type: 3}
-  DestroyTimeDelay: 1
-  UseWorldSpacePosition: 1
-  Offset: 0.1
-  rotationOffset: {x: 0, y: 0, z: 0}
-  useOnlyRotationOffset: 1
-  UseFirePointRotation: 0
-  DestoyMainEffect: 1
 --- !u!199 &199683473807085166
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -14575,26 +14552,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   forceHidden: 0
---- !u!114 &-4409313995334812330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1481587283673810}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a959a1b0b8414d4fb8a68bdc12d69ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectsOnCollision: []
-  DestroyTimeDelay: 5
-  UseWorldSpacePosition: 0
-  Offset: 0
-  rotationOffset: {x: 0, y: 0, z: 0}
-  useOnlyRotationOffset: 1
-  UseFirePointRotation: 0
-  DestoyMainEffect: 1
 --- !u!1 &1508716373653696
 GameObject:
   m_ObjectHideFlags: 0

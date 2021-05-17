@@ -4821,7 +4821,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4626950168529312}
   - component: {fileID: 198708430790554024}
-  - component: {fileID: 114533708928499944}
   - component: {fileID: 199135089733451208}
   - component: {fileID: -2992273558608185803}
   - component: {fileID: 3401319282554208823}
@@ -4867,7 +4866,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -9582,26 +9581,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &114533708928499944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1381080491605798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a959a1b0b8414d4fb8a68bdc12d69ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  EffectsOnCollision:
-  - {fileID: 1348390491135638, guid: d7d554880214e644bbbbfc89aa884b26, type: 3}
-  Offset: 0.1
-  DestroyTimeDelay: 2
-  UseWorldSpacePosition: 1
-  UseFirePointRotation: 0
 --- !u!199 &199135089733451208
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -9735,7 +9714,7 @@ MonoBehaviour:
   damage: 10
   destroyOnContact: 1
   m_Rigidbody: {fileID: 3401319282554208823}
-  m_Speed: 280
+  m_Speed: 150
   m_Lifespan: 3
   isAccelerating: 0
   isDeccelerating: 1

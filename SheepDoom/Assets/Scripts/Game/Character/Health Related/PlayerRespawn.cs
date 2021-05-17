@@ -80,6 +80,7 @@ namespace SheepDoom
         {
             if (playedDead == false)
             {
+                Debug.Log("Playing death anim for " + this.gameObject.name);
                 this.gameObject.GetComponent<NetworkAnimator>().SetTrigger("Dead");
                 playedDead = true;
             }
@@ -105,6 +106,7 @@ namespace SheepDoom
             GetComponent<PlayerHealth>().RefillHealth();
             GetComponent<PlayerHealth>().revivePlayer();
             RpcPlayerAlive();
+            playedDead = false;
 
         }
 
