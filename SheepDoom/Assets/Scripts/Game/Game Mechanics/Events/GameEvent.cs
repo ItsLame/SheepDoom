@@ -47,9 +47,9 @@ namespace SheepDoom
         public void AnnounceBossDeath(string defeater, float teamID)
         {
             if (teamID == 1)
-                RpcAnnouncers(defeater + " from Team Consortium has slain the mega boss");
+                RpcAnnouncers("Consortium's: " + defeater + " has slain the mega boss");
             else
-                RpcAnnouncers(defeater + " from Team Coalation has slain the mega boss");
+                RpcAnnouncers("Coalation's: " + defeater + " has slain the mega boss");
         }
 
         [ClientRpc]
