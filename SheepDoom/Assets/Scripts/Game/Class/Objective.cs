@@ -8,6 +8,13 @@ namespace SheepDoom
 {
     public abstract class Objective : NetworkBehaviour
     {
+        public AudioClip Sound1;
+        public AudioClip Sound2;
+        public AudioClip Sound3;
+        public AudioSource ObjectiveSound;
+        public float SoundInterval;
+        public float SoundTimer;
+
         [Header("--- Reference Objects ---")]
         [SerializeField] private GameObject scoreGameObject;
         [SerializeField] protected GameObject gameStatus;
@@ -134,6 +141,26 @@ namespace SheepDoom
             // empty
         }
 
+        [ClientRpc]
+        public void playCapturedSound()
+        {
+            ObjectiveSound.clip = Sound2;
+            ObjectiveSound.PlayOneShot(ObjectiveSound.clip, ObjectiveSound.volume);
+        }
+
+        [ClientRpc]
+        public void playCapturingSound()
+        {
+            SoundTimer += Time.deltaTime;
+
+            if (SoundTimer >= SoundInterval)
+            {
+                ObjectiveSound.clip = Sound1;
+                ObjectiveSound.PlayOneShot(ObjectiveSound.clip, ObjectiveSound.volume);
+            }
+
+        }
+
         protected virtual void Update()
         {
             if (isServer)
@@ -144,6 +171,8 @@ namespace SheepDoom
                     //show which point is captured, change point authority and max out towerHP
                     CapturedServer(P_capturedByBlue, P_capturedByRed);
                     RpcUpdateClients(true, false, false);
+
+                    playCapturedSound();
                 }
 
                 // regen hp if tower is not under capture
@@ -160,6 +189,7 @@ namespace SheepDoom
                 {
                     if(!gameStatus.GetComponent<GameStatus>().P_gameEnded)
                     {
+                        playCapturedSound();
                         Victory();
                         return;
                     }    
@@ -246,6 +276,8 @@ namespace SheepDoom
                     //decrease point normally if not base
                     ModifyingHealth(-(P_captureRate * Time.deltaTime));
                     RpcUpdateClients(false, true, false );
+
+                    playCapturingSound();
                 }
             }
         }

@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 namespace SheepDoom
 {
     public abstract class Shop : MonoBehaviour
     {
+        public AudioClip Sound1;
+        public AudioClip Sound2;
+        public AudioClip Sound3;
+        public AudioSource ShopSound;
+
         //linking to player
         private GameObject shopPlayer;
         [SerializeField] private GameObject skillIconSetter;
@@ -211,6 +217,9 @@ namespace SheepDoom
 
             //enable shopUI
             P_shopMenuUI.GetComponent<Canvas>().enabled = true;
+
+            ShopSound.clip = Sound1;
+            ShopSound.PlayOneShot(ShopSound.clip, ShopSound.volume);
         }
 
         public void CloseShopUI()
@@ -219,6 +228,9 @@ namespace SheepDoom
             P_gameUI.GetComponent<Canvas>().enabled = true;
             //disable shopUI
             P_shopMenuUI.GetComponent<Canvas>().enabled = false;
+
+            ShopSound.clip = Sound2;
+            ShopSound.PlayOneShot(ShopSound.clip, ShopSound.volume);
         }
 
 
@@ -254,7 +266,10 @@ namespace SheepDoom
                 //set player bool 'haspurchasedspecial' to true
                 P_shopPlayer.GetComponent<PlayerAttack>().PlayerHasPurchasedSpecial(false);
 
-     //           Debug.Log("First Special Purchased");
+
+                ShopSound.clip = Sound3;
+                ShopSound.PlayOneShot(ShopSound.clip, ShopSound.volume);
+                //           Debug.Log("First Special Purchased");
             }
 
             else
@@ -290,6 +305,9 @@ namespace SheepDoom
 
                 //update player gold
                 P_playerGold = P_shopPlayer.GetComponent<CharacterGold>().GetCurrentGold();
+
+                ShopSound.clip = Sound3;
+                ShopSound.PlayOneShot(ShopSound.clip, ShopSound.volume);
             }
         }
 
@@ -311,6 +329,9 @@ namespace SheepDoom
      //           Debug.Log("First Ulti Purchased");
                 //update player gold
                 P_playerGold = P_shopPlayer.GetComponent<CharacterGold>().GetCurrentGold();
+
+                ShopSound.clip = Sound3;
+                ShopSound.PlayOneShot(ShopSound.clip, ShopSound.volume);
             }
         }
 
@@ -332,6 +353,9 @@ namespace SheepDoom
 
                 //update player gold
                 P_playerGold = P_shopPlayer.GetComponent<CharacterGold>().GetCurrentGold();
+
+                ShopSound.clip = Sound3;
+                ShopSound.PlayOneShot(ShopSound.clip, ShopSound.volume);
             }
         }
     }

@@ -9,6 +9,8 @@ namespace SheepDoom
 {
     public class CapturePointScript : Objective
     {
+
+
         [Header("--- Which Team? ---")]
         [SerializeField] [SyncVar] private bool CapturedByBlue;
         [SerializeField] [SyncVar] private bool CapturedByRed;
