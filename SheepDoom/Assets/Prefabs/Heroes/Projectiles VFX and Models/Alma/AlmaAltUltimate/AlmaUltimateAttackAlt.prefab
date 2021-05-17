@@ -53,7 +53,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 10
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4928,7 +4928,7 @@ MonoBehaviour:
   isMovingDown: 0
   isMovingLeft: 0
   isMovingRight: 0
-  damage: 40
+  damage: 70
   destroyOnContact: 0
   m_Rigidbody: {fileID: -4202525936338854326}
   m_Speed: 200

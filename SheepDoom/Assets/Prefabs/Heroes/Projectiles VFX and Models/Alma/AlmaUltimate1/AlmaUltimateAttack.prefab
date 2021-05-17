@@ -4980,7 +4980,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 10
-      minScalar: 2
+      minScalar: 10
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -9799,7 +9799,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 12
+      scalar: 10
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -14611,7 +14611,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 12
+      scalar: 10
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -19422,7 +19422,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 12
+      scalar: 10
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -24119,7 +24119,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -24245,7 +24245,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 12
+      scalar: 10
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -28955,7 +28955,7 @@ MonoBehaviour:
   isMovingDown: 0
   isMovingLeft: 0
   isMovingRight: 0
-  damage: 60
+  damage: 100
   destroyOnContact: 0
   m_Rigidbody: {fileID: 5729536990247196296}
   m_Speed: 200
