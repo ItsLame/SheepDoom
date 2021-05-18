@@ -45,11 +45,18 @@ namespace SheepDoom
                         //kill target if target hp <= 0
                         if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
                         {
+                            //give announcer info
+                            col.GetComponent<GameEvent>().isNeutral = false;
+                            col.GetComponent<GameEvent>().isBoss = false;
+                            col.GetComponent<GameEvent>().isMinion = false;
+
+                            col.GetComponent<GameEvent>().whoKilled = objectName;
+
+
                             //set hit target to dead
                             col.GetComponent<PlayerHealth>().SetPlayerDead();
 
-                            //give announcer info
-                            col.GetComponent<GameEvent>().whoKilled = objectName;
+
                         }
 
                     }
