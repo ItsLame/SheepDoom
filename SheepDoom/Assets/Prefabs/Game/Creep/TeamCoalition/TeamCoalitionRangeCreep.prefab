@@ -345,7 +345,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 8
+  m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &7481533939122191808
 NavMeshAgent:
@@ -438,7 +438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: c86ef34f464325c409f5b82916791207
   hasSpawned: 0
 --- !u!114 &-5237622665496464381
 MonoBehaviour:
