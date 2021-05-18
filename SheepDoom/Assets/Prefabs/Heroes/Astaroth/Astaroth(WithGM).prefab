@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 71848908543369321}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -11.93, z: -0.36}
+  m_LocalPosition: {x: 0, y: -0.007, z: -0.36}
   m_LocalScale: {x: 6.603516, y: 0.00873481, z: 6.603516}
   m_Children: []
   m_Father: {fileID: 1075146533602815809}
@@ -880,8 +880,8 @@ MonoBehaviour:
     type: 3}
   AltUlti: {fileID: 1761614549529672, guid: 251e2d7a27deb2b41ade7fb8e286f8bf, type: 3}
   spawnPoint: {fileID: 1053827204936457064}
-  meleeAtkSpawn1: {fileID: 9182321830429707280}
-  meleeAtkSpawn2: {fileID: 8677723257031644930}
+  meleeAtkSpawn1: {fileID: 8677723257031644930}
+  meleeAtkSpawn2: {fileID: 9182321830429707280}
   buffspawnpoint: {fileID: 8214264772077163589}
   UltiAltSpawnpoint: {fileID: 88618015869035695}
   meleeAttackDuration1: 0.2
