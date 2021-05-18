@@ -33,6 +33,7 @@ namespace SheepDoom
             {
                 networkManager.networkAddress = "localhost";
                 networkManager.StartClient();
+                MainMenuUI.instance.FadeOut();
             }
         }
     }

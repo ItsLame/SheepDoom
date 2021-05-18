@@ -7,6 +7,13 @@ namespace SheepDoom
 {
     public class MainMenuUI : NetworkBehaviour
     {
+        public static MainMenuUI instance;
+
+        void Awake()
+        {
+            instance = this;
+        }
+
         public Animator transition;
         public void QuitGame()
         {
