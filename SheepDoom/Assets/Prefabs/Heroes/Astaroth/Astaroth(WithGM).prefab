@@ -880,8 +880,8 @@ MonoBehaviour:
     type: 3}
   AltUlti: {fileID: 1761614549529672, guid: 251e2d7a27deb2b41ade7fb8e286f8bf, type: 3}
   spawnPoint: {fileID: 1053827204936457064}
-  meleeAtkSpawn1: {fileID: 9182321830429707280}
-  meleeAtkSpawn2: {fileID: 8677723257031644930}
+  meleeAtkSpawn1: {fileID: 8677723257031644930}
+  meleeAtkSpawn2: {fileID: 9182321830429707280}
   buffspawnpoint: {fileID: 8214264772077163589}
   UltiAltSpawnpoint: {fileID: 88618015869035695}
   meleeAttackDuration1: 0.2
