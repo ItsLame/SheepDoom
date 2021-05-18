@@ -40,7 +40,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1065889875643358}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 1000
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -4851,7 +4851,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1095925013014214}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 1000
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -9671,7 +9671,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213368933650448}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 1000
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -13243,7 +13243,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 3
     type: 1
     collisionMode: 0
@@ -14483,7 +14483,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1331474418413882}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 1000
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -18055,7 +18055,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 3
     type: 1
     collisionMode: 0
@@ -19294,7 +19294,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679056910930218}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 1000
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -22866,7 +22866,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 3
     type: 1
     collisionMode: 0
@@ -24118,7 +24118,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699459221867030}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 1000
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -27690,7 +27690,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 3
     type: 1
     collisionMode: 0
@@ -28932,7 +28932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  m_AssetId: 19793904f54353746ae61e649cb095aa
   hasSpawned: 0
 --- !u!114 &8302890542301366857
 MonoBehaviour:
@@ -28960,7 +28960,7 @@ MonoBehaviour:
   destroyOnContact: 0
   m_Rigidbody: {fileID: 5729536990247196296}
   m_Speed: 200
-  m_Lifespan: 15
+  m_Lifespan: 30
   isAccelerating: 0
   isDeccelerating: 0
   accelerationRate: 0
@@ -29145,7 +29145,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1831905816721484}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 1000
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
