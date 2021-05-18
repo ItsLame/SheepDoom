@@ -92,10 +92,10 @@ namespace SheepDoom
             {
                 if (!_multiplier)
                 {
-                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
+                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn2);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
                     firedProjectile.transform.SetParent(null, false);
-                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
+                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn2.position, meleeAtkSpawn2.rotation);
 
                     //set direction
                     firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingRight = true;
@@ -104,7 +104,7 @@ namespace SheepDoom
                 }
                 else if (_multiplier)
                 {
-                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn1);
+                    firedProjectile = Instantiate(normalAtkMelee, meleeAtkSpawn2);
                     firedProjectile.GetComponent<PlayerProjectileSettings>().SetOwnerProjectile(gameObject);
 
                     //change speed and lifetime
@@ -115,7 +115,7 @@ namespace SheepDoom
                     firedProjectile.GetComponent<PlayerProjectileSettings>().isMovingRight = true;
 
                     firedProjectile.transform.SetParent(null, false);
-                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn1.position, meleeAtkSpawn1.rotation);
+                    firedProjectile.transform.SetPositionAndRotation(meleeAtkSpawn2.position, meleeAtkSpawn2.rotation);
 
                     NetworkServer.Spawn(firedProjectile, connectionToClient);
                 }
