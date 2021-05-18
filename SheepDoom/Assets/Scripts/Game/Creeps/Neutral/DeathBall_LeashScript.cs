@@ -12,10 +12,7 @@ namespace SheepDoom
         {
             //      Debug.Log(other.gameObject.name + (" has left the zone"));
             if (other.gameObject.CompareTag("DeathBall"))
-            {
                 other.gameObject.GetComponent<leashScript>().backToStart();
-                Debug.Log("Death Ball is going back to original place");
-            }
         }
     }
 }

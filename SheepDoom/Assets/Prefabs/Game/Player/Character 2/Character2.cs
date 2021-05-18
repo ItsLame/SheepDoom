@@ -123,19 +123,6 @@ namespace SheepDoom
             }
         }
 
-        [Client] // call from client to tell server
-        public void ServerSetHitBox(bool _hitBox)
-        {
-            if (!hasAuthority) return;
-            CmdSetHitBox(_hitBox);
-        }
-
-        [Command]
-        void CmdSetHitBox(bool _hitBox)
-        {
-            normalAtkMelee.GetComponent<OnTouchHealth>().SetHitBox(_hitBox);
-        }
-
         [Client]
         public void SpecialAtk(bool _isAltSpecial)
         {

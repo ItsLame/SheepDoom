@@ -11,8 +11,6 @@ namespace SheepDoom
         [SerializeField] NetworkManager networkManager;
         [SerializeField] private InputField username;
 
-        public static string SessionTicket;
-
         // Start is called before the first frame update
         void Start()
         {

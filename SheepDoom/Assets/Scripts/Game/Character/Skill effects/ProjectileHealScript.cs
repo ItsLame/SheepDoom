@@ -160,7 +160,7 @@ namespace SheepDoom
             }
             else if (col.gameObject.CompareTag("MegaBoss"))
             {
-                col.transform.parent.gameObject.GetComponent<MegaBossBehaviour>().TakeDamage(-damage);
+                col.GetComponent<GetParents>().getParent().GetComponent<MegaBossNewScript>().TakeDamage(-damage);
 
                 //if healing area is set by another object activate it 
                 if (hasHealingRadiusObject)

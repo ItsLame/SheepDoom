@@ -14,63 +14,67 @@ namespace SheepDoom
         [Header("If object will be destroyed on contact")]
         public bool destroyOnContact;
 
-        [Header("What does it interact with")]
-        public bool willContactPlayer;
-        public bool willContactMinion;
-
-        [Header("When to interact with bool")]
-        [SerializeField]
-        private bool hitboxActive;
-
-        [Header("If is child, parent's details here")]
-        [SerializeField]
-        private bool hasParent;
-        public GameObject parent;
-        [SerializeField]
-        private float parentTeamID;
-
-        public void SetHitBox(bool _status)
-        {
-            hitboxActive = _status;
-        }
-
         //when collide with player
         [ServerCallback]
         private void OnTriggerEnter(Collider col)
         {
-            if (hitboxActive)
-            {
+            //if (hitboxActive)
+            //{
    //             Debug.Log("Contacted With " + col.gameObject.name);
-                if (willContactPlayer)
-                {
-                    //if hit other player
-                    if (col.CompareTag("Player"))
-                    {
-                   //     Debug.Log("Player Hit");
-                        //change the hit player's HP
-                        col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
+                //if (willContactPlayer)
+                //{
+            //if hit other player
+            if (col.CompareTag("Player"))
+            {
+                //change the hit player's HP
+                col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount);
 
-                        //kill target if target hp <= 0
-                        if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
-                        {
-                            //set hit target to dead
-                            col.GetComponent<PlayerHealth>().SetPlayerDead();
+                if (destroyOnContact)
+                    Destroyy();
+            }
+                //} 
+            //}
+        }
 
-                            //get the brick's parent (the attacker)
-                            GameObject target = this.gameObject.GetComponent<GetParents>().getParent();
-                            //increase the attacker's score
-                            target.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
+        [Server]
+        private void Destroyy()
+        {
+            NetworkServer.Destroy(gameObject);
+        }
+    }
+}
 
-                            //give announcer info
-                            col.GetComponent<GameEvent>().whoKilled = target.GetComponent<PlayerObj>().GetPlayerName();
-                        }
 
-                        if (destroyOnContact)
-                            Destroyy();
-                    }
-                }
+//kill target if target hp <= 0
+/*
+ * //[Header("What does it interact with")]
+        //public bool willContactPlayer;
+        //public bool willContactMinion;
 
-                if (willContactMinion)
+        //[Header("When to interact with bool")]
+        //[SerializeField]
+        //private bool hitboxActive;
+
+        //[Header("If is child, parent's details here")]
+        //[SerializeField]
+        //private bool hasParent;
+        //public GameObject parent;
+        //[SerializeField]
+        //private float parentTeamID;
+ * if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
+{
+    //set hit target to dead
+    col.GetComponent<PlayerHealth>().SetPlayerDead();
+
+    //get the brick's parent (the attacker)
+    GameObject target = this.gameObject.GetComponent<GetParents>().getParent();
+    //increase the attacker's score
+    target.GetComponent<PlayerAdmin>().IncreaseCount(false, true, false);
+
+    //give announcer info
+    col.GetComponent<GameEvent>().whoKilled = target.GetComponent<PlayerObj>().GetPlayerName();
+}
+if (willContactMinion)
                 {
                     if (col.gameObject.CompareTag("BaseMinion"))
                     {
@@ -110,37 +114,13 @@ namespace SheepDoom
                             Destroyy();
                     }
                 }
-
-                //used to test gold for now
-                if (col.gameObject.CompareTag("NeutralMinion"))
-                {
-                    GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
-                    parent.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
-
-                    if (destroyOnContact)
-                        Destroyy();
-                }
-            }
-        }
-
-        [Server]
-        private void Destroyy()
-        {
-            NetworkServer.Destroy(gameObject);
-        }
-
-        void Update()
+void Update()
         {   
             if(hasParent)
             {
                 if (parentTeamID == 0)
                     parentTeamID = parent.GetComponent<PlayerAdmin>().getTeamIndex();
             }
-        }
-    }
-}
-
-
-
+        }*/
 
 
