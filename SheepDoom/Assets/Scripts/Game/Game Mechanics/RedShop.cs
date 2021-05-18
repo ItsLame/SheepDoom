@@ -7,7 +7,7 @@ namespace SheepDoom
 {
     public class RedShop : Shop
     {
-        [SerializeField] private GameObject ShopPlayer;
+        [SerializeField] private GameObject ShopPlayer = null;
         [SerializeField] private float PlayerGold;
         [SerializeField] private int ShopTeamIndex = 2;
 
