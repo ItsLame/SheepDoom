@@ -1,0 +1,4 @@
+https://medium.com/ironequal/android-optimization-with-unity-3504b34f00b0
+https://docs.unity3d.com/Manual/class-PlayerSettingsAndroid.html
+https://forum.unity.com/threads/mobile-graphics-optimization-unplayable-game.987153/#post-6411936
+https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html
