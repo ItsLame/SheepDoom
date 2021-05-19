@@ -97,7 +97,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.23, y: 6.59, z: 1}
+  m_Size: {x: 1.25, y: 6.59, z: 2.86}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2187317274458274644
 MonoBehaviour:
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: e79ba9888bf0d9844b048befbe27e3ea
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &1640021818379059376
 MonoBehaviour:
@@ -172,7 +172,7 @@ MonoBehaviour:
   destroyOnContact: 0
   m_Rigidbody: {fileID: 0}
   m_Speed: 120
-  m_Lifespan: 0.2
+  m_Lifespan: 0.3
   isAccelerating: 0
   isDeccelerating: 0
   accelerationRate: 0
