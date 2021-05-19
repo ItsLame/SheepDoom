@@ -21,7 +21,6 @@ namespace SheepDoom
             owner = player;
         }
 
-
         [ServerCallback]
         void OnTriggerEnter(Collider col)
         {
@@ -44,8 +43,6 @@ namespace SheepDoom
                     }
                 }
             }
-
-
         }
 
         [Server]

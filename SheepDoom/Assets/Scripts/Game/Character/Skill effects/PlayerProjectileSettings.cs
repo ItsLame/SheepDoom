@@ -116,14 +116,6 @@ namespace SheepDoom
                         Destroyy();
                 }
             }
-            //used to test gold for now
-            else if (col.gameObject.CompareTag("NeutralMinion"))
-            {
-                owner.gameObject.GetComponent<CharacterGold>().ServerVaryGold(5);
-
-                if (destroyOnContact)
-                    Destroyy();
-            }
             else if (col.gameObject.CompareTag("BaseMinion"))
             {
                 if (ownerTeamID == 2)
@@ -154,7 +146,6 @@ namespace SheepDoom
                     }
                 }
             }
-
             else if (col.gameObject.CompareTag("MegaBoss"))
             {
                 GameObject bossParent = col.gameObject.GetComponent<GetParents>().getParent();
