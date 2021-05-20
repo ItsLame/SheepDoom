@@ -7,60 +7,60 @@ namespace SheepDoom
     {
         [Header("Object name to be used for announcer")]
         [SerializeField] private string objectName;
- //       [SerializeField] private bool isFallZone;
 
         [Header("Amount of health to change on contact")]
         [SerializeField] private float healthChangeAmount;
 
-        [Header("What does it interact with")]
-        [SerializeField] private bool willContactPlayer;
-        [SerializeField] private bool willContactMinion;
-
-        [Header("When to interact with bool")]
-        [SerializeField] private bool hitboxActive;
-
-
-        public void SetHitBox(bool _status)
-        {
-            hitboxActive = _status;
-        }
-
-
+      
         //when collide with player
         [ServerCallback]
         private void OnTriggerStay(Collider col)
         {
 
-            if (hitboxActive)
-            {
-                if (willContactPlayer)
-                {
+            //if (hitboxActive)
+            //{
+                //if (willContactPlayer)
+                //{
                     //if hit other player
-                    if (col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
-                    {
-                 //       Debug.Log("Player Hit");
-                        //change the hit player's HP
-                        col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount * Time.deltaTime);
+            if (col.CompareTag("Player") && !col.GetComponent<PlayerHealth>().isPlayerDead())
+            {
+            //       Debug.Log("Player Hit");
+                //change the hit player's HP
+                col.GetComponent<PlayerHealth>().modifyinghealth(healthChangeAmount * Time.deltaTime);
 
-                        //kill target if target hp <= 0
-                        if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
-                        {
-                            //give announcer info
-                            col.GetComponent<GameEvent>().isNeutral = false;
-                            col.GetComponent<GameEvent>().isBoss = false;
-                            col.GetComponent<GameEvent>().isMinion = false;
+                //kill target if target hp <= 0
+                if (col.GetComponent<PlayerHealth>().getHealth() <= 0)
+                {
+                    //give announcer info
+                    col.GetComponent<GameEvent>().isNeutral = false;
+                    col.GetComponent<GameEvent>().isBoss = false;
+                    col.GetComponent<GameEvent>().isMinion = false;
 
-                            col.GetComponent<GameEvent>().whoKilled = objectName;
-
-
-                            //set hit target to dead
-                            col.GetComponent<PlayerHealth>().SetPlayerDead();
+                    col.GetComponent<GameEvent>().whoKilled = objectName;
 
 
-                        }
-
-                    }
+                    //set hit target to dead
+                    col.GetComponent<PlayerHealth>().SetPlayerDead();
                 }
+
+            } 
+        }
+    }
+}
+
+  /*//[Header("What does it interact with")]
+        //[SerializeField] private bool willContactPlayer;
+        //[SerializeField] private bool willContactMinion;
+
+        //[Header("When to interact with bool")]
+        //[SerializeField] private bool hitboxActive;
+
+
+        //public void SetHitBox(bool _status)
+        //{
+            //hitboxActive = _status;
+        //}
+   //}
 
                 if (willContactMinion)
                 {
@@ -103,13 +103,7 @@ namespace SheepDoom
                     GameObject parent = this.gameObject.GetComponent<GetParents>().getParent();
                     parent.gameObject.GetComponent<CharacterGold>().CmdVaryGold(5);
 
-                }
-            }
-        }
-    }
-}
-
-
+                }*/
 
 
 

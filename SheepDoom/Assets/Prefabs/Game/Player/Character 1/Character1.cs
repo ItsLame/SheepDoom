@@ -104,9 +104,8 @@ namespace SheepDoom
                 whichulti = false;
                 StartCastingUltimate();
             }
-
-
         }
+
         [Client]
         void StartCastingUltimate()
         {

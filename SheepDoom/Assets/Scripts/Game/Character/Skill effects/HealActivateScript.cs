@@ -45,7 +45,8 @@ namespace SheepDoom
                             // increase killer's kill count if target is killed
                             // non lethal dmg
                             if (other.gameObject.GetComponent<PlayerHealth>().getHealth() < 5) return;
-                                other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-healAmount * Time.deltaTime);
+
+                            other.gameObject.GetComponent<PlayerHealth>().modifyinghealth(-healAmount * Time.deltaTime);
                         }
                     }
                 }

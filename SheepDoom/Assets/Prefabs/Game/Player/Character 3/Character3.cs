@@ -81,7 +81,6 @@ namespace SheepDoom
         void startCasting()
         {
             isCasting = true;
-            Debug.Log("Start Casting");
             networkAnimator.SetTrigger("Channeling");
             castTimeInGame = castTime;
 
@@ -94,7 +93,6 @@ namespace SheepDoom
         {
             isChanneling = true;
             CmdUltiAtk(true);
-            Debug.Log("Start Channeling");
             networkAnimator.SetTrigger("Channeling");
 
             //set transform
@@ -110,7 +108,6 @@ namespace SheepDoom
             if (!_isAltUlti)
             {
                 startCasting();
-                Debug.Log("isCastingComplete 1: " + isCastingComplete);
             }
             else if (_isAltUlti)
                 startChanneling();
@@ -137,8 +134,6 @@ namespace SheepDoom
                 firedProjectile.GetComponent<ProjectileHealScript>().SetOwnerProjectile(gameObject);
                 firedProjectile.transform.SetParent(null, false);
                 firedProjectile.transform.SetPositionAndRotation(aoespawnPoint.position, aoespawnPoint.rotation);
-
-                Debug.Log("Setting owner to channel: " + this.gameObject.name);
                 //setting channeling conditions (if owner moves, destroy)
                 firedProjectile.GetComponent<ChannelingScript>().setOwner(this.gameObject);
 
