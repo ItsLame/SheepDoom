@@ -85,6 +85,9 @@ namespace SheepDoom
             //if hit player
             if (col.gameObject.CompareTag("Player"))
             {
+                if (ownerTeamID == 1 && col.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 1) return;
+                if (ownerTeamID == 2 && col.gameObject.GetComponent<PlayerAdmin>().getTeamIndex() == 2) return;
+
                 //dont hurt the owner of the projectile, dont increase score if hitting dead player
                 if (col.gameObject != owner && !col.gameObject.GetComponent<PlayerHealth>().isPlayerDead())
                 {
