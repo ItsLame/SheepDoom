@@ -43,6 +43,7 @@ namespace SheepDoom
                 }
             }
         }
+        
         [Server]
         public void AnnounceBossDeath(string defeater, float teamID)
         {
