@@ -25,6 +25,7 @@ namespace SheepDoom
         [SyncVar] public bool isSpeedUp;
 
 
+
         //Animation
         [SerializeField] private Animator animator;
 
@@ -127,12 +128,15 @@ namespace SheepDoom
                 if ((moveMe.x != 0) || (moveMe.z != 0))
                 {
                     animator.SetBool("Iswalking", true);
+                    animator.SetTrigger("Move");
                     this.transform.rotation = Quaternion.LookRotation(moveMe);
                     this.transform.position += moveMe;
                 }
+
                 if ((moveMe.x == 0) && (moveMe.z == 0))
                 {
                     animator.SetBool("Iswalking", false);
+                    animator.ResetTrigger("Move");
                 }
             }
         }
