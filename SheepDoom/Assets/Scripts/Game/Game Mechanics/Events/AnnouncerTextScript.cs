@@ -28,6 +28,5 @@ namespace SheepDoom
         {
             ClearTimer = seconds;
         }
-
     }
 }

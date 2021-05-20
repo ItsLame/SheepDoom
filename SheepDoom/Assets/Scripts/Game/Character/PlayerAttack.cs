@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace SheepDoom
 {
@@ -45,6 +47,7 @@ namespace SheepDoom
         //Melee
         public NetworkAnimator networkAnimator;
         public Animator animator;
+
         public override void OnStartClient()
         {
             if (!hasAuthority) return;
@@ -96,6 +99,11 @@ namespace SheepDoom
                     comp.normalAtk();
                     cooldown1_inGame = cooldown1 * cooldown1Multiplier;
                 }
+            }
+            else if(cooldown1_inGame < 0)
+            {
+                FindMe.instance.P_SkillCooldownText.GetComponent<TextMeshProUGUI>().text = "Normal attack is on cooldown! " + Math.Floor(cooldown1_inGame);
+                FindMe.instance.P_SkillCooldownText.GetComponent<AnnouncerTextScript>().ClearTimer = 0.5f;
             }
         }
 
@@ -174,6 +182,11 @@ namespace SheepDoom
                 }
                 cooldown2_inGame = cooldown2;
             }
+            else if(cooldown2_inGame > 0)
+            {
+                FindMe.instance.P_SkillCooldownText.GetComponent<TextMeshProUGUI>().text = "Special attack is on cooldown! " + Math.Floor(cooldown2_inGame);
+                FindMe.instance.P_SkillCooldownText.GetComponent<AnnouncerTextScript>().ClearTimer = 0.5f;
+            }
         }
 
         public void UltiClick()
@@ -210,6 +223,11 @@ namespace SheepDoom
                 }
 
                 cooldown3_inGame = cooldown3;
+            }
+            else if(cooldown3_inGame > 0)
+            {
+                FindMe.instance.P_SkillCooldownText.GetComponent<TextMeshProUGUI>().text = "Ultimate attack is on cooldown! " + Math.Floor(cooldown3_inGame);
+                FindMe.instance.P_SkillCooldownText.GetComponent<AnnouncerTextScript>().ClearTimer = 0.5f;
             }
         }
 

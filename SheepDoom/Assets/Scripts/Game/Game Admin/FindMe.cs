@@ -15,6 +15,7 @@ namespace SheepDoom
         [Header("--- Player & Misc ---")]
         [Space(5)]
         [SerializeField] private GameObject MyPlayer;
+        [SerializeField] private GameObject SkillCooldownText;
         [SerializeField] private GameObject GameStatusManager;
         [SerializeField] private GameObject RedBaseCamPosition;
         [SerializeField] private GameObject BlueBaseCamPosition;
@@ -224,6 +225,12 @@ namespace SheepDoom
         {
             get{return MyPlayer;}
             set{MyPlayer = value;}
+        }
+
+        public GameObject P_SkillCooldownText
+        {
+            get{return SkillCooldownText;}
+            set{SkillCooldownText = value;}
         }
 
         #endregion
