@@ -99,7 +99,14 @@ namespace SheepDoom
 
         private void OnNameUpdate(string oldValue, string newValue)
         {
-            GetComponent<PlayerNameGame>().SetPlayerName(newValue); 
+            Color newColor = Color.white;
+
+            if(getTeamIndex() == 1)
+                newColor = Color.blue;
+            else
+                newColor = Color.red;
+
+            GetComponent<PlayerNameGame>().SetPlayerName(newValue, newColor);
         }
 
         [Command]
