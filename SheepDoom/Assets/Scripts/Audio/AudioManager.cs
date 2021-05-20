@@ -7,6 +7,8 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField] private AudioMixerGroup BGMMixer;
+    [SerializeField] private AudioMixerGroup SFXMixer;
     public bool isBGMPlaying = false;
     public string SceneName;
     public bool listenerEnabled;
@@ -25,6 +27,11 @@ public class AudioManager : MonoBehaviour
         {
             s.source = gameObject.AddComponent<AudioSource>();
 
+            if(s.name == "BGMLobby" || s.name == "BGMGame")
+                s.source.outputAudioMixerGroup = BGMMixer;
+            else
+                s.source.outputAudioMixerGroup = SFXMixer;
+            
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;

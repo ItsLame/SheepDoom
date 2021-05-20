@@ -4849,7 +4849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 251e2d7a27deb2b41ade7fb8e286f8bf
+  m_AssetId: 
   hasSpawned: 0
 --- !u!114 &1445080623836608349
 MonoBehaviour:
@@ -4911,7 +4911,8 @@ AudioSource:
   m_GameObject: {fileID: 1761614549529672}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 6674096980866798355, guid: 3101c335ed1c02e419954e9ce3aa4f86,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 38c665a0e5cab2244852e037b086ebbb, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.2
