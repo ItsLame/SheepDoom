@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace SheepDoom
 {
     public class AnnouncerTextScript : MonoBehaviour
     {
-        public Text AnnouncerText;
+        //public Text AnnouncerText;
+        [SerializeField] TextMeshProUGUI AnnouncerText;
         public float ClearTimer;
 
         private void Update()

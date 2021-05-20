@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using TMPro;
 
 namespace SheepDoom
 {
@@ -12,7 +13,8 @@ namespace SheepDoom
     {
         //text to show timer
         public Text TimerText;
-        public Text AnnouncerText;
+        //public Text AnnouncerText;
+        public TextMeshProUGUI AnnouncerText;
         private const string TwentySeconds = "Game will begin in 10 seconds!";
         private const string ThirtySeconds = "Go forth and be victorious!";
 

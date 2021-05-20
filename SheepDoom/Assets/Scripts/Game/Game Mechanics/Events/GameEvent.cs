@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using TMPro;
 
 namespace SheepDoom
 {
     public class GameEvent : NetworkBehaviour
     {
-        public Text AnnouncerText;
+        public TextMeshProUGUI AnnouncerText;
 
         [SyncVar] public string whoKilled;
         [SyncVar] public string gotKilled;
@@ -22,7 +23,7 @@ namespace SheepDoom
         void Start()
         {
             GameObject gameEventText = FindMe.instance.P_GameEvent;
-            AnnouncerText = gameEventText.GetComponent<Text>();
+            AnnouncerText = gameEventText.GetComponent<TextMeshProUGUI>();
         }
 
         // Update is called once per frame
