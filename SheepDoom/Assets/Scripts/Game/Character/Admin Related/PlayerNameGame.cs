@@ -10,9 +10,13 @@ namespace SheepDoom
     {
         //[SerializeField] private Text playerName;
         [SerializeField] TextMeshProUGUI playerName;
-        public void SetPlayerName(string _name, Color _color)
+        public void SetPlayerName(string _name)
         {
             playerName.text = _name;
+        }
+
+        public void SetPlayerColor(Color _color)
+        {
             playerName.color = _color;
         }
     }

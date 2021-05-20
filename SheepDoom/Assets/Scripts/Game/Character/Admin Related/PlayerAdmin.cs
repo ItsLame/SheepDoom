@@ -12,7 +12,7 @@ namespace SheepDoom
         [Header("Player Info")]
         [SerializeField] [SyncVar] private float charID;
         [SerializeField] [SyncVar(hook = nameof(OnNameUpdate))] private string playerName;
-        [SerializeField] [SyncVar] private int TeamIndex;
+        [SerializeField] [SyncVar(hook = nameof(OnTeamUpdate))] private int TeamIndex;
 
         [Header("Player scores")]
         [SyncVar(hook = nameof(SyncPlayerKill))] private float PlayerKills;
@@ -99,14 +99,19 @@ namespace SheepDoom
 
         private void OnNameUpdate(string oldValue, string newValue)
         {
+            GetComponent<PlayerNameGame>().SetPlayerName(newValue);
+        }
+
+        private void OnTeamUpdate(int oldValue, int newValue)
+        {
             Color newColor = Color.white;
 
-            if(getTeamIndex() == 1)
+            if(newValue == 1)
                 newColor = Color.blue;
-            else
+            else if(newValue == 2)
                 newColor = Color.red;
 
-            GetComponent<PlayerNameGame>().SetPlayerName(newValue, newColor);
+            GetComponent<PlayerNameGame>().SetPlayerColor(newColor);
         }
 
         [Command]
