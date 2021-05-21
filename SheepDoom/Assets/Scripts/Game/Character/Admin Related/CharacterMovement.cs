@@ -129,6 +129,7 @@ namespace SheepDoom
                 {
                     animator.SetBool("Iswalking", true);
                     animator.SetTrigger("Move");
+                    animator.ResetTrigger("Attack");
                     this.transform.rotation = Quaternion.LookRotation(moveMe);
                     this.transform.position += moveMe;
                 }
