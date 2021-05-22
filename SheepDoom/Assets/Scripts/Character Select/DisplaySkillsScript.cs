@@ -15,13 +15,13 @@ public class DisplaySkillsScript : MonoBehaviour
     public void AlmaS1()
     {
  //       Debug.Log("a1 clicked");
-        SkillsText.GetComponent<Text>().text = "Alma fires fast but decelerating bullet that slows the enemy.";
+        SkillsText.GetComponent<Text>().text = "Alma fires bullet that slows the enemy.";
     }
 
     public void AlmaS2()
     {
  //       Debug.Log("a2 clicked");
-        SkillsText.GetComponent<Text>().text = "Alma plants a mine that stuns enemies on contact. The planted mine has a long duration.";
+        SkillsText.GetComponent<Text>().text = "Alma plants a mine that stuns enemies on contact.";
     }
 
     public void AlmaU1()
@@ -33,7 +33,7 @@ public class DisplaySkillsScript : MonoBehaviour
     public void AlmaU2()
     {
   //      Debug.Log("a4 clicked");
-        SkillsText.GetComponent<Text>().text = "Modifying her rifle, Alma fires a wider but slower laser that accelerates over time. Deals moderate damage to hit enemies & has global range.";
+        SkillsText.GetComponent<Text>().text = "Modifying her rifle, Alma fires a wider but slower laser. Deals moderate damage & slows hit enemies & has global range.";
     }
 
     // ------------------------- luigi ----------------------
@@ -83,7 +83,7 @@ public class DisplaySkillsScript : MonoBehaviour
     public void IsaU2()
     {
   //      Debug.Log("Is4 clicked");
-        SkillsText.GetComponent<Text>().text = "The Goddess is both merciful and cruel. Isabelle channels a holy zone around her, " +
+        SkillsText.GetComponent<Text>().text = "Isabelle channels a holy zone around her, " +
             "healing allies & damaging surrounding enemies over time. The channeling is stopped when Isabelle moves.";
     }
 }

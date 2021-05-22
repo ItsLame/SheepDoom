@@ -15,7 +15,7 @@ namespace SheepDoom
         protected override void InitHeroInfo()
         {
             P_heroName = "Astharoth Schwarz";
-            P_heroDesc = "... a Devil in Disguise";
+            P_heroDesc = "A Devil in Disguise";
             P_heroIcon = heroImage.sprite;
         }
 
